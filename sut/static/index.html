@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TaskBoard</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  header { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+  form { display: flex; gap: .5rem; margin: 1rem 0; }
+  form input[type=text] { flex: 1; padding: .4rem; }
+  ul { list-style: none; padding: 0; }
+  li { display: flex; gap: .75rem; align-items: center; padding: .5rem; border-bottom: 1px solid #ddd; }
+  .title { flex: 1; }
+  .status { font-size: .8rem; padding: .1rem .4rem; border-radius: 4px; background: #eee; }
+  .status.in_progress { background: #fff3c4; }
+  .status.done { background: #d4f5d4; }
+  #error { color: #b00020; min-height: 1.2em; }
+</style>
+</head>
+<body>
+<h1>TaskBoard</h1>
+<header>
+  <label>User <select id="user" data-testid="user-select"></select></label>
+  <label>Project <select id="project" data-testid="project-select"></select></label>
+  <form id="project-form" data-testid="project-form">
+    <input type="text" id="project-name" placeholder="New project" data-testid="new-project-name" required>
+    <button type="submit">Add project</button>
+  </form>
+</header>
+
+<form id="task-form" data-testid="task-form">
+  <input type="text" id="task-title" placeholder="New task title" data-testid="new-title" required>
+  <button type="submit" data-testid="create-btn">Create</button>
+</form>
+<div id="error" data-testid="error"></div>
+<ul id="tasks" data-testid="task-list"></ul>
+
+<script>
+const NEXT = { todo: "in_progress", in_progress: "done" };
+const params = new URLSearchParams(location.search);
+const userSel = document.getElementById("user");
+const projectSel = document.getElementById("project");
+const list = document.getElementById("tasks");
+const errorEl = document.getElementById("error");
+
+async function api(path, options = {}) {
+  const res = await fetch(path, {
+    ...options,
+    headers: { "Content-Type": "application/json", "X-User": userSel.value, ...(options.headers || {}) },
+  });
+  if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+  return res.status === 204 ? null : res.json();
+}
+
+function showError(err) { errorEl.textContent = err ? String(err.message || err) : ""; }
+
+async function loadUsers() {
+  const users = await fetch("/api/users").then(r => r.json());
+  userSel.innerHTML = "";
+  for (const u of users) userSel.add(new Option(u.username, u.username));
+  if (params.get("user")) userSel.value = params.get("user");
+}
+
+async function loadProjects(selectId) {
+  const projects = await api("/api/projects");
+  projectSel.innerHTML = "";
+  for (const p of projects) projectSel.add(new Option(p.name, p.id));
+  if (selectId) projectSel.value = String(selectId);
+  await loadTasks();
+}
+
+async function loadTasks() {
+  list.innerHTML = "";
+  if (!projectSel.value) return;
+  const page = await api(`/api/projects/${projectSel.value}/tasks?limit=100`);
+  for (const t of page.items) {
+    const li = document.createElement("li");
+    li.dataset.testid = "task-item";
+    li.dataset.taskId = t.id;
+    const titleEl = document.createElement("span");
+    titleEl.className = "title";
+    titleEl.dataset.testid = "task-title";
+    /*@RENDER_TITLE@*/
+    const status = document.createElement("span");
+    status.className = `status ${t.status}`;
+    status.dataset.testid = "task-status";
+    status.textContent = t.status;
+    li.append(titleEl, status);
+    if (NEXT[t.status]) {
+      const btn = document.createElement("button");
+      btn.textContent = `→ ${NEXT[t.status]}`;
+      btn.dataset.testid = "advance-btn";
+      btn.onclick = async () => {
+        try { await api(`/api/tasks/${t.id}/transition`, { method: "POST", body: JSON.stringify({ to: NEXT[t.status] }) }); showError(); await loadTasks(); }
+        catch (e) { showError(e); }
+      };
+      li.append(btn);
+    }
+    list.append(li);
+  }
+}
+
+document.getElementById("task-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const form = ev.target;
+  const title = document.getElementById("task-title").value;
+  try {
+    await api(`/api/projects/${projectSel.value}/tasks`, { method: "POST", body: JSON.stringify({ title }) });
+    showError();
+    /*@AFTER_CREATE@*/
+  } catch (e) { showError(e); }
+});
+
+document.getElementById("project-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const input = document.getElementById("project-name");
+  try {
+    const p = await api("/api/projects", { method: "POST", body: JSON.stringify({ name: input.value }) });
+    input.value = "";
+    showError();
+    await loadProjects(p.id);
+  } catch (e) { showError(e); }
+});
+
+userSel.addEventListener("change", () => loadProjects().catch(showError));
+projectSel.addEventListener("change", () => loadTasks().catch(showError));
+
+(async () => {
+  await loadUsers();
+  await loadProjects(params.get("project"));
+  document.body.dataset.ready = "true";
+})().catch(showError);
+</script>
+</body>
+</html>

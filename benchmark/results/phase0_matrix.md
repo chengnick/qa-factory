@@ -1,0 +1,23 @@
+# Phase 0 reference-test matrix
+
+- Generated: 2026-09-25T00:29:09+08:00
+- Python 3.11.9 · win32
+- Expected: a reference test **FAIL**s iff its bug is enabled, otherwise **PASS**es.
+- Cell: actual outcome; ✅ matches expectation, ❌ does not. Bold = the bug is enabled in that row.
+
+| SUT_BUGS | B01 | B02 | B03 | B04 | B05 | B06 | B07 | B08 | B09 | B10 | Result | Time |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `(none)` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 23.2s |
+| `B01` | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 23.2s |
+| `B02` | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 23.2s |
+| `B03` | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 23.2s |
+| `B04` | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 24.5s |
+| `B05` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 26.1s |
+| `B06` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | OK | 24.5s |
+| `B07` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | ✅ PASS | OK | 24.5s |
+| `B08` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | ✅ PASS | OK | 21.4s |
+| `B09` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | ✅ PASS | OK | 21.4s |
+| `B10` | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | ✅ PASS | **✅ FAIL** | OK | 26.4s |
+| `all` | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | **✅ FAIL** | OK | 27.1s |
+
+**120/120 cells match** → PASS

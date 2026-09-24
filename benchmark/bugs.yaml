@@ -1,0 +1,53 @@
+# Seeded bugs in the TaskBoard SUT. Enable with SUT_BUGS=B01,B04 (see sut/bugs.py).
+# Each bug has exactly one reference test: benchmark/reference_tests/test_<id>_*.py
+
+- id: B01
+  title: 分頁翻到最後一頁（offset > 0）時少回最後一筆資料
+  surface: api
+  category: boundary
+  requirement_ref: REQ-003
+- id: B02
+  title: 已完成任務仍可被改回進行中（違反狀態機）
+  surface: api
+  category: state_transition
+  requirement_ref: REQ-005
+- id: B03
+  title: 非專案成員可讀取任務詳情
+  surface: api
+  category: authorization
+  requirement_ref: REQ-007
+- id: B04
+  title: 任務標題超過 100 字元時回 500
+  surface: api
+  category: input_validation
+  requirement_ref: REQ-002
+- id: B05
+  title: 建立任務後列表未即時刷新
+  surface: ui
+  category: ui_state
+  requirement_ref: REQ-004
+- id: B06
+  title: priority 上界 5 被誤判為不合法（回 422）
+  surface: api
+  category: boundary
+  requirement_ref: REQ-002
+- id: B07
+  title: 非 owner 且非建立者的成員可刪除任務
+  surface: api
+  category: authorization
+  requirement_ref: REQ-008
+- id: B08
+  title: 可將任務指派給非專案成員
+  surface: api
+  category: data_integrity
+  requirement_ref: REQ-006
+- id: B09
+  title: 任務搜尋 q 變成區分大小寫
+  surface: api
+  category: search_filter
+  requirement_ref: REQ-009
+- id: B10
+  title: 任務標題以 HTML 渲染（未跳脫）
+  surface: ui
+  category: ui_security
+  requirement_ref: REQ-004
