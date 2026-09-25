@@ -78,7 +78,7 @@ def parse_junit(path: Path) -> dict[str, str]:
 
 def run_config(name: str, enabled: tuple[str, ...], workdir: Path) -> ConfigResult:
     junit = workdir / f"{name}.xml"
-    env = {**os.environ, "SUT_BUGS": ",".join(enabled)}
+    env = {**os.environ, "SUT_BUGS": ",".join(enabled), "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"}
     env.pop("SUT_BASE_URL", None)  # each config needs its own SUT process
     started = time.monotonic()
     proc = subprocess.run(

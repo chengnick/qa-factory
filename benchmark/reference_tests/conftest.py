@@ -8,74 +8,24 @@ test an already-running SUT instead.
 from __future__ import annotations
 
 import os
-import socket
-import subprocess
-import sys
-import tempfile
-import time
 import uuid
 from collections.abc import Callable, Iterator
-from pathlib import Path
 
 import httpx
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-STARTUP_TIMEOUT_S = 15
-
-
-def _free_port() -> int:
-    with socket.socket() as s:
-        s.bind(("127.0.0.1", 0))
-        return s.getsockname()[1]
-
-
-def _wait_healthy(url: str, proc: subprocess.Popen | None, log: Path | None = None) -> None:
-    deadline = time.monotonic() + STARTUP_TIMEOUT_S
-    while time.monotonic() < deadline:
-        if proc is not None and proc.poll() is not None:
-            out = log.read_text(encoding="utf-8", errors="replace") if log else ""
-            raise RuntimeError(f"SUT exited during startup (code {proc.returncode}):\n{out}")
-        try:
-            if httpx.get(f"{url}/health", timeout=1).status_code == 200:
-                return
-        except httpx.TransportError:
-            pass
-        time.sleep(0.1)
-    raise RuntimeError(f"SUT at {url} not healthy after {STARTUP_TIMEOUT_S}s")
+from sut.launcher import running_sut, wait_healthy
 
 
 @pytest.fixture(scope="session")
 def base_url() -> Iterator[str]:
     external = os.environ.get("SUT_BASE_URL")
     if external:
-        _wait_healthy(external.rstrip("/"), None)
+        wait_healthy(external)
         yield external.rstrip("/")
         return
-    port = _free_port()
-    # Log to a file, not a PIPE: an unread PIPE fills up on 500 tracebacks and blocks the server.
-    log_dir = tempfile.TemporaryDirectory(prefix="sut-")
-    log = Path(log_dir.name) / "sut.log"
-    log_fh = log.open("w", encoding="utf-8")
-    proc = subprocess.Popen(
-        [sys.executable, "-m", "uvicorn", "sut.app:app", "--host", "127.0.0.1", "--port", str(port), "--log-level", "warning"],
-        cwd=REPO_ROOT,
-        env={**os.environ, "SUT_DB": ":memory:"},
-        stdout=log_fh,
-        stderr=subprocess.STDOUT,
-    )
-    url = f"http://127.0.0.1:{port}"
-    try:
-        _wait_healthy(url, proc, log)
+    with running_sut() as url:
         yield url
-    finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            proc.kill()
-        log_fh.close()
-        log_dir.cleanup()
 
 
 @pytest.fixture(scope="session")
