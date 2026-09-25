@@ -43,7 +43,7 @@ def test_persistent_timeout_stops_at_max_attempts(harness):
     registry, tool = _tools([ToolTimeoutError("slow")])
 
     with pytest.raises(ToolTimeoutError) as exc_info:
-        TracedToolRegistry(registry, harness.inst).call("pytest")
+        TracedToolRegistry(registry, harness.inst).call("pytest", paths=["generated/test_x.py"])
 
     assert len(tool.calls) == 3
     assert len(_attempts(harness)) == 3
@@ -57,7 +57,7 @@ def test_non_retryable_error_is_a_single_attempt(harness):
     registry, tool = _tools([RuntimeError("boom"), OK])
 
     with pytest.raises(RuntimeError):
-        TracedToolRegistry(registry, harness.inst).call("pytest")
+        TracedToolRegistry(registry, harness.inst).call("pytest", paths=["generated/test_x.py"])
 
     assert len(tool.calls) == 1
     (attempt,) = _attempts(harness)
@@ -67,7 +67,7 @@ def test_non_retryable_error_is_a_single_attempt(harness):
 def test_failed_result_is_final_not_retried(harness):
     registry, tool = _tools([ToolResult(ok=False, exit_code=1, stdout="1 failed"), OK])
 
-    result = TracedToolRegistry(registry, harness.inst).call("pytest")
+    result = TracedToolRegistry(registry, harness.inst).call("pytest", paths=["generated/test_x.py"])
 
     assert not result.ok and result.attempts == 1 and len(tool.calls) == 1
     (attempt,) = _attempts(harness)
@@ -79,7 +79,7 @@ def test_backoff_is_exponential_and_goes_through_the_clock(harness):
     registry, _ = _tools([ToolTimeoutError("slow")])
 
     with pytest.raises(ToolTimeoutError):
-        TracedToolRegistry(registry, harness.inst).call("pytest")
+        TracedToolRegistry(registry, harness.inst).call("pytest", paths=["generated/test_x.py"])
 
     assert harness.clock.sleeps == [1.0, 2.0]
 
@@ -88,7 +88,7 @@ def test_single_attempt_policy_emits_no_attempt_spans(harness):
     registry, _ = _tools([ToolTimeoutError("slow")], policy=RetryPolicy(max_attempts=1))
 
     with pytest.raises(ToolTimeoutError):
-        TracedToolRegistry(registry, harness.inst).call("pytest")
+        TracedToolRegistry(registry, harness.inst).call("pytest", paths=["generated/test_x.py"])
 
     assert harness.named("attempt") == []
     assert harness.one("tool.pytest").status.status_code is StatusCode.ERROR

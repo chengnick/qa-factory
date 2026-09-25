@@ -34,4 +34,4 @@ class QAAgent:
             attempts = getattr(exc, "attempts", 1)
             return ToolExecution(tool, ok=False, attempts=attempts, error=f"{type(exc).__name__}: {exc}")
         lines = result.stdout.strip().splitlines()
-        return ToolExecution(tool, result.ok, result.attempts, result.exit_code, lines[-1] if lines else "")
+        return ToolExecution(tool, result.ok, result.attempts, result.exit_code, lines[-1] if lines else "", data=dict(result.data))

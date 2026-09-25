@@ -37,3 +37,15 @@ class LLMRateLimitError(LLMError):
 
 class LLMTimeoutError(LLMError):
     """The provider did not answer in time."""
+
+
+class LLMConnectionError(LLMError, ConnectionError):
+    """The provider could not be reached."""
+
+
+class LLMConfigError(LLMError):
+    """The client is misconfigured (e.g. missing API key)."""
+
+
+class LLMUnavailableError(LLMError):
+    """The provider is temporarily overloaded (HTTP 503). Retryable."""

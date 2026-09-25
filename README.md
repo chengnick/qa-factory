@@ -2,7 +2,24 @@
 
 A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec-v2.md](docs/spec-v2.md).
 
-## Current status: Phase 1 (agent skeleton and trace core)
+## Current status: Phase 2 (real tool execution)
+
+### Phase 2
+
+- **Gemini adapter**: `llm/adapters/gemini.py` uses the `google-genai` SDK in JSON mode with `temperature=0`. SDK retries are off; 429s and timeouts are retried through `with_retry()`, so every attempt is a span.
+- **Real tools**: `tools/` has `file_write` (writes only inside `generated/`), `pytest` / `playwright` (run tests in a subprocess against the SUT), and `http_request`. Arguments are checked against a parameter schema before a tool runs.
+- **Agent context**: agents get the API reference in [docs/sut-api.md](docs/sut-api.md) and the owner-written fixtures in [generated/conftest.py](generated/conftest.py), which is read-only for agents.
+- **SUT startup**: `sut/launcher.py` starts the SUT with any set of bug flags. The pipeline and the reference tests share it.
+
+**Acceptance** ([phase2_acceptance.md](benchmark/results/phase2_acceptance.md)): 5 of 6 bugged runs genuinely detected (B02, B03, B04, each checked by hand), 1 of 6 clean runs a false positive. Model: `gemini-3.5-flash-lite` (the larger Flash models returned 503 at run time).
+
+Set up the key once. Create `.env` in the repo root with `GEMINI_API_KEY=...`. It is git-ignored and never printed or traced.
+
+```bash
+pip install -e ".[dev,gemini]"
+python app.py --requirement REQ-005 --llm gemini --sut-bugs B02    # starts a SUT with B02 enabled
+QA_LIVE=1 pytest tests/llm/test_gemini_live.py                     # optional live smoke test
+```
 
 ### Phase 1
 
@@ -32,9 +49,10 @@ pytest tests                       # flag mechanism + manifest consistency
 
 ## Known limitations
 
-- **Fake runs only.** Phase 1 runs are fully scripted: the fake tools do not execute anything, and time runs on a simulated clock that starts at the current time.
+- **Fake runs are simulated.** `--llm fake` runs are fully scripted and use a simulated clock. `--llm gemini` runs use real tools and a real clock.
+- **Free tier.** Gemini's free tier uses submitted content to improve Google products (only the public requirements and generated tests are sent). Its small quota can make runs slow, and runs fail when retries are exhausted.
 - **Provisional verdict.** The verdict is computed by `agents/report.py::provisional_verdict`. The rule-based classifier and `layer` attribution arrive in Phase 3.
-- **Minimal tool registry.** It has no parameter schema validation yet (Phase 2) and no permission gate yet (Phase 5).
+- **No permission gate yet.** There is only an L0 path check in `file_write`; the gate arrives in Phase 5.
 
 - **UI bugs are visible in the page source.** B05 and B10 are injected server-side by swapping JS snippets. The served page looks like naturally buggy code with no flag names, but a reader can still spot the bug by reading it.
 - **Weak identity.** Users are identified only by the `X-User` header. There is no real authentication.

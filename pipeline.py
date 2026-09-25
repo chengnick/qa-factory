@@ -40,12 +40,13 @@ def run_pipeline(
     inst: Instrumentation,
     sut_bugs: Sequence[str] = (),
     llm_retry: RetryPolicy = NO_RETRY,
+    api_reference: str = "",
 ) -> PipelineResult:
     deps = AgentDeps(llm=TracedLLM(llm, inst, llm_retry), tools=TracedToolRegistry(tools, inst))
     stages = [
         traced_agent(RequirementAgent(deps), inst),
-        traced_agent(TestDesignAgent(deps), inst),
-        traced_agent(AutomationAgent(deps), inst),
+        traced_agent(TestDesignAgent(deps, api_reference), inst),
+        traced_agent(AutomationAgent(deps, api_reference), inst),
         traced_agent(QAAgent(deps), inst, _qa_attributes),
         traced_agent(ReportAgent(deps), inst),
     ]

@@ -31,7 +31,7 @@ def test_retry_durations_include_backoff_between_attempts(harness):
         retry=RetryPolicy(max_attempts=3, backoff_s=1.5),
     )
 
-    TracedToolRegistry(registry, harness.inst).call("pytest")
+    TracedToolRegistry(registry, harness.inst).call("pytest", paths=["generated/test_x.py"])
 
     first, second = sorted(harness.named("attempt"), key=lambda s: s.attributes["qa.retry.attempt"])
     assert _duration_s(first) == pytest.approx(3.0)

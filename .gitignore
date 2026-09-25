@@ -4,5 +4,7 @@ __pycache__/
 *.egg-info/
 .venv/
 traces/
-generated/
+generated/*
+!generated/conftest.py
+.env
 *.db

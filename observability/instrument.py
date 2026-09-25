@@ -24,10 +24,18 @@ from typing import Any, Generic, Protocol, TypeVar
 from opentelemetry import context as otel_context
 from opentelemetry.trace import Span, Status, StatusCode, Tracer
 
-from llm.client import ChatResponse, LLMClient, LLMRateLimitError, LLMTimeoutError, Message
+from llm.client import ChatResponse, LLMClient, LLMRateLimitError, LLMTimeoutError, LLMUnavailableError, Message
 from observability.clock import Clock
 from observability.redact import redact
-from tools.registry import NO_RETRY, RetryPolicy, ToolRegistry, ToolResult, ToolTimeoutError, UnknownToolError
+from tools.registry import (
+    NO_RETRY,
+    RetryPolicy,
+    ToolArgumentError,
+    ToolRegistry,
+    ToolResult,
+    ToolTimeoutError,
+    UnknownToolError,
+)
 
 T = TypeVar("T")
 In = TypeVar("In")
@@ -93,8 +101,12 @@ def symptom_of(exc: BaseException) -> str | None:
         return "TIMEOUT"
     if isinstance(exc, LLMRateLimitError):
         return "RATE_LIMIT"
+    if isinstance(exc, LLMUnavailableError):
+        return "HTTP_5XX"
     if isinstance(exc, UnknownToolError):
         return "INVALID_OUTPUT"
+    if isinstance(exc, ToolArgumentError):
+        return "SCHEMA_MISMATCH"
     if isinstance(exc, ConnectionError):
         return "CONNECTION"
     return None
@@ -216,7 +228,10 @@ class TracedLLM:
         self.model = llm.model
 
     def chat(self, messages: Sequence[Message]) -> ChatResponse:
-        attrs = {"gen_ai.operation.name": "chat", "gen_ai.request.model": self.model}
+        attrs: dict[str, Any] = {"gen_ai.operation.name": "chat", "gen_ai.request.model": self.model}
+        temperature = getattr(self._llm, "temperature", None)
+        if temperature is not None:
+            attrs["gen_ai.request.temperature"] = temperature
         with start_span(self._inst, "llm.chat", attrs) as span:
             record_content(self._inst, span, "prompt", "\n\n".join(f"[{m.role}]\n{m.content}" for m in messages))
             call = lambda: self._llm.chat(messages)  # noqa: E731
@@ -247,6 +262,7 @@ class TracedToolRegistry:
         attrs = {"gen_ai.operation.name": "execute_tool", "gen_ai.tool.name": name, "qa.tool.name": name}
         with start_span(self._inst, f"tool.{name}", attrs) as span:
             tool = self._registry.get(name)
+            tool.validate(args)  # a schema violation never reaches the tool
             invoke = lambda: tool.fn(**args)  # noqa: E731
             if tool.retry.max_attempts > 1:
                 outcome = with_retry(invoke, tool.retry, self._inst, failure_of=_tool_failure)

@@ -68,7 +68,7 @@ def test_secrets_absent_from_spans_artifacts_and_trace_file(tmp_dir):
     from observability.instrument import traced_run
 
     with traced_run(inst, "REQ-001") as run:
-        TracedToolRegistry(registry, inst).call("pytest")
+        TracedToolRegistry(registry, inst).call("pytest", paths=["generated/test_x.py"])
     provider.shutdown()
 
     written = [p for p in tmp_dir.rglob("*") if p.is_file()]

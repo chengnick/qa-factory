@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Literal
+from dataclasses import dataclass, field
+from typing import Any, Literal
 
 Surface = Literal["api", "ui"]
 Verdict = Literal["PASS", "DEFECT_FOUND", "TEST_BROKEN", "AGENT_FAILED", "ENV_BLOCKED", "FLAKY"]
@@ -62,6 +62,7 @@ class ToolExecution:
     exit_code: int | None = None
     summary: str = ""
     error: str | None = None  # set when the tool raised instead of returning a result
+    data: dict[str, Any] = field(default_factory=dict)  # tool-specific details, e.g. junit counts
 
 
 @dataclass(frozen=True)

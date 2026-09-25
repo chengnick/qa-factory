@@ -11,6 +11,7 @@ MASK = "[REDACTED]"
 _PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bsk-(?:ant-)?[A-Za-z0-9_\-]{16,}"), MASK),
     (re.compile(r"\bAKIA[0-9A-Z]{16}\b"), MASK),
+    (re.compile(r"\bAIza[0-9A-Za-z_\-]{35}\b"), MASK),  # Google API key
     (re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b"), MASK),
     (re.compile(r"(?i)\b(Bearer)\s+[A-Za-z0-9._~+/\-]+=*"), rf"\1 {MASK}"),
     (
