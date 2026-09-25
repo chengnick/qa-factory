@@ -73,3 +73,20 @@ def fake_tools(requirement_id: str, scenario: str = "flaky", clock: Clock | None
     )
     registry.register("playwright", tool([ToolResult(ok=True, exit_code=0, stdout="1 passed in 2.10s", command=pw_cmd)], "playwright"))
     return registry
+
+
+DRY_RUN_TEST = '''import httpx
+
+
+def test_sut_is_healthy(base_url):
+    r = httpx.get(f"{base_url}/health", timeout=10)
+    assert r.status_code == 200, r.text
+'''
+
+
+def dry_run_llm() -> FakeLLM:
+    """Scripted LLM for `python -m evaluation.run --llm fake`: writes one trivial real test (offline dry run)."""
+    requirement = {"summary": "dry run", "acceptance_criteria": ["the SUT answers its health check"]}
+    design = {"cases": [{"id": "TC-1", "title": "health", "surface": "api", "steps": ["GET /health"], "expected": "200"}]}
+    automation = {"files": [{"path": "generated/test_dry_run_api.py", "surface": "api", "content": DRY_RUN_TEST}]}
+    return FakeLLM([json.dumps(requirement), json.dumps(design), json.dumps(automation)])

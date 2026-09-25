@@ -42,3 +42,24 @@ def redact_value(value: Any) -> Any:
     if isinstance(value, dict):
         return {k: redact_value(v) for k, v in value.items()}
     return value
+
+
+# Credential shapes used to *detect* a leak (e.g. before committing run artifacts). Narrower than the
+# masking rules above, which also mask any `*token*=value` pair and would flag metric names like
+# "input_tokens".
+SECRET_SHAPES: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bsk-(?:ant-)?[A-Za-z0-9_\-]{16,}"),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    re.compile(r"\bAIza[0-9A-Za-z_\-]{35}\b"),
+    re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b"),
+    re.compile(r"(?i)\bBearer\s+(?!\[REDACTED\])[A-Za-z0-9._~+/\-]{16,}"),
+    re.compile(r"""(?i)\b[\w.\-]*(?:api[_-]?key|secret|password)[\w.\-]*["']?\s*[:=]\s*["']?(?!\[REDACTED\])[^\s"',;&]{8,}"""),
+)
+
+
+def find_secret(text: str) -> str | None:
+    """Return the first credential-shaped match (for reporting where), or None."""
+    for pattern in SECRET_SHAPES:
+        if m := pattern.search(text):
+            return m.group(0)
+    return None

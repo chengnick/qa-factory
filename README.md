@@ -2,7 +2,7 @@
 
 A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3).
 
-## Current status: Phase 2.5 done; Phase 2 acceptance to be redone (Phase 2R)
+## Current status: Phase 2R (re-acceptance of Phase 2 with cross-validation)
 
 Install the exact locked versions (spec v3 D13):
 
@@ -10,6 +10,24 @@ Install the exact locked versions (spec v3 D13):
 pip install -r requirements.lock
 pip install --no-deps -e .
 ```
+
+### Phase 2R (spec v3 §6, §11)
+
+- **Cross-validation** ([evaluation/differential.py](evaluation/differential.py)): the final generated tests run once on a **fresh bug SUT** and once on a **fresh clean SUT**. Both builds use the same file order, tools, retry policy and whitelisted environment, and every fresh SUT starts from the same seed (users 1–4, no projects). Results are compared per pytest node id (§6.2):
+
+  | Bug build | Clean build | Decision |
+  |---|---|---|
+  | FAIL | PASS | bug caught (R11) |
+  | FAIL | FAIL | broken test (R12) |
+  | PASS | FAIL | broken test (R13) |
+  | ERROR | anything | broken test (R10) |
+  | PASS | PASS | not caught |
+
+  Each build starts with a SUT health check. If either check fails, cross-validation is `ENV_BLOCKED`: no test is judged and none counts toward test health. The pipeline's own QA run only gives the **surface verdict**. Output: `differential.json`, `pytest/bug_build.log`, `pytest/clean_build.log`, and an `evaluation.differential` span in the same trace.
+- **Multi-round runner**: `python -m evaluation.run --dataset dev --rounds 5 --llm gemini --model gemini-3.5-flash-lite --results-dir benchmark/results/phase2r` ([evaluation/run.py](evaluation/run.py)).
+  - Combinations are interleaved round by round, and every run is copied to the results directory after a secret scan.
+  - Live runs refuse a dirty git worktree, and `--dataset test` is refused while `benchmark/frozen.yaml` does not exist.
+  - Metrics are in [evaluation/metrics.py](evaluation/metrics.py): mean, range, n, and per-bug detection.
 
 ### Phase 2.5 (minimal fixes, spec v3 §13)
 
@@ -76,6 +94,8 @@ pytest tests                       # flag mechanism + manifest consistency
 - **Weak identity.** Users are identified only by the `X-User` header. There is no real authentication.
 - **B01 needs multiple pages.** It only triggers when pagination has moved past the first page (`offset > 0`), so the single-page UI list is unaffected.
 - **Partial isolation only.** See *Isolation* below.
+- **What cross-validation cannot tell** (spec v3 §6.4). It confirms that a failure depends on the bug switch, not that the failing test describes *that* bug. For example, with B04 enabled, an unrelated wrong test could fail on the 500 by chance. Phase 5's manual labels quantify this.
+- **Clean runs cannot show a cross-validated false positive.** Both builds are clean, so a failing test is R12/R13, never R11. The main false-positive figure is therefore the **surface** rate: in real use there is no clean build to compare with, and the user sees the surface verdict.
 
 ## Isolation (current level: L0+)
 

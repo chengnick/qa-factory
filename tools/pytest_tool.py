@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from tools.file_tool import resolve_generated
+from observability.redact import redact
 from tools.registry import ToolArgumentError, ToolResult, ToolTimeoutError
 from tools.workspace import ensure_pytest_ini
 
@@ -71,9 +72,52 @@ def _junit_counts(path: Path) -> dict[str, int]:
             counts[key] += int(suite.get(key, 0))
     for failure in root.iter("failure"):
         message = failure.get("message", "")
-        kind = "assertion_failures" if message.startswith("AssertionError") or message.startswith("assert ") else "exception_failures"
+        kind = "assertion_failures" if _is_assertion(message) else "exception_failures"
         counts[kind] += 1
     return counts
+
+
+MESSAGE_LIMIT = 500
+
+
+def _is_assertion(message: str) -> bool:
+    return message.startswith("AssertionError") or message.startswith("assert ")
+
+
+def _node_id(root: Path, classname: str, name: str) -> str:
+    """junit (classname, name) -> pytest node id, e.g. ("generated.test_a.TestX", "test_y") -> generated/test_a.py::TestX::test_y."""
+    if not classname:  # module-level error (collection failure): name is the dotted module
+        return name.replace(".", "/") + ".py"
+    parts = classname.split(".")
+    for cut in range(len(parts), 0, -1):
+        module = "/".join(parts[:cut]) + ".py"
+        if (root / module).is_file():
+            return "::".join([module, *parts[cut:], name])
+    return "::".join([classname.replace(".", "/") + ".py", name])
+
+
+def junit_tests(path: Path, root: Path) -> list[dict[str, str]]:
+    """One entry per test case: node_id, outcome (PASS / FAIL / ERROR / SKIP) and a short redacted message.
+
+    FAIL = failed with AssertionError; ERROR = any other exception, setup/teardown or collection error.
+    """
+    if not path.exists():
+        return []
+    results = []
+    for case in ET.parse(path).getroot().iter("testcase"):
+        failure, error, skipped = case.find("failure"), case.find("error"), case.find("skipped")
+        if failure is not None:
+            message = failure.get("message", "")
+            outcome = "FAIL" if _is_assertion(message) else "ERROR"
+        elif error is not None:
+            message, outcome = error.get("message", "error"), "ERROR"
+        elif skipped is not None:
+            message, outcome = skipped.get("message", ""), "SKIP"
+        else:
+            message, outcome = "", "PASS"
+        node = _node_id(root, case.get("classname", ""), case.get("name", ""))
+        results.append({"node_id": node, "outcome": outcome, "message": redact(message)[:MESSAGE_LIMIT]})
+    return results
 
 
 class PytestTool:
@@ -116,7 +160,12 @@ class PytestTool:
         counts = _junit_counts(junit)
 
         output = (proc.stdout + proc.stderr)[-STDOUT_LIMIT:]
-        data: dict[str, Any] = {**counts, "files": rel, "junit": junit.relative_to(self.root).as_posix()}
+        data: dict[str, Any] = {
+            **counts,
+            "files": rel,
+            "junit": junit.relative_to(self.root).as_posix(),
+            "results": junit_tests(junit, self.root),
+        }
         return ToolResult(
             ok=proc.returncode == 0,
             exit_code=proc.returncode,

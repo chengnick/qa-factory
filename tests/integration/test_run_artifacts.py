@@ -104,7 +104,7 @@ DELETERS = re.compile(r"rmtree|\.unlink\(|os\.remove\(|\.rmdir\(|TemporaryDirect
 @pytest.mark.parametrize(
     "path",
     [REPO / "app.py", REPO / "pipeline.py", *sorted((REPO / "tools").glob("*.py")), *sorted((REPO / "observability").glob("*.py")),
-     *sorted((REPO / "agents").glob("*.py"))],
+     *sorted((REPO / "agents").glob("*.py")), *sorted((REPO / "evaluation").glob("*.py"))],
     ids=lambda p: p.relative_to(REPO).as_posix(),
 )  # fmt: skip
 def test_pipeline_code_never_deletes_files(path):

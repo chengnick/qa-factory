@@ -108,3 +108,34 @@ def test_failures_split_into_assertions_and_test_code_exceptions(root):
 
     assert result.data["failures"] == 2
     assert result.data["assertion_failures"] == 1 and result.data["exception_failures"] == 1
+
+
+def test_per_test_results_with_node_ids(root):
+    body = (
+        "import pytest\n\n"
+        "def test_ok():\n    pass\n\n"
+        "def test_assert():\n    assert 500 == 422, 'Internal Server Error'\n\n"
+        "def test_crash():\n    (lambda: None).post('/x')\n\n"
+        "@pytest.mark.parametrize('n', [1])\ndef test_param(n):\n    pass\n\n"
+        "class TestGroup:\n    def test_in_class(self):\n        pass\n"
+    )
+    path = _write(root, "test_nodes.py", body)
+
+    results = {r["node_id"]: r for r in PytestTool(root, "http://sut.test")(paths=[path]).data["results"]}
+
+    assert {k: v["outcome"] for k, v in results.items()} == {
+        "generated/test_nodes.py::test_ok": "PASS",
+        "generated/test_nodes.py::test_assert": "FAIL",
+        "generated/test_nodes.py::test_crash": "ERROR",
+        "generated/test_nodes.py::test_param[1]": "PASS",
+        "generated/test_nodes.py::TestGroup::test_in_class": "PASS",
+    }
+    assert "500 == 422" in results["generated/test_nodes.py::test_assert"]["message"]
+
+
+def test_collection_error_is_one_error_result(root):
+    path = _write(root, "test_syntax.py", "def test_a(:\n    pass\n")
+
+    (result,) = PytestTool(root, "http://sut.test")(paths=[path]).data["results"]
+
+    assert result == {"node_id": "generated/test_syntax.py", "outcome": "ERROR", "message": result["message"]}

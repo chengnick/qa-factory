@@ -18,8 +18,6 @@ The sealed test-set bugs (benchmark/datasets.py) are refused before Phase 5.
 from __future__ import annotations
 
 import argparse
-import contextlib
-import json
 import os
 import sys
 import time
@@ -27,15 +25,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from agents.contracts import RequirementInput
-from agents.version import PROMPT_VERSION
-from benchmark.datasets import TEST_BUGS, dataset_of
-from evaluation.provenance import git_commit, lockfile_sha256
+from benchmark.datasets import TEST_BUGS
+from evaluation.run import base_meta, execute_run, instrumentation, write_meta
 from llm.client import LLMConfigError
-from observability.clock import SystemClock
-from observability.instrument import Instrumentation, RunContentSink
-from observability.json_exporter import JsonFileSpanExporter
-from observability.setup import create_tracer_provider, get_tracer
-from pipeline import PipelineResult, run_pipeline
+from pipeline import run_pipeline
 from testing import scripts
 from testing.fake_clock import FakeClock
 from tools.workspace import create_run_workspace, new_run_id
@@ -64,59 +57,63 @@ def load_env_file(path: Path) -> None:
             os.environ[key] = value
 
 
-def _run_fake(args: argparse.Namespace, requirement: RequirementInput, sut_bugs: list[str], workspace: Path) -> PipelineResult:
+def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict]:
+    """Scripted LLM and scripted tools on a simulated clock (no SUT, no network)."""
+    run_id = new_run_id()
+    workspace = create_run_workspace(args.artifacts_dir, run_id)
+    meta = base_meta(run_id, args.requirement, llm="fake", model="fake-model", temperature=None, sut_bugs=sut_bugs)
+    meta["scenario"] = args.scenario
+    requirement = RequirementInput(args.requirement, (REQUIREMENTS_DIR / f"{args.requirement}.md").read_text(encoding="utf-8"))
     clock = FakeClock(start_ns=time.time_ns())
-    with _instrumentation(workspace, clock) as inst:
-        return run_pipeline(
-            requirement,
-            llm=scripts.fake_llm(args.requirement, clock),
-            tools=scripts.fake_tools(args.requirement, args.scenario, clock),
-            inst=inst,
-            sut_bugs=sut_bugs,
-            run_id=workspace.name,
-            dataset=dataset_of(sut_bugs),
-        )
+    try:
+        with instrumentation(workspace, clock) as inst:
+            result = run_pipeline(
+                requirement,
+                llm=scripts.fake_llm(args.requirement, clock),
+                tools=scripts.fake_tools(args.requirement, args.scenario, clock),
+                inst=inst,
+                sut_bugs=sut_bugs,
+                run_id=run_id,
+                dataset=meta["dataset"],
+            )
+    except Exception as exc:  # unclassified failure: keep the evidence, then crash loudly
+        meta.update(error=f"{type(exc).__name__}: {exc}", finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
+        write_meta(workspace, meta)
+        raise
+    meta.update(
+        trace_id=result.trace_id,
+        trace_file="trace.json",
+        verdict=result.verdict,
+        surface_verdict=result.surface_verdict,
+        error=result.error,
+        generated_files=[],
+        finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    )
+    write_meta(workspace, meta)
+    return workspace, meta
 
 
-def _run_gemini(args: argparse.Namespace, requirement: RequirementInput, sut_bugs: list[str], workspace: Path) -> PipelineResult:
+def _run_gemini(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict]:
+    """Real LLM and real tools; not in evaluation mode (no cross-validation: results are unverified)."""
     from llm.adapters.gemini import GEMINI_RETRY, GeminiClient
-    from sut.launcher import running_sut, wait_healthy
-    from tools.factory import real_tools
+    from sut.launcher import wait_healthy
 
     load_env_file(ENV_FILE)
     llm = GeminiClient(args.model)
     if args.sut_url:
         wait_healthy(args.sut_url)
-        sut = contextlib.nullcontext(args.sut_url.rstrip("/"))
-    else:
-        sut = running_sut(sut_bugs)
-    with sut as url, _instrumentation(workspace, SystemClock()) as inst:
-        print(f"SUT: {url}  bugs: {','.join(sut_bugs) or '(none)'}  model: {args.model}", flush=True)
-        return run_pipeline(
-            requirement,
-            llm=llm,
-            tools=real_tools(workspace, url),
-            inst=inst,
-            sut_bugs=sut_bugs,
-            llm_retry=GEMINI_RETRY,
-            api_reference=API_REFERENCE.read_text(encoding="utf-8"),
-            run_id=workspace.name,
-            dataset=dataset_of(sut_bugs),
-        )
-
-
-@contextlib.contextmanager
-def _instrumentation(workspace: Path, clock):
-    """Trace -> {workspace}/trace.json; full-size content -> {workspace}/prompts/ and spans/."""
-    provider = create_tracer_provider(JsonFileSpanExporter(workspace, filename="trace.json"))
-    try:
-        yield Instrumentation(get_tracer(provider), clock, RunContentSink(workspace))
-    finally:
-        provider.shutdown()
-
-
-def _write_run_record(workspace: Path, record: dict) -> None:
-    (workspace / "meta.json").write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+    return execute_run(
+        requirement_id=args.requirement,
+        sut_bugs=sut_bugs,
+        llm=llm,
+        llm_kind="gemini",
+        model=args.model,
+        artifacts_dir=args.artifacts_dir,
+        temperature=0.0,
+        llm_retry=GEMINI_RETRY,
+        differential=False,
+        sut_url=args.sut_url.rstrip("/") if args.sut_url else None,
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -133,10 +130,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--allow-test-set", action="store_true", help="Phase 5 only: allow sealed test-set bugs")
     args = parser.parse_args(argv)
 
-    req_file = REQUIREMENTS_DIR / f"{args.requirement}.md"
-    if not req_file.is_file():
-        parser.error(f"requirement not found: {req_file}")
-    requirement = RequirementInput(args.requirement, req_file.read_text(encoding="utf-8"))
+    if not (REQUIREMENTS_DIR / f"{args.requirement}.md").is_file():
+        parser.error(f"requirement not found: {args.requirement}")
     sut_bugs = parse_bugs(args.sut_bugs if args.sut_bugs is not None else os.environ.get("SUT_BUGS"))
     sealed = sorted(set(sut_bugs) & TEST_BUGS)
     if sealed and not args.allow_test_set:
@@ -144,54 +139,19 @@ def main(argv: list[str] | None = None) -> int:
 
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    run_id = new_run_id()
-    workspace = create_run_workspace(args.artifacts_dir, run_id)
-    print(f"run: {workspace}", flush=True)
-    record: dict = {
-        "run_id": run_id,
-        "trace_id": None,
-        "requirement_id": args.requirement,
-        "llm": args.llm,
-        "model": args.model if args.llm == "gemini" else "fake-model",
-        "temperature": 0.0 if args.llm == "gemini" else None,
-        "prompt_version": PROMPT_VERSION,
-        "dataset": dataset_of(sut_bugs),
-        "scenario": args.scenario if args.llm == "fake" else None,
-        "sut_bugs": sut_bugs,
-        "sut_url": args.sut_url,
-        "git_commit": git_commit(),
-        "lockfile_sha256": lockfile_sha256(),
-        "started_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-    }
-    runner = _run_fake if args.llm == "fake" else _run_gemini
     try:
-        result = runner(args, requirement, sut_bugs, workspace)
+        workspace, meta = _run_fake(args, sut_bugs) if args.llm == "fake" else _run_gemini(args, sut_bugs)
     except LLMConfigError as exc:
-        record.update(finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"), error=f"LLMConfigError: {exc}")
-        _write_run_record(workspace, record)
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    except Exception as exc:  # unclassified failure: keep the evidence, then crash loudly
-        record.update(finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"), error=f"{type(exc).__name__}: {exc}")
-        _write_run_record(workspace, record)
-        raise
 
-    trace_file = workspace / "trace.json"
-    record.update(
-        finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        trace_id=result.trace_id,
-        trace_file=trace_file.name,
-        verdict=result.verdict,
-        error=result.error,
-        generated_files=sorted(p.relative_to(workspace).as_posix() for p in (workspace / "generated").glob("test_*.py")),
-    )
-    _write_run_record(workspace, record)
-
-    print(result.report.summary if result.report else f"pipeline failed: {result.error}")
-    print(f"verdict: {result.verdict}")
+    print(f"run:     {workspace}")
+    if meta.get("error"):
+        print(f"pipeline failed: {meta['error']}")
+    print(f"verdict: {meta.get('verdict')} (unverified: no cross-validation outside evaluation mode)")
     clock_note = "  (simulated clock)" if args.llm == "fake" else ""
-    print(f"trace:   {trace_file}{clock_note}")
-    return 0 if result.error is None else 1
+    print(f"trace:   {workspace / 'trace.json'}{clock_note}")
+    return 0 if not meta.get("error") else 1
 
 
 if __name__ == "__main__":

@@ -363,6 +363,9 @@ class RunHandle:
     def set_verdict(self, verdict: str) -> None:
         self._span.set_attribute("qa.verdict", verdict)
 
+    def set_attribute(self, key: str, value: Any) -> None:
+        self._span.set_attribute(key, value)
+
     def fail(self, exc: BaseException) -> None:
         mark_error(self._inst, self._span, exc)
 
