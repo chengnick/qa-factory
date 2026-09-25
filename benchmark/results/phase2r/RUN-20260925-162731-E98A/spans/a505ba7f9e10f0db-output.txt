@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-002",
+  "files": [
+    {
+      "path": "generated/test_req002_api.py",
+      "content": "import pytest\n\ndef test_tc1_title_and_priority_boundary_values(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # 100-character title and priority 1 on POST\n    title_100 = \"a\" * 100\n    r_post = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": title_100, \"priority\": 1})\n    assert r_post.status_code == 201, r_post.text\n    task_data = r_post.json()\n    tid = task_data[\"id\"]\n    assert task_data[\"title\"] == title_100\n    assert task_data[\"priority\"] == 1\n    \n    # 1-character title and priority 5 on PATCH\n    title_1 = \"b\"\n    r_patch = alice.patch(f\"/api/tasks/{tid}\", json={\"title\": title_1, \"priority\": 5})\n    assert r_patch.status_code == 200, r_patch.text\n    updated_data = r_patch.json()\n    assert updated_data[\"title\"] == title_1\n    assert updated_data[\"priority\"] == 5\n\ndef test_tc2_invalid_title_lengths_and_blank_titles(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # Empty string title\n    r_empty = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"\", \"priority\": 3})\n    assert r_empty.status_code == 422, r_empty.text\n    \n    # 101-character title\n    title_101 = \"a\" * 101\n    r_long = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": title_101, \"priority\": 3})\n    assert r_long.status_code == 422, r_long.text\n\ndef test_tc3_out_of_range_priority_values(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # Priority 0\n    r_p0 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Valid Title\", \"priority\": 0})\n    assert r_p0.status_code == 422, r_p0.text\n    \n    # Priority 6\n    r_p6 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Valid Title\", \"priority\": 6})\n    assert r_p6.status_code == 422, r_p6.text\n",
+      "surface": "api"
+    }
+  ]
+}

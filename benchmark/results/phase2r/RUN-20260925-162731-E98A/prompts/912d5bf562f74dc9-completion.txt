@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Verify title and priority boundary values are accepted on POST and PATCH",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with a 100-character title and priority 1 as alice",
+        "PATCH /api/tasks/{tid} with a 1-character title and priority 5 as alice"
+      ],
+      "expected": "title 長度為 100 字元時應被接受，並回傳 201（POST）或 200（PATCH）。priority 值為 1 或 5 時應被接受。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify invalid title lengths and blank titles return 422 and no 5xx",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 2\"} as alice",
+        "POST /api/projects/{pid}/tasks with an empty string title and priority 3 as alice",
+        "POST /api/projects/{pid}/tasks with a 101-character title and priority 3 as alice"
+      ],
+      "expected": "title 欄位為必填，長度限制為 1 至 100 字元（含邊界）。title 長度大於 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx 錯誤。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify out-of-range priority values return 422 status code",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 3\"} as alice",
+        "POST /api/projects/{pid}/tasks with title \"Valid Title\" and priority 0 as alice",
+        "POST /api/projects/{pid}/tasks with title \"Valid Title\" and priority 6 as alice"
+      ],
+      "expected": "priority 欄位必須為整數，有效範圍為 1 至 5（含邊界），預設值為 3。priority 值為 1 或 5 時應被接受，而 0 或 6 則應回傳 422 狀態碼。"
+    }
+  ]
+}

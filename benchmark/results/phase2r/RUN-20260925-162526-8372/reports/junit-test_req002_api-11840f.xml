@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="3.141" timestamp="2026-09-26T00:25:38.604383+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req002_api" name="test_tc1_task_creation_boundaries" time="2.538" /><testcase classname="generated.test_req002_api" name="test_tc2_task_update_boundaries" time="0.008" /><testcase classname="generated.test_req002_api" name="test_tc3_task_title_invalid_length" time="0.023"><failure message="AssertionError: Internal Server Error&#10;assert 500 == 422&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000001CC65AA4400&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000001CC66979260&gt;
+
+    def test_tc3_task_title_invalid_length(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Empty title
+        r_empty = alice.post(f"/api/projects/{pid}/tasks", json={"title": ""})
+        assert r_empty.status_code == 422, r_empty.text
+    
+        # Too long title (101 chars)
+        too_long = "a" * 101
+        r_long = alice.post(f"/api/projects/{pid}/tasks", json={"title": too_long})
+&gt;       assert r_long.status_code == 422, r_long.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+generated\test_req002_api.py:58: AssertionError</failure></testcase><testcase classname="generated.test_req002_api" name="test_tc4_task_priority_invalid_range" time="0.011" /></testsuite></testsuites>

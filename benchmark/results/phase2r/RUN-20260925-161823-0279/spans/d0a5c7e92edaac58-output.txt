@@ -1,0 +1,55 @@
+{
+  "requirement_id": "REQ-007",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "3 passed in 3.51s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req007_api.py"
+        ],
+        "junit": "reports/junit-test_req007_api-24244f.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req007_api.py::test_req007_tc1_member_can_read",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_req007_tc3_non_existent_task",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

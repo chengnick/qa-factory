@@ -1,0 +1,141 @@
+{
+  "status": "COMPLETE",
+  "verdict": "PASS",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 0,
+    "passed": 4,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 4,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req002_api.py": "c73250f9119734fefca3ce0f95b21e7e87607f1a874463f7e3712ba29d8d704d"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_title_boundaries_and_required",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_title_too_long",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_priority_boundaries",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_priority_out_of_range",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-7476b1.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_title_boundaries_and_required",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_title_too_long",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_priority_boundaries",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_priority_out_of_range",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-a9f5fe.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req002_api.py::test_tc1_title_boundaries_and_required",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc2_title_too_long",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc3_priority_boundaries",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc4_priority_out_of_range",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    }
+  ]
+}

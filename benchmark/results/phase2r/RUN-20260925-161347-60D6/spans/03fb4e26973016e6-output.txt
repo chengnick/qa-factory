@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-007",
+  "files": [
+    {
+      "path": "generated/test_req007_api.py",
+      "content": "import pytest\n\ndef test_tc1_project_member_can_read_project_tasks_and_detail(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n\n    # Create a task\n    create_res = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Test Task\"})\n    assert create_res.status_code == 201, create_res.text\n    task_data = create_res.json()\n    tid = task_data[\"id\"]\n\n    # GET /api/projects/{pid}\n    proj_res = alice.get(f\"/api/projects/{pid}\")\n    assert proj_res.status_code == 200, proj_res.text\n\n    # GET /api/projects/{pid}/tasks\n    tasks_res = alice.get(f\"/api/projects/{pid}/tasks\")\n    assert tasks_res.status_code == 200, tasks_res.text\n    assert any(t[\"id\"] == tid for t in tasks_res.json()[\"items\"])\n\n    # GET /api/tasks/{tid}\n    detail_res = alice.get(f\"/api/tasks/{tid}\")\n    assert detail_res.status_code == 200, detail_res.text\n    assert detail_res.json()[\"id\"] == tid\n\n\ndef test_tc2_non_member_receives_403_for_task_detail(as_user, new_project):\n    alice = as_user(\"alice\")\n    bob = as_user(\"bob\")\n    pid = new_project(owner=\"alice\")\n\n    create_res = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Secret Task\"})\n    assert create_res.status_code == 201, create_res.text\n    tid = create_res.json()[\"id\"]\n\n    # Bob is not a member, should get 403\n    res = bob.get(f\"/api/tasks/{tid}\")\n    assert res.status_code == 403, res.text\n\n\ndef test_tc3_non_existent_task_returns_404(as_user):\n    alice = as_user(\"alice\")\n    res = alice.get(\"/api/tasks/999999\")\n    assert res.status_code == 404, res.text\n",
+      "surface": "api"
+    }
+  ]
+}

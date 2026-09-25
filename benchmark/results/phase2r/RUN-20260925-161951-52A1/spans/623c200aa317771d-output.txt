@@ -1,0 +1,54 @@
+{
+  "requirement_id": "REQ-005",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Allowed transitions succeed",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice (status becomes todo)",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "允許的狀態流轉包含：todo → in_progress、in_progress → done、in_progress → todo。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Transitions from done return 409 and keep status unchanged",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "done 為終態，從 done 出發的任何流轉應回傳 409 且任務狀態保持不變。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Other unlisted transitions including todo to done and same-status transitions return 409",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice (status is todo)",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "其他未列出的流轉（包含 todo → done 以及同狀態的流轉）應回傳 409。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Invalid status value in to parameter returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"} as alice"
+      ],
+      "expected": "當請求中的 to 參數不是合法的狀態時，應回傳 422。"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-002",
+  "files": [
+    {
+      "path": "generated/test_req002_api.py",
+      "content": "import pytest\n\ndef test_tc1_title_length_100_and_priorities_1_and_5(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # Title length 100, priority 1\n    r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"a\" * 100, \"priority\": 1})\n    assert r1.status_code in (200, 201), r1.text\n    \n    # Valid title, priority 5\n    r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Valid Title\", \"priority\": 5})\n    assert r2.status_code in (200, 201), r2.text\n\ndef test_tc2_title_length_101_and_empty_title_return_422(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # Title length 101\n    r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"a\" * 101})\n    assert r1.status_code == 422, r1.text\n    \n    # Empty title\n    r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"\"})\n    assert r2.status_code == 422, r2.text\n\ndef test_tc3_priority_boundaries_0_and_6_return_422(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # Priority 0\n    r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task\", \"priority\": 0})\n    assert r1.status_code == 422, r1.text\n    \n    # Priority 6\n    r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task\", \"priority\": 6})\n    assert r2.status_code == 422, r2.text\n",
+      "surface": "api"
+    }
+  ]
+}

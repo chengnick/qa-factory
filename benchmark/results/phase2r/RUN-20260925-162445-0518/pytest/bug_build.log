@@ -1,0 +1,31 @@
+===== pytest generated/test_req007_api.py (exit 1, attempts 1)
+.F.                                                                      [100%]
+================================== FAILURES ===================================
+____________ test_non_project_member_forbidden_reading_task_detail ____________
+
+as_user = <function as_user.<locals>.get at 0x000002856DCC4040>
+new_project = <function new_project.<locals>.create at 0x000002856DCC42C0>
+
+    def test_non_project_member_forbidden_reading_task_detail(as_user, new_project):
+        pid = new_project(owner="alice", members=())
+        alice = as_user("alice")
+        bob = as_user("bob")
+    
+        # Alice creates a task
+        create_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Alice's Task"})
+        assert create_res.status_code == 201, create_res.text
+        tid = create_res.json()["id"]
+    
+        # Bob tries to read the task detail
+        get_res = bob.get(f"/api/tasks/{tid}")
+>       assert get_res.status_code == 403, get_res.text
+E       AssertionError: {"id":2,"project_id":2,"title":"Alice's Task","description":"","status":"todo","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-25T16:25:05.412+00:00","updated_at":"2026-09-25T16:25:05.412+00:00"}
+E       assert 200 == 403
+E        +  where 200 = <Response [200 OK]>.status_code
+
+generated\test_req007_api.py:31: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260925-162445-0518\reports\junit-test_req007_api-84fa95.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req007_api.py::test_non_project_member_forbidden_reading_task_detail
+1 failed, 2 passed in 4.09s
+

@@ -1,0 +1,65 @@
+{
+  "requirement_id": "REQ-005",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 4 passed in 4.51s",
+      "error": null,
+      "data": {
+        "tests": 5,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req005_api.py"
+        ],
+        "junit": "reports/junit-test_req005_api-16eb05.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req005_api.py::test_req005_tc1_allowed_transitions",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_req005_tc1_specific_allowed",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+            "outcome": "FAIL",
+            "message": "AssertionError: {\"id\":4,\"project_id\":3,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:20:12.657+00:00\",\"updated_at\":\"2026-09-25T16:20:12.665+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code"
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_req005_tc3_unlisted_transitions",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_req005_tc4_invalid_status_value",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

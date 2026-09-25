@@ -1,0 +1,84 @@
+{
+  "status": "COMPLETE",
+  "verdict": "TEST_BROKEN",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 1,
+    "passed": 0,
+    "tests": 1
+  },
+  "test_health": {
+    "healthy": 0,
+    "total": 1
+  },
+  "file_hashes": {
+    "generated/test_req005_api.py": "1243439d2859c791485950fff618d8d9bc00441673c56d06b7eff61a5fa35f73"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py",
+          "outcome": "ERROR",
+          "message": "collection failure"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 2,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-847c3c.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py",
+          "outcome": "ERROR",
+          "message": "collection failure"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 2,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-0de339.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req005_api.py",
+      "bug_outcome": "ERROR",
+      "clean_outcome": "ERROR",
+      "decision": "BROKEN",
+      "rule": "R10",
+      "symptom": "CRASH",
+      "evidence": "bug build: collection failure"
+    }
+  ]
+}

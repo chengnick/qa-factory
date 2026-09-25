@@ -1,0 +1,36 @@
+{
+  "requirement_id": "REQ-007",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project member can successfully read project, task list, and task detail",
+      "surface": "api",
+      "steps": [
+        "Send GET /api/projects/{pid} as project member alice",
+        "Send GET /api/projects/{pid}/tasks as project member alice",
+        "Send GET /api/tasks/{tid} as project member alice"
+      ],
+      "expected": "專案成員可以成功讀取專案、任務列表與任務詳情（GET /api/tasks/{tid}）"
+    },
+    {
+      "id": "TC-2",
+      "title": "Non-project member is forbidden from reading project, task list, and task detail",
+      "surface": "api",
+      "steps": [
+        "Send GET /api/projects/{pid} as non-member dave",
+        "Send GET /api/projects/{pid}/tasks as non-member dave",
+        "Send GET /api/tasks/{tid} as non-member dave"
+      ],
+      "expected": "非專案成員嘗試讀取時系統應回傳 403 Forbidden"
+    },
+    {
+      "id": "TC-3",
+      "title": "Requesting a task resource that does not exist returns 404 Not Found",
+      "surface": "api",
+      "steps": [
+        "Send GET /api/tasks/999999 as project member alice"
+      ],
+      "expected": "當請求的任務資源不存在時系統應回傳 404 Not Found"
+    }
+  ]
+}

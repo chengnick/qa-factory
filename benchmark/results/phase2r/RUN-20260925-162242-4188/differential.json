@@ -1,0 +1,122 @@
+{
+  "status": "COMPLETE",
+  "verdict": "TEST_BROKEN",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 1,
+    "passed": 2,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 2,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req007_api.py": "3f2aa0a9524d04708c0e21152e2d04d317a062f2b58ff69587a53df2192b6f85"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_project_member_can_read_task_detail",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req007_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req007_api-bf8730.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_project_member_can_read_task_detail",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req007_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req007_api-b1facb.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req007_api.py::test_project_member_can_read_task_detail",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "FAIL",
+      "decision": "BROKEN",
+      "rule": "R12",
+      "symptom": "ASSERTION",
+      "evidence": "fails on a clean SUT: AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+    }
+  ]
+}

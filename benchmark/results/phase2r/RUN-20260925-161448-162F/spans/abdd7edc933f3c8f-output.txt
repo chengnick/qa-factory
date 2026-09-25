@@ -1,0 +1,50 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "驗證 title 欄位邊界與必填條件（1 至 100 字元及空白驗證）",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Test Project\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"A\"} (length 1)",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"[100 chars string]\"} (length 100)",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"\"} (empty)",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"   \"} (whitespace only)"
+      ],
+      "expected": "title 欄位為必填，且長度限制為 1 至 100 字元（包含邊界）。title 長度為 100 字元時，請求應被接受並回傳 201（建立）或 200（更新）。title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-2",
+      "title": "驗證 title 超過 100 字元時回傳 422 錯誤",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Test Project\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"[101 chars string]\"}"
+      ],
+      "expected": "title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "驗證 priority 欄位邊界與有效數值範圍（1 至 5）",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Test Project\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\", \"priority\": 1}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 5\", \"priority\": 5}"
+      ],
+      "expected": "priority 欄位必須為整數，數值範圍限制為 1 至 5（包含邊界），預設值為 3。priority 值為 1 或 5 時，請求應被接受。"
+    },
+    {
+      "id": "TC-4",
+      "title": "驗證 priority 欄位超出範圍或為無效數值時回傳 422 錯誤",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Test Project\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 0\", \"priority\": 0}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 6\", \"priority\": 6}"
+      ],
+      "expected": "priority 值為 0 或 6（或超出範圍）時，應回傳 422 狀態碼。"
+    }
+  ]
+}

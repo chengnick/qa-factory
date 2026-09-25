@@ -1,0 +1,11 @@
+{
+  "summary": "實作任務狀態流轉 API (POST /api/tasks/{tid}/transition)，支援定義好的狀態機規則，並對不合法的流轉或狀態回傳對應的錯誤碼。",
+  "acceptance_criteria": [
+    "允許從 todo 流轉至 in_progress",
+    "允許從 in_progress 流轉至 done",
+    "允許從 in_progress 流轉至 todo",
+    "done 為終態，任何從 done 出發的流轉皆回傳 409 且任務狀態保持不變",
+    "其他未列出的流轉（包含 todo → done 以及同狀態流轉）皆回傳 409",
+    "當請求中的 to 參數不是合法狀態時，回傳 422"
+  ]
+}

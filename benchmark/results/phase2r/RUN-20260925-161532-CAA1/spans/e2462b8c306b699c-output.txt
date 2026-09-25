@@ -1,0 +1,47 @@
+{
+  "requirement_id": "REQ-005",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Verify valid state transitions: todo to in_progress, in_progress to done, and in_progress to todo",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} on a task with status 'todo'",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} on a task with status 'in_progress'",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} on a task with status 'in_progress'"
+      ],
+      "expected": "Allow valid transitions: todo to in_progress, in_progress to done, and in_progress to todo."
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify done is a terminal state for any originating transition",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} on a task with status 'done'",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} on a task with status 'done'"
+      ],
+      "expected": "Done is a terminal state: any transition originating from done returns 409 and leaves the task status unchanged."
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify unlisted transitions including todo to done and self-transitions return 409",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} on a task with status 'todo'",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} on a task with status 'todo'",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} on a task with status 'in_progress'",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} on a task with status 'done'"
+      ],
+      "expected": "Other unlisted transitions, including todo to done and self-transitions, return 409."
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify providing a 'to' status that is not a valid state returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"} on any task"
+      ],
+      "expected": "Providing a 'to' status that is not a valid state returns 422."
+    }
+  ]
+}

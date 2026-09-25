@@ -1,0 +1,55 @@
+{
+  "run_id": "RUN-20260925-162051-4B53",
+  "trace_id": "90a1786edc3abb2efe1eb94db673444c",
+  "trace_file": "trace.json",
+  "requirement_id": "REQ-007",
+  "llm": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.0,
+  "prompt_version": "v3",
+  "dataset": "dev",
+  "sut_bugs": [
+    "B03"
+  ],
+  "git_commit": {
+    "sha": "32c5e1ed40c76567dfbaa3efb30bf384e4c8eb28",
+    "dirty": true
+  },
+  "lockfile_sha256": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6",
+  "started_at": "2026-09-25T16:20:52+00:00",
+  "round": 4,
+  "sut_url": null,
+  "evaluation_mode": true,
+  "verdict": "DEFECT_FOUND",
+  "surface_verdict": "DEFECT_FOUND",
+  "error": null,
+  "differential": {
+    "status": "COMPLETE",
+    "verdict": "DEFECT_FOUND",
+    "reason": null,
+    "counts": {
+      "detected": 1,
+      "missed": 2,
+      "broken": 0,
+      "passed": 0,
+      "tests": 3
+    },
+    "test_health": {
+      "healthy": 3,
+      "total": 3
+    }
+  },
+  "generated_files": [
+    "generated/test_req007_api.py"
+  ],
+  "finished_at": "2026-09-25T16:21:26+00:00",
+  "duration_s": 34.6,
+  "models_seen": [
+    "gemini-3.5-flash-lite"
+  ],
+  "tokens": {
+    "input": 3019,
+    "output": 1232,
+    "total": 4251
+  }
+}

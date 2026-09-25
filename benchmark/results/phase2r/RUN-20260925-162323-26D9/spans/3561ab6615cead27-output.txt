@@ -1,0 +1,55 @@
+{
+  "requirement_id": "REQ-002",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "3 passed in 2.79s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req002_api.py"
+        ],
+        "junit": "reports/junit-test_req002_api-785e61.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req002_api.py::test_tc1_title_boundary_and_priority_boundaries",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc2_title_too_long_or_blank",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc3_priority_out_of_bounds",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

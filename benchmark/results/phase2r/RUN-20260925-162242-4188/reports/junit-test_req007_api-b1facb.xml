@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="3.982" timestamp="2026-09-26T00:23:06.236494+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req007_api" name="test_project_member_can_read_task_detail" time="2.477" /><testcase classname="generated.test_req007_api" name="test_non_project_member_forbidden_reading_task" time="0.958" /><testcase classname="generated.test_req007_api" name="test_reading_non_existent_task_returns_404" time="0.006"><failure message="AssertionError: {&quot;detail&quot;:[{&quot;type&quot;:&quot;int_parsing&quot;,&quot;loc&quot;:[&quot;path&quot;,&quot;tid&quot;],&quot;msg&quot;:&quot;Input should be a valid integer, unable to parse string as an integer&quot;,&quot;input&quot;:&quot;non-existent-tid&quot;}]}&#10;assert 422 == 404&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x00000262F1E78040&gt;
+
+    def test_reading_non_existent_task_returns_404(as_user):
+        alice = as_user("alice")
+        r = alice.get("/api/tasks/non-existent-tid")
+&gt;       assert r.status_code == 404, r.text
+E       AssertionError: {"detail":[{"type":"int_parsing","loc":["path","tid"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"non-existent-tid"}]}
+E       assert 422 == 404
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+generated\test_req007_api.py:29: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,122 @@
+{
+  "status": "COMPLETE",
+  "verdict": "PASS",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 0,
+    "passed": 3,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 3,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req007_api.py": "4d49b4db4c844dad206b83a4494cd5eaf0bb34b2dd82170ed9cd9e63fe4e70de"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_tc1_project_member_can_read_project_tasks_and_detail",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_tc2_non_member_receives_403_for_task_detail",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_tc3_non_existent_task_returns_404",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req007_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req007_api-30c57d.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_tc1_project_member_can_read_project_tasks_and_detail",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_tc2_non_member_receives_403_for_task_detail",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_tc3_non_existent_task_returns_404",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req007_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req007_api-eec686.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req007_api.py::test_tc1_project_member_can_read_project_tasks_and_detail",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req007_api.py::test_tc2_non_member_receives_403_for_task_detail",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req007_api.py::test_tc3_non_existent_task_returns_404",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    }
+  ]
+}

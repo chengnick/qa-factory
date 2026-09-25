@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-005",
+  "summary": "API for transitioning task status via POST /api/tasks/{tid}/transition with defined allowed state transitions and error handling for invalid flows or states.",
+  "acceptance_criteria": [
+    "Allow valid transitions: todo to in_progress, in_progress to done, and in_progress to todo.",
+    "Done is a terminal state: any transition originating from done returns 409 and leaves the task status unchanged.",
+    "Other unlisted transitions, including todo to done and self-transitions, return 409.",
+    "Providing a 'to' status that is not a valid state returns 422."
+  ]
+}

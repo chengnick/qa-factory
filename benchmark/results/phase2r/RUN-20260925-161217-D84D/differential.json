@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B04"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 2,
+    "broken": 0,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 3,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req002_api.py": "7eba1d3e6093795f950606a4b9dcfbdc69905b70f02ad1e89d2fcaefdae204a9"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B04"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_title_length_100_and_priorities_1_and_5",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+          "outcome": "FAIL",
+          "message": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_priority_boundaries_0_and_6_return_422",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-663854.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_title_length_100_and_priorities_1_and_5",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_priority_boundaries_0_and_6_return_422",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-87b624.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req002_api.py::test_tc1_title_length_100_and_priorities_1_and_5",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "HTTP_5XX",
+      "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code"
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc3_priority_boundaries_0_and_6_return_422",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

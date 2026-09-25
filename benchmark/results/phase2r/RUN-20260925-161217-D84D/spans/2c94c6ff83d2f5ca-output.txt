@@ -1,0 +1,38 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Verify title length boundary of 100 characters and priority boundaries of 1 and 5",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/1/tasks with {\"title\": \"a\" * 100, \"priority\": 1} as alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Valid Title\", \"priority\": 5} as alice"
+      ],
+      "expected": "title 長度為 100 字元時應被接受（回傳 201 或 200）。 priority 為 1 或 5 時應被接受"
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify title length of 101 characters and empty title return 422 and not 5xx",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project B\"} as alice",
+        "POST /api/projects/1/tasks with {\"title\": \"a\" * 101} as alice",
+        "POST /api/projects/1/tasks with {\"title\": \"\"} as alice"
+      ],
+      "expected": "title 長度大於 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify priority boundaries of 0 and 6 return 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project C\"} as alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Task\", \"priority\": 0} as alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Task\", \"priority\": 6} as alice"
+      ],
+      "expected": "priority 為 0 或 6 時應回傳 422 錯誤。"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "requirement_id": "REQ-007",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 2 passed in 4.10s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req007_api.py"
+        ],
+        "junit": "reports/junit-test_req007_api-1963d8.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req007_api.py::test_project_member_can_read_task_detail",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+            "outcome": "FAIL",
+            "message": "AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

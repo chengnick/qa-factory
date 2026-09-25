@@ -1,0 +1,183 @@
+{
+  "status": "COMPLETE",
+  "verdict": "MISSED",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B02"
+  ],
+  "counts": {
+    "detected": 0,
+    "missed": 6,
+    "broken": 0,
+    "passed": 0,
+    "tests": 6
+  },
+  "test_health": {
+    "healthy": 6,
+    "total": 6
+  },
+  "file_hashes": {
+    "generated/test_req005_api.py": "9e83a84a5d932c82ec3110e0e694c5a60f33eb4dfe4822a20df2fe841428f450"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B02"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_backward_transition",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transition_from_done",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_forbidden_todo_to_done",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc5_forbidden_self_state_transition",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc6_invalid_status_value",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-400d83.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_backward_transition",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transition_from_done",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_forbidden_todo_to_done",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc5_forbidden_self_state_transition",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc6_invalid_status_value",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-825f12.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc2_backward_transition",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transition_from_done",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc4_forbidden_todo_to_done",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc5_forbidden_self_state_transition",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc6_invalid_status_value",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

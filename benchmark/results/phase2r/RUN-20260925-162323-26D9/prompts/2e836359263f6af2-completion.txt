@@ -1,0 +1,9 @@
+{
+  "files": [
+    {
+      "path": "generated/test_req002_api.py",
+      "surface": "api",
+      "content": "import pytest\n\ndef test_tc1_title_boundary_and_priority_boundaries(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # POST task with title length 100 and priority 1\n    long_title = \"a\" * 100\n    r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": long_title, \"priority\": 1})\n    assert r1.status_code == 201, r1.text\n    task = r1.json()\n    tid = task[\"id\"]\n    assert len(task[\"title\"]) == 100\n    assert task[\"priority\"] == 1\n    \n    # PATCH task with priority 5\n    r2 = alice.patch(f\"/api/tasks/{tid}\", json={\"priority\": 5})\n    assert r2.status_code == 200, r2.text\n    assert r2.json()[\"priority\"] == 5\n\ndef test_tc2_title_too_long_or_blank(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\")\n    \n    # Title > 100 chars (101 'a's)\n    too_long = \"a\" * 101\n    r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": too_long, \"priority\": 3})\n    assert r1.status_code == 422, r1.text\n    assert r1.status_code < 500\n    \n    # Blank title\n    r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"   \", \"priority\": 3})\n    assert r2.status_code == 422, r2.text\n    assert r2.status_code < 500\n\ndef test_tc3_priority_out_of_bounds(as_user, new_project):\n    alice = as_user(\n        \"alice\"\n    )\n    pid = new_project(owner=\"alice\")\n    \n    # Priority 0\n    r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Valid Title\", \"priority\": 0})\n    assert r1.status_code == 422, r1.text\n    \n    # Priority 6\n    r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Valid Title\", \"priority\": 6})\n    assert r2.status_code == 422, r2.text\n"
+    }
+  ]
+}

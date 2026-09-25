@@ -1,0 +1,3 @@
+...                                                                      [100%]
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260925-161217-D84D\reports\junit-test_req002_api-87b624.xml -
+3 passed in 2.62s

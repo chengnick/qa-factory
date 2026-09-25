@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="3.319" timestamp="2026-09-26T00:15:51.599388+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req005_api" name="test_req005_tc1_valid_transitions" time="2.760" /><testcase classname="generated.test_req005_api" name="test_req005_tc2_done_is_terminal" time="0.019"><failure message="AssertionError: {&quot;id&quot;:3,&quot;project_id&quot;:2,&quot;title&quot;:&quot;Terminal Task&quot;,&quot;description&quot;:&quot;&quot;,&quot;status&quot;:&quot;in_progress&quot;,&quot;priority&quot;:3,&quot;assignee_id&quot;:null,&quot;created_by&quot;:1,&quot;created_at&quot;:&quot;2026-09-25T16:15:54.400+00:00&quot;,&quot;updated_at&quot;:&quot;2026-09-25T16:15:54.413+00:00&quot;}&#10;assert 200 == 409&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x0000023391318220&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x00000233913184A0&gt;
+
+    def test_req005_tc2_done_is_terminal(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Terminal Task"})
+        assert res.status_code == 201, res.text
+        tid = res.json()["id"]
+    
+        # Move to in_progress then done
+        alice.post(f"/api/tasks/{tid}/transition", json={"to": "in_progress"})
+        alice.post(f"/api/tasks/{tid}/transition", json={"to": "done"})
+    
+        # Try done -&gt; todo
+        res = alice.post(f"/api/tasks/{tid}/transition", json={"to": "todo"})
+        assert res.status_code == 409, res.text
+        # Verify status unchanged
+        assert alice.get(f"/api/tasks/{tid}").json()["status"] == "done"
+    
+        # Try done -&gt; in_progress
+        res = alice.post(f"/api/tasks/{tid}/transition", json={"to": "in_progress"})
+&gt;       assert res.status_code == 409, res.text
+E       AssertionError: {"id":3,"project_id":2,"title":"Terminal Task","description":"","status":"in_progress","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-25T16:15:54.400+00:00","updated_at":"2026-09-25T16:15:54.413+00:00"}
+E       assert 200 == 409
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+generated\test_req005_api.py:60: AssertionError</failure></testcase><testcase classname="generated.test_req005_api" name="test_req005_tc3_unlisted_and_self_transitions" time="0.016" /><testcase classname="generated.test_req005_api" name="test_req005_tc4_invalid_status_value" time="0.007" /></testsuite></testsuites>

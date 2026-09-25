@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "驗證 title 長度為邊界值 100 字元與 priority 為有效範圍 1 及 5 時可被接受",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"<100_chars_string>\", \"priority\": 1} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"A\", \"priority\": 5} as alice"
+      ],
+      "expected": "title 長度為 100 字元時應被接受（回傳 201 或 200）。priority 值為 1 或 5 時應被接受"
+    },
+    {
+      "id": "TC-2",
+      "title": "驗證 title 長度超過 101 字元或為空白時應回傳 422 錯誤且非 5xx",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"<101_chars_string>\", \"priority\": 3} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"\", \"priority\": 3} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"   \", \"priority\": 3} as alice"
+      ],
+      "expected": "title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "驗證 priority 越界值 0 與 6 時應回傳 422 錯誤",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Valid Title\", \"priority\": 0} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Valid Title\", \"priority\": 6} as alice"
+      ],
+      "expected": "priority 值為 0 或 6 時應回傳 422 錯誤。"
+    },
+    {
+      "id": "TC-4",
+      "title": "驗證未提供 priority 時預設值為 3",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Default Priority Task\"} as alice"
+      ],
+      "expected": "priority 必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。"
+    }
+  ]
+}

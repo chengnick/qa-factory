@@ -1,0 +1,55 @@
+{
+  "requirement_id": "REQ-007",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 2 passed in 4.46s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req007_api.py"
+        ],
+        "junit": "reports/junit-test_req007_api-4714f2.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req007_api.py::test_project_member_can_read_task_detail",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_non_project_member_gets_403_reading_task_detail",
+            "outcome": "FAIL",
+            "message": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:16:29.416+00:00\",\"updated_at\":\"2026-09-25T16:16:29.416+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code"
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_getting_non_existent_task_returns_404",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

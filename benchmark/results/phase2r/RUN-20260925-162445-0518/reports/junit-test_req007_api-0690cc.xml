@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="3.990" timestamp="2026-09-26T00:24:54.213606+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req007_api" name="test_project_member_can_read_task_detail" time="2.473" /><testcase classname="generated.test_req007_api" name="test_non_project_member_forbidden_reading_task_detail" time="0.968"><failure message="AssertionError: {&quot;id&quot;:2,&quot;project_id&quot;:2,&quot;title&quot;:&quot;Alice's Task&quot;,&quot;description&quot;:&quot;&quot;,&quot;status&quot;:&quot;todo&quot;,&quot;priority&quot;:3,&quot;assignee_id&quot;:null,&quot;created_by&quot;:1,&quot;created_at&quot;:&quot;2026-09-25T16:24:57.677+00:00&quot;,&quot;updated_at&quot;:&quot;2026-09-25T16:24:57.677+00:00&quot;}&#10;assert 200 == 403&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000001A04622C2C0&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000001A04622C540&gt;
+
+    def test_non_project_member_forbidden_reading_task_detail(as_user, new_project):
+        pid = new_project(owner="alice", members=())
+        alice = as_user("alice")
+        bob = as_user("bob")
+    
+        # Alice creates a task
+        create_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Alice's Task"})
+        assert create_res.status_code == 201, create_res.text
+        tid = create_res.json()["id"]
+    
+        # Bob tries to read the task detail
+        get_res = bob.get(f"/api/tasks/{tid}")
+&gt;       assert get_res.status_code == 403, get_res.text
+E       AssertionError: {"id":2,"project_id":2,"title":"Alice's Task","description":"","status":"todo","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-25T16:24:57.677+00:00","updated_at":"2026-09-25T16:24:57.677+00:00"}
+E       assert 200 == 403
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+generated\test_req007_api.py:31: AssertionError</failure></testcase><testcase classname="generated.test_req007_api" name="test_non_existent_task_returns_404" time="0.003" /></testsuite></testsuites>

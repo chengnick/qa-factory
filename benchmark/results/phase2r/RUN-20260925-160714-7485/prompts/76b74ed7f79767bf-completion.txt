@@ -1,0 +1,35 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "驗證 title 欄位邊界長度 100 字元與 priority 邊界值 1、5",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+      "POST /api/projects/{pid}/tasks with title of exactly 100 characters and priority 1 as alice",
+      "POST /api/projects/{pid}/tasks with priority 5 (default valid title) as alice"
+    ],
+    "expected": "title 長度為 100 字元時應被接受（回傳 201 或 200）。priority 為 1 或 5 時應被接受"
+  },
+  {
+    "id": "TC-2",
+    "title": "驗證 title 超過 101 字元或為空白時回傳 422 錯誤",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project 2\"} as alice",
+      "POST /api/projects/{pid}/tasks with title of 101 characters as alice",
+      "POST /api/projects/{pid}/tasks with empty title \"\" as alice"
+    ],
+    "expected": "title 長度超過 101 字元或為空白時應回傳 422 錯誤，不得回傳 5xx。"
+  },
+  {
+    "id": "TC-3",
+    "title": "驗證 priority 欄位非法邊界值 0 與 6 回傳 422 錯誤",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project 3\"} as alice",
+      "POST /api/projects/{pid}/tasks with valid title and priority 0 as alice",
+      "POST /api/projects/{pid}/tasks with valid title and priority 6 as alice"
+    ],
+    "expected": "為 0 或 6 時應回傳 422 錯誤。"
+  }
+]}

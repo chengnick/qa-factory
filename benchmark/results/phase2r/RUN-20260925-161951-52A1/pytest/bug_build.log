@@ -1,0 +1,35 @@
+===== pytest generated/test_req005_api.py (exit 1, attempts 1)
+..F..                                                                    [100%]
+================================== FAILURES ===================================
+______________________ test_req005_tc2_done_is_terminal _______________________
+
+as_user = <function as_user.<locals>.get at 0x000001C9A64FC180>
+new_project = <function new_project.<locals>.create at 0x000001C9A742CFE0>
+
+    def test_req005_tc2_done_is_terminal(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        r = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task 1"})
+        tid = r.json()["id"]
+    
+        alice.post(f"/api/tasks/{tid}/transition", json={"to": "in_progress"})
+        alice.post(f"/api/tasks/{tid}/transition", json={"to": "done"})
+    
+        # Attempting to transition from done to todo should return 409 and keep status unchanged
+        r_trans = alice.post(f"/api/tasks/{tid}/transition", json={"to": "todo"})
+        assert r_trans.status_code == 409, r_trans.text
+    
+        # Attempting to transition from done to in_progress should return 409
+        r_trans2 = alice.post(f"/api/tasks/{tid}/transition", json={"to": "in_progress"})
+>       assert r_trans2.status_code == 409, r_trans2.text
+E       AssertionError: {"id":4,"project_id":3,"title":"Task 1","description":"","status":"in_progress","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-25T16:20:23.066+00:00","updated_at":"2026-09-25T16:20:23.074+00:00"}
+E       assert 200 == 409
+E        +  where 200 = <Response [200 OK]>.status_code
+
+generated\test_req005_api.py:93: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260925-161951-52A1\reports\junit-test_req005_api-44f8ba.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req005_api.py::test_req005_tc2_done_is_terminal - Asser...
+1 failed, 4 passed in 4.53s
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="4.694" timestamp="2026-09-26T00:21:02.904333+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req007_api" name="test_tc1_member_can_read_project_tasks_and_task_detail" time="3.078" /><testcase classname="generated.test_req007_api" name="test_tc2_non_member_forbidden_from_reading" time="1.039"><failure message="AssertionError: {&quot;id&quot;:2,&quot;project_id&quot;:2,&quot;title&quot;:&quot;Test Task&quot;,&quot;description&quot;:&quot;&quot;,&quot;status&quot;:&quot;todo&quot;,&quot;priority&quot;:3,&quot;assignee_id&quot;:null,&quot;created_by&quot;:1,&quot;created_at&quot;:&quot;2026-09-25T16:21:07.083+00:00&quot;,&quot;updated_at&quot;:&quot;2026-09-25T16:21:07.083+00:00&quot;}&#10;assert 200 == 403&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000002A608850540&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000002A6088507C0&gt;
+
+    def test_tc2_non_member_forbidden_from_reading(as_user, new_project):
+        alice = as_user("alice")
+        dave = as_user("dave")
+        pid = new_project(owner="alice", members=())
+    
+        # Create a task as alice
+        task_resp = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Test Task"})
+        assert task_resp.status_code == 201, task_resp.text
+        tid = task_resp.json()["id"]
+    
+        # 1. GET /api/projects/{pid} as dave
+        r_proj = dave.get(f"/api/projects/{pid}")
+        assert r_proj.status_code == 403, r_proj.text
+    
+        # 2. GET /api/projects/{pid}/tasks as dave
+        r_tasks = dave.get(f"/api/projects/{pid}/tasks")
+        assert r_tasks.status_code == 403, r_tasks.text
+    
+        # 3. GET /api/tasks/{tid} as dave
+        r_task = dave.get(f"/api/tasks/{tid}")
+&gt;       assert r_task.status_code == 403, r_task.text
+E       AssertionError: {"id":2,"project_id":2,"title":"Test Task","description":"","status":"todo","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-25T16:21:07.083+00:00","updated_at":"2026-09-25T16:21:07.083+00:00"}
+E       assert 200 == 403
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+generated\test_req007_api.py:44: AssertionError</failure></testcase><testcase classname="generated.test_req007_api" name="test_tc3_non_existent_task_returns_404" time="0.003" /></testsuite></testsuites>

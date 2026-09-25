@@ -1,0 +1,47 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "驗證建立任務時 title 邊界值與 priority 預設值與範圍邊界",
+    "surface": "api",
+    "steps": [
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects` 建立測試專案",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 建立任務，帶入 1 字元 title 與最小 priority 1",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 建立任務，帶入 100 字元 title 與最大 priority 5",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 建立任務，僅帶入有效 title 且不帶 priority 欄位"
+    ],
+    "expected": "title 為必填欄位，長度限制為 1 至 100 字元（含邊界），title 長度為 100 字元時應被接受並回傳 201（建立），priority 必須為整數，有效範圍為 1 至 5（含邊界），預設值為 3，priority 數值為 1 或 5 時應被接受"
+  },
+  {
+    "id": "TC-2",
+    "title": "驗證更新任務時 title 與 priority 的有效邊界值",
+    "surface": "api",
+    "steps": [
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects` 建立測試專案",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 建立初始任務",
+      "使用 headers 'X-User: alice' 發送 PATCH 至 `/api/tasks/{tid}` 更新 title 為 100 字元且 priority 為 5"
+    ],
+    "expected": "title 長度為 100 字元時應被接受並回傳 201（建立）或 200（更新），priority 數值為 1 或 5 時應被接受"
+  },
+  {
+    "id": "TC-3",
+    "title": "驗證建立與更新任務時 title 違規長度與空白之錯誤處理",
+    "surface": "api",
+    "steps": [
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects` 建立測試專案",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 嘗試建立 title 為空字串的任務",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 嘗試建立 title 超過 100 字元的任務"
+    ],
+    "expected": "title 長度超過 100 字元或為空白時，應回傳 422 錯誤狀態碼，不得回傳 5xx"
+  },
+  {
+    "id": "TC-4",
+    "title": "驗證建立與更新任務時 priority 範圍外數值之錯誤處理",
+    "surface": "api",
+    "steps": [
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects` 建立測試專案",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 嘗試建立 priority 為 0 的任務",
+      "使用 headers 'X-User: alice' 發送 POST 至 `/api/projects/{pid}/tasks` 嘗試建立 priority 為 6 的任務"
+    ],
+    "expected": "priority 數值為 0 或 6（或範圍外）時應回傳 422 錯誤狀態碼"
+  }
+]}

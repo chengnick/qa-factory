@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-007",
+  "files": [
+    {
+      "path": "generated/test_req007_api.py",
+      "content": "import pytest\n\ndef test_tc1_member_can_read(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\", members=())\n    \n    # GET /api/projects/{pid}\n    r = alice.get(f\"/api/projects/{pid}\")\n    assert r.status_code == 200, r.text\n    \n    # POST task\n    r_task = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Test Task\"})\n    assert r_task.status_code == 201, r_task.text\n    tid = r_task.json()[\"id\"]\n    \n    # GET task list\n    r_list = alice.get(f\"/api/projects/{pid}/tasks\")\n    assert r_list.status_code == 200, r_list.text\n    \n    # GET task detail\n    r_detail = alice.get(f\"/api/tasks/{tid}\")\n    assert r_detail.status_code == 200, r_detail.text\n\n\ndef test_tc2_non_member_forbidden(as_user, new_project):\n    alice = as_user(\"alice\")\n    bob = as_user(\"bob\")\n    pid = new_project(owner=\"alice\", members=())\n    \n    r_task = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Secret Task\"})\n    assert r_task.status_code == 201, r_task.text\n    tid = r_task.json()[\"id\"]\n    \n    # Non-member bob tries to read project, task list, task detail\n    r1 = bob.get(f\"/api/projects/{pid}\")\n    assert r1.status_code == 403, r1.text\n    \n    r2 = bob.get(f\"/api/projects/{pid}/tasks\")\n    assert r2.status_code == 403, r2.text\n    \n    r3 = bob.get(f\"/api/tasks/{tid}\")\n    assert r3.status_code == 403, r3.text\n\n\ndef test_tc3_not_found(as_user):\n    alice = as_user(\"alice\")\n    \n    r1 = alice.get(\"/api/projects/99999\")\n    assert r1.status_code == 404, r1.text\n    \n    r2 = alice.get(\"/api/projects/99999/tasks\")\n    assert r2.status_code == 404, r2.text\n    \n    r3 = alice.get(\"/api/tasks/99999\")\n    assert r3.status_code == 404, r3.text\n",
+      "surface": "api"
+    }
+  ]
+}

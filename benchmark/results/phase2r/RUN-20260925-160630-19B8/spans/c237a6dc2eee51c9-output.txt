@@ -1,0 +1,36 @@
+{
+  "requirement_id": "REQ-007",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project member can successfully read task detail",
+      "surface": "api",
+      "steps": [
+        "As alice, POST /api/projects with {\"name\": \"Project A\"} to create a project",
+        "As alice, POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} to create a task",
+        "As alice, GET /api/tasks/{tid} to read the task detail"
+      ],
+      "expected": "專案、任務列表、任務詳情（GET /api/tasks/{tid}）僅限該專案成員讀取"
+    },
+    {
+      "id": "TC-2",
+      "title": "Non-project member receives 403 error when reading task detail",
+      "surface": "api",
+      "steps": [
+        "As alice, POST /api/projects with {\"name\": \"Project A\"} to create a project",
+        "As alice, POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} to create a task",
+        "As bob (non-member), GET /api/tasks/{tid} to read the task detail"
+      ],
+      "expected": "非專案成員存取時回傳 403 錯誤"
+    },
+    {
+      "id": "TC-3",
+      "title": "Receives 404 error when requesting a non-existent task detail",
+      "surface": "api",
+      "steps": [
+        "As alice, GET /api/tasks/999999 to read a non-existent task"
+      ],
+      "expected": "請求的資源不存在時回傳 404 錯誤"
+    }
+  ]
+}

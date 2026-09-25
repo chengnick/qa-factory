@@ -1,0 +1,70 @@
+{
+  "requirement_id": "REQ-005",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "6 passed in 3.15s",
+      "error": null,
+      "data": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req005_api.py"
+        ],
+        "junit": "reports/junit-test_req005_api-a2e71e.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc2_backward_transition",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transition_from_done",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc4_forbidden_todo_to_done",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc5_forbidden_self_state_transition",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc6_invalid_status_value",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "status": "COMPLETE",
+  "verdict": "MISSED",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B02"
+  ],
+  "counts": {
+    "detected": 0,
+    "missed": 5,
+    "broken": 0,
+    "passed": 0,
+    "tests": 5
+  },
+  "test_health": {
+    "healthy": 5,
+    "total": 5
+  },
+  "file_hashes": {
+    "generated/test_req005_api.py": "fc5ce779dcea120e4919e8499ee907fb850ae2880c9992e652024eacd13de4b4"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B02"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_valid_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_done_is_terminal",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_invalid_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_parameter",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-5f678f.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_valid_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_done_is_terminal",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_invalid_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_parameter",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-d2cf70.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc1_valid_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc2_done_is_terminal",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc3_invalid_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_parameter",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

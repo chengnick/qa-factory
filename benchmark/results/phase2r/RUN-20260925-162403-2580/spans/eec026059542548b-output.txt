@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-005",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Valid state transitions from todo and in_progress",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice (status is todo)",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 2\"} as alice",
+        "POST /api/tasks/{tid2}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid2}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "允許從 todo 流轉至 in_progress；允許從 in_progress 流轉至 done；允許從 in_progress 流轉至 todo"
+    },
+    {
+      "id": "TC-2",
+      "title": "Transitions when task is in done state",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P2\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice"
+      ],
+      "expected": "當任務處於 done 狀態時，任何流轉嘗試皆須回傳 409 且任務狀態保持不變"
+    },
+    {
+      "id": "TC-3",
+      "title": "Other unlisted transitions and self-transitions",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P3\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Todo\"} as alice (status todo)",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task InProgress\"} as alice",
+        "POST /api/tasks/{tid2}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid2}/transition with {\"to\": \"in_progress\"} as alice"
+      ],
+      "expected": "其他未列出的流轉（包含 todo → done 以及相同狀態的流轉）皆須回傳 409"
+    },
+    {
+      "id": "TC-4",
+      "title": "Transition with illegal status value in to field",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"P4\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Invalid\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"} as alice"
+      ],
+      "expected": "當 to 欄位帶入不合法的狀態時，須回傳 422"
+    }
+  ]
+}

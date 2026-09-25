@@ -1,0 +1,24 @@
+.F.                                                                      [100%]
+================================== FAILURES ===================================
+______________________ test_tc2_title_too_long_or_empty _______________________
+
+as_user = <function as_user.<locals>.get at 0x00000205FBCF8220>
+new_project = <function new_project.<locals>.create at 0x00000205FBCF84A0>
+
+    def test_tc2_title_too_long_or_empty(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Title of 101 characters -> 422
+        title_101 = "a" * 101
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": title_101})
+>       assert r1.status_code == 422, r1.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+generated\test_req002_api.py:24: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260925-160714-7485\reports\junit-test_req002_api-97191f.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req002_api.py::test_tc2_title_too_long_or_empty - Asser...
+1 failed, 2 passed in 3.35s

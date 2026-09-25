@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-007",
+  "files": [
+    {
+      "path": "generated/test_req007_api.py",
+      "content": "import pytest\n\ndef test_project_member_can_read_task_detail(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\", members=())\n    task_res = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"T1\"})\n    assert task_res.status_code == 201, task_res.text\n    tid = task_res.json()[\"id\"]\n\n    r = alice.get(f\"/api/tasks/{tid}\")\n    assert r.status_code == 200, r.text\n    assert r.json()[\"id\"] == tid\n    assert r.json()[\"title\"] == \"T1\"\n\ndef test_non_project_member_forbidden_reading_task(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\", members=())\n    task_res = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"T1\"})\n    assert task_res.status_code == 201, task_res.text\n    tid = task_res.json()[\"id\"]\n\n    bob = as_user(\"bob\")\n    r = bob.get(f\"/api/tasks/{tid}\")\n    assert r.status_code == 403, r.text\n\ndef test_reading_non_existent_task_returns_404(as_user):\n    alice = as_user(\"alice\")\n    r = alice.get(\"/api/tasks/non-existent-tid\")\n    assert r.status_code == 404, r.text\n",
+      "surface": "api"
+    }
+  ]
+}

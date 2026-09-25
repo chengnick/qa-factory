@@ -1,0 +1,51 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "驗證 title 邊界與成功建立/更新",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 1 字元 title 建立任務",
+        "以 100 字元 title 建立任務",
+        "更新任務 title 為 100 字元"
+      ],
+      "expected": "title 長度限制為 1 至 100 字元（含邊界）。title 長度為 100 字元時應被接受，並回傳成功狀態碼（201 或 200）。"
+    },
+    {
+      "id": "TC-2",
+      "title": "驗證 title 過長或空白時的錯誤回傳",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 101 字元 title 建立任務",
+        "以空字串 title 建立任務"
+      ],
+      "expected": "title 長度超過 100 字元或為空白時，應回傳 422 錯誤狀態碼，且不得回傳 5xx 錯誤。"
+    },
+    {
+      "id": "TC-3",
+      "title": "驗證 priority 邊界數值與預設值",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "不帶 priority 建立任務",
+        "以 priority 為 1 建立任務",
+        "以 priority 為 5 建立任務"
+      ],
+      "expected": "priority 必須為整數，有效範圍為 1 至 5（含邊界），預設值為 3。priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤狀態碼。"
+    },
+    {
+      "id": "TC-4",
+      "title": "驗證 priority 超出範圍的錯誤回傳",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 priority 為 0 建立任務",
+        "以 priority 為 6 建立任務"
+      ],
+      "expected": "priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤狀態碼。"
+    }
+  ]
+}

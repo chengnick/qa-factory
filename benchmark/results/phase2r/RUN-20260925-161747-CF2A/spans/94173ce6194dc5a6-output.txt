@@ -1,0 +1,45 @@
+{
+  "requirement_id": "REQ-005",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 2,
+      "summary": "1 error in 0.53s",
+      "error": null,
+      "data": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 1,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req005_api.py"
+        ],
+        "junit": "reports/junit-test_req005_api-e6a120.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req005_api.py",
+            "outcome": "ERROR",
+            "message": "collection failure"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

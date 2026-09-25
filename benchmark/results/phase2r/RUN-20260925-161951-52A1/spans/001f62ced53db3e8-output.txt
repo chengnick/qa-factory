@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-005",
+  "summary": "實作任務狀態流轉 API (POST /api/tasks/{tid}/transition)，支援指定狀態的變更並驗證狀態機規則。",
+  "acceptance_criteria": [
+    "允許的狀態流轉包含：todo → in_progress、in_progress → done、in_progress → todo。",
+    "done 為終態，從 done 出發的任何流轉應回傳 409 且任務狀態保持不變。",
+    "其他未列出的流轉（包含 todo → done 以及同狀態的流轉）應回傳 409。",
+    "當請求中的 to 參數不是合法的狀態時，應回傳 422。"
+  ]
+}

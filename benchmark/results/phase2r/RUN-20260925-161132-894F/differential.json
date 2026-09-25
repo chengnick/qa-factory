@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B03"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 2,
+    "broken": 0,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 3,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req007_api.py": "372f22986cdccfe5f11944011afcbfa40d29877ed8209232c27769c302168fdb"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B03"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_req007_tc1_member_can_read_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:11:53.435+00:00\",\"updated_at\":\"2026-09-25T16:11:53.435+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code"
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_req007_tc3_non_existent_task_not_found",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req007_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req007_api-9e807d.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_req007_tc1_member_can_read_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_req007_tc3_non_existent_task_not_found",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req007_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req007_api-56a8c0.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req007_api.py::test_req007_tc1_member_can_read_task",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:11:53.435+00:00\",\"updated_at\":\"2026-09-25T16:11:53.435+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code"
+    },
+    {
+      "node_id": "generated/test_req007_api.py::test_req007_tc3_non_existent_task_not_found",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

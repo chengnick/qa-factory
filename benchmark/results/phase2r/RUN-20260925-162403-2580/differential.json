@@ -1,0 +1,145 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B02"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 3,
+    "broken": 0,
+    "passed": 0,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 4,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req005_api.py": "56ddee728345760054fd9db1ace12a3f4ce15ee16280995c141bf9e53173eb44"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B02"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc1_valid_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task Done\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:25.090+00:00\",\"updated_at\":\"2026-09-25T16:24:25.113+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc3_unlisted_and_self_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc4_illegal_status_value",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-ecdaae.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc1_valid_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc3_unlisted_and_self_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc4_illegal_status_value",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-ceca6b.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req005_api.py::test_req005_tc1_valid_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task Done\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:25.090+00:00\",\"updated_at\":\"2026-09-25T16:24:25.113+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_req005_tc3_unlisted_and_self_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_req005_tc4_illegal_status_value",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

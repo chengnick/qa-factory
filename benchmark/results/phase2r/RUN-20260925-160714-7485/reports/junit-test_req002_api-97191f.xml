@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="3.303" timestamp="2026-09-26T00:07:24.108383+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req002_api" name="test_tc1_title_boundary_and_priority" time="2.628" /><testcase classname="generated.test_req002_api" name="test_tc2_title_too_long_or_empty" time="0.029"><failure message="AssertionError: Internal Server Error&#10;assert 500 == 422&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x00000205FBCF8220&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x00000205FBCF84A0&gt;
+
+    def test_tc2_title_too_long_or_empty(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Title of 101 characters -&gt; 422
+        title_101 = "a" * 101
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": title_101})
+&gt;       assert r1.status_code == 422, r1.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+generated\test_req002_api.py:24: AssertionError</failure></testcase><testcase classname="generated.test_req002_api" name="test_tc3_priority_invalid_boundaries" time="0.013" /></testsuite></testsuites>

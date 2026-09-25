@@ -1,0 +1,25 @@
+===== pytest generated/test_req002_api.py (exit 1, attempts 1)
+.F.                                                                      [100%]
+================================== FAILURES ===================================
+____________ test_tc2_title_length_101_and_empty_title_return_422 _____________
+
+as_user = <function as_user.<locals>.get at 0x000001B0620A0180>
+new_project = <function new_project.<locals>.create at 0x000001B0620A0400>
+
+    def test_tc2_title_length_101_and_empty_title_return_422(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Title length 101
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "a" * 101})
+>       assert r1.status_code == 422, r1.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+generated\test_req002_api.py:21: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260925-161217-D84D\reports\junit-test_req002_api-663854.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422
+1 failed, 2 passed in 3.04s
+

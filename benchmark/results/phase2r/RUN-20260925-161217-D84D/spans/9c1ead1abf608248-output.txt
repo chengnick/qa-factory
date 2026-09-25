@@ -1,0 +1,5 @@
+{
+  "requirement_id": "REQ-002",
+  "verdict": "DEFECT_FOUND",
+  "summary": "REQ-002: DEFECT_FOUND\n- pytest: FAILED (attempts=1, exit=1) - 1 failed, 2 passed in 3.24s\n- http_request: ok (attempts=1, exit=None) - {\"status\":\"ok\"}"
+}

@@ -1,0 +1,10 @@
+{
+  "summary": "驗證專案任務的建立與更新 API (`POST /api/projects/{pid}/tasks` 及 `PATCH /api/tasks/{tid}`) 中的 `title` 與 `priority` 欄位驗證規則。",
+  "acceptance_criteria": [
+    "title 為必填欄位，長度限制為 1 至 100 字元（包含邊界）。",
+    "title 長度為 100 字元時應被接受（回傳 201 或 200）。",
+    "title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。",
+    "priority 必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。",
+    "priority 值為 1 或 5 時應被接受，值為 0 或 6 時應回傳 422 錯誤。"
+  ]
+}

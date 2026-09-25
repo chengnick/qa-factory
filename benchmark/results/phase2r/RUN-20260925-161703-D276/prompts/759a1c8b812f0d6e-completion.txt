@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "驗證 title 長度邊界（1 與 100 字元）以及預設 priority 建立任務",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 title 長度為 1 字元的任務",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 title 長度為 100 字元的任務"
+      ],
+      "expected": "title 為必填欄位，長度限制為 1 至 100 字元（含邊界），title 長度為 100 字元時應被接受，回傳狀態碼 201（建立）或 200（更新）。"
+    },
+    {
+      "id": "TC-2",
+      "title": "驗證超過 100 字元或為空白的 title 建立/更新任務",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 title 超過 100 字元的任務",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 title 為空白字串的任務"
+      ],
+      "expected": "title 長度超過 100 字元或為空白時，應回傳狀態碼 422，且不得回傳 5xx 錯誤。"
+    },
+    {
+      "id": "TC-3",
+      "title": "驗證 priority 數值範圍邊界（1 與 5）建立任務",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 priority 為 1 的任務",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 priority 為 5 的任務"
+      ],
+      "expected": "priority 必須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。priority 值為 1 或 5 時應被接受"
+    },
+    {
+      "id": "TC-4",
+      "title": "驗證 priority 數值超出範圍（0 與 6）建立任務",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立專案",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 priority 為 0 的任務",
+        "以 alice 呼叫 POST /api/projects/{pid}/tasks 建立 priority 為 6 的任務"
+      ],
+      "expected": "priority 值為 0 或 6 時應回傳狀態碼 422。"
+    }
+  ]
+}
