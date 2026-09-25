@@ -1,4 +1,4 @@
-"""Attribute naming per spec 3.3: gen_ai.* on LLM/tool spans, qa.* namespace, verdict placement."""
+"""Attribute naming per spec v2 §3.3 (carried over by spec v3 §4.4; text in git history, docs/spec-v2.md @ 639bc1c) and spec v3 §4.4: gen_ai.* on LLM/tool spans, qa.* namespace, verdict placement."""
 
 import pytest
 from opentelemetry.trace import StatusCode

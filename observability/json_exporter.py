@@ -1,4 +1,4 @@
-"""JsonFileSpanExporter: one `traces/{trace_id}.json` per trace (spec 3.4).
+"""JsonFileSpanExporter: one JSON document per trace, format per spec v2 §3.4 (carried over by spec v3 §4.4; text in git history, docs/spec-v2.md @ 639bc1c).
 
 Spans are buffered per trace and the file is written when the root span ends.
 Everything is passed through redact() on the way out.
@@ -90,8 +90,12 @@ def trace_document(trace_id: int, spans: list[ReadableSpan]) -> dict[str, Any]:
 
 
 class JsonFileSpanExporter(SpanExporter):
-    def __init__(self, directory: str | Path) -> None:
+    """Writes {directory}/{trace_id}.json, or {directory}/{filename} when a fixed name is given
+    (a per-run directory holds exactly one trace: artifacts/{run_id}/trace.json)."""
+
+    def __init__(self, directory: str | Path, filename: str | None = None) -> None:
         self.directory = Path(directory)
+        self.filename = filename
         self._pending: dict[int, list[ReadableSpan]] = defaultdict(list)
         self._lock = threading.Lock()
         self.written: list[Path] = []
@@ -112,7 +116,7 @@ class JsonFileSpanExporter(SpanExporter):
 
     def _write(self, trace_id: int, spans: list[ReadableSpan]) -> None:
         self.directory.mkdir(parents=True, exist_ok=True)
-        path = self.directory / f"{trace_id:032x}.json"
+        path = self.directory / (self.filename or f"{trace_id:032x}.json")
         path.write_text(json.dumps(trace_document(trace_id, spans), ensure_ascii=False, indent=2), encoding="utf-8")
         self.written.append(path)
 

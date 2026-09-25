@@ -48,4 +48,4 @@ class LLMConfigError(LLMError):
 
 
 class LLMUnavailableError(LLMError):
-    """The provider is temporarily overloaded (HTTP 503). Retryable."""
+    """The provider answered with a server error (HTTP 5xx other than 504), e.g. 503 overloaded. Retryable."""

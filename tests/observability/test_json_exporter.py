@@ -1,4 +1,4 @@
-"""traces/{trace_id}.json follows spec 3.4."""
+"""Trace JSON documents follow spec v2 §3.4 (carried over by spec v3 §4.4; text in git history, docs/spec-v2.md @ 639bc1c)."""
 
 import json
 import re

@@ -53,10 +53,10 @@ def test_cli_writes_trace_file(tmp_dir, capsys):
 
     import app
 
-    code = app.main(["--requirement", "REQ-005", "--llm", "fake", "--sut-bugs", "B02", "--traces-dir", str(tmp_dir)])
+    code = app.main(["--requirement", "REQ-005", "--llm", "fake", "--sut-bugs", "B02", "--artifacts-dir", str(tmp_dir)])
 
     assert code == 0
-    (trace_file,) = tmp_dir.glob("*.json")
+    (trace_file,) = tmp_dir.glob("*/trace.json")
     doc = json.loads(trace_file.read_text(encoding="utf-8"))
     assert doc["run"]["requirement_id"] == "REQ-005" and doc["run"]["verdict"] == "FLAKY"
     assert "verdict: FLAKY" in capsys.readouterr().out

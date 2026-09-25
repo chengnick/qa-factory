@@ -51,6 +51,21 @@ def wait_healthy(url: str, proc: subprocess.Popen | None = None, log: Path | Non
     raise SUTStartupError(f"SUT at {url} not healthy after {timeout_s}s")
 
 
+def stop_process_tree(proc: subprocess.Popen) -> None:
+    """Stop the server and any children. On Windows a venv's python.exe is a launcher that runs the real
+    interpreter as a child, so terminating only `proc` would leave the SUT running."""
+    if proc.poll() is None:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
+        else:
+            proc.terminate()
+    try:
+        proc.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        proc.wait()
+
+
 @contextmanager
 def running_sut(bugs: Sequence[str] | None = None, *, port: int | None = None) -> Iterator[str]:
     """Yield the base URL of a fresh SUT. `bugs=None` inherits SUT_BUGS from the environment.
@@ -62,7 +77,8 @@ def running_sut(bugs: Sequence[str] | None = None, *, port: int | None = None) -
         env["SUT_BUGS"] = ",".join(bugs)
     port = port or free_port()
     url = f"http://127.0.0.1:{port}"
-    with tempfile.TemporaryDirectory(prefix="sut-") as log_dir:
+    # The SUT's own server log is scratch, not run evidence; a Windows file-lock race must not fail the run.
+    with tempfile.TemporaryDirectory(prefix="sut-", ignore_cleanup_errors=True) as log_dir:
         log = Path(log_dir) / "sut.log"
         with log.open("w", encoding="utf-8") as log_fh:
             proc = subprocess.Popen(
@@ -76,9 +92,4 @@ def running_sut(bugs: Sequence[str] | None = None, *, port: int | None = None) -
                 wait_healthy(url, proc, log)
                 yield url
             finally:
-                proc.terminate()
-                try:
-                    proc.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    proc.kill()
-                    proc.wait()
+                stop_process_tree(proc)

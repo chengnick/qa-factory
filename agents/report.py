@@ -1,10 +1,40 @@
 from __future__ import annotations
 
-from agents.base import AgentDeps
+from agents.base import AgentDeps, AgentOutputError
 from agents.contracts import QAResult, Report, Verdict
-
+from llm.client import (
+    LLMConfigError,
+    LLMConnectionError,
+    LLMError,
+    LLMRateLimitError,
+    LLMTimeoutError,
+    LLMUnavailableError,
+)
+from tools.registry import ToolArgumentError, ToolConnectionError, ToolError, ToolTimeoutError, UnknownToolError
 
 RUNNERS = ("pytest", "playwright")
+
+# Verdict for an exception that aborted the pipeline, by exception type (first match wins).
+# PROVISIONAL until classification/ lands in Phase 3.
+EXCEPTION_VERDICTS: tuple[tuple[tuple[type[BaseException], ...], Verdict], ...] = (
+    # The LLM provider or the SUT could not serve the run: nothing was learned about the SUT.
+    ((LLMRateLimitError, LLMUnavailableError), "ENV_BLOCKED"),  # 429 / 503
+    ((LLMTimeoutError, LLMConnectionError, LLMConfigError), "ENV_BLOCKED"),  # unreachable, bad or missing key
+    ((ToolTimeoutError, ToolConnectionError), "ENV_BLOCKED"),
+    # The agent produced something unusable: bad output, a handoff missing fields, a bad tool call.
+    ((AgentOutputError, UnknownToolError, ToolArgumentError), "AGENT_FAILED"),
+    ((LLMError,), "AGENT_FAILED"),  # any other LLM failure, e.g. empty/blocked response or 400
+    # A tool broke for another reason (harness): the run's result cannot be trusted.
+    ((ToolError,), "TEST_BROKEN"),
+)
+
+
+def exception_verdict(exc: BaseException) -> Verdict | None:
+    """Verdict for an exception that aborted the run; None if the type is not classified (a bug in our code)."""
+    for types, verdict in EXCEPTION_VERDICTS:
+        if isinstance(exc, types):
+            return verdict
+    return None
 
 
 def provisional_verdict(qa: QAResult) -> Verdict:

@@ -10,10 +10,11 @@ from tools.pytest_tool import PytestTool
 from tools.registry import ToolRegistry
 
 
-def real_tools(root: Path, sut_url: str) -> ToolRegistry:
+def real_tools(workspace: Path, sut_url: str) -> ToolRegistry:
+    """Tools bound to one run workspace (see tools/workspace.py) and one SUT."""
     registry = ToolRegistry()
-    registry.register("file_write", FileWriteTool(root))
-    registry.register("pytest", PytestTool(root, sut_url, timeout_s=120))
+    registry.register("file_write", FileWriteTool(workspace))
+    registry.register("pytest", PytestTool(workspace, sut_url, timeout_s=120))
     registry.register("http_request", HttpTool(sut_url))
-    registry.register("playwright", PytestTool(root, sut_url, timeout_s=180))
+    registry.register("playwright", PytestTool(workspace, sut_url, timeout_s=180))
     return registry

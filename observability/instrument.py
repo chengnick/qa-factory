@@ -24,7 +24,15 @@ from typing import Any, Generic, Protocol, TypeVar
 from opentelemetry import context as otel_context
 from opentelemetry.trace import Span, Status, StatusCode, Tracer
 
-from llm.client import ChatResponse, LLMClient, LLMRateLimitError, LLMTimeoutError, LLMUnavailableError, Message
+from llm.client import (
+    ChatResponse,
+    LLMClient,
+    LLMConnectionError,
+    LLMRateLimitError,
+    LLMTimeoutError,
+    LLMUnavailableError,
+    Message,
+)
 from observability.clock import Clock
 from observability.redact import redact
 from tools.registry import (
@@ -65,6 +73,22 @@ class MemoryContentSink:
     def store(self, trace_id: str, span_id: str, kind: str, text: str) -> str | None:
         self.items[(trace_id, span_id, kind)] = text
         return f"memory://{trace_id}/{span_id}-{kind}"
+
+
+class RunContentSink:
+    """Per-run layout (spec v3 §4.2): LLM prompts/completions -> prompts/, other large content -> spans/."""
+
+    PROMPT_KINDS = frozenset({"prompt", "completion"})
+
+    def __init__(self, run_dir: str | Path) -> None:
+        self.run_dir = Path(run_dir)
+
+    def store(self, trace_id: str, span_id: str, kind: str, text: str) -> str | None:
+        folder = "prompts" if kind in self.PROMPT_KINDS else "spans"
+        path = self.run_dir / folder / f"{span_id}-{kind}.txt"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+        return path.relative_to(self.run_dir).as_posix()
 
 
 class FileContentSink:
@@ -112,6 +136,23 @@ def symptom_of(exc: BaseException) -> str | None:
     return None
 
 
+# Provider-side LLM failures (spec v3 §5.4 R2-R4): layer PROVIDER, verdict ENV_BLOCKED.
+# The full rule table (R1-R16) and its evidence output arrive with classification/ in Phase 3.
+PROVIDER_RULES: tuple[tuple[type[BaseException], str], ...] = (
+    (LLMRateLimitError, "R2"),
+    (LLMUnavailableError, "R3"),
+    (LLMTimeoutError, "R4"),
+    (LLMConnectionError, "R4"),
+)
+
+
+def provider_rule(exc: BaseException) -> str | None:
+    for exc_type, rule in PROVIDER_RULES:
+        if isinstance(exc, exc_type):
+            return rule
+    return None
+
+
 def mark_error(inst: Instrumentation, span: Span, exc: BaseException) -> None:
     message = redact(f"{type(exc).__name__}: {exc}")
     span.set_status(Status(StatusCode.ERROR, message))
@@ -122,6 +163,9 @@ def mark_error(inst: Instrumentation, span: Span, exc: BaseException) -> None:
     )
     if symptom := symptom_of(exc):
         span.set_attribute("qa.failure.symptom", symptom)
+    if rule := provider_rule(exc):
+        span.set_attribute("qa.failure.layer", "PROVIDER")
+        span.set_attribute("qa.failure.rule", rule)
 
 
 @contextmanager
@@ -324,7 +368,18 @@ class RunHandle:
 
 
 @contextmanager
-def traced_run(inst: Instrumentation, requirement_id: str, sut_bugs: Sequence[str] = ()) -> Iterator[RunHandle]:
-    attrs = {"qa.run.requirement_id": requirement_id, "qa.run.sut_bugs": list(sut_bugs)}
+def traced_run(
+    inst: Instrumentation,
+    requirement_id: str,
+    sut_bugs: Sequence[str] = (),
+    *,
+    run_id: str | None = None,
+    prompt_version: str | None = None,
+    dataset: str | None = None,
+) -> Iterator[RunHandle]:
+    attrs: dict[str, Any] = {"qa.run.requirement_id": requirement_id, "qa.run.sut_bugs": list(sut_bugs)}
+    for key, value in (("qa.run.id", run_id), ("qa.run.prompt_version", prompt_version), ("qa.run.dataset", dataset)):
+        if value is not None:
+            attrs[key] = value
     with start_span(inst, "qa.run", attrs, root=True) as span:
         yield RunHandle(span, inst)

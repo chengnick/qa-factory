@@ -103,7 +103,9 @@ def test_missing_usage_is_none_not_zero():
         (_api_error(503), LLMUnavailableError),
         (_api_error(504), LLMTimeoutError),
         (_api_error(401), LLMConfigError),
-        (_api_error(500), LLMError),
+        (_api_error(500), LLMUnavailableError),  # spec v3 R3: every provider 5xx is PROVIDER
+        (_api_error(502), LLMUnavailableError),
+        (_api_error(400), LLMError),
         (httpx.ReadTimeout("slow"), LLMTimeoutError),
         (httpx.ConnectError("refused"), LLMConnectionError),
     ],
@@ -191,3 +193,35 @@ def test_overloaded_model_is_retried(harness):
     assert harness.clock.sleeps == [5.0]
     first = min(harness.named("attempt"), key=lambda s: s.attributes["qa.retry.attempt"])
     assert first.attributes["qa.failure.symptom"] == "HTTP_5XX"
+
+
+@pytest.mark.parametrize(
+    "error, symptom, rule",
+    [
+        (_api_error(429), "RATE_LIMIT", "R2"),
+        (_api_error(503), "HTTP_5XX", "R3"),
+        (_api_error(500), "HTTP_5XX", "R3"),
+        (httpx.ReadTimeout("slow"), "TIMEOUT", "R4"),
+        (httpx.ConnectError("refused"), "CONNECTION", "R4"),
+    ],
+)
+def test_provider_failures_are_layer_provider_and_env_blocked(harness, error, symptom, rule):
+    llm, _ = _client(error)
+
+    result = harness.run(llm=llm)
+
+    assert result.verdict == "ENV_BLOCKED"
+    llm_span = harness.one("llm.chat")
+    assert llm_span.attributes["qa.failure.layer"] == "PROVIDER"
+    assert llm_span.attributes["qa.failure.symptom"] == symptom
+    assert llm_span.attributes["qa.failure.rule"] == rule
+    assert harness.one("qa.run").attributes["qa.failure.layer"] == "PROVIDER"
+
+
+def test_non_provider_llm_error_is_not_provider(harness):
+    llm, _ = _client(_api_error(400))
+
+    result = harness.run(llm=llm)
+
+    assert result.verdict == "AGENT_FAILED"
+    assert "qa.failure.layer" not in harness.one("llm.chat").attributes

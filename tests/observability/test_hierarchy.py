@@ -1,4 +1,4 @@
-"""The span tree of a fake run matches spec 3.2, rebuilt purely from parent_span_id links."""
+"""The span tree of a fake run matches spec v2 §3.2 (carried over by spec v3 §4.4; text in git history, docs/spec-v2.md @ 639bc1c), rebuilt purely from parent_span_id links."""
 
 from opentelemetry.trace import StatusCode
 

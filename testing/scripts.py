@@ -1,6 +1,6 @@
 """Canned fake-mode runs: a FakeLLM script plus fake tools for each scenario.
 
-`flaky` (the default) reproduces the span tree of spec 3.2 exactly:
+`flaky` (the default) reproduces the span tree of spec v2 §3.2 (carried over by spec v3 §4.4; text in git history, docs/spec-v2.md @ 639bc1c) exactly:
 pytest times out once and passes on attempt 2, then http_request, then playwright.
 """
 

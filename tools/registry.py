@@ -87,7 +87,7 @@ def validate(tool: str, schema: Schema, args: Mapping[str, Any]) -> None:
 
 
 NO_RETRY = RetryPolicy()
-# Test runners are the tools that time out transiently; see spec 3.2.
+# Test runners are the tools that time out transiently; see spec v2 §3.2 (carried over by spec v3 §4.4; text in git history, docs/spec-v2.md @ 639bc1c).
 DEFAULT_POLICIES: dict[str, RetryPolicy] = {
     "pytest": RetryPolicy(max_attempts=3, backoff_s=1.0),
     "playwright": RetryPolicy(max_attempts=3, backoff_s=1.0),

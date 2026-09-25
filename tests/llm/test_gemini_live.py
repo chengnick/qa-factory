@@ -1,4 +1,8 @@
-"""Live smoke test against the real Gemini API. Skipped unless QA_LIVE=1 and GEMINI_API_KEY is set."""
+"""PROBE (spec v3 §15): live connectivity check against the real Gemini API.
+
+It bypasses TracedLLM on purpose, so it leaves no trace and must never be used for acceptance.
+Skipped unless QA_LIVE=1 and GEMINI_API_KEY is set.
+"""
 
 import json
 import os

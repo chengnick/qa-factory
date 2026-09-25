@@ -101,10 +101,10 @@ def _map_api_error(exc: errors.APIError) -> LLMError:
     message = redact(f"Gemini API error {exc.code}: {exc.message}")
     if exc.code == 429:
         return LLMRateLimitError(message)
-    if exc.code == 503:
-        return LLMUnavailableError(message)
     if exc.code in (408, 504):
         return LLMTimeoutError(message)
+    if exc.code >= 500:  # spec v3 R3: any provider 5xx is a PROVIDER failure
+        return LLMUnavailableError(message)
     if exc.code in (401, 403):
         return LLMConfigError(message)
     return LLMError(message)
