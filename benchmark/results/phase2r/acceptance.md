@@ -80,7 +80,11 @@
 
 ## 已知問題與限制
 
-- **`git_commit.dirty` 標記有誤**：只有第 1 個 run 記為 `dirty: false`，其餘 29 個與 summary 都是 `true`。原因是執行器每跑完一個 run 就把它複製進 `benchmark/results/phase2r/`，這些尚未追蹤的新檔案讓工作目錄變成 dirty。已確認 30 個 run 的 commit 都是 `32c5e1e`，與這個 commit 相比，被追蹤的檔案沒有任何變更。修正方式（尚未實作）：判斷 dirty 時排除結果目錄，或先寫到 `artifacts/` 最後再一次複製。
+- **更正：`git_commit.dirty` 應為 `false`（30 個 run 全部）**。已 commit 的 `meta.json` 與 summary 中，29 個 run 記為 `dirty: true`，這是錯誤標記：
+  - 原因：當時的判斷把**未追蹤的檔案**也算進去，而執行器每跑完一個 run 就把它複製進 `benchmark/results/phase2r/`，這些新檔案讓後續的 run 都被判為 dirty。
+  - 實際狀態：30 個 run 都在 commit `32c5e1e` 上執行，已追蹤的檔案與該 commit 完全相同。
+  - 修正：`evaluation/provenance.py` 改為只檢查已追蹤檔案（`git status --untracked-files=no`），並附測試 `tests/evaluation/test_provenance.py`。
+  - 依規定，已 commit 的 30 份 `meta.json` 不修改，更正只記錄在本文件。
 - **B02 的漏抓是 prompt 層面的問題**：兩次都只測 `done → todo`。依 Phase 2R 規則沒有修改 prompt。
 - **只有 5 輪、每個組合 n=5**，比率的解析度是 20%。
 - **交叉驗證的限制**（spec v3 §6.4）：只能確認失敗與 bug 開關有關，不能確認測試描述的就是那個 bug。
