@@ -2,7 +2,7 @@
 
 - Model: `gemini-3.5-flash-lite` (reported by provider: gemini-3.5-flash-lite), temperature 0.0
 - Prompt version: `v3`; git commit `32c5e1ed40c76567dfbaa3efb30bf384e4c8eb28` (dirty: True); lockfile sha256 `e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6`
-- Summary regenerated from the 30 run directories on 2026-09-26T12:44:39+00:00 (commit `75d04e6172822790dc36d143a886ab3e19806a71`); no pipeline was re-run.
+- Summary regenerated from the 30 run directories on 2026-09-26T12:49:13+00:00 (commit `db23134467f7c31b64e732e12343f882e532691c`); no pipeline was re-run.
 
 ## Metrics (spec v3 §11.2)
 
@@ -11,6 +11,7 @@ Mean and range are over per-round rates; the 95% CI is a Wilson interval on the 
 | Metric | Value |
 |---|---|
 | True detection rate (cross-validated) | 80% (range 67%–100%, rounds n=5; pooled 12/15, 95% CI 55%–93%) |
+| Detection rate when the pipeline completed (AGENT_FAILED excluded) | 87% (range 67%–100%, rounds n=5; pooled 12/14, 95% CI 60%–96%) |
 | Surface detection rate (unverified) | 80% (range 67%–100%, rounds n=5; pooled 12/15, 95% CI 55%–93%) |
 | **False-positive rate (surface, main figure)** | 7% (range 0%–33%, rounds n=5; pooled 1/15, 95% CI 1%–30%) |
 | False-positive rate (cross-validated; 0 by construction) | 0% (range 0%–0%, rounds n=5; pooled 0/15, 95% CI 0%–20%) |
@@ -19,11 +20,11 @@ Mean and range are over per-round rates; the 95% CI is a Wilson interval on the 
 
 ## Per-bug detection
 
-| Bug | Cross-validated | Surface | ENV_BLOCKED |
-|---|---|---|---|
-| B02 | 3/5 | 3/5 | 0/5 |
-| B03 | 5/5 | 5/5 | 0/5 |
-| B04 | 4/5 | 4/5 | 0/5 |
+| Bug | Cross-validated | Pipeline completed | AGENT_FAILED | Surface | ENV_BLOCKED |
+|---|---|---|---|---|---|
+| B02 | 3/5 | 3/5 | 0/5 | 3/5 | 0/5 |
+| B03 | 5/5 | 5/5 | 0/5 | 5/5 | 0/5 |
+| B04 | 4/5 | 4/4 | 1/5 | 4/5 | 0/5 |
 
 Cost: mean tokens 5113.5, mean duration 30.81 s, n=30
 

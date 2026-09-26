@@ -49,8 +49,8 @@ def test_env_blocked_rate_counts_all_runs():
 
 def test_per_bug_detection():
     per_bug = compute(RUNS)["per_bug_detection"]
-    assert per_bug["B02"] == {"verified": "2/2", "surface": "2/2", "env_blocked": "0/2"}
-    assert per_bug["B03"] == {"verified": "0/1", "surface": "1/1", "env_blocked": "1/2"}
+    assert per_bug["B02"] == {"verified": "2/2", "completed": "2/2", "agent_failed": "0/2", "surface": "2/2", "env_blocked": "0/2"}
+    assert per_bug["B03"] == {"verified": "0/1", "completed": "0/1", "agent_failed": "0/1", "surface": "1/1", "env_blocked": "1/2"}
 
 
 def test_round_with_empty_denominator_is_not_averaged_as_zero():
@@ -80,3 +80,13 @@ def test_every_rate_carries_a_ci_on_its_pooled_count():
     m = compute(RUNS)
     assert m["true_detection_rate"]["ci95"] == pytest.approx([0.2077, 0.9385], abs=1e-3)  # 2/3
     assert m["env_blocked_rate"]["ci95"][0] == pytest.approx(0.0301, abs=1e-3)  # 1/6
+
+
+def test_detection_when_pipeline_completed_excludes_agent_failed():
+    runs = RUNS + [run(3, ["B03"], "AGENT_FAILED", "AGENT_FAILED"), run(3, ["B02"], "DEFECT_FOUND", "DEFECT_FOUND")]
+    m = compute(runs)
+    assert m["true_detection_rate"]["pooled"] == "3/5"  # AGENT_FAILED counts as not found
+    assert m["true_detection_rate_completed"]["pooled"] == "3/4"  # only runs that produced tests
+    assert m["per_bug_detection"]["B03"]["verified"] == "0/2"
+    assert m["per_bug_detection"]["B03"]["completed"] == "0/1"
+    assert m["per_bug_detection"]["B03"]["agent_failed"] == "1/2"
