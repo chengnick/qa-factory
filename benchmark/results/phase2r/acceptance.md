@@ -44,12 +44,12 @@
 
 實際使用時沒有乾淨版可以比對，使用者看到的就是 surface verdict，所以 surface 誤報率才是使用者實際會遇到的誤報。
 
-乾淨版的 run 在交叉驗證時兩個 build 都是乾淨版：失敗的測試只會落入 R12 或 R13（測試壞了），不可能落入 R11（抓到 bug）。因此交叉驗證後的誤報率依定義一定是 0，只列出作為對照。
+乾淨版的 run 在交叉驗證時兩個 build 都是乾淨版：失敗的測試只會落入 R12 或 R13（失敗與注入的 bug 無關），不可能落入 R11（抓到 bug）。因此交叉驗證後的誤報率依定義一定是 0，只列出作為對照。
 
 ## 交叉驗證這次改變了什麼
 
 - **開 bug 的 run**：真實偵測率與表面偵測率相同（12/15）。這 15 次中沒有「碰巧失敗被當成偵測」的情況，交叉驗證確認了 12 次偵測都與 bug 開關有關。
-- **乾淨版的 run**：1 次 surface 誤報（`RUN-20260925-162242-4188`）被交叉驗證判為 R12，也就是測試本身錯誤。
+- **乾淨版的 run**：1 次 surface 誤報（`RUN-20260925-162242-4188`）被交叉驗證判為 R12，表示失敗與注入的 bug 無關。細看之下這是 API 規格模糊，不是明確的測試錯誤：測試以非數字 ID 查詢並期待 404，SUT 回 422，而 REQ-007 沒有規定 ID 格式錯誤時的回應（見 spec v3 §6.4）。
 
 ## 全部 30 個 run
 
@@ -77,7 +77,7 @@
 | 4 | `RUN-20260925-162051-4B53` | REQ-007 | B03 | DEFECT_FOUND | DEFECT_FOUND | 1 / 0 / 3 |  |
 | 4 | `RUN-20260925-162140-FD00` | REQ-002 | B04 | AGENT_FAILED | AGENT_FAILED | - | Automation 輸出的 JSON 不合法（line 16 col 7），pipeline 中止；非 PROVIDER，計入分母 |
 | 4 | `RUN-20260925-162200-4DA6` | REQ-005 | （乾淨版） | PASS | PASS | 0 / 0 / 4 |  |
-| 4 | `RUN-20260925-162242-4188` | REQ-007 | （乾淨版） | DEFECT_FOUND | TEST_BROKEN | 0 / 1 / 3 | surface 誤報：測試用非數字 ID 查詢並期待 404，SUT 回 422；交叉驗證判為 R12（兩邊都失敗）→ TEST_BROKEN |
+| 4 | `RUN-20260925-162242-4188` | REQ-007 | （乾淨版） | DEFECT_FOUND | TEST_BROKEN | 0 / 1 / 3 | surface 誤報：測試用非數字 ID 查詢並期待 404，SUT 回 422（REQ-007 未規定，屬規格模糊）；交叉驗證判為 R12（兩邊都失敗，與 bug 無關）→ TEST_BROKEN |
 | 4 | `RUN-20260925-162323-26D9` | REQ-002 | （乾淨版） | PASS | PASS | 0 / 0 / 3 |  |
 | 5 | `RUN-20260925-162403-2580` | REQ-005 | B02 | DEFECT_FOUND | DEFECT_FOUND | 1 / 0 / 4 |  |
 | 5 | `RUN-20260925-162445-0518` | REQ-007 | B03 | DEFECT_FOUND | DEFECT_FOUND | 1 / 0 / 3 |  |
@@ -93,6 +93,7 @@
   - 實際狀態：30 個 run 都在 commit `32c5e1e` 上執行，已追蹤的檔案與該 commit 完全相同。
   - 修正：`evaluation/provenance.py` 改為只檢查已追蹤檔案（`git status --untracked-files=no`），並附測試 `tests/evaluation/test_provenance.py`。
   - 依規定，已 commit 的 30 份 `meta.json` 不修改，更正只記錄在本文件。
+- **temperature 0 下結果仍會變動**：REQ-005 + B02 在同樣條件下第 1、2 輪漏抓、第 3–5 輪抓到。這是每個組合跑多輪、並報告範圍與信賴區間的理由（spec v3 §6.4）。
 - **B02 的漏抓是 prompt 層面的問題**：兩次都只測 `done → todo`。依 Phase 2R 規則沒有修改 prompt。
 - **只有 5 輪、每個組合 n=5**，比率的解析度是 20%。
 - **交叉驗證的限制**（spec v3 §6.4）：只能確認失敗與 bug 開關有關，不能確認測試描述的就是那個 bug。
