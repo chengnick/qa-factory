@@ -51,6 +51,16 @@ def test_fake_run_writes_trace_and_run_record(tmp_dir):
     assert root["attributes"]["qa.run.dataset"] == "clean"
 
 
+def test_run_writes_classification(tmp_dir):
+    assert app.main(["--requirement", "REQ-005", "--llm", "fake", "--scenario", "defect", "--artifacts-dir", str(tmp_dir)]) == 0
+    (run_dir,) = _run_dirs(tmp_dir)
+    meta = _meta(run_dir)
+    classification = json.loads((run_dir / "classification.json").read_text(encoding="utf-8"))
+    assert meta["verdict"] == classification["surface"]["verdict"] == "DEFECT_FOUND"
+    assert meta["classification"]["decided_by"]["matched_rule"] == "R11U"
+    assert classification["surface"]["classifications"][0]["unverified"] is True
+
+
 def test_runs_accumulate_and_earlier_runs_are_untouched(tmp_dir):
     app.main(["--requirement", "REQ-005", "--llm", "fake", "--artifacts-dir", str(tmp_dir)])
     (first,) = _run_dirs(tmp_dir)

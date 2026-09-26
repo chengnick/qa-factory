@@ -112,6 +112,13 @@ def compute(runs: list[Run]) -> dict[str, Any]:
             "env_blocked": f"{len(mine) - len(usable)}/{len(mine)}",
         }
     metrics["per_bug_detection"] = per_bug
+    # UNKNOWN ratio: classifications no rule matched, over all classifications (runs recorded before Phase 3
+    # carry no classification and are left out; see evaluation/classify_runs.py for re-classifying them).
+    classified = [r for r in runs if (r.get("classification") or {}).get("counts")]
+    unknown = sum(r["classification"]["counts"]["unknown"] for r in classified)
+    total = sum(r["classification"]["counts"]["total"] for r in classified)
+    metrics["unknown_classification_rate"] = _summary({}, unknown, total) | {"runs_with_classification": len(classified)}
+    metrics["inconclusive_rate"] = _stat(runs, lambda r: not is_env_blocked(r), lambda r: r.get("verdict") == "INCONCLUSIVE")
     tokens = [r["tokens"]["total"] for r in runs if (r.get("tokens") or {}).get("total") is not None]
     durations = [r["duration_s"] for r in runs if r.get("duration_s") is not None]
     metrics["cost"] = {

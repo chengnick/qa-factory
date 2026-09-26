@@ -13,19 +13,20 @@ def test_root_carries_run_attributes(harness):
     assert root.attributes["qa.verdict"] == "FLAKY"
 
 
-def test_verdict_only_on_root_and_qa_agent(harness):
+def test_verdict_only_on_root(harness):
+    """Phase 3: the verdict comes from classifying the whole trace, so only the root carries it."""
     harness.run()
 
     carriers = sorted(s.name for s in harness.spans() if "qa.verdict" in s.attributes)
-    assert carriers == ["agent.qa", "qa.run"]
+    assert carriers == ["qa.run"]
 
 
 @pytest.mark.parametrize("scenario, verdict", [("pass", "PASS"), ("flaky", "FLAKY"), ("defect", "DEFECT_FOUND")])
-def test_provisional_verdict_per_scenario(harness, scenario, verdict):
+def test_classified_verdict_per_scenario(harness, scenario, verdict):
     result = harness.run(scenario=scenario)
 
     assert result.verdict == verdict
-    assert harness.one("agent.qa").attributes["qa.verdict"] == verdict
+    assert harness.one("qa.run").attributes["qa.verdict"] == verdict
 
 
 def test_agent_spans_name_their_agent(harness):

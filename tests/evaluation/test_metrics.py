@@ -90,3 +90,14 @@ def test_detection_when_pipeline_completed_excludes_agent_failed():
     assert m["per_bug_detection"]["B03"]["verified"] == "0/2"
     assert m["per_bug_detection"]["B03"]["completed"] == "0/1"
     assert m["per_bug_detection"]["B03"]["agent_failed"] == "1/2"
+
+
+def test_unknown_and_inconclusive_rates():
+    classified = [
+        {**run(1, ["B02"], "INCONCLUSIVE", "INCONCLUSIVE"), "classification": {"counts": {"total": 2, "unknown": 1}}},
+        {**run(1, [], "PASS", "PASS"), "classification": {"counts": {"total": 0, "unknown": 0}}},
+    ]
+    m = compute(RUNS + classified)
+    assert m["unknown_classification_rate"]["pooled"] == "1/2"
+    assert m["unknown_classification_rate"]["runs_with_classification"] == 2
+    assert m["inconclusive_rate"]["pooled"] == "1/7"  # the ENV_BLOCKED run is excluded

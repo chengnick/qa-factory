@@ -49,8 +49,8 @@ def test_full_run_duration_is_deterministic(harness):
 
 
 def test_same_run_twice_gives_identical_timings():
-    from observability.instrument import Instrumentation, MemoryContentSink
-    from observability.setup import create_tracer_provider, get_tracer
+    from observability.instrument import MemoryContentSink
+    from observability.setup import new_instrumentation
     from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
     from agents.contracts import RequirementInput
     from pipeline import run_pipeline
@@ -58,8 +58,7 @@ def test_same_run_twice_gives_identical_timings():
 
     def timings():
         exporter, clock = InMemorySpanExporter(), FakeClock()
-        provider = create_tracer_provider(exporter)
-        inst = Instrumentation(get_tracer(provider), clock, MemoryContentSink())
+        provider, inst = new_instrumentation(clock, MemoryContentSink(), exporter)
         run_pipeline(RequirementInput("REQ-005", "t"), llm=scripts.fake_llm("REQ-005", clock), tools=scripts.fake_tools("REQ-005", "flaky", clock), inst=inst)
         return [(s.name, s.start_time, s.end_time) for s in exporter.get_finished_spans()]
 

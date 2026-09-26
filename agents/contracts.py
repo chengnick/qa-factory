@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any, Literal
 
 Surface = Literal["api", "ui"]
-Verdict = Literal["PASS", "DEFECT_FOUND", "TEST_BROKEN", "AGENT_FAILED", "ENV_BLOCKED", "FLAKY"]
+Verdict = Literal["PASS", "DEFECT_FOUND", "TEST_BROKEN", "MISSED", "AGENT_FAILED", "ENV_BLOCKED", "INCONCLUSIVE", "FLAKY"]
 
 
 @dataclass(frozen=True)
@@ -73,6 +73,7 @@ class QAResult:
 
 @dataclass(frozen=True)
 class Report:
+    """Human-readable summary. The verdict is not decided here: classification/ derives it from the trace."""
+
     requirement_id: str
-    verdict: Verdict
     summary: str

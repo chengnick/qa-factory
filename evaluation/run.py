@@ -35,7 +35,7 @@ from observability.clock import Clock, SystemClock
 from observability.instrument import Instrumentation, RunContentSink
 from observability.json_exporter import JsonFileSpanExporter
 from observability.redact import find_secret
-from observability.setup import create_tracer_provider, get_tracer
+from observability.setup import new_instrumentation
 from pipeline import run_pipeline
 from sut.launcher import SUTStartupError, running_sut
 from tools.factory import real_tools
@@ -58,9 +58,9 @@ class RunnerRefused(RuntimeError):
 @contextlib.contextmanager
 def instrumentation(workspace: Path, clock: Clock) -> Iterator[Instrumentation]:
     """Trace -> {workspace}/trace.json; full-size content -> {workspace}/prompts/ and spans/."""
-    provider = create_tracer_provider(JsonFileSpanExporter(workspace, filename="trace.json"))
+    provider, inst = new_instrumentation(clock, RunContentSink(workspace), JsonFileSpanExporter(workspace, filename="trace.json"))
     try:
-        yield Instrumentation(get_tracer(provider), clock, RunContentSink(workspace))
+        yield inst
     finally:
         provider.shutdown()
 
@@ -85,6 +85,21 @@ def base_meta(run_id: str, requirement_id: str, *, llm: str, model: str, tempera
 
 def write_meta(workspace: Path, meta: dict[str, Any]) -> None:
     (workspace / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def record_classification(workspace: Path, meta: dict[str, Any], classification: dict[str, Any] | None, underlying: str | None) -> None:
+    """Write classification.json and copy its headline numbers into meta (spec v3 §5)."""
+    if classification is None:
+        return
+    (workspace / "classification.json").write_text(json.dumps(classification, ensure_ascii=False, indent=2), encoding="utf-8")
+    decisive = classification.get("final") or classification["surface"]
+    meta["underlying_verdict"] = underlying
+    meta["classification"] = {
+        "counts": decisive["counts"],
+        "surface_counts": classification["surface"]["counts"],
+        "decided_by": decisive["decided_by"],
+        "flaky": decisive["flaky"],
+    }
 
 
 def _now() -> str:
@@ -167,6 +182,7 @@ def execute_run(
         duration_s=round(time.monotonic() - started, 1),
         **_trace_facts(workspace),
     )
+    record_classification(workspace, meta, result.classification, result.underlying_verdict)
     write_meta(workspace, meta)
     return workspace, meta
 
@@ -309,6 +325,15 @@ def render_summary(summary: dict[str, Any]) -> str:
         f"| False-positive rate (cross-validated; 0 by construction) | {_fmt_rate(m['false_positive_rate_verified'])} |",
         f"| Test health | {_fmt_rate(m['test_health'])} |",
         f"| Environment-block rate | {_fmt_rate(m['env_blocked_rate'])} |",
+        *(
+            [
+                f"| INCONCLUSIVE rate (no rule matched a failure) | {_fmt_rate(m['inconclusive_rate'])} |",
+                f"| UNKNOWN classification rate | {m['unknown_classification_rate']['pooled']} classifications "
+                f"({m['unknown_classification_rate']['runs_with_classification']} runs with classification) |",
+            ]
+            if "inconclusive_rate" in m
+            else []
+        ),
         "",
         "## Per-bug detection",
         "",

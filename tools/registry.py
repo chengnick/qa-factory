@@ -34,6 +34,14 @@ class ToolArgumentError(ToolError):
     """Arguments do not match the tool's parameter schema; the tool was not executed."""
 
 
+class PermissionDeniedError(ToolError):
+    """The permission gate or the generated-code policy refused the call; nothing was executed."""
+
+
+class RepeatedToolCallError(ToolError):
+    """The same failing tool call was requested again after repeated failures; aborted without executing."""
+
+
 @dataclass(frozen=True)
 class ToolResult:
     ok: bool

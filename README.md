@@ -88,7 +88,7 @@ pytest tests                       # flag mechanism + manifest consistency
 
 - **Fake runs are simulated.** `--llm fake` runs are fully scripted and use a simulated clock. `--llm gemini` runs use real tools and a real clock.
 - **Free tier.** Gemini's free tier uses submitted content to improve Google products (only the public requirements and generated tests are sent). Its small quota can make runs slow, and runs fail when retries are exhausted.
-- **Provisional verdict.** The verdict is computed by `agents/report.py::provisional_verdict`. Only the PROVIDER layer (R2–R4) is attributed so far; the full rule-based classifier arrives in Phase 3.
+- **Rule-based attribution only.** The verdict comes from the rule table in [classification/rules.py](classification/rules.py) (spec v3 §5.4). A failure that no rule matches is `UNKNOWN`, and the run is `INCONCLUSIVE` rather than guessed. Examples are a non-provider LLM error such as a 400, or a bad API key in the middle of a run.
 - **Playwright browser.** `requirements.lock` pins Playwright 1.61; run `playwright install chromium` if no matching browser is installed.
 - **UI bugs are visible in the page source.** B05 and B10 are injected server-side by swapping JS snippets. The served page looks like naturally buggy code with no flag names, but a reader can still spot the bug by reading it.
 - **Weak identity.** Users are identified only by the `X-User` header. There is no real authentication.

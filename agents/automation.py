@@ -4,7 +4,7 @@ import json
 import re
 from dataclasses import asdict
 
-from agents.base import AgentDeps, AgentOutputError, ask_json, dict_list, field
+from agents.base import AgentDeps, AgentOutputError, HandoffError, ask_json, dict_list, field
 from agents.contracts import AutomationResult, GeneratedFile, TestPlan
 from tools.registry import ToolError
 
@@ -46,6 +46,8 @@ class AutomationAgent:
         self.api_reference = api_reference
 
     def run(self, plan: TestPlan) -> AutomationResult:
+        if not plan.cases:
+            raise HandoffError("test_design", "test plan has no cases")
         user = f"Test plan for {plan.requirement_id}:\n{json.dumps(asdict(plan), ensure_ascii=False, indent=2)}"
         if self.api_reference:
             user += f"\n\nAPI reference:\n{self.api_reference}"

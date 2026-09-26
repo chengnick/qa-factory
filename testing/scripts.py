@@ -58,7 +58,15 @@ def fake_tools(requirement_id: str, scenario: str = "flaky", clock: Clock | None
     pytest_script: list = {
         "pass": [passed],
         "flaky": [ToolTimeoutError("pytest did not finish within 60s"), passed],
-        "defect": [ToolResult(ok=False, exit_code=1, command=pytest_cmd, stdout="E   AssertionError: expected 409, got 200\n1 failed in 0.52s")],
+        "defect": [
+            ToolResult(
+                ok=False,
+                exit_code=1,
+                command=pytest_cmd,
+                stdout="E   AssertionError: expected 409, got 200\n1 failed in 0.52s",
+                data={"results": [{"node_id": f"{api_path}::test_api_rule", "outcome": "FAIL", "message": "AssertionError: expected 409, got 200"}]},
+            )
+        ],
     }[scenario]
 
     def tool(script: list, name: str) -> FakeTool:

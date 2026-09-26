@@ -4,9 +4,9 @@ import json
 import re
 
 from agents.contracts import RequirementInput
-from observability.instrument import FileContentSink, Instrumentation
+from observability.instrument import FileContentSink
 from observability.json_exporter import JsonFileSpanExporter
-from observability.setup import create_tracer_provider, get_tracer
+from observability.setup import create_tracer_provider, get_tracer, new_instrumentation
 from pipeline import run_pipeline
 from testing import scripts
 from testing.fake_clock import FakeClock
@@ -16,9 +16,8 @@ ISO_MS = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
 
 def _run(tmp_dir, scenario="flaky", requirement_id="REQ-005"):
     exporter = JsonFileSpanExporter(tmp_dir)
-    provider = create_tracer_provider(exporter)
     clock = FakeClock()
-    inst = Instrumentation(get_tracer(provider), clock, FileContentSink(tmp_dir))
+    provider, inst = new_instrumentation(clock, FileContentSink(tmp_dir), exporter)
     result = run_pipeline(
         RequirementInput(requirement_id, "text"),
         llm=scripts.fake_llm(requirement_id, clock),

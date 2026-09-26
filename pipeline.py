@@ -1,6 +1,8 @@
 """Wires the five agents together and mounts instrumentation around them.
 
 This is the only place where agents meet observability; agents/ never imports it.
+The verdict is decided at the end of the run by classification/ from the run's own trace
+(spec v3 §5): a surface verdict from the pipeline alone and, in evaluation mode, a cross-validated one.
 """
 
 from __future__ import annotations
@@ -11,14 +13,17 @@ from typing import Any
 
 from agents.automation import AutomationAgent
 from agents.base import AgentDeps
-from agents.contracts import AutomationResult, QAResult, Report, RequirementInput
+from agents.contracts import AutomationResult, Report, RequirementInput
 from agents.qa import QAAgent
-from agents.report import ReportAgent, exception_verdict, provisional_verdict
+from agents.report import ReportAgent
 from agents.requirement import RequirementAgent
 from agents.test_design import TestDesignAgent
 from agents.version import PROMPT_VERSION
+from classification.observations import observe
+from classification.verdict import Outcome, final_outcome, surface_outcome
 from llm.client import LLMClient
-from observability.instrument import Instrumentation, TracedLLM, TracedToolRegistry, traced_agent, traced_run
+from observability.instrument import Instrumentation, RunHandle, TracedLLM, TracedToolRegistry, traced_agent, traced_run
+from observability.json_exporter import span_to_dict
 from tools.registry import NO_RETRY, RetryPolicy, ToolRegistry
 
 
@@ -28,16 +33,14 @@ class PipelineResult:
     verdict: str  # final: cross-validated when a differential ran, otherwise the surface verdict
     report: Report | None
     error: str | None = None
-    surface_verdict: str | None = None  # the pipeline's own (unverified) verdict
+    surface_verdict: str | None = None  # what the pipeline alone can say (unverified)
     differential: Any = None  # evaluation.differential.DifferentialResult when evaluation mode ran
+    underlying_verdict: str | None = None  # set when verdict is FLAKY
+    classification: dict[str, Any] | None = None  # {"surface": Outcome json, "final": Outcome json | None}
 
 
 # Evaluation hook: given the final generated tests, cross-validate them (evaluation/differential.py).
 Differential = Callable[[AutomationResult], Any]
-
-
-def _qa_attributes(result: QAResult) -> dict[str, str]:
-    return {"qa.verdict": provisional_verdict(result)}
 
 
 def run_pipeline(
@@ -53,27 +56,51 @@ def run_pipeline(
     dataset: str | None = None,
     differential: Differential | None = None,
 ) -> PipelineResult:
+    if inst.collector is None:
+        raise ValueError("Instrumentation needs a span collector (observability.setup.new_instrumentation) to classify the run")
     deps = AgentDeps(llm=TracedLLM(llm, inst, llm_retry), tools=TracedToolRegistry(tools, inst))
     requirement_agent = traced_agent(RequirementAgent(deps), inst)
     design_agent = traced_agent(TestDesignAgent(deps, api_reference), inst)
     automation_agent = traced_agent(AutomationAgent(deps, api_reference), inst)
-    qa_agent = traced_agent(QAAgent(deps), inst, _qa_attributes)
+    qa_agent = traced_agent(QAAgent(deps), inst)
     report_agent = traced_agent(ReportAgent(deps), inst)
     with traced_run(inst, requirement.requirement_id, sut_bugs, run_id=run_id, prompt_version=PROMPT_VERSION, dataset=dataset) as run:
+        report: Report | None = None
+        error: str | None = None
+        diff = None
         try:
             automation = automation_agent.run(design_agent.run(requirement_agent.run(requirement)))
             report = report_agent.run(qa_agent.run(automation))
-        except Exception as exc:
-            verdict = exception_verdict(exc)
-            if verdict is None:
-                raise  # unclassified exception: a bug in our code, not a verdict about the SUT (root span marked ERROR)
-            run.set_verdict(verdict)
+        except Exception as exc:  # classified from the trace below; an unmatched exception becomes UNKNOWN
             run.fail(exc)
-            return PipelineResult(run.trace_id, verdict, None, f"{type(exc).__name__}: {exc}", surface_verdict=verdict)
-        run.set_attribute("qa.verdict.surface", report.verdict)
-        if differential is None:
-            run.set_verdict(report.verdict)
-            return PipelineResult(run.trace_id, report.verdict, report, surface_verdict=report.verdict)
-        diff = differential(automation)
-        run.set_verdict(diff.verdict)
-        return PipelineResult(run.trace_id, diff.verdict, report, surface_verdict=report.verdict, differential=diff)
+            error = f"{type(exc).__name__}: {exc}"
+        else:
+            if differential is not None:
+                diff = differential(automation)
+        return _conclude(run, inst, report, error, diff, bugs_enabled=bool(sut_bugs))
+
+
+def _conclude(run: RunHandle, inst: Instrumentation, report: Report | None, error: str | None, diff: Any, *, bugs_enabled: bool) -> PipelineResult:
+    spans = [span_to_dict(s) for s in inst.collector.spans(run.trace_id)]
+    obs = observe(spans, differential=diff.to_json() if diff is not None else None)
+    surface = surface_outcome(obs)
+    final = final_outcome(obs, bugs_enabled=bugs_enabled) if diff is not None else surface
+    _annotate_root(run, final, surface)
+    classification = {"surface": surface.to_json(), "final": final.to_json() if diff is not None else None}
+    return PipelineResult(
+        run.trace_id, final.verdict, report, error, surface.verdict, diff, final.underlying_verdict, classification
+    )  # fmt: skip
+
+
+def _annotate_root(run: RunHandle, final: Outcome, surface: Outcome) -> None:
+    run.set_verdict(final.verdict)
+    run.set_attribute("qa.verdict.surface", surface.verdict)
+    if final.underlying_verdict:
+        run.set_attribute("qa.verdict.underlying", final.underlying_verdict)
+    counts = final.counts
+    run.set_attribute("qa.classification.total", counts["total"])
+    run.set_attribute("qa.classification.unknown", counts["unknown"])
+    if c := final.decided_by:
+        run.set_attribute("qa.failure.layer", c.layer)
+        run.set_attribute("qa.failure.symptom", c.symptom)
+        run.set_attribute("qa.failure.rule", c.matched_rule or "UNKNOWN")

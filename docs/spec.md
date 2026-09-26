@@ -186,49 +186,61 @@ artifacts/
 | 值 | 意義 |
 |---|---|
 | `PASS` | 測試通過，未發現問題 |
-| `DEFECT_FOUND` | 交叉驗證確認抓到 SUT 缺陷 |
-| `TEST_BROKEN` | 測試本身壞了，結果不可信 |
+| `DEFECT_FOUND` | 抓到 SUT 缺陷（評估模式由交叉驗證確認；非評估模式為 `unverified`） |
+| `TEST_BROKEN` | 測試或執行框架出問題，結果不可信 |
+| `INCONCLUSIVE` | 有失敗，但沒有任何規則能分類（layer 為 `UNKNOWN`）；Phase 3 新增 |
 | `MISSED` | 開了 bug 但測試全數通過（僅評估模式） |
 | `AGENT_FAILED` | Agent 行為錯誤，導致無法完成任務 |
 | `ENV_BLOCKED` | `PROVIDER` 或 `ENV` 問題，導致無法判定 |
-| `FLAKY` | 重試後結果改變 |
+| `FLAKY` | 重試後結果改變（另外保留 `underlying_verdict`） |
 
 ### 5.4 規則表
 
-依序比對，第一個符合的規則勝出，都不符合時為 `UNKNOWN`。
+依序比對，第一個符合的規則勝出，都不符合時為 `UNKNOWN`。**排序原則：具體的規則在前，通用的在後。** 下表即為比對順序（Phase 3 修訂）。
 
-| # | 條件 | layer | symptom |
-|---|---|---|---|
-| R1 | SUT health check 失敗 | ENV | CONNECTION |
-| R2 | LLM API 回 429 | PROVIDER | RATE_LIMIT |
-| R3 | LLM API 回 5xx | PROVIDER | HTTP_5XX |
-| R4 | LLM API timeout 或連線失敗 | PROVIDER | TIMEOUT / CONNECTION |
-| R5 | LLM 輸出無法 parse 成預期結構 | AGENT | INVALID_OUTPUT |
-| R6 | Agent 呼叫未註冊的工具，或參數不符 schema | AGENT | INVALID_OUTPUT |
-| R7 | handoff 時缺少必要欄位 | AGENT | SCHEMA_MISMATCH |
-| R8 | pytest exit code 2 / 3 / 4 | HARNESS | CRASH |
-| R9 | pytest collection error、ImportError、SyntaxError | TEST | CRASH |
-| R10 | 測試執行時出現非 AssertionError 的例外（AttributeError、TypeError、fixture 錯誤等） | TEST | CRASH |
-| R11 | 交叉驗證：開 bug 版 FAIL，乾淨版 PASS | SUT | ASSERTION / HTTP_5XX |
-| R12 | 交叉驗證：兩版都 FAIL | TEST | ASSERTION |
-| R13 | 交叉驗證：開 bug 版 PASS，乾淨版 FAIL | TEST | ASSERTION |
-| R14 | Playwright locator timeout，且頁面可正常載入 | TEST | TIMEOUT |
-| R15 | Playwright 導頁 timeout，且 health check 失敗 | ENV | TIMEOUT |
-| R16 | 瀏覽器無法啟動 | ENV | CRASH |
+| 順序 | # | 條件 | layer | symptom |
+|---|---|---|---|---|
+| 1 | R1 | SUT health check 失敗 | ENV | CONNECTION |
+| 2 | R2 | LLM API 回 429 | PROVIDER | RATE_LIMIT |
+| 3 | R3 | LLM API 回 5xx | PROVIDER | HTTP_5XX |
+| 4 | R4 | LLM API timeout 或連線失敗 | PROVIDER | TIMEOUT / CONNECTION |
+| 5 | R5 | LLM 輸出無法 parse 成預期結構 | AGENT | INVALID_OUTPUT |
+| 6 | R6 | Agent 呼叫未註冊的工具、參數不符 schema，或重複要求同一個已失敗的工具呼叫 | AGENT | INVALID_OUTPUT |
+| 7 | R7 | handoff 時缺少必要欄位（歸因到上游 Agent） | AGENT | SCHEMA_MISMATCH |
+| 8 | R18 | 權限閘門或產生程式碼的靜態檢查拒絕了動作（Phase 3 新增） | AGENT | PERMISSION_DENIED |
+| 9 | R9 | pytest collection error、ImportError、SyntaxError | TEST | CRASH |
+| 10 | R8 | pytest exit code 2 / 3 / 4 | HARNESS | CRASH |
+| 11 | R17 | pytest 或工具層級逾時（重試用完）（Phase 3 新增） | HARNESS | TIMEOUT |
+| 12 | R14 | Playwright locator timeout，且頁面可正常載入 | TEST | TIMEOUT |
+| 13 | R15 | Playwright 導頁 timeout，且 health check 失敗 | ENV | TIMEOUT |
+| 14 | R16 | 瀏覽器無法啟動 | ENV | CRASH |
+| 15 | R10 | 測試執行時出現非 AssertionError 的例外（AttributeError、TypeError、fixture 錯誤等） | TEST | CRASH |
+| 16 | R11 | 交叉驗證：開 bug 版 FAIL，乾淨版 PASS | SUT | ASSERTION / HTTP_5XX |
+| 17 | R11U | 非評估模式：assertion 失敗，沒有乾淨版可比對（`unverified: true`）（Phase 3 新增） | SUT | ASSERTION / HTTP_5XX |
+| 18 | R12 | 交叉驗證：兩版都 FAIL（失敗與注入的 bug 無關，見 §6.4） | TEST | ASSERTION |
+| 19 | R13 | 交叉驗證：開 bug 版 PASS，乾淨版 FAIL | TEST | ASSERTION |
 
 - 每筆分類必須輸出 `matched_rule` 與 `evidence`（觸發規則的原始片段），不輸出 confidence 數值。
+- R9 排在 R8 之前：收集失敗時 pytest 的 exit code 也是 2，若 R8 在前 R9 永遠不會觸發。
+- R14–R16 排在 R10 之前：Playwright 的錯誤都是非 AssertionError 的例外，若 R10 在前它們永遠不會觸發。
 - R10 必須排在 R11 之前：碰巧失敗的測試在交叉驗證之前就會被判為 TEST。
-- 非評估模式（沒有乾淨版可以比對）時，assertion 失敗預設為 `SUT`，並在報告中標註 `unverified: true`。
+- 每條規則都有「可達性測試」：一個案例，斷言 `matched_rule` 等於該規則（`tests/classification/test_rules.py`）。
 
-### 5.5 Verdict 彙總（依序）
+### 5.5 Verdict 彙總（依序，第一個符合者勝出）
 
-1. 任一 span 為 `PROVIDER` 或 `ENV` 且任務未完成 → `ENV_BLOCKED`
-2. 任一 span 為 `AGENT` 且任務未完成 → `AGENT_FAILED`
-3. 存在 `TEST` 或 `HARNESS` → `TEST_BROKEN`
-4. 存在 `SUT`（R11） → `DEFECT_FOUND`
-5. 評估模式下開了 bug 但全部通過 → `MISSED`
-6. 任一 attempt 失敗但最終成功 → `FLAKY`（另外保留原本的 verdict 在 `underlying_verdict`）
-7. 其餘 → `PASS`
+§5.5 原本的順序（TEST_BROKEN 在 DEFECT_FOUND 之前）與 §6.3（有抓到 bug 就算 DEFECT_FOUND，壞掉的測試另記在 `test_health`）衝突；**以 §6.3 為準**。
+
+1. 任一分類為 `PROVIDER` 或 `ENV` → `ENV_BLOCKED`
+2. 任一分類為 `AGENT` → `AGENT_FAILED`
+3. 任一分類為 `SUT`（評估模式 R11；非評估模式 R11U） → `DEFECT_FOUND`
+4. 任一分類為 `TEST` 或 `HARNESS` → `TEST_BROKEN`
+5. 任一分類為 `UNKNOWN` → `INCONCLUSIVE`
+6. 評估模式下開了 bug、交叉驗證完成、但沒有任何失敗 → `MISSED`
+7. 任一 attempt 失敗但最終成功 → `FLAKY`（`underlying_verdict` 為 `PASS`）
+8. 其餘 → `PASS`
+
+- 同一個 run 產生兩個 verdict：只看 pipeline 本身的 **surface verdict**（R11U），以及評估模式下以交叉驗證取代 QA 測試結果的 **最終 verdict**。
+- summary 另外列出 `UNKNOWN` 分類的比率與 `INCONCLUSIVE` 的比率。
 
 ---
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict
 
-from agents.base import AgentDeps, AgentOutputError, ask_json, dict_list, field, str_list
+from agents.base import AgentDeps, AgentOutputError, HandoffError, ask_json, dict_list, field, str_list
 from agents.contracts import RequirementSpec, TestCase, TestPlan
 
 MAX_CASES = 8
@@ -34,6 +34,8 @@ class TestDesignAgent:
         self.api_reference = api_reference
 
     def run(self, spec: RequirementSpec) -> TestPlan:
+        if not spec.acceptance_criteria or not all(c.strip() for c in spec.acceptance_criteria):
+            raise HandoffError("requirement", "acceptance_criteria missing or blank")
         user = f"Requirement:\n{json.dumps(asdict(spec), ensure_ascii=False, indent=2)}"
         if self.api_reference:
             user += f"\n\nAPI reference:\n{self.api_reference}"

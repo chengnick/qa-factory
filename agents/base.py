@@ -33,7 +33,18 @@ class Agent(Protocol[In, Out]):
 
 
 class AgentOutputError(Exception):
-    """The LLM output (or an upstream handoff) does not have the expected structure."""
+    """The LLM output does not have the expected structure."""
+
+
+class HandoffError(AgentOutputError):
+    """A downstream agent rejected its input: the upstream agent's output is missing required content.
+
+    The failure is attributed to `upstream` (spec v3 R7), not to the agent that detected it.
+    """
+
+    def __init__(self, upstream: str, message: str) -> None:
+        super().__init__(f"handoff from {upstream} rejected: {message}")
+        self.upstream = upstream
 
 
 def ask_json(llm: LLMClient, system: str, user: str) -> dict[str, Any]:

@@ -26,7 +26,7 @@ from pathlib import Path
 
 from agents.contracts import RequirementInput
 from benchmark.datasets import TEST_BUGS
-from evaluation.run import base_meta, execute_run, instrumentation, write_meta
+from evaluation.run import base_meta, execute_run, instrumentation, record_classification, write_meta
 from llm.client import LLMConfigError
 from pipeline import run_pipeline
 from testing import scripts
@@ -89,6 +89,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict
         generated_files=[],
         finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
     )
+    record_classification(workspace, meta, result.classification, result.underlying_verdict)
     write_meta(workspace, meta)
     return workspace, meta
 

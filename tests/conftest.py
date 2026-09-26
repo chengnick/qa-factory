@@ -11,7 +11,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 
 from agents.contracts import RequirementInput
 from observability.instrument import Instrumentation, MemoryContentSink
-from observability.setup import create_tracer_provider, get_tracer
+from observability.setup import SpanCollector, create_tracer_provider, get_tracer
 from pipeline import PipelineResult, run_pipeline
 from testing import scripts
 from testing.fake_clock import FakeClock
@@ -62,10 +62,11 @@ class Harness:
 @pytest.fixture
 def harness() -> Iterator[Harness]:
     exporter = InMemorySpanExporter()
-    provider = create_tracer_provider(exporter)
+    collector = SpanCollector()
+    provider = create_tracer_provider(exporter, collector=collector)
     clock = FakeClock()
     sink = MemoryContentSink()
-    yield Harness(exporter, provider, clock, sink, Instrumentation(get_tracer(provider), clock, sink))
+    yield Harness(exporter, provider, clock, sink, Instrumentation(get_tracer(provider), clock, sink, collector))
     provider.shutdown()
 
 

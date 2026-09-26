@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from agents.base import AgentDeps
+from agents.base import AgentDeps, HandoffError
 from agents.contracts import AutomationResult, QAResult, ToolExecution
 from tools.registry import ToolError
 
@@ -16,6 +16,8 @@ class QAAgent:
         self.deps = deps
 
     def run(self, automation: AutomationResult) -> QAResult:
+        if not automation.files:
+            raise HandoffError("automation", "no generated test files")
         api = [f.path for f in automation.files if f.surface == "api"]
         ui = [f.path for f in automation.files if f.surface == "ui"]
         executions = []

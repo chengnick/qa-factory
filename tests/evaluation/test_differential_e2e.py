@@ -110,9 +110,10 @@ def test_each_spec_row_is_decided_per_node_id(b02_run):
 
 def test_surface_verdict_comes_from_the_pipeline_run(b02_run):
     _, meta = b02_run
-    # The pipeline's own QA run saw an AttributeError (test code crash) -> surface TEST_BROKEN,
-    # while cross-validation still finds the bug: the two verdicts are independent.
-    assert meta["surface_verdict"] == "TEST_BROKEN"
+    # The pipeline's own QA run saw assertion failures (R11U, unverified SUT) and an AttributeError (R10).
+    # Phase 3 aggregation puts DEFECT_FOUND before TEST_BROKEN (spec v3 §6.3), so the surface is DEFECT_FOUND;
+    # only cross-validation shows which failure actually depends on the bug.
+    assert meta["surface_verdict"] == "DEFECT_FOUND"
 
 
 def test_builds_are_symmetric(b02_run):
@@ -146,7 +147,8 @@ def test_trace_contains_differential_under_the_same_run(b02_run):
     test_ids = {e["attributes"]["qa.test.id"] for e in diff_span["events"] if e["name"] == "qa.test"}
     assert test_ids == set(EXPECTED)
     root = next(s for s in trace["spans"] if s["parent_span_id"] is None)
-    assert root["attributes"]["qa.verdict"] == "DEFECT_FOUND" and root["attributes"]["qa.verdict.surface"] == "TEST_BROKEN"
+    assert root["attributes"]["qa.verdict"] == "DEFECT_FOUND" and root["attributes"]["qa.verdict.surface"] == "DEFECT_FOUND"
+    assert root["attributes"]["qa.failure.rule"] == "R11"
     assert trace["trace_id"] == meta["trace_id"]
 
 

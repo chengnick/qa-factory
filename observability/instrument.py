@@ -112,6 +112,7 @@ class Instrumentation:
     tracer: Tracer
     clock: Clock
     sink: ContentSink = field(default_factory=NullContentSink)
+    collector: Any = None  # observability.setup.SpanCollector: lets the pipeline classify its own trace before it ends
 
 
 def _ids(span: Span) -> tuple[str, str]:
@@ -156,11 +157,10 @@ def provider_rule(exc: BaseException) -> str | None:
 def mark_error(inst: Instrumentation, span: Span, exc: BaseException) -> None:
     message = redact(f"{type(exc).__name__}: {exc}")
     span.set_status(Status(StatusCode.ERROR, message))
-    span.add_event(
-        "exception",
-        {"exception.type": type(exc).__name__, "exception.message": redact(str(exc))},
-        timestamp=inst.clock.now_ns(),
-    )
+    event: dict[str, Any] = {"exception.type": type(exc).__name__, "exception.message": redact(str(exc))}
+    if upstream := getattr(exc, "upstream", None):
+        event["exception.upstream"] = upstream
+    span.add_event("exception", event, timestamp=inst.clock.now_ns())
     if symptom := symptom_of(exc):
         span.set_attribute("qa.failure.symptom", symptom)
     if rule := provider_rule(exc):
@@ -303,7 +303,11 @@ class TracedToolRegistry:
         self._registry, self._inst = registry, inst
 
     def call(self, name: str, **args: Any) -> ToolResult:
-        attrs = {"gen_ai.operation.name": "execute_tool", "gen_ai.tool.name": name, "qa.tool.name": name}
+        attrs: dict[str, Any] = {"gen_ai.operation.name": "execute_tool", "gen_ai.tool.name": name, "qa.tool.name": name}
+        # Recorded before the call so a tool that raises (e.g. SUT down) still says what it targeted.
+        for key in ("method", "route"):
+            if isinstance(args.get(key), str):
+                attrs[f"qa.http.{key}"] = args[key].upper() if key == "method" else args[key]
         with start_span(self._inst, f"tool.{name}", attrs) as span:
             tool = self._registry.get(name)
             tool.validate(args)  # a schema violation never reaches the tool
@@ -324,6 +328,17 @@ class TracedToolRegistry:
         for key in ("method", "route", "status_code"):
             if key in result.data:
                 span.set_attribute(f"qa.http.{key}", result.data[key])
+        results = result.data.get("results") or []
+        if results:
+            span.set_attribute("qa.test.count", len(results))
+            span.set_attribute("qa.test.collection_errors", sum(1 for r in results if "::" not in r["node_id"] and r["outcome"] == "ERROR"))
+        for r in results:
+            if r["outcome"] in ("FAIL", "ERROR"):
+                span.add_event(
+                    "qa.test.result",
+                    {"qa.test.id": r["node_id"], "qa.test.outcome": r["outcome"], "qa.test.message": redact(r.get("message", ""))[:500]},
+                    timestamp=self._inst.clock.now_ns(),
+                )
         record_content(self._inst, span, "stdout", result.stdout, tail=True)
         if message := _tool_failure(result):
             span.set_status(Status(StatusCode.ERROR, redact(message)))

@@ -219,9 +219,10 @@ def test_provider_failures_are_layer_provider_and_env_blocked(harness, error, sy
 
 
 def test_non_provider_llm_error_is_not_provider(harness):
+    """A 400 is not a provider outage (R2-R4) and no v3 rule covers it: UNKNOWN -> INCONCLUSIVE."""
     llm, _ = _client(_api_error(400))
 
     result = harness.run(llm=llm)
 
-    assert result.verdict == "AGENT_FAILED"
+    assert result.verdict == "INCONCLUSIVE"
     assert "qa.failure.layer" not in harness.one("llm.chat").attributes
