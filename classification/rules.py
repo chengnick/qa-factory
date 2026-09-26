@@ -17,7 +17,8 @@ from dataclasses import dataclass
 
 from classification.observations import RUNNERS, Unit
 
-_HTTP_5XX = re.compile(r"\b5\d\d\b")
+# A 5xx only counts when it is part of the failed comparison itself (not e.g. digits in a timestamp).
+_HTTP_5XX = re.compile(r"assert\s+5\d\d\s*==|==\s*5\d\d\b|<Response \[5\d\d")
 _BROWSER_LAUNCH = re.compile(r"BrowserType\.launch|Executable doesn't exist|Failed to launch|browser has been closed", re.IGNORECASE)
 _NAVIGATION_TIMEOUT = re.compile(r"page\.goto.*Timeout|Timeout.*page\.goto|Navigation timeout", re.IGNORECASE | re.DOTALL)
 _LOCATOR_TIMEOUT = re.compile(r"Timeout", re.IGNORECASE)
@@ -41,7 +42,7 @@ def _exc(*names: str) -> Callable[[Unit], bool]:
 
 
 def _assertion_symptom(u: Unit) -> str:
-    return "HTTP_5XX" if _HTTP_5XX.search(u.message) and "==" in u.message else "ASSERTION"
+    return "HTTP_5XX" if _HTTP_5XX.search(u.message) else "ASSERTION"
 
 
 RULES: tuple[Rule, ...] = (

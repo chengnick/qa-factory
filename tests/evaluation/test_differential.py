@@ -85,3 +85,8 @@ def test_run_verdict_clean_dataset():
     broken = ok + [decide("b", _r("FAIL"), _r("FAIL"), bugs_enabled=False)]
     assert run_verdict(ok, bugs_enabled=False) == "PASS"
     assert run_verdict(broken, bugs_enabled=False) == "TEST_BROKEN"
+
+
+def test_r11_symptom_ignores_5xx_digits_outside_the_comparison():
+    message = 'AssertionError: {"created_at":"2026-09-25T16:06:50.530+00:00"}\nassert 200 == 403'
+    assert decide("t", _r("FAIL", message), _r("PASS"), bugs_enabled=True).symptom == "ASSERTION"

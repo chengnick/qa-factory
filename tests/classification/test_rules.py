@@ -102,3 +102,19 @@ def test_r11u_is_flagged_unverified():
 def test_evidence_is_redacted():
     unit = Unit("llm", exception="LLMRateLimitError", message="quota for key AIzaSyA1234567890abcdefghijklmnopqrstuv")
     assert "AIza" not in classify_unit(unit).evidence
+
+
+@pytest.mark.parametrize(
+    "message, symptom",
+    [
+        ("AssertionError: Internal Server Error\nassert 500 == 422", "HTTP_5XX"),
+        ("assert r.status_code == 503", "HTTP_5XX"),
+        ("where 500 = <Response [500 Internal Server Error]>", "HTTP_5XX"),
+        # Phase 2R RUN-20260925-160630-19B8: a 200-vs-403 failure whose body holds a timestamp with "530"
+        ('AssertionError: {"id":2,"created_at":"2026-09-25T16:06:50.530+00:00"}\nassert 200 == 403', "ASSERTION"),
+        ("assert 409 == 200", "ASSERTION"),
+    ],
+)
+def test_http_5xx_symptom_only_from_the_failed_comparison(message, symptom):
+    assert classify_unit(Unit("test", test_id="t::a", outcome="FAIL", message=message)).symptom == symptom
+    assert classify_unit(Unit("diff", test_id="t::a", outcome="FAIL", decision_rule="R11", message=message)).symptom == symptom

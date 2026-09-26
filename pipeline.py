@@ -8,7 +8,7 @@ The verdict is decided at the end of the run by classification/ from the run's o
 from __future__ import annotations
 
 import dataclasses
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -62,7 +62,10 @@ def run_pipeline(
     differential: Differential | None = None,
     workspace: Path | None = None,
     sut_url: str | None = None,
+    agents: Mapping[str, Callable[[AgentDeps], Any]] | None = None,
 ) -> PipelineResult:
+    """`agents` replaces individual agents by name (test doubles such as testing.fake_agent.ScriptedAgent);
+    a replacement receives that agent's own gated deps, so the permission table still applies to it."""
     if inst.collector is None:
         raise ValueError("Instrumentation needs a span collector (observability.setup.new_instrumentation) to classify the run")
     security = SecurityRecorder(run_id)
@@ -74,11 +77,17 @@ def run_pipeline(
     def deps(agent: str) -> AgentDeps:  # each agent calls tools as itself, so the gate applies its row of §8.1
         return AgentDeps(llm=traced_llm, tools=AgentTools(traced_tools, agent))
 
-    requirement_agent = traced_agent(RequirementAgent(deps("requirement")), inst)
-    design_agent = traced_agent(TestDesignAgent(deps("test_design"), api_reference), inst)
-    automation_agent = traced_agent(AutomationAgent(deps("automation"), api_reference), inst)
-    qa_agent = traced_agent(QAAgent(deps("qa")), inst)
-    report_agent = traced_agent(ReportAgent(deps("report")), inst)
+    factories: dict[str, Callable[[AgentDeps], Any]] = {
+        "requirement": RequirementAgent,
+        "test_design": lambda d: TestDesignAgent(d, api_reference),
+        "automation": lambda d: AutomationAgent(d, api_reference),
+        "qa": QAAgent,
+        "report": ReportAgent,
+        **(agents or {}),
+    }
+    requirement_agent, design_agent, automation_agent, qa_agent, report_agent = (
+        traced_agent(factories[name](deps(name)), inst) for name in ("requirement", "test_design", "automation", "qa", "report")
+    )
     with traced_run(inst, requirement.requirement_id, sut_bugs, run_id=run_id, prompt_version=PROMPT_VERSION, dataset=dataset) as run:
         report: Report | None = None
         error: str | None = None

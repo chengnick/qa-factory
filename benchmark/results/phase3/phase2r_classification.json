@@ -1,0 +1,2247 @@
+{
+  "source": "benchmark/results/phase2r",
+  "runs": 30,
+  "distribution": {
+    "final": {
+      "layer": {
+        "SUT": 12,
+        "TEST": 3,
+        "AGENT": 1
+      },
+      "symptom": {
+        "ASSERTION": 9,
+        "HTTP_5XX": 4,
+        "CRASH": 2,
+        "INVALID_OUTPUT": 1
+      },
+      "rule": {
+        "R11": 12,
+        "R9": 1,
+        "R10": 1,
+        "R5": 1,
+        "R12": 1
+      },
+      "layer_symptom_rule": {
+        "SUT/ASSERTION/R11": 8,
+        "SUT/HTTP_5XX/R11": 4,
+        "TEST/CRASH/R9": 1,
+        "TEST/CRASH/R10": 1,
+        "AGENT/INVALID_OUTPUT/R5": 1,
+        "TEST/ASSERTION/R12": 1
+      },
+      "verdict": {
+        "MISSED": 2,
+        "DEFECT_FOUND": 12,
+        "PASS": 13,
+        "TEST_BROKEN": 2,
+        "AGENT_FAILED": 1
+      }
+    },
+    "surface": {
+      "layer": {
+        "SUT": 13,
+        "TEST": 1,
+        "AGENT": 1
+      },
+      "symptom": {
+        "ASSERTION": 9,
+        "HTTP_5XX": 4,
+        "CRASH": 1,
+        "INVALID_OUTPUT": 1
+      },
+      "rule": {
+        "R11U": 13,
+        "R9": 1,
+        "R5": 1
+      },
+      "layer_symptom_rule": {
+        "SUT/ASSERTION/R11U": 9,
+        "SUT/HTTP_5XX/R11U": 4,
+        "TEST/CRASH/R9": 1,
+        "AGENT/INVALID_OUTPUT/R5": 1
+      },
+      "verdict": {
+        "PASS": 15,
+        "DEFECT_FOUND": 13,
+        "TEST_BROKEN": 1,
+        "AGENT_FAILED": 1
+      }
+    }
+  },
+  "mismatches": [],
+  "per_run": [
+    {
+      "run_id": "RUN-20260925-160546-73BF",
+      "round": 1,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "recorded": {
+        "surface": "PASS",
+        "final": "MISSED"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "MISSED",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "MISSED",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-160630-19B8",
+      "round": 1,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:06:42.563+00:00\",\"updated_at\":\"2026-09-25T16:06:42.563+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | test ",
+          "span_id": "879f4a404feca2f5",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req007_api.py::test_tc2_non_project_member_receives_403",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:06:42.563+00:00\",\"updated_at\":\"2026-09-25T16:06:42.563+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | test ",
+            "span_id": "879f4a404feca2f5",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req007_api.py::test_tc2_non_project_member_receives_403",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:06:50.769+00:00\",\"updated_at\":\"2026-09-25T16:06:50.769+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_c",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req007_api.py::test_tc2_non_project_member_receives_403",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:06:50.769+00:00\",\"updated_at\":\"2026-09-25T16:06:50.769+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_c",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req007_api.py::test_tc2_non_project_member_receives_403",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-160714-7485",
+      "round": 1,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_too_long_or_empty (FAIL)",
+          "span_id": "c4bbfb5b915bdd2e",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req002_api.py::test_tc2_title_too_long_or_empty",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_too_long_or_empty (FAIL)",
+            "span_id": "c4bbfb5b915bdd2e",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req002_api.py::test_tc2_title_too_long_or_empty",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_too_long_or_empty (FAIL) | cross-validation R11",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req002_api.py::test_tc2_title_too_long_or_empty",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_too_long_or_empty (FAIL) | cross-validation R11",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req002_api.py::test_tc2_title_too_long_or_empty",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-160754-1661",
+      "round": 1,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-160844-FFB7",
+      "round": 1,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-160935-E01D",
+      "round": 1,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161022-8C22",
+      "round": 2,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "recorded": {
+        "surface": "PASS",
+        "final": "MISSED"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "MISSED",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "MISSED",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161132-894F",
+      "round": 2,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:11:44.973+00:00\",\"updated_at\":\"2026-09-25T16:11:44.973+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | ",
+          "span_id": "8400d0f40301d24d",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:11:44.973+00:00\",\"updated_at\":\"2026-09-25T16:11:44.973+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | ",
+            "span_id": "8400d0f40301d24d",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:11:53.435+00:00\",\"updated_at\":\"2026-09-25T16:11:53.435+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.sta",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:11:53.435+00:00\",\"updated_at\":\"2026-09-25T16:11:53.435+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.sta",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req007_api.py::test_req007_tc2_non_member_forbidden",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161217-D84D",
+      "round": 2,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422 (FAIL)",
+          "span_id": "9e4f32bbeb84f5dd",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422 (FAIL)",
+            "span_id": "9e4f32bbeb84f5dd",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422 (FAIL) | cross-validation R11",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422 (FAIL) | cross-validation R11",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req002_api.py::test_tc2_title_length_101_and_empty_title_return_422",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161300-9E1B",
+      "round": 2,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161347-60D6",
+      "round": 2,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161448-162F",
+      "round": 2,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161532-CAA1",
+      "round": 3,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Terminal Task\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:15:46.882+00:00\",\"updated_at\":\"2026-09-25T16:15:46.899+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.statu",
+          "span_id": "c2d02d29d74d0ca4",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Terminal Task\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:15:46.882+00:00\",\"updated_at\":\"2026-09-25T16:15:46.899+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.statu",
+            "span_id": "c2d02d29d74d0ca4",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Terminal Task\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:15:54.400+00:00\",\"updated_at\":\"2026-09-25T16:15:54.413+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Terminal Task\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:15:54.400+00:00\",\"updated_at\":\"2026-09-25T16:15:54.413+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161615-9CE6",
+      "round": 3,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:16:29.416+00:00\",\"updated_at\":\"2026-09-25T16:16:29.416+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | test ",
+          "span_id": "5b61ef2e66840f92",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req007_api.py::test_non_project_member_gets_403_reading_task_detail",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:16:29.416+00:00\",\"updated_at\":\"2026-09-25T16:16:29.416+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | test ",
+            "span_id": "5b61ef2e66840f92",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req007_api.py::test_non_project_member_gets_403_reading_task_detail",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:16:38.308+00:00\",\"updated_at\":\"2026-09-25T16:16:38.308+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_c",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req007_api.py::test_non_project_member_gets_403_reading_task_detail",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:16:38.308+00:00\",\"updated_at\":\"2026-09-25T16:16:38.308+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_c",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req007_api.py::test_non_project_member_gets_403_reading_task_detail",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161703-D276",
+      "round": 3,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty (FAIL)",
+          "span_id": "e7948bf12f7c88d1",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty (FAIL)",
+            "span_id": "e7948bf12f7c88d1",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty (FAIL) | cross-validation R11",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty (FAIL) | cross-validation R11",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req002_api.py::test_tc2_invalid_title_length_or_empty",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161747-CF2A",
+      "round": 3,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "TEST_BROKEN",
+        "final": "TEST_BROKEN"
+      },
+      "reclassified": {
+        "surface": "TEST_BROKEN",
+        "final": "TEST_BROKEN",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "TEST_BROKEN",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "tool",
+          "layer": "TEST",
+          "symptom": "CRASH",
+          "matched_rule": "R9",
+          "evidence": "1 error in 0.53s | exit code 2",
+          "span_id": "870b1cdd62055e46",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": null,
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "TEST": 1
+          },
+          "rules": {
+            "R9": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "tool",
+            "layer": "TEST",
+            "symptom": "CRASH",
+            "matched_rule": "R9",
+            "evidence": "1 error in 0.53s | exit code 2",
+            "span_id": "870b1cdd62055e46",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": null,
+            "unverified": false
+          }
+        ]
+      },
+      "final": {
+        "verdict": "TEST_BROKEN",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "tool",
+          "layer": "TEST",
+          "symptom": "CRASH",
+          "matched_rule": "R9",
+          "evidence": "1 error in 0.53s | exit code 2",
+          "span_id": "870b1cdd62055e46",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": null,
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 2,
+          "unknown": 0,
+          "layers": {
+            "TEST": 2
+          },
+          "rules": {
+            "R9": 1,
+            "R10": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "tool",
+            "layer": "TEST",
+            "symptom": "CRASH",
+            "matched_rule": "R9",
+            "evidence": "1 error in 0.53s | exit code 2",
+            "span_id": "870b1cdd62055e46",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": null,
+            "unverified": false
+          },
+          {
+            "unit": "diff",
+            "layer": "TEST",
+            "symptom": "CRASH",
+            "matched_rule": "R10",
+            "evidence": "bug build: collection failure | test generated/test_req005_api.py (ERROR) | cross-validation R10",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req005_api.py",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161823-0279",
+      "round": 3,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161907-808D",
+      "round": 3,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-161951-52A1",
+      "round": 4,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":4,\"project_id\":3,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:20:12.657+00:00\",\"updated_at\":\"2026-09-25T16:20:12.665+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code ",
+          "span_id": "8e8183230a6cb512",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":4,\"project_id\":3,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:20:12.657+00:00\",\"updated_at\":\"2026-09-25T16:20:12.665+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code ",
+            "span_id": "8e8183230a6cb512",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":4,\"project_id\":3,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:20:23.066+00:00\",\"updated_at\":\"2026-09-25T16:20:23.074+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.s",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":4,\"project_id\":3,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:20:23.066+00:00\",\"updated_at\":\"2026-09-25T16:20:23.074+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.s",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req005_api.py::test_req005_tc2_done_is_terminal",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162051-4B53",
+      "round": 4,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Test Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:21:07.083+00:00\",\"updated_at\":\"2026-09-25T16:21:07.083+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | te",
+          "span_id": "5cb2b21a69a8ce0b",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req007_api.py::test_tc2_non_member_forbidden_from_reading",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Test Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:21:07.083+00:00\",\"updated_at\":\"2026-09-25T16:21:07.083+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code | te",
+            "span_id": "5cb2b21a69a8ce0b",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req007_api.py::test_tc2_non_member_forbidden_from_reading",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Test Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:21:15.492+00:00\",\"updated_at\":\"2026-09-25T16:21:15.492+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.statu",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req007_api.py::test_tc2_non_member_forbidden_from_reading",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Test Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:21:15.492+00:00\",\"updated_at\":\"2026-09-25T16:21:15.492+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.statu",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req007_api.py::test_tc2_non_member_forbidden_from_reading",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162140-FD00",
+      "round": 4,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "recorded": {
+        "surface": "AGENT_FAILED",
+        "final": "AGENT_FAILED"
+      },
+      "reclassified": {
+        "surface": "AGENT_FAILED",
+        "final": "AGENT_FAILED",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "AGENT_FAILED",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "agent",
+          "layer": "AGENT",
+          "symptom": "INVALID_OUTPUT",
+          "matched_rule": "R5",
+          "evidence": "AgentOutputError: LLM output is not valid JSON: Expecting property name enclosed in double quotes: line 16 column 7 (char 529)",
+          "span_id": "65c587b0bda72922",
+          "span": "agent.test_design",
+          "agent": "test_design",
+          "test_id": null,
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "AGENT": 1
+          },
+          "rules": {
+            "R5": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "agent",
+            "layer": "AGENT",
+            "symptom": "INVALID_OUTPUT",
+            "matched_rule": "R5",
+            "evidence": "AgentOutputError: LLM output is not valid JSON: Expecting property name enclosed in double quotes: line 16 column 7 (char 529)",
+            "span_id": "65c587b0bda72922",
+            "span": "agent.test_design",
+            "agent": "test_design",
+            "test_id": null,
+            "unverified": false
+          }
+        ]
+      },
+      "final": {
+        "verdict": "AGENT_FAILED",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "agent",
+          "layer": "AGENT",
+          "symptom": "INVALID_OUTPUT",
+          "matched_rule": "R5",
+          "evidence": "AgentOutputError: LLM output is not valid JSON: Expecting property name enclosed in double quotes: line 16 column 7 (char 529)",
+          "span_id": "65c587b0bda72922",
+          "span": "agent.test_design",
+          "agent": "test_design",
+          "test_id": null,
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "AGENT": 1
+          },
+          "rules": {
+            "R5": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "agent",
+            "layer": "AGENT",
+            "symptom": "INVALID_OUTPUT",
+            "matched_rule": "R5",
+            "evidence": "AgentOutputError: LLM output is not valid JSON: Expecting property name enclosed in double quotes: line 16 column 7 (char 529)",
+            "span_id": "65c587b0bda72922",
+            "span": "agent.test_design",
+            "agent": "test_design",
+            "test_id": null,
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162200-4DA6",
+      "round": 4,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162242-4188",
+      "round": 4,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "TEST_BROKEN"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "TEST_BROKEN",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req007_api.py::t",
+          "span_id": "7ed5b88c124df068",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req007_api.py::t",
+            "span_id": "7ed5b88c124df068",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "TEST_BROKEN",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "TEST",
+          "symptom": "ASSERTION",
+          "matched_rule": "R12",
+          "evidence": "fails on a clean SUT: AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "TEST": 1
+          },
+          "rules": {
+            "R12": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "TEST",
+            "symptom": "ASSERTION",
+            "matched_rule": "R12",
+            "evidence": "fails on a clean SUT: AssertionError: {\"detail\":[{\"type\":\"int_parsing\",\"loc\":[\"path\",\"tid\"],\"msg\":\"Input should be a valid integer, unable to parse string as an integer\",\"input\":\"non-existent-tid\"}]}\nassert 422 == 404\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req007_api.py::test_reading_non_existent_task_returns_404",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162323-26D9",
+      "round": 4,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162403-2580",
+      "round": 5,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task Done\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:18.220+00:00\",\"updated_at\":\"2026-09-25T16:24:18.230+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_co",
+          "span_id": "53537d83cae7af63",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task Done\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:18.220+00:00\",\"updated_at\":\"2026-09-25T16:24:18.230+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_co",
+            "span_id": "53537d83cae7af63",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task Done\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:25.090+00:00\",\"updated_at\":\"2026-09-25T16:24:25.113+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task Done\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:25.090+00:00\",\"updated_at\":\"2026-09-25T16:24:25.113+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req005_api.py::test_req005_tc2_done_state_transitions",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162445-0518",
+      "round": 5,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Alice's Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:57.677+00:00\",\"updated_at\":\"2026-09-25T16:24:57.677+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code |",
+          "span_id": "3619df5d2762e427",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task_detail",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Alice's Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:24:57.677+00:00\",\"updated_at\":\"2026-09-25T16:24:57.677+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code |",
+            "span_id": "3619df5d2762e427",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task_detail",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "ASSERTION",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Alice's Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:25:05.412+00:00\",\"updated_at\":\"2026-09-25T16:25:05.412+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.st",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task_detail",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "ASSERTION",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Alice's Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-25T16:25:05.412+00:00\",\"updated_at\":\"2026-09-25T16:25:05.412+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.st",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req007_api.py::test_non_project_member_forbidden_reading_task_detail",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162526-8372",
+      "round": 5,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "recorded": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND"
+      },
+      "reclassified": {
+        "surface": "DEFECT_FOUND",
+        "final": "DEFECT_FOUND",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "test",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11U",
+          "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc3_task_title_invalid_length (FAIL)",
+          "span_id": "0fe58a187a6cb347",
+          "span": "tool.pytest",
+          "agent": "qa",
+          "test_id": "generated/test_req002_api.py::test_tc3_task_title_invalid_length",
+          "unverified": true
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11U": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "test",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11U",
+            "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc3_task_title_invalid_length (FAIL)",
+            "span_id": "0fe58a187a6cb347",
+            "span": "tool.pytest",
+            "agent": "qa",
+            "test_id": "generated/test_req002_api.py::test_tc3_task_title_invalid_length",
+            "unverified": true
+          }
+        ]
+      },
+      "final": {
+        "verdict": "DEFECT_FOUND",
+        "underlying_verdict": null,
+        "decided_by": {
+          "unit": "diff",
+          "layer": "SUT",
+          "symptom": "HTTP_5XX",
+          "matched_rule": "R11",
+          "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc3_task_title_invalid_length (FAIL) | cross-validation R11",
+          "span_id": null,
+          "span": "",
+          "agent": null,
+          "test_id": "generated/test_req002_api.py::test_tc3_task_title_invalid_length",
+          "unverified": false
+        },
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 1,
+          "unknown": 0,
+          "layers": {
+            "SUT": 1
+          },
+          "rules": {
+            "R11": 1
+          }
+        },
+        "classifications": [
+          {
+            "unit": "diff",
+            "layer": "SUT",
+            "symptom": "HTTP_5XX",
+            "matched_rule": "R11",
+            "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc3_task_title_invalid_length (FAIL) | cross-validation R11",
+            "span_id": null,
+            "span": "",
+            "agent": null,
+            "test_id": "generated/test_req002_api.py::test_tc3_task_title_invalid_length",
+            "unverified": false
+          }
+        ]
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162609-DB83",
+      "round": 5,
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162650-B731",
+      "round": 5,
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    },
+    {
+      "run_id": "RUN-20260925-162731-E98A",
+      "round": 5,
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "recorded": {
+        "surface": "PASS",
+        "final": "PASS"
+      },
+      "reclassified": {
+        "surface": "PASS",
+        "final": "PASS",
+        "underlying": null
+      },
+      "surface": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      },
+      "final": {
+        "verdict": "PASS",
+        "underlying_verdict": null,
+        "decided_by": null,
+        "flaky": false,
+        "flaky_evidence": [],
+        "counts": {
+          "total": 0,
+          "unknown": 0,
+          "layers": {},
+          "rules": {}
+        },
+        "classifications": []
+      }
+    }
+  ]
+}

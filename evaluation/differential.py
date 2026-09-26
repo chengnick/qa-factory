@@ -31,7 +31,7 @@ from tools.registry import ToolError
 
 SutFactory = Callable[[Sequence[str]], ContextManager[str]]
 
-_HTTP_5XX = re.compile(r"\b5\d\d\b")
+_HTTP_5XX = re.compile(r"assert\s+5\d\d\s*==|==\s*5\d\d\b|<Response \[5\d\d")  # same test as classification/rules.py
 
 
 # --------------------------------------------------------------------------- per-test decision (§6.2)
@@ -77,7 +77,7 @@ def decide(node_id: str, bug: dict | None, clean: dict | None, *, bugs_enabled: 
             return result("BROKEN", "R12", "ASSERTION", f"fails on a clean SUT: {b_msg}")
         return result("BROKEN", "R13", "ASSERTION", f"nondeterministic on identical clean SUTs: bug={b} ({b_msg}) clean={c} ({c_msg})")
     if b == "FAIL" and not clean_failed:
-        symptom = "HTTP_5XX" if _HTTP_5XX.search(b_msg) and "==" in b_msg else "ASSERTION"
+        symptom = "HTTP_5XX" if _HTTP_5XX.search(b_msg) else "ASSERTION"
         return result("DETECTED", "R11", symptom, f"bug build: {b_msg}")
     if b == "FAIL" and clean_failed:
         return result("BROKEN", "R12", "ASSERTION", f"bug build: {b_msg} | clean build: {c_msg}")

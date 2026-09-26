@@ -2,7 +2,23 @@
 
 A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3).
 
-## Current status: Phase 2R (re-acceptance of Phase 2 with cross-validation)
+## Current status: Phase 3 (failure attribution, permission gate, fault injection)
+
+### Architecture fact: tool routing is fixed
+
+Agents decide which tool to call and with which arguments; **the LLM only produces content** (a requirement summary, a test plan, test source code). It never chooses a tool. So "the LLM called an unknown tool", "passed wrong arguments" or "kept repeating a failing call" cannot happen through the model in this pipeline.
+
+The fault-injection scenarios reproduce those situations with `ScriptedAgent` ([testing/fake_agent.py](testing/fake_agent.py)), an agent whose tool calls come from a script. **Those scenarios test the safeguards** (gate, registry, trace, classifier), **not the model's behaviour**. The same holds for prompt injection layer 1: FakeLLM plays a model that obeys the injection, and the tests show the safeguards hold. How often a real model would obey is a separate, statistical question (spec v3 §11.4, Phase 5).
+
+### Phase 3 (spec v3 §5, §7, §10)
+
+- **Classifier** ([classification/](classification/)): the rule table R1–R18 plus R11U, ordered specific before general. Every classification records `matched_rule` and `evidence`; a failure no rule matches is `UNKNOWN`, and the run is `INCONCLUSIVE`. The verdict order is ENV_BLOCKED > AGENT_FAILED > DEFECT_FOUND > TEST_BROKEN > INCONCLUSIVE > MISSED > FLAKY > PASS. Each run writes `classification.json`.
+- **Permission gate and security events** ([permissions/gate.py](permissions/gate.py), [security/events.py](security/events.py)): spec v3 §8.1 per agent; `security_events.json` per run.
+- **Static check of generated tests** ([tools/code_policy.py](tools/code_policy.py)): a check, not a sandbox.
+- **Fault injection**: `pytest tests/agent_faults/ tests/agent_security/` runs 104 tests in about 6 s (13–16 s wall clock), identical across 20 consecutive runs. Details in [benchmark/results/phase3/acceptance.md](benchmark/results/phase3/acceptance.md).
+- **Phase 2R re-classified offline**: `python -m evaluation.classify_runs`. All 30 verdicts are reproduced.
+
+### Phase 2R (re-acceptance of Phase 2 with cross-validation)
 
 Install the exact locked versions (spec v3 D13):
 
