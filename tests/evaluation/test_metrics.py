@@ -57,3 +57,26 @@ def test_round_with_empty_denominator_is_not_averaged_as_zero():
     runs = [run(1, ["B02"], "DEFECT_FOUND", "DEFECT_FOUND"), run(2, ["B02"], "ENV_BLOCKED", "ENV_BLOCKED")]
     stat = compute(runs)["true_detection_rate"]
     assert stat["per_round"] == {1: 1.0} and stat["mean"] == 1.0 and stat["n_rounds"] == 1
+
+
+@pytest.mark.parametrize(
+    "num, den, low, high",
+    [(12, 15, 0.548, 0.930), (0, 15, 0.0, 0.204), (15, 15, 0.796, 1.0), (1, 15, 0.012, 0.298), (5, 5, 0.566, 1.0)],
+)
+def test_wilson_interval_matches_reference_values(num, den, low, high):
+    from evaluation.metrics import wilson_interval
+
+    lo, hi = wilson_interval(num, den)
+    assert lo == pytest.approx(low, abs=1e-3) and hi == pytest.approx(high, abs=1e-3)
+
+
+def test_wilson_interval_undefined_for_empty_denominator():
+    from evaluation.metrics import wilson_interval
+
+    assert wilson_interval(0, 0) is None
+
+
+def test_every_rate_carries_a_ci_on_its_pooled_count():
+    m = compute(RUNS)
+    assert m["true_detection_rate"]["ci95"] == pytest.approx([0.2077, 0.9385], abs=1e-3)  # 2/3
+    assert m["env_blocked_rate"]["ci95"][0] == pytest.approx(0.0301, abs=1e-3)  # 1/6

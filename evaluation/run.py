@@ -278,7 +278,9 @@ def run_dataset(
 def _fmt_rate(stat: dict[str, Any]) -> str:
     if stat["mean"] is None:
         return f"n/a (pooled {stat['pooled']})"
-    return f"{stat['mean']:.0%} (range {stat['min']:.0%}–{stat['max']:.0%}, rounds n={stat['n_rounds']}, pooled {stat['pooled']})"
+    ci = stat.get("ci95")
+    ci_text = f", 95% CI {ci[0]:.0%}–{ci[1]:.0%}" if ci else ""
+    return f"{stat['mean']:.0%} (range {stat['min']:.0%}–{stat['max']:.0%}, rounds n={stat['n_rounds']}; pooled {stat['pooled']}{ci_text})"
 
 
 def render_summary(summary: dict[str, Any]) -> str:
@@ -288,8 +290,15 @@ def render_summary(summary: dict[str, Any]) -> str:
         "",
         f"- Model: `{c['model']}` (reported by provider: {', '.join(c['models_seen']) or 'n/a'}), temperature {c['temperature']}",
         f"- Prompt version: `{c['prompt_version']}`; git commit `{c['git_commit']['sha']}` (dirty: {c['git_commit']['dirty']}); lockfile sha256 `{c['lockfile_sha256']}`",
+        *(
+            [f"- Summary regenerated from the {summary['regenerated']['runs_read']} run directories on {summary['regenerated']['at']} "
+             f"(commit `{summary['regenerated']['git_commit']['sha']}`); no pipeline was re-run."]
+            if summary.get("regenerated") else []
+        ),
         "",
         "## Metrics (spec v3 §11.2)",
+        "",
+        "Mean and range are over per-round rates; the 95% CI is a Wilson interval on the pooled count.",
         "",
         "| Metric | Value |",
         "|---|---|",

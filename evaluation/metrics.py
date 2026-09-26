@@ -1,13 +1,15 @@
 """Spec v3 §11.2 metrics over a set of runs (each run = its meta.json).
 
 Every rate is computed per round, then reported as mean, min-max over rounds, the number of rounds that
-had a non-empty denominator, and the pooled count (numerator/denominator over all runs).
+had a non-empty denominator, the pooled count (numerator/denominator over all runs) and a Wilson 95%
+confidence interval on the pooled count.
 ENV_BLOCKED runs are excluded from every denominator except the environment-block rate itself.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
+from math import sqrt
 from statistics import mean
 from typing import Any
 
@@ -38,14 +40,27 @@ def _stat(runs: list[Run], include: Callable[[Run], bool], hit: Callable[[Run], 
     return _summary(per_round, num, den)
 
 
+def wilson_interval(num: int, den: int, z: float = 1.96) -> tuple[float, float] | None:
+    """Wilson score interval for a binomial proportion (95% for z=1.96); None when den == 0."""
+    if den == 0:
+        return None
+    p = num / den
+    denom = 1 + z * z / den
+    centre = (p + z * z / (2 * den)) / denom
+    half = z * sqrt(p * (1 - p) / den + z * z / (4 * den * den)) / denom
+    return max(0.0, centre - half), min(1.0, centre + half)
+
+
 def _summary(per_round: dict[int, float], num: int, den: int) -> dict[str, Any]:
     values = list(per_round.values())
+    ci = wilson_interval(num, den)
     return {
         "mean": mean(values) if values else None,
         "min": min(values) if values else None,
         "max": max(values) if values else None,
         "n_rounds": len(values),
         "pooled": f"{num}/{den}",
+        "ci95": list(ci) if ci else None,
         "per_round": per_round,
     }
 
