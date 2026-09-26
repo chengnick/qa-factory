@@ -110,9 +110,10 @@ Measured against spec v3 §8.2. Generated test code can still read and write loc
 | Generated tests run in a subprocess whose working directory is the run workspace `artifacts/{run_id}/` | ✅ (L0+) |
 | The subprocess gets whitelisted environment variables only; `GEMINI_API_KEY`, other tokens and `PYTHONPATH` are dropped (tested in `tests/tools/test_pytest_isolation.py`) | ✅ (L0+) |
 | The workspace has its own `pytest.ini`, so the repo root is not on `sys.path` | ✅ (L0+) |
+| Permission gate per agent (spec v3 §8.1): tools per agent; `file_write` paths judged after `resolve()` + `normcase()` (own `generated/` → protected → evidence → other); `http_request` only to SUT paths. Refusals never execute and are recorded in `security_events.json` | ✅ Phase 3 (L0, in-process) |
+| Static check of generated test code (AST): allowed imports only; no `open` / `exec` / `eval` / `compile` / `__import__` / `getattr` / `__builtins__`; no `__dict__` / `__class__` / `__subclasses__`; no hard-coded non-SUT URLs. A violating file is not run (`AGENT_FAILED`, rule R18). **This is a check, not a sandbox**: determined code can get around it | ✅ Phase 3 (L0+) |
 | Network access from generated code is limited to the SUT | ❌ **not enforced** (L1, Phase 4) |
 | Restricting which paths generated code can read or write | ❌ **not enforced.** Generated code can open any absolute path the OS user can access, including `sut/`, `benchmark/`, `.env` and the reference tests |
-| Permission gate per agent (spec v3 §8.1 table) | ❌ Phase 3 |
 | Container with read-only mounts (L2) | ❌ |
 
 The pipeline is one-way (tests run after the LLM has finished writing them), so test output never flows back into an LLM prompt.

@@ -7,8 +7,10 @@ The verdict is decided at the end of the run by classification/ from the run's o
 
 from __future__ import annotations
 
+import dataclasses
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from agents.automation import AutomationAgent
@@ -22,8 +24,10 @@ from agents.version import PROMPT_VERSION
 from classification.observations import observe
 from classification.verdict import Outcome, final_outcome, surface_outcome
 from llm.client import LLMClient
-from observability.instrument import Instrumentation, RunHandle, TracedLLM, TracedToolRegistry, traced_agent, traced_run
+from observability.instrument import AgentTools, Instrumentation, RunHandle, TracedLLM, TracedToolRegistry, traced_agent, traced_run
 from observability.json_exporter import span_to_dict
+from permissions.gate import PermissionGate
+from security.events import SecurityRecorder
 from tools.registry import NO_RETRY, RetryPolicy, ToolRegistry
 
 
@@ -37,6 +41,7 @@ class PipelineResult:
     differential: Any = None  # evaluation.differential.DifferentialResult when evaluation mode ran
     underlying_verdict: str | None = None  # set when verdict is FLAKY
     classification: dict[str, Any] | None = None  # {"surface": Outcome json, "final": Outcome json | None}
+    security: dict[str, Any] | None = None  # security_events.json content: {"run_id", "breach", "events"}
 
 
 # Evaluation hook: given the final generated tests, cross-validate them (evaluation/differential.py).
@@ -55,15 +60,25 @@ def run_pipeline(
     run_id: str | None = None,
     dataset: str | None = None,
     differential: Differential | None = None,
+    workspace: Path | None = None,
+    sut_url: str | None = None,
 ) -> PipelineResult:
     if inst.collector is None:
         raise ValueError("Instrumentation needs a span collector (observability.setup.new_instrumentation) to classify the run")
-    deps = AgentDeps(llm=TracedLLM(llm, inst, llm_retry), tools=TracedToolRegistry(tools, inst))
-    requirement_agent = traced_agent(RequirementAgent(deps), inst)
-    design_agent = traced_agent(TestDesignAgent(deps, api_reference), inst)
-    automation_agent = traced_agent(AutomationAgent(deps, api_reference), inst)
-    qa_agent = traced_agent(QAAgent(deps), inst)
-    report_agent = traced_agent(ReportAgent(deps), inst)
+    security = SecurityRecorder(run_id)
+    inst = dataclasses.replace(inst, security=security)
+    gate = PermissionGate(security, registered=tools.names, workspace=workspace, sut_url=sut_url)
+    traced_tools = TracedToolRegistry(tools, inst, guard=gate.check)
+    traced_llm = TracedLLM(llm, inst, llm_retry)
+
+    def deps(agent: str) -> AgentDeps:  # each agent calls tools as itself, so the gate applies its row of §8.1
+        return AgentDeps(llm=traced_llm, tools=AgentTools(traced_tools, agent))
+
+    requirement_agent = traced_agent(RequirementAgent(deps("requirement")), inst)
+    design_agent = traced_agent(TestDesignAgent(deps("test_design"), api_reference), inst)
+    automation_agent = traced_agent(AutomationAgent(deps("automation"), api_reference), inst)
+    qa_agent = traced_agent(QAAgent(deps("qa")), inst)
+    report_agent = traced_agent(ReportAgent(deps("report")), inst)
     with traced_run(inst, requirement.requirement_id, sut_bugs, run_id=run_id, prompt_version=PROMPT_VERSION, dataset=dataset) as run:
         report: Report | None = None
         error: str | None = None
@@ -77,18 +92,22 @@ def run_pipeline(
         else:
             if differential is not None:
                 diff = differential(automation)
-        return _conclude(run, inst, report, error, diff, bugs_enabled=bool(sut_bugs))
+        return _conclude(run, inst, report, error, diff, security, bugs_enabled=bool(sut_bugs))
 
 
-def _conclude(run: RunHandle, inst: Instrumentation, report: Report | None, error: str | None, diff: Any, *, bugs_enabled: bool) -> PipelineResult:
+def _conclude(
+    run: RunHandle, inst: Instrumentation, report: Report | None, error: str | None, diff: Any, security: SecurityRecorder, *, bugs_enabled: bool
+) -> PipelineResult:
     spans = [span_to_dict(s) for s in inst.collector.spans(run.trace_id)]
     obs = observe(spans, differential=diff.to_json() if diff is not None else None)
     surface = surface_outcome(obs)
     final = final_outcome(obs, bugs_enabled=bugs_enabled) if diff is not None else surface
     _annotate_root(run, final, surface)
+    run.set_attribute("qa.security.events", len(security.events))
+    run.set_attribute("qa.security.breach", security.breach)
     classification = {"surface": surface.to_json(), "final": final.to_json() if diff is not None else None}
     return PipelineResult(
-        run.trace_id, final.verdict, report, error, surface.verdict, diff, final.underlying_verdict, classification
+        run.trace_id, final.verdict, report, error, surface.verdict, diff, final.underlying_verdict, classification, security.to_json()
     )  # fmt: skip
 
 

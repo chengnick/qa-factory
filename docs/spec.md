@@ -321,6 +321,9 @@ artifacts/
 
 - 被拒絕的動作**不得實際執行**，`executed` 必須為 `false`。
 - 若 `executed: true` 的安全事件出現，代表防護失效，run 的 verdict 另外標記 `security_breach: true`。
+- `SECRET_ACCESS`（Phase 3 實作）：掃描必須在 redact **之前**，對象為 LLM 輸出、工具 stdout、`file_write` 的內容。LLM 輸出與 stdout 在存入 artifact 前已遮罩，記為 `executed: false`；含秘密的 `file_write` 直接拒絕（不寫入），也記為 `executed: false`。只有秘密真的以明文進入 artifact 或工具時才是 `executed: true`。
+- 未註冊的工具記為 `INVALID_TOOL_CALL`；已註冊但該 Agent 無權使用的工具記為 `PERMISSION_DENIED`。
+- `PROTECTED_PATH_WRITE` 同時記一筆 `GOAL_DRIFT`（§9.3）。
 
 ---
 
@@ -339,6 +342,22 @@ artifacts/
 - 沒有任何 Agent 擁有讀檔、shell、刪除類工具。新增工具必須先更新本表。
 - `http_request` 的目標若不是 SUT base URL，一律拒絕。
 
+### 8.1.1 權限閘門的判斷順序（Phase 3）
+
+閘門在 tool span 內、工具執行之前檢查；拒絕時不執行、記錄安全事件，並以規則 R18 分類。
+
+1. 工具未註冊 → `INVALID_TOOL_CALL`
+2. 該 Agent 沒有這個工具的權限 → `PERMISSION_DENIED`
+3. `file_write` 的路徑，先 `resolve()` 再 `normcase()`，並同時以 run 工作目錄與 repo 根目錄解析相對路徑，依序判斷：
+   1. 在本 run 自己的 `generated/` 內 → 允許（再掃描內容中的秘密）。**必須排在第 3 步之前**，因為 `generated/` 本身位於 `artifacts/` 之下
+   2. `sut/`、`benchmark/reference_tests/`、`docs/` → `PROTECTED_PATH_WRITE` + `GOAL_DRIFT`
+   3. `artifacts/`（任何 run）、`benchmark/`、`traces/` → `EVIDENCE_TAMPER_ATTEMPT`
+   4. 其他 → `PERMISSION_DENIED`
+4. `http_request` 的目標不是 SUT 上的路徑（含 `://`、`//` 開頭或非 `/` 開頭）→ `PERMISSION_DENIED`
+5. `pytest` / `playwright` 要執行的檔案違反產生程式碼的靜態檢查（§8.2）→ `PERMISSION_DENIED`
+
+測試涵蓋大小寫不同、反斜線、`../` 穿越與絕對路徑（`tests/agent_security/test_gate.py`）。
+
 ### 8.2 產生的測試程式（間接執行面）
 
 Agent 的權限只能限制工具呼叫，限制不了**被執行的測試程式本身**能做什麼。這一層由隔離等級決定。
@@ -346,7 +365,8 @@ Agent 的權限只能限制工具呼叫，限制不了**被執行的測試程式
 | 等級 | 內容 | 狀態 |
 |---|---|---|
 | L0 | 工具呼叫的路徑檢查 | ✅ |
-| L0+ | pytest 子行程改用環境變數白名單、專屬工作目錄 | 🔄 Phase 2.5 |
+| L0+ | pytest 子行程改用環境變數白名單、專屬工作目錄 | ✅ Phase 2.5 |
+| L0+ | 產生程式碼的靜態檢查（AST）：只允許 `pytest`、`httpx`、`uuid`、`re`、`playwright` 的 import；禁止 `open`、`exec`、`eval`、`compile`、`__import__`、`getattr`、`__builtins__`，以及 `__dict__`、`__class__`、`__subclasses__` 屬性；禁止寫死的非 SUT 網址。違反時不執行，分類為 `AGENT/PERMISSION_DENIED`（R18），verdict 為 `AGENT_FAILED`。**這是檢查，不是沙箱**，可以被刻意繞過 | ✅ Phase 3 |
 | L1 | 子行程以受限帳號或受限 token 執行；對 `sut/`、`benchmark/`、`artifacts/` 只有讀取權限；網路只能連到 SUT | ⏳ Phase 4 |
 | L2 | 在 container 內執行，唯讀掛載，網路隔離 | 可選 |
 

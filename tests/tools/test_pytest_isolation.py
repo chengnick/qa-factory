@@ -21,7 +21,9 @@ def workspace(tmp_dir: Path) -> Path:
 
 def _run(workspace: Path, name: str, body: str):
     (workspace / "generated" / name).write_text(body, encoding="utf-8")
-    return PytestTool(workspace, "http://sut.test")(paths=[f"generated/{name}"])
+    # enforce_policy=False: these tests deliberately import os/importlib to probe the L0+ isolation layer on its
+    # own; the static code policy (tools/code_policy.py) is a separate layer tested in tests/agent_security/.
+    return PytestTool(workspace, "http://sut.test", enforce_policy=False)(paths=[f"generated/{name}"])
 
 
 def test_generated_code_cannot_read_gemini_api_key(workspace, monkeypatch):

@@ -57,7 +57,8 @@ def _write(root: Path, name: str, body: str) -> str:
 def test_passing_run(root):
     path = _write(root, "test_ok.py", "import os\n\ndef test_env():\n    assert os.environ['SUT_BASE_URL'] == 'http://sut.test'\n")
 
-    result = PytestTool(root, "http://sut.test")(paths=[path])
+    # enforce_policy=False: this probes the runner's environment, which the code policy would refuse (import os)
+    result = PytestTool(root, "http://sut.test", enforce_policy=False)(paths=[path])
 
     assert result.ok and result.exit_code == 0, result.stdout
     assert result.data["tests"] == 1 and result.data["failures"] == 0
@@ -87,7 +88,7 @@ def test_timeout_raises_retryable_error(root):
     path = _write(root, "test_slow.py", "import time\n\ndef test_slow():\n    time.sleep(30)\n")
 
     with pytest.raises(ToolTimeoutError):
-        PytestTool(root, "http://sut.test", timeout_s=3)(paths=[path])
+        PytestTool(root, "http://sut.test", timeout_s=3, enforce_policy=False)(paths=[path])  # uses `import time`
 
 
 def test_missing_file_and_outside_paths_rejected(root):

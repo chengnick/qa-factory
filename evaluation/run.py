@@ -87,6 +87,14 @@ def write_meta(workspace: Path, meta: dict[str, Any]) -> None:
     (workspace / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def record_security(workspace: Path, meta: dict[str, Any], security: dict[str, Any] | None) -> None:
+    """security_events.json (spec v3 §7); a breach (any executed event) is flagged in meta."""
+    if security is None:
+        return
+    (workspace / "security_events.json").write_text(json.dumps(security, ensure_ascii=False, indent=2), encoding="utf-8")
+    meta["security"] = {"events": len(security["events"]), "breach": security["breach"], "types": sorted({e["type"] for e in security["events"]})}
+
+
 def record_classification(workspace: Path, meta: dict[str, Any], classification: dict[str, Any] | None, underlying: str | None) -> None:
     """Write classification.json and copy its headline numbers into meta (spec v3 §5)."""
     if classification is None:
@@ -158,6 +166,8 @@ def execute_run(
                 run_id=run_id,
                 dataset=meta["dataset"],
                 differential=cross_validate,
+                workspace=workspace,
+                sut_url=url,
             )
     except SUTStartupError as exc:
         meta.update(verdict="ENV_BLOCKED", surface_verdict="ENV_BLOCKED", error=f"SUTStartupError: {exc}", finished_at=_now())
@@ -183,6 +193,7 @@ def execute_run(
         **_trace_facts(workspace),
     )
     record_classification(workspace, meta, result.classification, result.underlying_verdict)
+    record_security(workspace, meta, result.security)
     write_meta(workspace, meta)
     return workspace, meta
 

@@ -113,6 +113,19 @@ class Instrumentation:
     clock: Clock
     sink: ContentSink = field(default_factory=NullContentSink)
     collector: Any = None  # observability.setup.SpanCollector: lets the pipeline classify its own trace before it ends
+    security: Any = None  # security.events.SecurityRecorder for the current run (secret scans before redaction)
+
+
+def _scan_secret(inst: Instrumentation, action: str, target: str, text: str) -> None:
+    """SECRET_ACCESS: scanned on the raw text, *before* record_content redacts it. The stored copy is masked,
+    so the secret never reaches an artifact: executed is false."""
+    if inst.security is None or not text:
+        return
+    from observability.redact import find_secret
+
+    if secret := find_secret(text):
+        inst.security.record("SECRET_ACCESS", agent=None, action=action, target=target, executed=False,
+                             evidence=f"credential-shaped string in {action} (masked in artifacts): {secret}")  # fmt: skip
 
 
 def _ids(span: Span) -> tuple[str, str]:
@@ -285,6 +298,7 @@ class TracedLLM:
                 span.set_attribute("gen_ai.usage.input_tokens", response.input_tokens)
             if response.output_tokens is not None:
                 span.set_attribute("gen_ai.usage.output_tokens", response.output_tokens)
+            _scan_secret(self._inst, "llm.completion", self.model, response.content)
             record_content(self._inst, span, "completion", response.content)
             return response
 
@@ -296,19 +310,39 @@ def _tool_failure(result: ToolResult) -> str | None:
     return lines[-1] if lines else f"exit code {result.exit_code}"
 
 
-class TracedToolRegistry:
-    """Tool calls as tool.<name> spans; tools whose policy allows >1 attempt run through with_retry()."""
+Guard = Callable[[str, str, Mapping[str, Any]], None]  # (agent, tool, args) -> raises to refuse
 
-    def __init__(self, registry: ToolRegistry, inst: Instrumentation) -> None:
-        self._registry, self._inst = registry, inst
+
+class TracedToolRegistry:
+    """Tool calls as tool.<name> spans; tools whose policy allows >1 attempt run through with_retry().
+
+    A guard (the permission gate) runs inside the tool span before anything executes, so a refusal is
+    traced like any other tool failure. Calls without an agent (evaluation builds) are not gated.
+    """
+
+    def __init__(self, registry: ToolRegistry, inst: Instrumentation, guard: Guard | None = None) -> None:
+        self._registry, self._inst, self._guard = registry, inst, guard
+
+    def names(self) -> list[str]:
+        return self._registry.names()
 
     def call(self, name: str, **args: Any) -> ToolResult:
+        return self.call_as(None, name, args)
+
+    def call_as(self, agent: str | None, name: str, args: Mapping[str, Any], precheck: Callable[[], None] | None = None) -> ToolResult:
+        args = dict(args)
         attrs: dict[str, Any] = {"gen_ai.operation.name": "execute_tool", "gen_ai.tool.name": name, "qa.tool.name": name}
+        if agent is not None:
+            attrs["qa.agent.name"] = agent
         # Recorded before the call so a tool that raises (e.g. SUT down) still says what it targeted.
         for key in ("method", "route"):
             if isinstance(args.get(key), str):
                 attrs[f"qa.http.{key}"] = args[key].upper() if key == "method" else args[key]
         with start_span(self._inst, f"tool.{name}", attrs) as span:
+            if precheck is not None:
+                precheck()
+            if self._guard is not None and agent is not None:
+                self._guard(agent, name, args)
             tool = self._registry.get(name)
             tool.validate(args)  # a schema violation never reaches the tool
             invoke = lambda: tool.fn(**args)  # noqa: E731
@@ -339,9 +373,45 @@ class TracedToolRegistry:
                     {"qa.test.id": r["node_id"], "qa.test.outcome": r["outcome"], "qa.test.message": redact(r.get("message", ""))[:500]},
                     timestamp=self._inst.clock.now_ns(),
                 )
+        _scan_secret(self._inst, "tool.stdout", getattr(span, "name", "tool"), result.stdout)
         record_content(self._inst, span, "stdout", result.stdout, tail=True)
         if message := _tool_failure(result):
             span.set_status(Status(StatusCode.ERROR, redact(message)))
+
+
+class AgentTools:
+    """The tool view one agent gets: every call is made as that agent (and so passes the gate for it).
+
+    Repeated-call guard: after MAX_IDENTICAL_FAILURES failures of the same call (tool + identical arguments),
+    another identical request is refused without executing (RepeatedToolCallError, rule R6).
+    """
+
+    MAX_IDENTICAL_FAILURES = 2
+
+    def __init__(self, traced: TracedToolRegistry, agent: str) -> None:
+        self._traced, self.agent = traced, agent
+        self._failures: dict[str, int] = {}
+
+    def call(self, name: str, **args: Any) -> ToolResult:
+        from tools.registry import RepeatedToolCallError
+
+        key = json.dumps([name, args], sort_keys=True, default=str)
+
+        def precheck() -> None:
+            if self._failures.get(key, 0) >= self.MAX_IDENTICAL_FAILURES:
+                raise RepeatedToolCallError(f"{name} with identical arguments already failed {self._failures[key]} times; not retrying")
+
+        try:
+            result = self._traced.call_as(self.agent, name, args, precheck)
+        except Exception as exc:
+            if type(exc).__name__ != "RepeatedToolCallError":
+                self._failures[key] = self._failures.get(key, 0) + 1
+            raise
+        if result.ok:
+            self._failures.pop(key, None)
+        else:
+            self._failures[key] = self._failures.get(key, 0) + 1
+        return result
 
 
 class TracedAgent(Generic[In, Out]):

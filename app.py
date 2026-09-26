@@ -26,7 +26,7 @@ from pathlib import Path
 
 from agents.contracts import RequirementInput
 from benchmark.datasets import TEST_BUGS
-from evaluation.run import base_meta, execute_run, instrumentation, record_classification, write_meta
+from evaluation.run import base_meta, execute_run, instrumentation, record_classification, record_security, write_meta
 from llm.client import LLMConfigError
 from pipeline import run_pipeline
 from testing import scripts
@@ -75,6 +75,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict
                 sut_bugs=sut_bugs,
                 run_id=run_id,
                 dataset=meta["dataset"],
+                workspace=workspace,
             )
     except Exception as exc:  # unclassified failure: keep the evidence, then crash loudly
         meta.update(error=f"{type(exc).__name__}: {exc}", finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
@@ -90,6 +91,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict
         finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
     )
     record_classification(workspace, meta, result.classification, result.underlying_verdict)
+    record_security(workspace, meta, result.security)
     write_meta(workspace, meta)
     return workspace, meta
 
