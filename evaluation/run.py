@@ -390,7 +390,7 @@ def render_summary(summary: dict[str, Any]) -> str:
         "| Metric | Value |",
         "|---|---|",
         f"| True detection rate (cross-validated) | {_fmt_rate(m['true_detection_rate'])} |",
-        f"| Detection rate when the pipeline completed (AGENT_FAILED excluded) | {_fmt_rate(m['true_detection_rate_completed'])} |",
+        f"| Detection rate when the pipeline completed (AGENT_FAILED and R20 excluded) | {_fmt_rate(m['true_detection_rate_completed'])} |",
         f"| Surface detection rate (unverified) | {_fmt_rate(m['surface_detection_rate'])} |",
         f"| **False-positive rate (surface, main figure)** | {_fmt_rate(m['false_positive_rate_surface'])} |",
         f"| False-positive rate (cross-validated; 0 by construction) | {_fmt_rate(m['false_positive_rate_verified'])} |",
@@ -408,10 +408,10 @@ def render_summary(summary: dict[str, Any]) -> str:
         "",
         "## Per-bug detection",
         "",
-        "| Bug | Cross-validated | Pipeline completed | AGENT_FAILED | Surface | ENV_BLOCKED |",
-        "|---|---|---|---|---|---|",
+        "| Bug | Cross-validated | Pipeline completed | AGENT_FAILED | R20 (LLM request rejected) | Surface | ENV_BLOCKED |",
+        "|---|---|---|---|---|---|---|",
         *[
-            f"| {bug} | {v['verified']} | {v['completed']} | {v['agent_failed']} | {v['surface']} | {v['env_blocked']} |"
+            f"| {bug} | {v['verified']} | {v['completed']} | {v['agent_failed']} | {v.get('llm_rejected', '0/0')} | {v['surface']} | {v['env_blocked']} |"
             for bug, v in m["per_bug_detection"].items()
         ],
         "",
