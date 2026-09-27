@@ -41,5 +41,5 @@ def test_process_exit_code_is_non_zero_on_mismatch(tmp_dir):
         "matrix.run_config = lambda n, e, w: ConfigResult(n, e, {b: 'PASS' for b in ids}, 0.0, '')\n"
         f"sys.exit(matrix.main(['--jobs', '1', '--out', r'{tmp_dir / 'm.md'}']))\n"
     )
-    proc = subprocess.run([sys.executable, "-c", script], cwd=REPO, capture_output=True, text=True)
+    proc = subprocess.run([sys.executable, "-c", script], cwd=REPO, capture_output=True, text=True, encoding="utf-8", errors="replace")
     assert proc.returncode == 1, proc.stdout + proc.stderr
