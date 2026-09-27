@@ -27,6 +27,7 @@ from llm.client import LLMClient
 from observability.instrument import AgentTools, Instrumentation, RunHandle, TracedLLM, TracedToolRegistry, traced_agent, traced_run
 from observability.json_exporter import span_to_dict
 from permissions.gate import PermissionGate
+from permissions.policy import Policy, default_policy
 from security.events import SecurityRecorder
 from tools.registry import NO_RETRY, RetryPolicy, ToolRegistry
 
@@ -42,6 +43,7 @@ class PipelineResult:
     underlying_verdict: str | None = None  # set when verdict is FLAKY
     classification: dict[str, Any] | None = None  # {"surface": Outcome json, "final": Outcome json | None}
     security: dict[str, Any] | None = None  # security_events.json content: {"run_id", "breach", "events"}
+    policy: dict[str, Any] | None = None  # {"hash", "path", "permission_checks", "allowed", "denied"}
 
 
 # Evaluation hook: given the final generated tests, cross-validate them (evaluation/differential.py).
@@ -63,6 +65,7 @@ def run_pipeline(
     workspace: Path | None = None,
     sut_url: str | None = None,
     agents: Mapping[str, Callable[[AgentDeps], Any]] | None = None,
+    policy: Policy | None = None,
 ) -> PipelineResult:
     """`agents` replaces individual agents by name (test doubles such as testing.fake_agent.ScriptedAgent);
     a replacement receives that agent's own gated deps, so the permission table still applies to it."""
@@ -70,7 +73,8 @@ def run_pipeline(
         raise ValueError("Instrumentation needs a span collector (observability.setup.new_instrumentation) to classify the run")
     security = SecurityRecorder(run_id)
     inst = dataclasses.replace(inst, security=security)
-    gate = PermissionGate(security, registered=tools.names, workspace=workspace, sut_url=sut_url)
+    policy = policy or default_policy()
+    gate = PermissionGate(security, registered=tools.names, workspace=workspace, sut_url=sut_url, policy=policy)
     traced_tools = TracedToolRegistry(tools, inst, guard=gate.check)
     traced_llm = TracedLLM(llm, inst, llm_retry)
 
@@ -101,7 +105,10 @@ def run_pipeline(
         else:
             if differential is not None:
                 diff = differential(automation)
-        return _conclude(run, inst, report, error, diff, security, bugs_enabled=bool(sut_bugs))
+        run.set_attribute("qa.policy.hash", policy.hash)
+        run.set_attribute("qa.policy.path", policy.display_path)
+        result = _conclude(run, inst, report, error, diff, security, bugs_enabled=bool(sut_bugs))
+        return dataclasses.replace(result, policy={"hash": policy.hash, "path": policy.display_path, **gate.stats})
 
 
 def _conclude(

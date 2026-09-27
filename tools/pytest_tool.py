@@ -122,12 +122,13 @@ def junit_tests(path: Path, root: Path) -> list[dict[str, str]]:
 
 
 class PytestTool:
-    def __init__(self, root: Path, sut_url: str, *, timeout_s: float = 120.0, enforce_policy: bool = True) -> None:
+    def __init__(self, root: Path, sut_url: str, *, timeout_s: float = 120.0, enforce_policy: bool = True, policy: Any = None) -> None:
         self.root = root  # the run workspace
         self.sut_url = sut_url
         self.timeout_s = timeout_s
         # Tests of the isolation layer itself switch the code policy off to probe the environment directly.
         self.enforce_policy = enforce_policy
+        self.policy = policy  # None -> the default policy file
 
     def __call__(self, paths: list[str]) -> ToolResult:
         if not paths:
@@ -138,7 +139,7 @@ class PytestTool:
             raise ToolArgumentError(f"test files not found: {missing}")
         rel = [f.relative_to(self.root).as_posix() for f in files]
         # Defence in depth: the gate checks this for agents; evaluation builds call the tool directly.
-        if self.enforce_policy and (violations := check_files(self.root, rel, sut_url=self.sut_url)):
+        if self.enforce_policy and (violations := check_files(self.root, rel, sut_url=self.sut_url, policy=self.policy)):
             detail = "; ".join(f"{p}:{v.line} {v.kind} {v.detail}" for p, v in violations)
             raise PermissionDeniedError(f"generated-code policy: {detail}")
 

@@ -26,7 +26,8 @@ from pathlib import Path
 
 from agents.contracts import RequirementInput
 from benchmark.datasets import TEST_BUGS
-from evaluation.run import base_meta, execute_run, instrumentation, record_classification, record_security, write_meta
+from evaluation.run import base_meta, execute_run, instrumentation, record_classification, record_policy, record_security, write_meta
+from permissions.policy import DEFAULT_POLICY_PATH, Policy, PolicyError, load_policy
 from llm.client import LLMConfigError
 from pipeline import run_pipeline
 from testing import scripts
@@ -57,11 +58,11 @@ def load_env_file(path: Path) -> None:
             os.environ[key] = value
 
 
-def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict]:
+def _run_fake(args: argparse.Namespace, sut_bugs: list[str], policy: Policy) -> tuple[Path, dict]:
     """Scripted LLM and scripted tools on a simulated clock (no SUT, no network)."""
     run_id = new_run_id()
     workspace = create_run_workspace(args.artifacts_dir, run_id)
-    meta = base_meta(run_id, args.requirement, llm="fake", model="fake-model", temperature=None, sut_bugs=sut_bugs)
+    meta = base_meta(run_id, args.requirement, llm="fake", model="fake-model", temperature=None, sut_bugs=sut_bugs, policy=policy)
     meta["scenario"] = args.scenario
     requirement = RequirementInput(args.requirement, (REQUIREMENTS_DIR / f"{args.requirement}.md").read_text(encoding="utf-8"))
     clock = FakeClock(start_ns=time.time_ns())
@@ -76,6 +77,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict
                 run_id=run_id,
                 dataset=meta["dataset"],
                 workspace=workspace,
+                policy=policy,
             )
     except Exception as exc:  # unclassified failure: keep the evidence, then crash loudly
         meta.update(error=f"{type(exc).__name__}: {exc}", finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
@@ -92,11 +94,12 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict
     )
     record_classification(workspace, meta, result.classification, result.underlying_verdict)
     record_security(workspace, meta, result.security)
+    record_policy(meta, result.policy)
     write_meta(workspace, meta)
     return workspace, meta
 
 
-def _run_gemini(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, dict]:
+def _run_gemini(args: argparse.Namespace, sut_bugs: list[str], policy: Policy) -> tuple[Path, dict]:
     """Real LLM and real tools; not in evaluation mode (no cross-validation: results are unverified)."""
     from llm.adapters.gemini import GEMINI_RETRY, GeminiClient
     from sut.launcher import wait_healthy
@@ -116,6 +119,7 @@ def _run_gemini(args: argparse.Namespace, sut_bugs: list[str]) -> tuple[Path, di
         llm_retry=GEMINI_RETRY,
         differential=False,
         sut_url=args.sut_url.rstrip("/") if args.sut_url else None,
+        policy=policy,
     )
 
 
@@ -131,6 +135,7 @@ def main(argv: list[str] | None = None) -> int:
         "--artifacts-dir", type=Path, default=ROOT / "artifacts", help="one directory per run: meta.json, trace.json, generated tests (never auto-deleted)"
     )
     parser.add_argument("--allow-test-set", action="store_true", help="Phase 5 only: allow sealed test-set bugs")
+    parser.add_argument("--policy", type=Path, default=DEFAULT_POLICY_PATH, help="agent policy file (validated before anything runs)")
     args = parser.parse_args(argv)
 
     if not (REQUIREMENTS_DIR / f"{args.requirement}.md").is_file():
@@ -140,10 +145,16 @@ def main(argv: list[str] | None = None) -> int:
     if sealed and not args.allow_test_set:
         parser.error(f"{','.join(sealed)} belong to the sealed test set; the pipeline may not run them before Phase 5")
 
+    try:  # startup error: no run_id, no artifacts, not a classified run (spec v3.1 §8.5.3)
+        policy = load_policy(args.policy)
+    except PolicyError as exc:
+        print(f"policy error: {exc}", file=sys.stderr)
+        return 2
+
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     try:
-        workspace, meta = _run_fake(args, sut_bugs) if args.llm == "fake" else _run_gemini(args, sut_bugs)
+        workspace, meta = _run_fake(args, sut_bugs, policy) if args.llm == "fake" else _run_gemini(args, sut_bugs, policy)
     except LLMConfigError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

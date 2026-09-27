@@ -36,6 +36,7 @@ from observability.instrument import Instrumentation, RunContentSink
 from observability.json_exporter import JsonFileSpanExporter
 from observability.redact import find_secret
 from observability.setup import new_instrumentation
+from permissions.policy import DEFAULT_POLICY_PATH, Policy, PolicyError, default_policy, load_policy
 from pipeline import run_pipeline
 from sut.launcher import SUTStartupError, running_sut
 from tools.factory import real_tools
@@ -65,7 +66,10 @@ def instrumentation(workspace: Path, clock: Clock) -> Iterator[Instrumentation]:
         provider.shutdown()
 
 
-def base_meta(run_id: str, requirement_id: str, *, llm: str, model: str, temperature: float | None, sut_bugs: Sequence[str]) -> dict[str, Any]:
+def base_meta(
+    run_id: str, requirement_id: str, *, llm: str, model: str, temperature: float | None, sut_bugs: Sequence[str], policy: Policy | None = None
+) -> dict[str, Any]:
+    policy = policy or default_policy()
     return {
         "run_id": run_id,
         "trace_id": None,
@@ -79,12 +83,20 @@ def base_meta(run_id: str, requirement_id: str, *, llm: str, model: str, tempera
         "sut_bugs": list(sut_bugs),
         "git_commit": git_commit(),
         "lockfile_sha256": lockfile_sha256(),
+        "policy_hash": policy.hash,
+        "policy_path": policy.display_path,
         "started_at": _now(),
     }
 
 
 def write_meta(workspace: Path, meta: dict[str, Any]) -> None:
     (workspace / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def record_policy(meta: dict[str, Any], policy: dict[str, Any] | None) -> None:
+    """Permission-check statistics go to meta.json only (security_events.json holds security events)."""
+    if policy is not None:
+        meta["permission_checks"] = {k: policy[k] for k in ("permission_checks", "allowed", "denied")}
 
 
 def record_security(workspace: Path, meta: dict[str, Any], security: dict[str, Any] | None) -> None:
@@ -143,11 +155,13 @@ def execute_run(
     sut_url: str | None = None,
     round_no: int | None = None,
     clock: Clock | None = None,
+    policy: Policy | None = None,
 ) -> tuple[Path, dict[str, Any]]:
     """One live run with real tools. Returns (workspace, meta). meta.json is always written."""
+    policy = policy or default_policy()
     run_id = new_run_id()
     workspace = create_run_workspace(artifacts_dir, run_id)
-    meta = base_meta(run_id, requirement_id, llm=llm_kind, model=model, temperature=temperature, sut_bugs=sut_bugs)
+    meta = base_meta(run_id, requirement_id, llm=llm_kind, model=model, temperature=temperature, sut_bugs=sut_bugs, policy=policy)
     meta.update(round=round_no, sut_url=sut_url, evaluation_mode=differential)
     requirement = RequirementInput(requirement_id, (REQUIREMENTS_DIR / f"{requirement_id}.md").read_text(encoding="utf-8"))
     started = time.monotonic()
@@ -158,7 +172,7 @@ def execute_run(
             result = run_pipeline(
                 requirement,
                 llm=llm,
-                tools=real_tools(workspace, url),
+                tools=real_tools(workspace, url, policy),
                 inst=inst,
                 sut_bugs=sut_bugs,
                 llm_retry=llm_retry,
@@ -166,6 +180,7 @@ def execute_run(
                 run_id=run_id,
                 dataset=meta["dataset"],
                 differential=cross_validate,
+                policy=policy,
                 workspace=workspace,
                 sut_url=url,
             )
@@ -194,6 +209,7 @@ def execute_run(
     )
     record_classification(workspace, meta, result.classification, result.underlying_verdict)
     record_security(workspace, meta, result.security)
+    record_policy(meta, result.policy)
     write_meta(workspace, meta)
     return workspace, meta
 
@@ -246,6 +262,7 @@ def run_dataset(
     sut_factory: SutFactory = running_sut,
     sleep: Callable[[float], None] = time.sleep,
     log: Callable[[str], None] = print,
+    policy: Policy | None = None,
 ) -> dict[str, Any]:
     plan = list(only) if only is not None else combinations(dataset)
     if (results_dir / "summary.json").exists():
@@ -268,6 +285,7 @@ def run_dataset(
                 llm_retry=llm_retry,
                 sut_factory=sut_factory,
                 round_no=rnd,
+                policy=policy,
             )
             copied = copy_run(workspace, results_dir)
             meta["copied_to_results"] = copied is not None
@@ -395,10 +413,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--pause-s", type=float, default=10.0, help="pause between runs (free-tier pacing)")
     parser.add_argument("--artifacts-dir", type=Path, default=REPO_ROOT / "artifacts")
     parser.add_argument("--results-dir", type=Path, required=True, help="e.g. benchmark/results/phase2r")
+    parser.add_argument("--policy", type=Path, default=DEFAULT_POLICY_PATH, help="agent policy file (validated before anything runs)")
     args = parser.parse_args(argv)
 
     try:
         combinations(args.dataset)
+        policy = load_policy(args.policy)
         if args.llm == "gemini":
             if not args.model:
                 parser.error("--model is required with --llm gemini")
@@ -413,6 +433,9 @@ def main(argv: list[str] | None = None) -> int:
             from testing.scripts import dry_run_llm
 
             factory, retry, temperature, model = dry_run_llm, NO_RETRY, None, "fake-model"
+    except PolicyError as exc:
+        print(f"policy error: {exc}", file=sys.stderr)
+        return 2
     except RunnerRefused as exc:
         print(f"refused: {exc}", file=sys.stderr)
         return 2
@@ -431,6 +454,7 @@ def main(argv: list[str] | None = None) -> int:
             temperature=temperature,
             llm_retry=retry,
             pause_s=args.pause_s if args.llm == "gemini" else 0.0,
+            policy=policy,
         )
     except RunnerRefused as exc:
         print(f"refused: {exc}", file=sys.stderr)

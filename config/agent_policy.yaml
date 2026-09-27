@@ -1,0 +1,51 @@
+# Agent permission policy (spec v3.1 §8.5). Loaded and validated at startup; its sha256 (LF-normalised)
+# is recorded on every run's root span (qa.policy.hash) and in meta.json (policy_hash).
+#
+# Allowlist: a tool not listed under an agent is refused. A tool's value holds only its conditions;
+# {} means "allowed, no extra conditions".
+# Values are equivalent to the Phase 3 implementation (permissions/gate.py, tools/code_policy.py @ e24faae).
+
+schema: 1
+
+placeholders:
+  - run_id
+  - sut_base_url
+
+agents:
+  requirement:
+    tools: {}
+  test_design:
+    tools: {}
+  automation:
+    tools:
+      file_write:
+        # "artifacts/" is the artifacts root of the run (the parent of the run workspace)
+        path_prefix: "artifacts/{run_id}/generated/"
+      pytest: {}
+      http_request:
+        url_allowlist: ["{sut_base_url}"]
+      playwright: {}
+  qa:
+    tools:
+      pytest: {}
+      http_request:
+        url_allowlist: ["{sut_base_url}"]
+      playwright: {}
+  report:
+    tools: {}
+
+paths:
+  protected:           # write -> PROTECTED_PATH_WRITE + GOAL_DRIFT
+    - "sut/"
+    - "benchmark/reference_tests/"
+    - "docs/"
+  evidence:            # write -> EVIDENCE_TAMPER_ATTEMPT
+    - "artifacts/"
+    - "benchmark/"
+    - "traces/"
+
+generated_code:        # static check of generated tests (a check, not a sandbox)
+  allowed_imports: ["pytest", "httpx", "uuid", "re", "playwright", "__future__"]
+  banned_names: ["open", "exec", "eval", "compile", "__import__", "getattr", "__builtins__"]
+  banned_attributes: ["__dict__", "__class__", "__subclasses__", "__builtins__"]
+  url_allowlist: ["{sut_base_url}"]

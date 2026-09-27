@@ -101,3 +101,12 @@ def test_unknown_and_inconclusive_rates():
     assert m["unknown_classification_rate"]["pooled"] == "1/2"
     assert m["unknown_classification_rate"]["runs_with_classification"] == 2
     assert m["inconclusive_rate"]["pooled"] == "1/7"  # the ENV_BLOCKED run is excluded
+
+
+def test_harness_failure_run_is_not_in_the_test_health_denominator():
+    """An R20 run (LLM rejected our request, HARNESS) ends before any test exists: no cross-validation,
+    so it adds nothing to test health (neither healthy nor total), whatever its verdict."""
+    r20 = {**run(3, ["B04"], "TEST_BROKEN", "TEST_BROKEN"), "differential": None,
+           "classification": {"counts": {"total": 1, "unknown": 0}, "decided_by": {"matched_rule": "R20"}}}  # fmt: skip
+    assert compute(RUNS + [r20])["test_health"]["pooled"] == compute(RUNS)["test_health"]["pooled"] == "12/15"
+    assert 3 not in compute(RUNS + [r20])["test_health"]["per_round"]

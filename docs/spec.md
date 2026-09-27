@@ -1,6 +1,6 @@
-# QA Factory × AI Observability — 規格 v3
+# QA Factory × AI Observability — 規格 v3.1
 
-> 版本：v3（2026-09-25），取代 `docs/spec-v2.md`。本檔放在 `docs/spec.md`，之後改版只更新檔頭版本號，不再改檔名。
+> 版本：v3.1（2026-09-27）。v3（2026-09-25）取代 `docs/spec-v2.md`；v3.1 併入「Phase 3.5 增補」（D14–D20、§8.5、§15.5、Phase 3.5）。本檔放在 `docs/spec.md`，之後改版只更新檔頭版本號，不再改檔名；repo 中不得同時存在兩份規格。
 >
 > 定位：**證明這套系統抓得到 bug，並且分辨得出是產品壞了、測試壞了、Agent 壞了，還是外部服務或環境壞了。**
 >
@@ -18,6 +18,7 @@
 | 2.5 | 隔離最小修正、Artifact 保存、503 verdict、驗收紀錄補全 | ✅ `d4f7591` |
 | 2R | 交叉驗證 + 多輪執行，重新驗收 Phase 2 | ✅ `32c5e1e`（程式）、`fafe6d2`（結果） |
 | 3 | 失敗歸因、Agent 故障注入、安全事件 | ✅ 見 `benchmark/results/phase3/acceptance.md`；W01 / W03 延到 Phase 4 |
+| 3.5 | Policy 檔（權限設定外部化、hash 追蹤）、CI（ubuntu + windows） | 🔄 進行中 |
 | 4 | Playwright 證據、Workflow Evaluator、L1 隔離 | ⏳ |
 | 5 | 正式評估（解封測試集）、最終報告 | ⏳ |
 | 6 | OTLP / OpenObserve / Dashboard（可選） | ⏳ |
@@ -40,6 +41,13 @@
 - 不宣稱「全自動把需求變成測試」。
 - 不宣稱模型能抵抗 prompt injection，除非有 §11.4 的統計數字。
 - Phase 6 之前不做 dashboard。
+- Phase 3.5 範圍外（D16–D19）：
+  - pip、shell、讀檔、刪檔的權限與測試（D16）
+  - `LIMITED`、`APPROVAL_REQUIRED`、人工核准流程（D17）
+  - 多個 Python 版本的必過矩陣（D18）
+  - 瀏覽器矩陣（Firefox、WebKit）、Docker 矩陣
+  - CI 失敗的自動分類（D19）
+  - 在 CI 中執行任何 Agent pipeline 或評估
 
 ---
 
@@ -60,6 +68,13 @@
 | D11 | Prompt injection 分兩層：防護機制測試（確定性）與模型抵抗度（統計） | 用 FakeLLM 測到的是閘門，不是模型 |
 | D12 | 人看的 `run_id` 與 OTel `trace_id` 並存並互相對應 | 保留 OTel 相容性，同時方便人查找 |
 | D13 | 相依套件改用 lockfile 鎖定版本 | 目前只寫下限，乾淨環境會裝到較新版本，已出現 starlette 棄用警告 |
+| D14 | 權限表從程式碼移到 `config/agent_policy.yaml`，**仍以工具為單位**，條件寫成具體欄位 | 設定與程式分離、可驗證、可追蹤；但不改變權限模型 |
+| D15 | trace 與 meta.json 記錄 policy 檔的 **sha256 hash**，不依賴手動維護的版本字串 | 版本字串容易忘記更新，hash 不會 |
+| D16 | 不新增 pip、shell、讀檔、刪檔等權限 | 系統中沒有這些工具；為不存在的能力寫規則，在正式執行時永遠不會觸發 |
+| D17 | 不實作 `LIMITED` 與 `APPROVAL_REQUIRED` | `LIMITED` 就是「允許 + 條件」，條件已由具體欄位表達；評估流程是無人值守的，目前也沒有需要人工核准的動作 |
+| D18 | CI 以**作業系統矩陣**為主（ubuntu、windows），Python 固定一個版本，另加一個不阻擋合併的預警版本 | 本專案是應用程式，不是函式庫；路徑正規化、`SYSTEMROOT` 等邏輯是 Windows 專屬，需要在兩種 OS 上驗證 |
+| D19 | CI 失敗不另建分類；不新增 `DEPENDENCY_ERROR`、`COMPATIBILITY_ERROR`、`CONFIGURATION_ERROR` | CI 失敗的原因由失敗的步驟名稱（install / test）即可判斷；不把 CI 的問題混進 QA run 的失敗分類 |
+| D20 | CI 不呼叫真實 LLM，workflow 中不得引用任何 secret | 確定性測試才適合 CI；避免 API key 外洩到 CI 環境 |
 
 ---
 
@@ -386,6 +401,117 @@ Agent 的權限只能限制工具呼叫，限制不了**被執行的測試程式
 
 ---
 
+### 8.5 Policy 檔（Phase 3.5）
+
+#### 8.5.1 位置與格式
+
+- 路徑：`config/agent_policy.yaml`
+- YAML 解析使用 repo 中已經在用的函式庫（與 `benchmark/bugs.yaml` 相同），不新增相依套件。
+- schema 驗證優先使用現有相依套件中的工具（FastAPI 已帶入 pydantic）；若改用手寫驗證，必須有同等的測試覆蓋。
+
+#### 8.5.2 內容
+
+內容必須與 §8.1 權限表、Phase 3 已實作的受保護路徑、靜態檢查規則**完全等價**。以下為結構示意，實際值以 Phase 3 的實作為準：
+
+```yaml
+schema: 1
+
+placeholders:          # 只允許這兩個佔位符
+  - run_id
+  - sut_base_url
+
+agents:
+  requirement:
+    tools: {}          # 沒有任何工具
+  test_design:
+    tools: {}
+  automation:
+    tools:
+      file_write:
+        path_prefix: "artifacts/{run_id}/generated/"
+      pytest: {}
+      http_request:
+        url_allowlist: ["{sut_base_url}"]
+      playwright: {}
+  qa:
+    tools:
+      pytest: {}
+      http_request:
+        url_allowlist: ["{sut_base_url}"]
+      playwright: {}
+  report:
+    tools: {}
+
+paths:
+  protected:           # 寫入 → PROTECTED_PATH_WRITE + GOAL_DRIFT
+    - "sut/"
+    - "benchmark/reference_tests/"
+    - "docs/"
+  evidence:            # 寫入 → EVIDENCE_TAMPER_ATTEMPT
+    - "artifacts/"
+    - "benchmark/"
+    - "traces/"
+
+generated_code:        # Phase 3 的靜態檢查
+  allowed_imports: ["pytest", "httpx", "uuid", "re", "playwright"]
+  banned_names: ["open", "exec", "eval", "__import__", "compile",
+                 "getattr", "__builtins__", "__dict__", "__class__", "__subclasses__"]
+```
+
+- 規則是**白名單**：`tools` 裡沒有列出的工具一律拒絕。
+- 工具的值是一個物件，裡面只放條件；空物件 `{}` 代表無額外條件的允許。
+- 不使用 `true` / `false` 或 `allow` / `deny` 之類的欄位，避免同一件事有兩種寫法。
+
+#### 8.5.3 驗證（啟動時，失敗就停止）
+
+以下任一情況，程式以非零 exit code 結束，並輸出指出錯誤位置的訊息。**不得改用預設值繼續執行。**
+
+| 檢查 | 範例 |
+|---|---|
+| 未知的欄位 | `agents.qa.tools.pytest.retries: 3`（schema 中沒有這個欄位） |
+| 未知的 Agent 名稱 | `agents.qa_agent`（pipeline 中的名稱是 `qa`） |
+| pipeline 中的 Agent 沒有出現在 policy 裡 | 少了 `report` |
+| 未知的工具名稱 | 工具名稱必須存在於 tool registry |
+| 條件型別錯誤 | `path_prefix: 123` |
+| 未定義的佔位符 | `"{home}/x"` |
+| `evidence` 與 Automation 的 `path_prefix` 關係錯誤 | Automation 的可寫路徑必須位於 `artifacts/` 之下，且包含 `{run_id}` |
+| YAML 語法錯誤 | — |
+
+這些是**啟動錯誤**，不是 run 的失敗：run 根本沒有開始，所以不產生 run_id，也不進入失敗分類（D19）。
+
+#### 8.5.4 Hash 與追蹤
+
+- hash 計算：先將換行字元統一為 LF，再計算 sha256。
+- root span 屬性：`qa.policy.hash`、`qa.policy.path`
+- `meta.json`：`policy_hash`
+- `report.json` 的 `security` 區塊：`policy_hash`、`permission_checks`、`allowed`、`denied`
+- 每一次權限檢查（包括允許的）都在對應的 span 上加一個 event `qa.permission.check`：
+
+```json
+{
+  "agent": "automation",
+  "tool": "file_write",
+  "target": "artifacts/RUN-20260926-101500-3C1D/generated/test_req005_api.py",
+  "decision": "allow",
+  "matched": "agents.automation.tools.file_write.path_prefix"
+}
+```
+
+- Phase 2R 的 30 份 meta.json 沒有 `policy_hash`，**不得回頭補寫**。
+
+#### 8.5.5 必測項目
+
+| 測試 | 目的 |
+|---|---|
+| Phase 3 既有的閘門測試全部不修改、全部通過 | 證明這是重構，行為不變 |
+| 黃金測試：從 policy 檔載入的權限，與 §8.1 表格逐格比對一致 | 防止 policy 檔與規格悄悄分歧 |
+| 修改測試：用臨時 policy 檔給 QA Agent `file_write`，行為隨之改變 | 證明真的從檔案讀取，不是寫死在程式裡的備用值 |
+| §8.5.3 每一種驗證錯誤都有一個案例 | 證明不會默默改用預設值 |
+| 同一份 policy 在 CRLF 與 LF 換行下 hash 相同 | 防止 Windows 與 Linux 算出不同的 hash |
+| 權限檢查的 event 數量與 `report.json` 的統計一致 | 證明統計沒有漏算 |
+
+---
+
 ## 9. Workflow Evaluator
 
 ### 9.1 原則
@@ -605,6 +731,31 @@ Agent 的權限只能限制工具呼叫，限制不了**被執行的測試程式
 4. Prompt injection 第一層（§10.3）。
 5. **驗收條件**：§10.4；以 Phase 2R 的 artifact 重跑分類，產出分類結果的分布。
 
+### Phase 3.5 — Policy 檔與 CI（v3.1 增補）
+
+**前置條件**
+
+- Phase 3 已完成、已 commit，且 2R 重新分類的結果已經回報並確認。
+- repo 已推到 GitHub。
+
+**步驟**
+
+1. 將增補併入本檔，版本改為 v3.1，刪除增補檔。
+2. Policy 檔（§8.5）：建立 `config/agent_policy.yaml`、loader、驗證，閘門改為讀取 policy。
+3. Policy hash 與權限檢查 event（§8.5.4）。
+4. `live` marker 與略過機制（§15.5.4）。
+5. CI workflow（§15.5）。
+6. README 更新（§16.1）。
+
+**Commit**：分兩個。(a) spec 合併 + Policy 檔（步驟 1 到 3）；(b) CI（步驟 4 到 6）。
+
+**驗收條件**
+
+- §8.5.5 全部通過，而且 Phase 3 既有的閘門測試**沒有任何修改**。
+- `test` job 在 ubuntu 與 windows 上都通過；`canary` 的結果不論成敗都照實記錄。
+- 回報：兩個 OS 各自的測試數、略過數與略過原因、總耗時、驗收矩陣實際在哪些 OS 上執行。
+- 故意製造一次失敗（例如在分支上讓一支測試失敗），確認 CI 會變紅、會上傳 artifact；確認後刪除該分支。
+
 ### Phase 4 — 證據與 Workflow
 
 1. Playwright 證據：失敗時保存 trace.zip、截圖、console log（pytest-playwright 可用 `--tracing=retain-on-failure --screenshot=only-on-failure`；console log 需自行以 `page.on("console")` 收集），路徑寫入 `qa.artifact.path`。
@@ -687,7 +838,86 @@ tests/
 
 ---
 
+### 15.5 CI（Phase 3.5）
+
+#### 15.5.1 檔案
+
+`.github/workflows/ci.yml`
+
+#### 15.5.2 觸發條件
+
+- push 到任何分支、所有 pull request。
+- 同一分支有新的 push 時，取消正在執行的舊 run（`concurrency` + `cancel-in-progress: true`）。
+
+#### 15.5.3 Job
+
+**`test`（必須通過）**
+
+| 設定 | 值 |
+|---|---|
+| OS | `ubuntu-latest`、`windows-latest` |
+| Python | 固定為開發環境使用的版本（從 `.python-version` 或 `pyproject.toml` 讀取，不在 workflow 中寫死第二份） |
+| `fail-fast` | `false`（一個 OS 失敗時，另一個仍要跑完） |
+| `timeout-minutes` | 20 |
+
+步驟：
+
+1. checkout
+2. setup-python
+3. **從 lockfile 安裝**相依套件（使用 D13 選定的工具）
+4. 安裝 Playwright Chromium（Linux 加上 `--with-deps`）
+5. `pytest -m "not live"`，輸出 junit XML
+6. 執行 Phase 0 驗收矩陣：`python -m benchmark.matrix`
+7. 失敗時上傳 junit XML、矩陣結果，以及 `artifacts/` 中本次產生的內容
+
+若驗收矩陣在 Windows 上超過 10 分鐘，可改為只在 ubuntu 上執行，並在本節註明原因。
+
+**`canary`（不阻擋合併）**
+
+| 設定 | 值 |
+|---|---|
+| OS | `ubuntu-latest` |
+| Python | 比固定版本新的下一個版本；若尚未正式發布，使用 prerelease（`allow-prereleases: true`） |
+| `continue-on-error` | `true` |
+
+步驟同 `test` 的 1 到 5，但從 `pyproject.toml` 安裝而不是 lockfile（lockfile 可能綁定特定 Python 版本）。
+
+#### 15.5.4 真實 LLM 測試的排除
+
+- 在 `pyproject.toml` 註冊 marker `live`。
+- 所有會呼叫真實 LLM 的測試都要加上 `@pytest.mark.live`。
+- 雙重保護：`conftest.py` 在沒有 `GEMINI_API_KEY` 時，自動略過 `live` 測試。
+- workflow 中不得出現 `secrets.`。
+- 新增一個測試：掃描 `.github/workflows/*.yml`，確認沒有引用任何 secret。
+
+#### 15.5.5 平台相關的測試
+
+- 只適用於特定 OS 的測試，使用 `pytest.mark.skipif` 明確標示，不得在不適用的平台上「靜默通過」。
+- Phase 3 的路徑測試（大小寫、反斜線、`../` 穿越、絕對路徑）：
+  - 與平台無關的案例，兩個 OS 都要跑。
+  - 只在 Windows 成立的案例（例如大小寫不同視為同一路徑），在 Linux 上以 skipif 略過，並在略過原因中說明。
+
+#### 15.5.6 成本提醒
+
+- 公開 repo 使用 GitHub Actions 免費。
+- 私有 repo 有每月分鐘數限制，而 Windows runner 的分鐘數以 2 倍計算。若 repo 目前是私有的，要留意用量。
+
+---
+
 ## 16. README 定位（Phase 5 完成後）
+
+### 16.1 Phase 3.5 起的 README 內容
+
+**隔離等級說明**（可依實際狀態調整用詞）：
+
+> **Policy decides what an agent should be allowed to do. Isolation determines what it actually can do.**
+>
+> - Policy: tool-level allowlist in `config/agent_policy.yaml`, validated at startup, hash recorded in every trace
+> - Isolation: currently L0+ (see Known limitations); L1 planned in Phase 4
+
+**Badge**：只加 CI 狀態 badge。不寫「Python 3.x–3.y tested」之類的宣稱；CI 實際驗證的是一個 Python 版本、兩個作業系統，README 就照這樣寫。
+
+### 16.2 Phase 5 完成後的定位
 
 低調、有數字支撐，不寫無法證明的內容：
 
