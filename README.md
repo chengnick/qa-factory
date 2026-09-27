@@ -1,5 +1,7 @@
 # QA Factory
 
+[![CI](https://github.com/chengnick/qa-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/chengnick/qa-factory/actions/workflows/ci.yml)
+
 A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3.2).
 
 ## Current status: Phase 4 (evidence, Workflow Evaluator, L1 guard)

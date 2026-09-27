@@ -27,7 +27,7 @@ Spec v3.2 §13 Phase 4. Date 2026-09-27, Windows 11, Python 3.11, `requirements.
 | Phase 4 tests only | 74 passed, 63.2 s |
 | `python -m benchmark.matrix` | 120/120 cells match |
 
-Not verified yet: the new tests on ubuntu (CI has not run; the repo is not pushed).
+CI (after two CI-only fixes, see [../phase3_5/ci_acceptance.md](../phase3_5/ci_acceptance.md)): ubuntu 656 passed / 13 skipped, windows 668 passed / 1 skipped, Python 3.14 canary 656 passed / 13 skipped.
 
 ## Offline check on the Phase 2R runs
 

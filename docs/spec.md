@@ -18,7 +18,7 @@
 | 2.5 | 隔離最小修正、Artifact 保存、503 verdict、驗收紀錄補全 | ✅ `d4f7591` |
 | 2R | 交叉驗證 + 多輪執行，重新驗收 Phase 2 | ✅ `32c5e1e`（程式）、`fafe6d2`（結果） |
 | 3 | 失敗歸因、Agent 故障注入、安全事件 | ✅ 見 `benchmark/results/phase3/acceptance.md`；W01 / W03 延到 Phase 4 |
-| 3.5 | Policy 檔（權限設定外部化、hash 追蹤）、CI（ubuntu + windows） | 🔄 進行中 |
+| 3.5 | Policy 檔（權限設定外部化、hash 追蹤）、CI（ubuntu + windows） | ✅ 見 `benchmark/results/phase3_5/ci_acceptance.md` |
 | 4 | Playwright 證據、Workflow Evaluator、L1 隔離 | ✅ 見 `benchmark/results/phase4/acceptance.md`；L1 為行程內 audit hook（D22），container 模式未做 |
 | 5 | 正式評估（解封測試集）、最終報告 | ⏳ |
 | 6 | OTLP / OpenObserve / Dashboard（可選） | ⏳ |
