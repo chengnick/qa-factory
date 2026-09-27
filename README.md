@@ -1,8 +1,17 @@
 # QA Factory
 
-A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3).
+A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3.2).
 
-## Current status: Phase 3.5 (policy file, CI)
+## Current status: Phase 4 (evidence, Workflow Evaluator, L1 guard)
+
+- **Revision rounds** ([pipeline.py](pipeline.py)): the pipeline can run automation + QA again while tests fail, up to `max_rounds`, for an automation agent that declares `revises = True`. **The real AutomationAgent does not revise, so live runs have exactly one round** (prompt stays v3; an LLM-driven revision step would need a new prompt version and a dev-set re-run). Each round's tests are saved read-only to `generated/roundN/` and listed with sha256 and per-test results in `rounds.json`. Spans carry `qa.test.round`.
+- **Playwright evidence** ([generated/conftest.py](generated/conftest.py)): a failed UI test leaves `playwright/{call}/{test}/trace.zip`, `screenshot.png` and `console.log`; tool spans list what they produced in `qa.artifact.path`. The owner conftest's hash is in `meta.json` (`conftest_sha256`).
+- **Workflow Evaluator** ([evaluation/workflow.py](evaluation/workflow.py), spec v3 §9): deterministic rules over the whole run. W01 weakened test, W02 removed failing test, W03 expected value rewritten to the observed one, W04 executed security event, W05 missing or changed evidence in acceptance mode. Output `workflow_eval.json`, `WORKFLOW_VIOLATION` / `GOAL_DRIFT` security events. **It does not change the verdict**; it is reported next to it. Because live runs have one round, W01–W03 are shown on scripted histories ([testing/scripted_rounds.py](testing/scripted_rounds.py)), not on real model behaviour.
+- **L1 guard** ([tools/l1_guard.py](tools/l1_guard.py)): see *Isolation* below. In-process, not an OS sandbox.
+- **Final report**: every run ends with `report.json` (spec v3 §12). `python -m evaluation.report <run dirs> --out DIR` rebuilds reports for existing runs elsewhere.
+- **Offline check on the 30 Phase 2R runs**: no W01–W04 violation; W05 lists only the files later phases added (`security_events.json`, `classification.json`, `rounds.json`), as expected for the older layout.
+
+### Phase 3.5 (policy file, CI)
 
 - **Policy file** ([config/agent_policy.yaml](config/agent_policy.yaml), [permissions/policy.py](permissions/policy.py)): the permission table, protected and evidence paths, and the generated-code rules. Validated strictly at startup: an invalid policy stops the program before any run exists. Every permission check, allowed or denied, is a `qa.permission.check` span event and is counted in `meta.json`.
 - **CI** ([.github/workflows/ci.yml](.github/workflows/ci.yml)): runs the tests (`-m "not live"`) and the Phase 0 matrix on ubuntu-latest and windows-latest with the pinned Python version (`.python-version`) and `requirements.lock`, plus a non-blocking Python 3.14 canary. No real LLM, no secrets. CI verifies one Python version on two operating systems, nothing more.
@@ -114,35 +123,37 @@ pytest tests                       # flag mechanism + manifest consistency
 - **UI bugs are visible in the page source.** B05 and B10 are injected server-side by swapping JS snippets. The served page looks like naturally buggy code with no flag names, but a reader can still spot the bug by reading it.
 - **Weak identity.** Users are identified only by the `X-User` header. There is no real authentication.
 - **B01 needs multiple pages.** It only triggers when pagination has moved past the first page (`offset > 0`), so the single-page UI list is unaffected.
-- **Partial isolation only.** See *Isolation* below.
+- **Isolation is in-process.** The L1 guard is an audit hook, not an OS sandbox. See *Isolation* below.
 - **Policy write area is relative to the run's parent directory.** The `artifacts/` in the policy's `path_prefix` (`config/agent_policy.yaml`) is taken to be the parent directory of the run workspace. For real runs this is `<repo>/artifacts`; for tests with a temporary workspace it is the temporary parent. A workspace placed somewhere else therefore gets its write area there too.
 - **What cross-validation cannot tell** (spec v3 §6.4). It confirms that a failure depends on the bug switch, not that the failing test describes *that* bug. For example, with B04 enabled, an unrelated wrong test could fail on the 500 by chance. Phase 5's manual labels quantify this.
 - **R12 means "the failure is unrelated to the injected bug", not necessarily "the test is wrong".** Both builds failed, so the bug did not cause the failure. The test may be wrong, the requirement or API spec may be ambiguous, or the SUT may have an unlisted behaviour difference. Example: in `RUN-20260925-162242-4188` a test queried a task with a non-numeric id and expected `404`; the SUT answers `422`. REQ-007 only says "missing resource → 404", so this is spec ambiguity rather than a clearly wrong test (spec v3 §6.4).
 - **Results vary even at temperature 0.** In Phase 2R, REQ-005 + B02 was missed in rounds 1–2 and caught in rounds 3–5 with the same model, prompt and temperature 0. A single run says little about detection ability, which is why every combination runs at least 5 rounds and is reported with mean, range and a 95% CI.
 - **Clean runs cannot show a cross-validated false positive.** Both builds are clean, so a failing test is R12/R13, never R11. The main false-positive figure is therefore the **surface** rate: in real use there is no clean build to compare with, and the user sees the surface verdict.
 
-## Isolation (current level: L0+)
+## Isolation (current level: L1 as an in-process guard)
 
 > **Policy decides what an agent should be allowed to do. Isolation determines what it actually can do.**
 >
 > - Policy: tool-level allowlist in [config/agent_policy.yaml](config/agent_policy.yaml), validated at startup, hash recorded in every trace (`qa.policy.hash`) and in `meta.json` (`policy_hash`)
-> - Isolation: currently L0+ (see the table below and Known limitations); L1 planned in Phase 4
-
-
-Measured against spec v3 §8.2. Generated test code can still read and write local files until L1.
+> - Isolation: L1 **enforced in-process** by an audit hook in the test subprocess. It meets the L1 rules of spec v3 §8.2 (read-only repo and evidence, network only to the SUT) for code that goes through CPython's audited operations. It is **not** the restricted OS account that §8.2 describes, and it is not a sandbox.
 
 | Control | Status |
 |---|---|
 | Agents can reach tools only through the registry, with a parameter schema check | ✅ in-process (L0) |
-| `file_write` refuses paths outside the run's `generated/`, the owner conftest, and non-`.py` files | ✅ in-process check on the tool (L0) |
+| `file_write` refuses paths outside the run's `generated/`, the owner conftest, the round snapshots `generated/roundN/`, and non-`.py` files | ✅ in-process check on the tool (L0) |
 | Generated tests run in a subprocess whose working directory is the run workspace `artifacts/{run_id}/` | ✅ (L0+) |
 | The subprocess gets whitelisted environment variables only; `GEMINI_API_KEY`, other tokens and `PYTHONPATH` are dropped (tested in `tests/tools/test_pytest_isolation.py`) | ✅ (L0+) |
 | The workspace has its own `pytest.ini`, so the repo root is not on `sys.path` | ✅ (L0+) |
 | Permission gate per agent (spec v3 §8.1): tools per agent; `file_write` paths judged after `resolve()` + `normcase()` (own `generated/` → protected → evidence → other); `http_request` only to SUT paths. Refusals never execute and are recorded in `security_events.json` | ✅ Phase 3 (L0, in-process) |
 | Static check of generated test code (AST): allowed imports only; no `open` / `exec` / `eval` / `compile` / `__import__` / `getattr` / `__builtins__`; no `__dict__` / `__class__` / `__subclasses__`; no hard-coded non-SUT URLs. A violating file is not run (`AGENT_FAILED`, rule R18). **This is a check, not a sandbox**: determined code can get around it | ✅ Phase 3 (L0+) |
-| Network access from generated code is limited to the SUT | ❌ **not enforced** (L1, Phase 4) |
-| Restricting which paths generated code can read or write | ❌ **not enforced.** Generated code can open any absolute path the OS user can access, including `sut/`, `benchmark/`, `.env` and the reference tests |
-| Container with read-only mounts (L2) | ❌ |
+| Generated code can write only its own junit report, the Playwright evidence folder and a private temp dir; `sut/`, `benchmark/`, the run's own evidence and every other path are read-only; the repo `.env` cannot be read (tested in `tests/tools/test_l1_guard.py`) | ✅ Phase 4 (L1, **in-process audit hook**) |
+| Network from generated code: name lookups and connections only to the SUT | ✅ Phase 4 (L1, in-process audit hook) |
+| Network from the browser: every request that is not for the SUT is aborted by the page fixture (the browser runs outside Python) | ✅ Phase 4 (fixture route; the test code could remove it) |
+| Processes: only the Playwright driver may be started; `os.system`, exec, spawn, fork refused. Native code: no new libraries, no raw memory reads | ✅ Phase 4 (L1, in-process audit hook) |
+| What the L1 guard cannot stop: operations CPython does not audit (e.g. `_winapi.CreateFile` on Windows), functions of libraries loaded before the hook (pytest, colorama, httpx, trio are preloaded; colorama holds `kernel32`), and anything done by the browser process itself. Refusals are logged to a file the test could rewrite; the refusal itself is the protection | ⚠️ known gaps |
+| Restricted OS account / container with read-only mounts and an isolated network (L2) | ❌ (container mode proposed, not built) |
+
+Refusals raise `PermissionError` in the test, are recorded as `PERMISSION_DENIED` security events (`action: l1:<event>`, `executed: false`) and counted on the tool span (`qa.isolation.denials`). `report.json` states the level (`isolation_level`) and what it means (`isolation_note`). `PytestTool(isolation="L0+")` switches the guard off; the test suite uses that as a control to show the same write succeeding without it.
 
 The pipeline is one-way (tests run after the LLM has finished writing them), so test output never flows back into an LLM prompt.
 That limits what a test could leak to the model, but it is not a security boundary.

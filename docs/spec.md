@@ -1,6 +1,6 @@
-# QA Factory × AI Observability — 規格 v3.1
+# QA Factory × AI Observability — 規格 v3.2
 
-> 版本：v3.1（2026-09-27）。v3（2026-09-25）取代 `docs/spec-v2.md`；v3.1 併入「Phase 3.5 增補」（D14–D20、§8.5、§15.5、Phase 3.5）。本檔放在 `docs/spec.md`，之後改版只更新檔頭版本號，不再改檔名；repo 中不得同時存在兩份規格。
+> 版本：v3.2（2026-09-27）。v3.2 記錄 Phase 4 的實作決策（D21–D25）與 artifact 目錄補充。前一版 v3.1（2026-09-27）。v3（2026-09-25）取代 `docs/spec-v2.md`；v3.1 併入「Phase 3.5 增補」（D14–D20、§8.5、§15.5、Phase 3.5）。本檔放在 `docs/spec.md`，之後改版只更新檔頭版本號，不再改檔名；repo 中不得同時存在兩份規格。
 >
 > 定位：**證明這套系統抓得到 bug，並且分辨得出是產品壞了、測試壞了、Agent 壞了，還是外部服務或環境壞了。**
 >
@@ -19,7 +19,7 @@
 | 2R | 交叉驗證 + 多輪執行，重新驗收 Phase 2 | ✅ `32c5e1e`（程式）、`fafe6d2`（結果） |
 | 3 | 失敗歸因、Agent 故障注入、安全事件 | ✅ 見 `benchmark/results/phase3/acceptance.md`；W01 / W03 延到 Phase 4 |
 | 3.5 | Policy 檔（權限設定外部化、hash 追蹤）、CI（ubuntu + windows） | 🔄 進行中 |
-| 4 | Playwright 證據、Workflow Evaluator、L1 隔離 | ⏳ |
+| 4 | Playwright 證據、Workflow Evaluator、L1 隔離 | ✅ 見 `benchmark/results/phase4/acceptance.md`；L1 為行程內 audit hook（D22），container 模式未做 |
 | 5 | 正式評估（解封測試集）、最終報告 | ⏳ |
 | 6 | OTLP / OpenObserve / Dashboard（可選） | ⏳ |
 
@@ -75,6 +75,11 @@
 | D18 | CI 以**作業系統矩陣**為主（ubuntu、windows），Python 固定一個版本，另加一個不阻擋合併的預警版本 | 本專案是應用程式，不是函式庫；路徑正規化、`SYSTEMROOT` 等邏輯是 Windows 專屬，需要在兩種 OS 上驗證 |
 | D19 | CI 失敗不另建分類；不新增 `DEPENDENCY_ERROR`、`COMPATIBILITY_ERROR`、`CONFIGURATION_ERROR` | CI 失敗的原因由失敗的步驟名稱（install / test）即可判斷；不把 CI 的問題混進 QA run 的失敗分類 |
 | D20 | CI 不呼叫真實 LLM，workflow 中不得引用任何 secret | 確定性測試才適合 CI；避免 API key 外洩到 CI 環境 |
+| D21 | 修正輪次只建機制（`max_rounds`、`RevisionRequest`、`generated/roundN/`、`rounds.json`）；真實的 AutomationAgent 不修正，live run 只有一輪；W01–W03 以 `ScriptedRounds` 驗證 | 加入 LLM 修正步驟需要新 prompt 版本與開發集重跑，且會讓結果無法與 2R 比較；先把偵測機制做好 |
+| D22 | L1 以測試子行程內的 audit hook（`sys.addaudithook`）實作，標示為「行程內檢查，不是 OS 沙箱」；受限帳號不做，container 模式另議 | 受限帳號需要系統管理員權限與 OS 設定變更；audit hook 可在兩種 OS 的 CI 上驗證，但無法攔截未稽核的操作 |
+| D23 | Workflow Evaluator 的結果不改變 verdict，另外列在 `workflow_eval.json` 與 `report.json` | verdict 描述產品與測試的狀態；「測試被改弱」是流程問題，兩者混在一起會讓 verdict 失去意義 |
+| D24 | 分類器只判斷最後一輪的測試執行；前面輪次交給 Workflow Evaluator | verdict 描述 run 最後留下的測試；改測試的過程由 W01–W03 判斷 |
+| D25 | Playwright 證據每個失敗測試一個資料夾（`playwright/{call}/{test}/`），不是 §4.2 原本的單一檔案 | 同一次執行可能有多支 UI 測試失敗，交叉驗證也會再執行一次 |
 
 ---
 
@@ -146,10 +151,13 @@ artifacts/
     ├── pytest/
     │   ├── bug_build.log
     │   └── clean_build.log       # 交叉驗證用
-    ├── playwright/               # 僅 UI 測試
-    │   ├── trace.zip
-    │   ├── screenshot.png
-    │   └── console.log
+    ├── rounds.json               # 每一輪的檔案（sha256）與逐測試結果（Phase 4）
+    ├── reports/                  # junit 報告、L1 guard 記錄
+    ├── playwright/               # 僅 UI 測試，失敗時才保存（D25）
+    │   └── {call}/{test}/
+    │       ├── trace.zip
+    │       ├── screenshot.png
+    │       └── console.log
     ├── differential.json         # 交叉驗證結果（§6）
     ├── security_events.json      # §7
     ├── workflow_eval.json        # §9
@@ -386,7 +394,7 @@ Agent 的權限只能限制工具呼叫，限制不了**被執行的測試程式
 | L0 | 工具呼叫的路徑檢查 | ✅ |
 | L0+ | pytest 子行程改用環境變數白名單、專屬工作目錄 | ✅ Phase 2.5 |
 | L0+ | 產生程式碼的靜態檢查（AST）：只允許 `pytest`、`httpx`、`uuid`、`re`、`playwright` 的 import；禁止 `open`、`exec`、`eval`、`compile`、`__import__`、`getattr`、`__builtins__`，以及 `__dict__`、`__class__`、`__subclasses__` 屬性；禁止寫死的非 SUT 網址。違反時不執行，分類為 `AGENT/PERMISSION_DENIED`（R18），verdict 為 `AGENT_FAILED`。**這是檢查，不是沙箱**，可以被刻意繞過 | ✅ Phase 3 |
-| L1 | 子行程以受限帳號或受限 token 執行；對 `sut/`、`benchmark/`、`artifacts/` 只有讀取權限；網路只能連到 SUT | ⏳ Phase 4 |
+| L1 | 子行程以受限帳號或受限 token 執行；對 `sut/`、`benchmark/`、`artifacts/` 只有讀取權限；網路只能連到 SUT | ✅ Phase 4，**以行程內 audit hook 實作**（`tools/l1_guard.py`，D22）：寫入只限本次呼叫的 junit、Playwright 證據、私有暫存目錄；網路只限 SUT；只能啟動 Playwright driver。受限帳號未做；未稽核的操作（例如 Windows 的 `_winapi.CreateFile`）攔不住 |
 | L2 | 在 container 內執行，唯讀掛載，網路隔離 | 可選 |
 
 ### 8.3 環境變數白名單（L0+）
@@ -763,7 +771,8 @@ generated_code:        # Phase 3 的靜態檢查
 3. Workflow Evaluator（§9）。
 4. L1 隔離（§8.2）。
 5. 最終報告（§12）。
-6. **驗收條件**：
+6. **實作說明（v3.2）**：D21–D25。W03 的「觀察到的錯誤結果」判定方式：以 `assert <expr> <op> <literal>` 與 `expect(<expr>).to_*(<literal>)` 的字面值為期望值，依運算式原始碼配對；舊的期望值消失、新的期望值以獨立 token 出現在第 N 輪的失敗訊息中，才算成立（只新增檢查不算）。W05 的必要檔案依 run 實際發生的事決定（有 LLM 呼叫才要 `prompts/`、交叉驗證完成才要 `differential.json` 與兩份 log、UI 測試失敗才要 Playwright 證據），並以 sha256 檢查各輪快照未被改動。
+7. **驗收條件**：
    - §9.2 每條規則都有觸發與不觸發的測試
    - 用 `ScriptedRounds` 模擬的測試弱化情境，被 W01 抓到並標記 `GOAL_DRIFT`
    - L1 下，產生的測試程式無法寫入 `benchmark/` 與 `sut/`
@@ -913,7 +922,7 @@ tests/
 > **Policy decides what an agent should be allowed to do. Isolation determines what it actually can do.**
 >
 > - Policy: tool-level allowlist in `config/agent_policy.yaml`, validated at startup, hash recorded in every trace
-> - Isolation: currently L0+ (see Known limitations); L1 planned in Phase 4
+> - Isolation: L1 enforced in-process by an audit hook (not an OS sandbox); container mode not built
 
 **Badge**：只加 CI 狀態 badge。不寫「Python 3.x–3.y tested」之類的宣稱；CI 實際驗證的是一個 Python 版本、兩個作業系統，README 就照這樣寫。
 

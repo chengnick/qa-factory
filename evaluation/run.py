@@ -31,6 +31,7 @@ from evaluation import workflow as wf
 from evaluation.differential import SutFactory, run_differential
 from evaluation.metrics import compute
 from evaluation.provenance import conftest_sha256, git_commit, lockfile_sha256
+from evaluation.report import write_report
 from llm.client import LLMClient
 from observability.clock import Clock, SystemClock
 from observability.instrument import Instrumentation, RunContentSink
@@ -129,6 +130,7 @@ def record_workflow(workspace: Path, meta: dict[str, Any], workflow: dict[str, A
     meta["workflow"] = {"status": result["workflow_status"], "goal_drift": result["goal_drift"],
                         "violations": [v["rule"] for v in result["violations"]], "missing_evidence": len(missing)}  # fmt: skip
     write_meta(workspace, meta)
+    write_report(workspace)  # last: report.json summarises every other file (spec v3 §12)
 
 
 def record_policy(meta: dict[str, Any], policy: dict[str, Any] | None) -> None:

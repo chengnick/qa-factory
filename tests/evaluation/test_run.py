@@ -58,6 +58,10 @@ def test_run_dataset_copies_every_run_and_writes_summary(tmp_dir):
         assert workflow["acceptance_mode"] is True and workflow["missing_evidence"] == [], workflow
         assert workflow["workflow_status"] == "PASS" and workflow["rules_checked"] == ["W01", "W02", "W03", "W04", "W05"]
         assert json.loads((copied / "meta.json").read_text(encoding="utf-8"))["workflow"]["status"] == "PASS"
+        report = json.loads((copied / "report.json").read_text(encoding="utf-8"))  # spec v3 §12
+        assert report["run_id"] == r["run_id"] and report["verdict"] == r["verdict"]
+        assert report["isolation_level"] == "L1" and report["artifacts_complete"] is True
+        assert report["differential"]["status"] == "COMPLETE" and report["security"] == {"events": 0, "breach": False}
     # The dry-run test passes on both builds: bugged runs are MISSED, clean runs PASS.
     assert [r["verdict"] for r in runs] == ["MISSED", "PASS", "MISSED", "PASS"]
     m = summary["metrics"]
