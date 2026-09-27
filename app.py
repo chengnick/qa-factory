@@ -26,7 +26,16 @@ from pathlib import Path
 
 from agents.contracts import RequirementInput
 from benchmark.datasets import TEST_BUGS
-from evaluation.run import base_meta, execute_run, instrumentation, record_classification, record_policy, record_security, write_meta
+from evaluation.run import (
+    base_meta,
+    execute_run,
+    instrumentation,
+    record_classification,
+    record_policy,
+    record_rounds,
+    record_security,
+    write_meta,
+)
 from permissions.policy import DEFAULT_POLICY_PATH, Policy, PolicyError, load_policy
 from llm.client import LLMConfigError
 from pipeline import run_pipeline
@@ -95,6 +104,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str], policy: Policy) -> 
     record_classification(workspace, meta, result.classification, result.underlying_verdict)
     record_security(workspace, meta, result.security)
     record_policy(meta, result.policy)
+    record_rounds(workspace, meta, result.rounds)
     write_meta(workspace, meta)
     return workspace, meta
 

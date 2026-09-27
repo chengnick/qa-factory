@@ -44,6 +44,11 @@ def test_fake_run_writes_trace_and_run_record(tmp_dir):
     assert meta["prompt_version"] == "v3" and meta["dataset"] == "clean"
     assert set(meta["git_commit"]) == {"sha", "dirty"}
     assert "lockfile_sha256" in meta
+    assert len(meta["conftest_sha256"]) == 64
+    assert meta["revision_rounds"] == 1
+    rounds = json.loads((run_dir / "rounds.json").read_text(encoding="utf-8"))["rounds"]
+    assert [r["round"] for r in rounds] == [1]
+    assert {f["snapshot"] for f in rounds[0]["files"]} == {"generated/round1/test_req005_api.py", "generated/round1/test_req005_ui.py"}
     assert sorted(p.name for p in (run_dir / "prompts").iterdir())  # LLM inputs/outputs kept
     root = _root(trace)
     assert root["attributes"]["qa.run.id"] == run_dir.name  # run_id <-> trace_id both ways

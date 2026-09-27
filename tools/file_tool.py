@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from tools.registry import ToolArgumentError, ToolResult
 
 GENERATED = "generated"
 PROTECTED_NAMES = {"conftest.py"}  # the owner-written fixtures in generated/ are read-only for agents
+ROUND_DIR = re.compile(r"^round\d+$")  # generated/roundN/: the pipeline's per-round snapshots (evidence)
 
 
 def resolve_generated(root: Path, path: str) -> Path:
@@ -25,6 +27,9 @@ class FileWriteTool:
 
     def __call__(self, path: str, content: str) -> ToolResult:
         target = resolve_generated(self.root, path)
+        inner = target.relative_to((self.root / GENERATED).resolve()).parts
+        if len(inner) > 1 and ROUND_DIR.match(inner[0]):
+            raise ToolArgumentError(f"{GENERATED}/{inner[0]}/ holds the pipeline's round snapshots and is read-only for agents")
         if target.name in PROTECTED_NAMES:
             raise ToolArgumentError(f"{target.name} is owner-maintained and read-only for agents")
         if target.suffix != ".py":

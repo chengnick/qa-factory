@@ -322,6 +322,7 @@ class TracedToolRegistry:
 
     def __init__(self, registry: ToolRegistry, inst: Instrumentation, guard: Guard | None = None) -> None:
         self._registry, self._inst, self._guard = registry, inst, guard
+        self.round: int | None = None  # set by the pipeline: every tool span of that round gets qa.test.round
 
     def names(self) -> list[str]:
         return self._registry.names()
@@ -334,6 +335,8 @@ class TracedToolRegistry:
         attrs: dict[str, Any] = {"gen_ai.operation.name": "execute_tool", "gen_ai.tool.name": name, "qa.tool.name": name}
         if agent is not None:
             attrs["qa.agent.name"] = agent
+        if self.round is not None:
+            attrs["qa.test.round"] = self.round
         # Recorded before the call so a tool that raises (e.g. SUT down) still says what it targeted.
         for key in ("method", "route"):
             if isinstance(args.get(key), str):
@@ -362,6 +365,10 @@ class TracedToolRegistry:
         for key in ("method", "route", "status_code"):
             if key in result.data:
                 span.set_attribute(f"qa.http.{key}", result.data[key])
+        # Files this call left in the run directory (spec v3 §4.4): junit report, Playwright evidence folders.
+        produced = [p for p in (result.data.get("junit"), *result.data.get("evidence", ())) if isinstance(p, str)]
+        if produced:
+            span.set_attribute("qa.artifact.path", produced)
         results = result.data.get("results") or []
         if results:
             span.set_attribute("qa.test.count", len(results))
@@ -395,7 +402,8 @@ class AgentTools:
     def call(self, name: str, **args: Any) -> ToolResult:
         from tools.registry import RepeatedToolCallError
 
-        key = json.dumps([name, args], sort_keys=True, default=str)
+        # A new revision round rewrites the files, so the same arguments are a new call there.
+        key = json.dumps([name, args, self._traced.round], sort_keys=True, default=str)
 
         def precheck() -> None:
             if self._failures.get(key, 0) >= self.MAX_IDENTICAL_FAILURES:
@@ -424,8 +432,12 @@ class TracedAgent(Generic[In, Out]):
         self._agent, self._inst, self._output_attributes = agent, inst, output_attributes
         self.name: str = agent.name
 
-    def run(self, inp: In) -> Out:
-        with start_span(self._inst, f"agent.{self.name}", {"qa.agent.name": self.name}) as span:
+    @property
+    def inner(self) -> Any:
+        return self._agent
+
+    def run(self, inp: In, attributes: Mapping[str, Any] | None = None) -> Out:
+        with start_span(self._inst, f"agent.{self.name}", {"qa.agent.name": self.name, **(attributes or {})}) as span:
             out = self._agent.run(inp)
             if self._output_attributes:
                 span.set_attributes(dict(self._output_attributes(out)))

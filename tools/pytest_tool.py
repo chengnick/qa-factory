@@ -49,8 +49,10 @@ ENV_WHITELIST = (
 )
 
 
-def subprocess_env(sut_url: str) -> dict[str, str]:
+def subprocess_env(sut_url: str, evidence_dir: Path | None = None) -> dict[str, str]:
     env = {name: os.environ[name] for name in ENV_WHITELIST if name in os.environ}
+    if evidence_dir is not None:  # read by the page fixture in generated/conftest.py
+        env["QA_PLAYWRIGHT_DIR"] = str(evidence_dir)
     env.update(
         {
             "SUT_BASE_URL": sut_url,
@@ -122,13 +124,17 @@ def junit_tests(path: Path, root: Path) -> list[dict[str, str]]:
 
 
 class PytestTool:
-    def __init__(self, root: Path, sut_url: str, *, timeout_s: float = 120.0, enforce_policy: bool = True, policy: Any = None) -> None:
+    def __init__(
+        self, root: Path, sut_url: str, *, timeout_s: float = 120.0, enforce_policy: bool = True, policy: Any = None, evidence: bool = False
+    ) -> None:
         self.root = root  # the run workspace
         self.sut_url = sut_url
         self.timeout_s = timeout_s
         # Tests of the isolation layer itself switch the code policy off to probe the environment directly.
         self.enforce_policy = enforce_policy
         self.policy = policy  # None -> the default policy file
+        # Playwright evidence of failed UI tests goes to playwright/{junit stem}/{test}/ (one folder per call).
+        self.evidence = evidence
 
     def __call__(self, paths: list[str]) -> ToolResult:
         if not paths:
@@ -147,6 +153,7 @@ class PytestTool:
         reports = self.root / "reports"
         reports.mkdir(exist_ok=True)
         junit = reports / f"junit-{Path(rel[0]).stem}-{secrets.token_hex(3)}.xml"
+        evidence_dir = self.root / "playwright" / junit.stem.removeprefix("junit-") if self.evidence else None
         ini = ensure_pytest_ini(self.root)
         cmd = [
             sys.executable, "-m", "pytest", *rel, "-q", "-p", "no:cacheprovider",
@@ -156,7 +163,7 @@ class PytestTool:
             proc = subprocess.run(
                 cmd,
                 cwd=self.root,
-                env=subprocess_env(self.sut_url),
+                env=subprocess_env(self.sut_url, evidence_dir),
                 capture_output=True,
                 text=True,
                 timeout=self.timeout_s,
@@ -174,6 +181,8 @@ class PytestTool:
             "junit": junit.relative_to(self.root).as_posix(),
             "results": junit_tests(junit, self.root),
         }
+        if evidence_dir is not None and evidence_dir.is_dir():
+            data["evidence"] = sorted(d.relative_to(self.root).as_posix() for d in evidence_dir.iterdir() if d.is_dir())
         return ToolResult(
             ok=proc.returncode == 0,
             exit_code=proc.returncode,

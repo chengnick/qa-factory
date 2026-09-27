@@ -8,6 +8,7 @@ The verdict is decided at the end of the run by classification/ from the run's o
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -15,7 +16,7 @@ from typing import Any
 
 from agents.automation import AutomationAgent
 from agents.base import AgentDeps
-from agents.contracts import AutomationResult, Report, RequirementInput
+from agents.contracts import AutomationResult, QAResult, Report, RequirementInput, RevisionRequest
 from agents.qa import QAAgent
 from agents.report import ReportAgent
 from agents.requirement import RequirementAgent
@@ -30,6 +31,7 @@ from permissions.gate import PermissionGate
 from permissions.policy import Policy, default_policy
 from security.events import SecurityRecorder
 from tools.registry import NO_RETRY, RetryPolicy, ToolRegistry
+from tools.workspace import snapshot_round
 
 
 @dataclass(frozen=True)
@@ -44,6 +46,7 @@ class PipelineResult:
     classification: dict[str, Any] | None = None  # {"surface": Outcome json, "final": Outcome json | None}
     security: dict[str, Any] | None = None  # security_events.json content: {"run_id", "breach", "events"}
     policy: dict[str, Any] | None = None  # {"hash", "path", "permission_checks", "allowed", "denied"}
+    rounds: list[dict[str, Any]] = dataclasses.field(default_factory=list)  # rounds.json: files and test results per round
 
 
 # Evaluation hook: given the final generated tests, cross-validate them (evaluation/differential.py).
@@ -66,9 +69,17 @@ def run_pipeline(
     sut_url: str | None = None,
     agents: Mapping[str, Callable[[AgentDeps], Any]] | None = None,
     policy: Policy | None = None,
+    max_rounds: int = 1,
 ) -> PipelineResult:
     """`agents` replaces individual agents by name (test doubles such as testing.fake_agent.ScriptedAgent);
-    a replacement receives that agent's own gated deps, so the permission table still applies to it."""
+    a replacement receives that agent's own gated deps, so the permission table still applies to it.
+
+    Rounds (spec v3 §9): round 1 is automation + QA. While round N had a failing test, fewer than `max_rounds`
+    rounds ran and the automation agent declares `revises = True`, round N+1 hands it a RevisionRequest and
+    runs QA again. The real AutomationAgent does not revise, so live runs have exactly one round. Each round's
+    tests are snapshotted to generated/roundN/ (when a workspace is given) and listed in `rounds`."""
+    if max_rounds < 1:
+        raise ValueError("max_rounds must be at least 1")
     if inst.collector is None:
         raise ValueError("Instrumentation needs a span collector (observability.setup.new_instrumentation) to classify the run")
     security = SecurityRecorder(run_id)
@@ -96,9 +107,23 @@ def run_pipeline(
         report: Report | None = None
         error: str | None = None
         diff = None
+        rounds: list[dict[str, Any]] = []
         try:
-            automation = automation_agent.run(design_agent.run(requirement_agent.run(requirement)))
-            report = report_agent.run(qa_agent.run(automation))
+            plan = design_agent.run(requirement_agent.run(requirement))
+            revises = bool(getattr(automation_agent.inner, "revises", False))
+            request: Any = plan
+            while True:
+                n = len(rounds) + 1
+                traced_tools.round = n
+                automation = automation_agent.run(request, {"qa.test.round": n})
+                rounds.append(_start_round(n, automation, workspace))
+                qa = qa_agent.run(automation, {"qa.test.round": n})
+                rounds[-1]["results"] = _round_results(qa)
+                if n >= max_rounds or not revises or not _has_failures(rounds[-1]["results"]):
+                    break
+                request = RevisionRequest(plan, automation, qa, n + 1)
+            traced_tools.round = None
+            report = report_agent.run(qa)
         except Exception as exc:  # classified from the trace below; an unmatched exception becomes UNKNOWN
             run.fail(exc)
             error = f"{type(exc).__name__}: {exc}"
@@ -108,7 +133,25 @@ def run_pipeline(
         run.set_attribute("qa.policy.hash", policy.hash)
         run.set_attribute("qa.policy.path", policy.display_path)
         result = _conclude(run, inst, report, error, diff, security, bugs_enabled=bool(sut_bugs))
-        return dataclasses.replace(result, policy={"hash": policy.hash, "path": policy.display_path, **gate.stats})
+        return dataclasses.replace(result, policy={"hash": policy.hash, "path": policy.display_path, **gate.stats}, rounds=rounds)
+
+
+def _start_round(n: int, automation: AutomationResult, workspace: Path | None) -> dict[str, Any]:
+    files = [(f.path, f.content) for f in automation.files]
+    if workspace is not None:
+        saved = snapshot_round(workspace, n, files)
+    else:  # fake tools without a workspace: nothing on disk, keep the hashes only
+        saved = [{"path": p, "snapshot": None, "sha256": hashlib.sha256(c.encode("utf-8")).hexdigest()} for p, c in files]
+    return {"round": n, "files": saved, "results": []}
+
+
+def _round_results(qa: QAResult) -> list[dict[str, Any]]:
+    """Per-test outcomes of one round, as the runners reported them (node_id, outcome, message, tool)."""
+    return [{**r, "tool": e.tool} for e in qa.executions for r in e.data.get("results", ())]
+
+
+def _has_failures(results: list[dict[str, Any]]) -> bool:
+    return any(r["outcome"] in ("FAIL", "ERROR") for r in results)
 
 
 def _conclude(

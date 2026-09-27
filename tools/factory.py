@@ -17,5 +17,5 @@ def real_tools(workspace: Path, sut_url: str, policy: Policy | None = None) -> T
     registry.register("file_write", FileWriteTool(workspace))
     registry.register("pytest", PytestTool(workspace, sut_url, timeout_s=120, policy=policy))
     registry.register("http_request", HttpTool(sut_url))
-    registry.register("playwright", PytestTool(workspace, sut_url, timeout_s=180, policy=policy))
+    registry.register("playwright", PytestTool(workspace, sut_url, timeout_s=180, policy=policy, evidence=True))
     return registry

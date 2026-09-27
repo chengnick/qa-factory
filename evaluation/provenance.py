@@ -28,3 +28,14 @@ def git_commit(repo: Path = REPO_ROOT) -> dict[str, object]:
 
 def lockfile_sha256(path: Path = LOCKFILE) -> str | None:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+
+
+OWNER_CONFTEST = REPO_ROOT / "generated" / "conftest.py"
+
+
+def conftest_sha256(path: Path = OWNER_CONFTEST) -> str | None:
+    """The owner-written fixtures change what generated tests can do (Phase 4: Playwright evidence) without a
+    prompt change, so their hash is recorded next to the prompt version. Line endings normalised to LF."""
+    if not path.is_file():
+        return None
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()

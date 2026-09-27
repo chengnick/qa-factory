@@ -72,6 +72,20 @@ class QAResult:
 
 
 @dataclass(frozen=True)
+class RevisionRequest:
+    """Input of revision round `round` (2, 3, ...): the plan, the previous round's files and what running them gave.
+
+    Only an automation agent with `revises = True` receives it (spec v3 §9; Phase 4 has no LLM-driven reviser,
+    testing.scripted_rounds.ScriptedRounds plays one).
+    """
+
+    plan: TestPlan
+    previous: AutomationResult
+    qa: QAResult
+    round: int
+
+
+@dataclass(frozen=True)
 class Report:
     """Human-readable summary. The verdict is not decided here: classification/ derives it from the trace."""
 

@@ -29,7 +29,7 @@ from agents.version import PROMPT_VERSION
 from benchmark.datasets import DEV_COMBINATIONS, dataset_of
 from evaluation.differential import SutFactory, run_differential
 from evaluation.metrics import compute
-from evaluation.provenance import git_commit, lockfile_sha256
+from evaluation.provenance import conftest_sha256, git_commit, lockfile_sha256
 from llm.client import LLMClient
 from observability.clock import Clock, SystemClock
 from observability.instrument import Instrumentation, RunContentSink
@@ -83,6 +83,7 @@ def base_meta(
         "sut_bugs": list(sut_bugs),
         "git_commit": git_commit(),
         "lockfile_sha256": lockfile_sha256(),
+        "conftest_sha256": conftest_sha256(),
         "policy_hash": policy.hash,
         "policy_path": policy.display_path,
         "started_at": _now(),
@@ -91,6 +92,12 @@ def base_meta(
 
 def write_meta(workspace: Path, meta: dict[str, Any]) -> None:
     (workspace / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def record_rounds(workspace: Path, meta: dict[str, Any], rounds: list[dict[str, Any]]) -> None:
+    """rounds.json: per revision round, the snapshotted files (generated/roundN/) and the test results."""
+    (workspace / "rounds.json").write_text(json.dumps({"rounds": rounds}, ensure_ascii=False, indent=2), encoding="utf-8")
+    meta["revision_rounds"] = len(rounds)
 
 
 def record_policy(meta: dict[str, Any], policy: dict[str, Any] | None) -> None:
@@ -210,6 +217,7 @@ def execute_run(
     record_classification(workspace, meta, result.classification, result.underlying_verdict)
     record_security(workspace, meta, result.security)
     record_policy(meta, result.policy)
+    record_rounds(workspace, meta, result.rounds)
     write_meta(workspace, meta)
     return workspace, meta
 
