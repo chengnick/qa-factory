@@ -41,9 +41,11 @@ PATH_EVENTS = {  # event -> indexes of path arguments that must stay inside the 
     "os.setxattr": (0,), "os.removexattr": (0,), "shutil.rmtree": (0,), "shutil.copyfile": (1,),
     "shutil.copymode": (1,), "shutil.copystat": (1,), "shutil.chown": (0,), "shutil.move": (0, 1),
 }  # fmt: skip
+# Starting a program: allowed only for the Playwright driver (config["exec"]). subprocess.Popen raises its own event and,
+# depending on the Python version and OS, then os.posix_spawn (3.14 on Linux) or os.exec / os.spawn.
+PROCESS_EVENTS = {"subprocess.Popen", "os.posix_spawn", "os.posix_spawnp", "os.exec", "os.spawn"}
 REFUSED = {
-    "os.link", "os.symlink", "_winapi.CreateJunction", "os.system", "os.exec", "os.spawn", "os.posix_spawn",
-    "os.startfile", "os.fork", "os.forkpty", "ctypes.dlopen", "ctypes.cdata", "ctypes.cdata/buffer",
+    "os.link", "os.symlink", "_winapi.CreateJunction", "os.system", "os.startfile", "os.fork", "os.forkpty", "ctypes.dlopen", "ctypes.cdata", "ctypes.cdata/buffer",
     "ctypes.string_at", "ctypes.wstring_at",
     "_winapi.OpenProcess", "_winapi.TerminateProcess", "os.kill", "os.killpg", "signal.pthread_kill",
     "winreg.ConnectRegistry", "winreg.CreateKey", "winreg.DeleteKey", "winreg.DeleteValue", "winreg.LoadKey",
@@ -96,10 +98,10 @@ class Guard:
             for i in PATH_EVENTS[event]:
                 if i < len(args) and (path := _norm(args[i])) is not None and not _inside(path, self.write_roots):
                     self._deny(event, path, "outside the write roots")
-        elif event in REFUSED or event.startswith("os.exec") or event.startswith("os.spawn"):
+        elif event in REFUSED:
             self._deny(event, _describe(args), "refused at L1")
-        elif event == "subprocess.Popen":
-            program = args[0] if args[0] else (args[1][0] if isinstance(args[1], (list, tuple)) and args[1] else args[1])
+        elif event in PROCESS_EVENTS or event.startswith(("os.exec", "os.spawn")):
+            program = _program(args)
             path = _norm(program) if isinstance(program, (str, bytes, os.PathLike)) else None
             if path is None or not _inside(path, self.exec_roots):
                 self._deny(event, str(program), "only the Playwright driver may be started")
@@ -143,6 +145,16 @@ class Guard:
             except OSError:
                 pass
         raise PermissionError(f"L1 guard refused {event} {target!r}: {reason}")
+
+
+def _program(args: tuple[Any, ...]) -> Any:
+    """The program a process event starts: an explicit executable/path, else argv[0]."""
+    if not args:
+        return None
+    if args[0]:
+        return args[0]
+    argv = args[1] if len(args) > 1 else None
+    return argv[0] if isinstance(argv, (list, tuple)) and argv else argv
 
 
 def _resolve(host: str, port: int) -> list[Any]:

@@ -223,3 +223,22 @@ def test_refusals_become_security_events(harness, workspace, sut_url, repo_probe
 def test_unknown_isolation_level_is_rejected(workspace, sut_url):
     with pytest.raises(ValueError):
         PytestTool(workspace, sut_url, isolation="L9")
+
+
+# --------------------------------------------------------------------------- process events per Python version
+
+
+@pytest.mark.parametrize("event", ["subprocess.Popen", "os.posix_spawn", "os.posix_spawnp", "os.exec", "os.spawn"])
+def test_process_events_allow_only_the_playwright_driver(tmp_dir, event):
+    """Python 3.14 on Linux starts subprocesses with os.posix_spawn after the subprocess.Popen event (CI canary, run #2)."""
+    from tools.l1_guard import Guard
+
+    driver = tmp_dir / "driver"
+    driver.mkdir()
+    node = driver / "node"
+    guard = Guard({"write": [], "exec": [str(driver)], "sut_host": "127.0.0.1", "sut_port": 1})
+
+    guard(event, (str(node), [str(node), "cli.js", "run-driver"], {}))  # allowed
+    guard(event, (None, [str(node), "cli.js"], {}))  # program taken from argv[0]
+    with pytest.raises(PermissionError, match="only the Playwright driver"):
+        guard(event, (str(tmp_dir / "sh"), [str(tmp_dir / "sh"), "-c", "id"], {}))
