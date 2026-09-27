@@ -3,14 +3,16 @@
 `playwright` is the same runner restricted to UI test files; the browser is driven by the
 Playwright fixtures in generated/conftest.py.
 
-Isolation (partial L1, see README): the subprocess runs in the per-run workspace with its own
-pytest.ini, and gets only whitelisted environment variables, so secrets such as GEMINI_API_KEY and
-PYTHONPATH never reach generated code. There is no filesystem sandbox: generated code can still open
-any path the OS user can read or write.
+Isolation (see README): the subprocess runs in the per-run workspace with its own pytest.ini, and gets
+only whitelisted environment variables, so secrets such as GEMINI_API_KEY and PYTHONPATH never reach
+generated code (L0+). With isolation="L1" (the default) it also installs tools/l1_guard.py, an audit hook
+that limits writes to this call's own files, network to the SUT and processes to the Playwright driver.
+That guard is an in-process check, not an OS sandbox (tools/l1_guard.py says what it cannot stop).
 """
 
 from __future__ import annotations
 
+import json
 import os
 import secrets
 import subprocess
@@ -18,6 +20,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from tools.file_tool import resolve_generated
 from observability.redact import redact
@@ -26,6 +29,56 @@ from tools.registry import PermissionDeniedError, ToolArgumentError, ToolResult,
 from tools.workspace import ensure_pytest_ini
 
 STDOUT_LIMIT = 20_000
+REPO_ROOT = Path(__file__).resolve().parents[1]
+GUARD = Path(__file__).resolve().with_name("l1_guard.py")
+ISOLATION_LEVELS = ("L0+", "L1")
+# Runs in the child: import pytest and the libraries tests may use (on Windows colorama, click and others load
+# system DLLs through ctypes at import, which the guard refuses afterwards), load the guard by path (the repo
+# never goes on sys.path), install it, then run pytest. platform.platform() fills platform's cache first: on Windows
+# it would otherwise start `cmd /c ver` from inside the test run.
+PRELOAD = ("colorama", "httpx", "trio")  # trio (pulled in by the HTTP stack when installed) probes libc at import
+BOOT = (
+    "import importlib.util as u, json, platform, sys; import pytest; platform.platform(); "
+    "[__import__(n) for n in {preload!r} if u.find_spec(n.split('.')[0])]; "
+    "s = u.spec_from_file_location('qa_l1_guard', {guard!r}); m = u.module_from_spec(s); s.loader.exec_module(m); "
+    "m.install(json.loads({config!r})); del u, s, m; "
+    "sys.exit(pytest.main(sys.argv[1:]))"
+)
+
+
+def playwright_driver_dir() -> Path | None:
+    try:
+        import playwright
+    except ImportError:
+        return None
+    return Path(playwright.__file__).resolve().parent / "driver"
+
+
+def guard_config(*, sut_url: str, write: list[Path], log: Path) -> dict[str, Any]:
+    parts = urlsplit(sut_url)
+    driver = playwright_driver_dir()
+    return {
+        "write": [str(p) for p in write],
+        "deny_read": [str(REPO_ROOT / ".env")],
+        "exec": [str(driver)] if driver else [],
+        "sut_host": parts.hostname or "",
+        "sut_port": parts.port or (443 if parts.scheme == "https" else 80),
+        "log": str(log),
+    }
+
+
+def read_denials(log: Path) -> list[dict[str, str]]:
+    if not log.is_file():
+        return []
+    denials = []
+    for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(entry, dict):
+            denials.append({k: str(entry.get(k, "")) for k in ("event", "target", "reason")})
+    return denials
 
 # The only variables passed through from the parent environment: what Python, the OS and the
 # Playwright browser cache need to start. Everything else (API keys, tokens, PYTHONPATH) is dropped.
@@ -125,9 +178,20 @@ def junit_tests(path: Path, root: Path) -> list[dict[str, str]]:
 
 class PytestTool:
     def __init__(
-        self, root: Path, sut_url: str, *, timeout_s: float = 120.0, enforce_policy: bool = True, policy: Any = None, evidence: bool = False
+        self,
+        root: Path,
+        sut_url: str,
+        *,
+        timeout_s: float = 120.0,
+        enforce_policy: bool = True,
+        policy: Any = None,
+        evidence: bool = False,
+        isolation: str = "L1",
     ) -> None:
+        if isolation not in ISOLATION_LEVELS:
+            raise ValueError(f"isolation must be one of {ISOLATION_LEVELS}, got {isolation!r}")
         self.root = root  # the run workspace
+        self.isolation = isolation
         self.sut_url = sut_url
         self.timeout_s = timeout_s
         # Tests of the isolation layer itself switch the code policy off to probe the environment directly.
@@ -153,17 +217,30 @@ class PytestTool:
         reports = self.root / "reports"
         reports.mkdir(exist_ok=True)
         junit = reports / f"junit-{Path(rel[0]).stem}-{secrets.token_hex(3)}.xml"
-        evidence_dir = self.root / "playwright" / junit.stem.removeprefix("junit-") if self.evidence else None
+        call = junit.stem.removeprefix("junit-")
+        evidence_dir = self.root / "playwright" / call if self.evidence else None
         ini = ensure_pytest_ini(self.root)
-        cmd = [
-            sys.executable, "-m", "pytest", *rel, "-q", "-p", "no:cacheprovider",
-            "-c", str(ini), "--rootdir", str(self.root), f"--junitxml={junit}",
-        ]  # fmt: skip
+        args = [*rel, "-q", "-p", "no:cacheprovider", "-c", str(ini), "--rootdir", str(self.root), f"--junitxml={junit}"]
+        env = subprocess_env(self.sut_url, evidence_dir)
+        guard_log = reports / f"l1-{call}.log"
+        if evidence_dir is not None:
+            evidence_dir.mkdir(parents=True)  # created here: under L1 the child may write inside it, not create it
+        if self.isolation == "L1":
+            # A private temp dir per call: the guard lets the test write there, not in the shared system temp.
+            private_tmp = self.root / "tmp" / call
+            private_tmp.mkdir(parents=True)
+            env.update(dict.fromkeys(("TEMP", "TMP", "TMPDIR"), str(private_tmp)))  # all three are whitelisted names
+            write = [junit, guard_log, private_tmp, *([evidence_dir] if evidence_dir else [])]
+            config = json.dumps(guard_config(sut_url=self.sut_url, write=write, log=guard_log))
+            preload = [*PRELOAD, *(["playwright.sync_api"] if self.evidence else [])]
+            cmd = [sys.executable, "-B", "-c", BOOT.format(guard=str(GUARD), config=config, preload=preload), *args]
+        else:
+            cmd = [sys.executable, "-m", "pytest", *args]
         try:
             proc = subprocess.run(
                 cmd,
                 cwd=self.root,
-                env=subprocess_env(self.sut_url, evidence_dir),
+                env=env,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout_s,
@@ -181,6 +258,9 @@ class PytestTool:
             "junit": junit.relative_to(self.root).as_posix(),
             "results": junit_tests(junit, self.root),
         }
+        data["isolation"] = self.isolation
+        if denials := read_denials(guard_log):
+            data["l1_denials"] = denials
         if evidence_dir is not None and evidence_dir.is_dir():
             data["evidence"] = sorted(d.relative_to(self.root).as_posix() for d in evidence_dir.iterdir() if d.is_dir())
         return ToolResult(

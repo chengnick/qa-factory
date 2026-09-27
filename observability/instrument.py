@@ -355,7 +355,19 @@ class TracedToolRegistry:
             else:
                 result, attempts = invoke(), 1
             self._annotate(span, result)
+            self._record_l1_denials(agent, name, result)
             return dataclasses.replace(result, attempts=attempts)
+
+    L1_EVENT_LIMIT = 20
+
+    def _record_l1_denials(self, agent: str | None, tool: str, result: ToolResult) -> None:
+        """What the L1 guard refused inside the test subprocess becomes PERMISSION_DENIED events (never executed)."""
+        denials = result.data.get("l1_denials") or []
+        if self._inst.security is None:
+            return
+        for d in denials[: self.L1_EVENT_LIMIT]:
+            self._inst.security.record("PERMISSION_DENIED", agent=agent, action=f"l1:{d['event']}", target=d["target"], executed=False,
+                                       evidence=f"{tool}: generated test code: {d['reason']}")  # fmt: skip
 
     def _annotate(self, span: Span, result: ToolResult) -> None:
         if result.command is not None:
@@ -369,6 +381,10 @@ class TracedToolRegistry:
         produced = [p for p in (result.data.get("junit"), *result.data.get("evidence", ())) if isinstance(p, str)]
         if produced:
             span.set_attribute("qa.artifact.path", produced)
+        if isinstance(result.data.get("isolation"), str):
+            span.set_attribute("qa.isolation.level", result.data["isolation"])
+        if denials := result.data.get("l1_denials"):
+            span.set_attribute("qa.isolation.denials", len(denials))
         results = result.data.get("results") or []
         if results:
             span.set_attribute("qa.test.count", len(results))

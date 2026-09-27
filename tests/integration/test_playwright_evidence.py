@@ -15,6 +15,7 @@ from pipeline import run_pipeline
 from sut.launcher import running_sut
 from testing.fake_llm import FakeLLM
 from tools.factory import real_tools
+from tools.pytest_tool import PytestTool
 
 REPO = Path(__file__).resolve().parents[2]
 
@@ -75,6 +76,27 @@ def test_failed_ui_test_keeps_trace_screenshot_and_console(harness, root):
     assert paths[0].startswith("reports/junit-") and paths[0].endswith(".xml")
     assert paths[1:] == [folder.relative_to(root).as_posix()]
     assert all((root / p).exists() for p in paths)
+    # Under L1 the Playwright driver, asyncio's self-pipe and the SUT connection are all allowed: no refusals.
+    assert span.attributes["qa.isolation.level"] == "L1" and "qa.isolation.denials" not in span.attributes
+
+
+BROWSER_ESCAPE = """
+import pytest
+
+
+def test_browser_cannot_leave_the_sut(base_url, page):
+    page.goto(base_url + "/")
+    with pytest.raises(Exception, match="ERR_BLOCKED_BY_CLIENT"):
+        page.goto("http://example.com/")
+"""
+
+
+def test_browser_requests_outside_the_sut_are_blocked(harness, root):
+    (root / "generated" / "test_req005_ui.py").write_text(BROWSER_ESCAPE, encoding="utf-8")
+    with running_sut([]) as url:
+        # enforce_policy=False: the static policy would already refuse the hard-coded URL; this tests the browser route.
+        result = PytestTool(root, url, enforce_policy=False, evidence=True)(paths=["generated/test_req005_ui.py"])
+    assert result.ok, result.stdout
 
 
 def test_api_runner_leaves_no_playwright_folder(harness, root):

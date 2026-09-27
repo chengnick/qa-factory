@@ -99,6 +99,9 @@ def page(browser, request):
     $QA_PLAYWRIGHT_DIR/{test name}/. Passing tests keep nothing.
     """
     context = browser.new_context()
+    # The browser runs outside Python, so the L1 guard cannot see its traffic: only the SUT is reachable from pages.
+    sut = os.environ.get("SUT_BASE_URL", "").rstrip("/")
+    context.route("**/*", lambda route: route.continue_() if route.request.url.startswith(sut + "/") else route.abort("blockedbyclient"))
     evidence = _evidence_dir(request.node)
     if evidence is not None:
         context.tracing.start(screenshots=True, snapshots=True)
