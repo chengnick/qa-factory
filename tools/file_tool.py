@@ -23,7 +23,8 @@ def resolve_generated(root: Path, path: str) -> Path:
 
 class FileWriteTool:
     def __init__(self, root: Path) -> None:
-        self.root = root
+        # Resolved once: paths are compared after resolve(), which turns Windows 8.3 short names (RUNNER~1) into long ones.
+        self.root = root.resolve()
 
     def __call__(self, path: str, content: str) -> ToolResult:
         target = resolve_generated(self.root, path)

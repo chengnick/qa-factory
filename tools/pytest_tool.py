@@ -190,7 +190,7 @@ class PytestTool:
     ) -> None:
         if isolation not in ISOLATION_LEVELS:
             raise ValueError(f"isolation must be one of {ISOLATION_LEVELS}, got {isolation!r}")
-        self.root = root  # the run workspace
+        self.root = root.resolve()  # the run workspace; resolved like the test paths (Windows 8.3 short names)
         self.isolation = isolation
         self.sut_url = sut_url
         self.timeout_s = timeout_s
