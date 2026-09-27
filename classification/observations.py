@@ -111,6 +111,10 @@ def observe(
     probes = [s for s in spans if s["name"] == "tool.http_request" and s["attributes"].get("qa.http.route") == "/health" and not in_evaluation(s)]
     health_ok = None if not probes else all(not _is_error(p) and p["attributes"].get("qa.http.status_code") == 200 for p in probes)
 
+    # Revision rounds (Phase 4): the verdict is about the tests the run ended with; how earlier rounds were changed
+    # is judged by the Workflow Evaluator (evaluation/workflow.py), so superseded rounds' test runs are skipped here.
+    last_round = max((s["attributes"].get("qa.test.round", 0) for s in spans if s["name"].startswith("tool.")), default=0)
+
     for span in spans:
         name, attrs = span["name"], span["attributes"]
         evaluation = in_evaluation(span)
@@ -146,6 +150,8 @@ def observe(
                     )
                 continue
             exit_code = attrs.get("qa.tool.exit_code")
+            if tool in RUNNERS and attrs.get("qa.test.round", last_round) < last_round:
+                continue
             if tool in RUNNERS and exc is None:
                 results = _test_results(span) or fallback.get(span["span_id"], [])
                 collection = attrs.get("qa.test.collection_errors", 0) > 0 or any("::" not in r["node_id"] and r["outcome"] == "ERROR" for r in results)

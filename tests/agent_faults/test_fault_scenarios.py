@@ -1,6 +1,6 @@
 """Spec v3 §10.2 fault-injection scenarios. Each checks behaviour, trace and attribution.
 
-W01 / W03 (test weakening across revision rounds) need the Workflow Evaluator and move to Phase 4.
+W01 / W03 (test weakening across revision rounds) are in test_workflow_scenarios.py (Phase 4).
 """
 
 from __future__ import annotations

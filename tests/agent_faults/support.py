@@ -83,6 +83,7 @@ def run_scenario(tmp_dir: Path) -> Iterator[Callable[..., Scenario]]:
         requirement_text: str = "REQ-005: done is terminal",
         llm_retry: RetryPolicy | None = None,
         pytest_retry: RetryPolicy | None = None,
+        max_rounds: int = 1,
     ) -> Scenario:
         workspace = create_run_workspace(tmp_dir / "artifacts", new_run_id())
         clock = FakeClock()
@@ -101,7 +102,7 @@ def run_scenario(tmp_dir: Path) -> Iterator[Callable[..., Scenario]]:
         kwargs = {"llm_retry": llm_retry} if llm_retry else {}
         result = run_pipeline(
             RequirementInput("REQ-005", requirement_text), llm=llm or FakeLLM(llm_script()), tools=registry, inst=inst,
-            run_id=workspace.name, workspace=workspace, agents=agents, **kwargs,
+            run_id=workspace.name, workspace=workspace, agents=agents, max_rounds=max_rounds, **kwargs,
         )  # fmt: skip
         provider.shutdown()
         return Scenario(result, memory, workspace, fakes)

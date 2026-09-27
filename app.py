@@ -34,6 +34,7 @@ from evaluation.run import (
     record_policy,
     record_rounds,
     record_security,
+    record_workflow,
     write_meta,
 )
 from permissions.policy import DEFAULT_POLICY_PATH, Policy, PolicyError, load_policy
@@ -106,6 +107,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str], policy: Policy) -> 
     record_policy(meta, result.policy)
     record_rounds(workspace, meta, result.rounds)
     write_meta(workspace, meta)
+    record_workflow(workspace, meta, result.workflow)
     return workspace, meta
 
 

@@ -27,6 +27,7 @@ from typing import Any
 from agents.contracts import RequirementInput
 from agents.version import PROMPT_VERSION
 from benchmark.datasets import DEV_COMBINATIONS, dataset_of
+from evaluation import workflow as wf
 from evaluation.differential import SutFactory, run_differential
 from evaluation.metrics import compute
 from evaluation.provenance import conftest_sha256, git_commit, lockfile_sha256
@@ -98,6 +99,36 @@ def record_rounds(workspace: Path, meta: dict[str, Any], rounds: list[dict[str, 
     """rounds.json: per revision round, the snapshotted files (generated/roundN/) and the test results."""
     (workspace / "rounds.json").write_text(json.dumps({"rounds": rounds}, ensure_ascii=False, indent=2), encoding="utf-8")
     meta["revision_rounds"] = len(rounds)
+
+
+def record_workflow(workspace: Path, meta: dict[str, Any], workflow: dict[str, Any] | None) -> None:
+    """W05 (evidence complete) once every other file is written, then workflow_eval.json (spec v3 §9.4).
+
+    W01-W04 came from the pipeline. A W05 violation is appended to security_events.json as WORKFLOW_VIOLATION
+    (span_id null: the trace is already closed). Rewrites meta.json with the workflow summary.
+    """
+    if workflow is None:
+        return
+    missing, w05 = wf.evaluate_evidence(workspace, meta)
+    events_file = workspace / "security_events.json"
+    if w05 and events_file.is_file():
+        security = json.loads(events_file.read_text(encoding="utf-8"))
+        security["events"] += [
+            {"type": "WORKFLOW_VIOLATION", "run_id": meta["run_id"], "span_id": None, "agent": None, "action": "W05",
+             "target": v.evidence.removeprefix("missing: "), "executed": False, "evidence": v.evidence}  # fmt: skip
+            for v in w05
+        ]
+        record_security(workspace, meta, security)
+    result = dict(workflow)
+    result["violations"] = workflow["violations"] + [v.to_json() for v in w05]
+    result["workflow_status"] = "FAIL" if result["violations"] else "PASS"
+    result["rules_checked"] = ["W01", "W02", "W03", "W04", "W05"]
+    result["acceptance_mode"] = meta.get("evaluation_mode") is True
+    result["missing_evidence"] = missing
+    (workspace / "workflow_eval.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    meta["workflow"] = {"status": result["workflow_status"], "goal_drift": result["goal_drift"],
+                        "violations": [v["rule"] for v in result["violations"]], "missing_evidence": len(missing)}  # fmt: skip
+    write_meta(workspace, meta)
 
 
 def record_policy(meta: dict[str, Any], policy: dict[str, Any] | None) -> None:
@@ -219,6 +250,7 @@ def execute_run(
     record_policy(meta, result.policy)
     record_rounds(workspace, meta, result.rounds)
     write_meta(workspace, meta)
+    record_workflow(workspace, meta, result.workflow)
     return workspace, meta
 
 

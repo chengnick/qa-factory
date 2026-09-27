@@ -50,6 +50,8 @@ def test_fake_run_writes_trace_and_run_record(tmp_dir):
     assert [r["round"] for r in rounds] == [1]
     assert {f["snapshot"] for f in rounds[0]["files"]} == {"generated/round1/test_req005_api.py", "generated/round1/test_req005_ui.py"}
     assert sorted(p.name for p in (run_dir / "prompts").iterdir())  # LLM inputs/outputs kept
+    workflow = json.loads((run_dir / "workflow_eval.json").read_text(encoding="utf-8"))
+    assert workflow["workflow_status"] == "PASS" and workflow["acceptance_mode"] is False and workflow["missing_evidence"] == []
     root = _root(trace)
     assert root["attributes"]["qa.run.id"] == run_dir.name  # run_id <-> trace_id both ways
     assert root["attributes"]["qa.run.prompt_version"] == "v3"

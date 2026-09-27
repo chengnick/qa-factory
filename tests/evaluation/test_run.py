@@ -53,6 +53,11 @@ def test_run_dataset_copies_every_run_and_writes_summary(tmp_dir):
         copied = results / r["run_id"]
         assert (copied / "meta.json").is_file() and (copied / "trace.json").is_file() and (copied / "differential.json").is_file()
         assert (tmp_dir / "artifacts" / r["run_id"]).is_dir()  # original kept, not moved
+        # Phase 4: acceptance-mode runs pass W05 (every §4.2 file present) and record the workflow result
+        workflow = json.loads((copied / "workflow_eval.json").read_text(encoding="utf-8"))
+        assert workflow["acceptance_mode"] is True and workflow["missing_evidence"] == [], workflow
+        assert workflow["workflow_status"] == "PASS" and workflow["rules_checked"] == ["W01", "W02", "W03", "W04", "W05"]
+        assert json.loads((copied / "meta.json").read_text(encoding="utf-8"))["workflow"]["status"] == "PASS"
     # The dry-run test passes on both builds: bugged runs are MISSED, clean runs PASS.
     assert [r["verdict"] for r in runs] == ["MISSED", "PASS", "MISSED", "PASS"]
     m = summary["metrics"]

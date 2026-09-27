@@ -24,6 +24,7 @@ from agents.test_design import TestDesignAgent
 from agents.version import PROMPT_VERSION
 from classification.observations import observe
 from classification.verdict import Outcome, final_outcome, surface_outcome
+from evaluation import workflow as wf
 from llm.client import LLMClient
 from observability.instrument import AgentTools, Instrumentation, RunHandle, TracedLLM, TracedToolRegistry, traced_agent, traced_run
 from observability.json_exporter import span_to_dict
@@ -47,6 +48,7 @@ class PipelineResult:
     security: dict[str, Any] | None = None  # security_events.json content: {"run_id", "breach", "events"}
     policy: dict[str, Any] | None = None  # {"hash", "path", "permission_checks", "allowed", "denied"}
     rounds: list[dict[str, Any]] = dataclasses.field(default_factory=list)  # rounds.json: files and test results per round
+    workflow: dict[str, Any] | None = None  # Workflow Evaluator W01-W04 (spec v3 §9); the runner adds W05
 
 
 # Evaluation hook: given the final generated tests, cross-validate them (evaluation/differential.py).
@@ -108,6 +110,7 @@ def run_pipeline(
         error: str | None = None
         diff = None
         rounds: list[dict[str, Any]] = []
+        sources: list[wf.Round] = []  # the same rounds with file contents, for the Workflow Evaluator
         try:
             plan = design_agent.run(requirement_agent.run(requirement))
             revises = bool(getattr(automation_agent.inner, "revises", False))
@@ -117,8 +120,10 @@ def run_pipeline(
                 traced_tools.round = n
                 automation = automation_agent.run(request, {"qa.test.round": n})
                 rounds.append(_start_round(n, automation, workspace))
+                sources.append(wf.Round(n, {f.path: f.content for f in automation.files}))
                 qa = qa_agent.run(automation, {"qa.test.round": n})
                 rounds[-1]["results"] = _round_results(qa)
+                sources[-1] = wf.Round(n, sources[-1].files, rounds[-1]["results"])
                 if n >= max_rounds or not revises or not _has_failures(rounds[-1]["results"]):
                     break
                 request = RevisionRequest(plan, automation, qa, n + 1)
@@ -132,8 +137,28 @@ def run_pipeline(
                 diff = differential(automation)
         run.set_attribute("qa.policy.hash", policy.hash)
         run.set_attribute("qa.policy.path", policy.display_path)
+        workflow = _evaluate_workflow(run, sources, security, run_id)
         result = _conclude(run, inst, report, error, diff, security, bugs_enabled=bool(sut_bugs))
-        return dataclasses.replace(result, policy={"hash": policy.hash, "path": policy.display_path, **gate.stats}, rounds=rounds)
+        return dataclasses.replace(
+            result, policy={"hash": policy.hash, "path": policy.display_path, **gate.stats}, rounds=rounds, workflow=workflow
+        )
+
+
+def _evaluate_workflow(run: RunHandle, sources: list[wf.Round], security: SecurityRecorder, run_id: str | None) -> dict[str, Any]:
+    """W01-W04 on the finished rounds. Runs inside the root span, so its security events are recorded there."""
+    events = [dataclasses.asdict(e) for e in security.events]
+    violations = wf.evaluate_rounds(sources) + wf.evaluate_security(events)
+    drift = wf.goal_drift(violations, events)
+    for v in violations:
+        agent = "automation" if v.rule in wf.DRIFT_RULES else None
+        security.record("WORKFLOW_VIOLATION", agent=agent, action=v.rule, target=v.test_id or "", executed=False, evidence=v.evidence)
+        if v.rule in wf.DRIFT_RULES:
+            security.record("GOAL_DRIFT", agent=agent, action=v.rule, target=v.test_id or "", executed=False,
+                            evidence=f"{v.rule}: the test was changed to pass instead of verifying the requirement")  # fmt: skip
+    run.set_attribute("qa.workflow.status", "FAIL" if violations else "PASS")
+    run.set_attribute("qa.workflow.goal_drift", drift)
+    run.set_attribute("qa.workflow.violations", [v.rule for v in violations])
+    return wf.workflow_json(run_id, violations, drift, rounds=len(sources))
 
 
 def _start_round(n: int, automation: AutomationResult, workspace: Path | None) -> dict[str, Any]:
