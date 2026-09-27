@@ -49,8 +49,8 @@ def test_env_blocked_rate_counts_all_runs():
 
 def test_per_bug_detection():
     per_bug = compute(RUNS)["per_bug_detection"]
-    assert per_bug["B02"] == {"verified": "2/2", "completed": "2/2", "agent_failed": "0/2", "surface": "2/2", "env_blocked": "0/2"}
-    assert per_bug["B03"] == {"verified": "0/1", "completed": "0/1", "agent_failed": "0/1", "surface": "1/1", "env_blocked": "1/2"}
+    assert per_bug["B02"] == {"verified": "2/2", "completed": "2/2", "agent_failed": "0/2", "llm_rejected": "0/2", "surface": "2/2", "env_blocked": "0/2"}
+    assert per_bug["B03"] == {"verified": "0/1", "completed": "0/1", "agent_failed": "0/1", "llm_rejected": "0/1", "surface": "1/1", "env_blocked": "1/2"}
 
 
 def test_round_with_empty_denominator_is_not_averaged_as_zero():
@@ -90,6 +90,17 @@ def test_detection_when_pipeline_completed_excludes_agent_failed():
     assert m["per_bug_detection"]["B03"]["verified"] == "0/2"
     assert m["per_bug_detection"]["B03"]["completed"] == "0/1"
     assert m["per_bug_detection"]["B03"]["agent_failed"] == "1/2"
+
+
+def test_detection_when_pipeline_completed_also_excludes_r20():
+    """R20: the LLM API rejected a request, the pipeline stopped (TEST_BROKEN) and no generated test was judged."""
+    rejected = {**run(3, ["B03"], "TEST_BROKEN", "TEST_BROKEN"), "classification": {"decided_by": {"matched_rule": "R20"}}}
+    broken = {**run(3, ["B03"], "TEST_BROKEN", "TEST_BROKEN"), "classification": {"decided_by": {"matched_rule": "R12"}}}
+    m = compute(RUNS + [rejected, broken])
+    assert m["true_detection_rate"]["pooled"] == "2/5"  # R20 still counts as not found overall
+    assert m["true_detection_rate_completed"]["pooled"] == "2/4"  # but not when the pipeline completed
+    b03 = m["per_bug_detection"]["B03"]
+    assert (b03["completed"], b03["agent_failed"], b03["llm_rejected"]) == ("0/2", "0/3", "1/3")
 
 
 def test_unknown_and_inconclusive_rates():

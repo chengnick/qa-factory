@@ -28,6 +28,18 @@ def is_agent_failed(run: Run) -> bool:
     return run.get("verdict") == "AGENT_FAILED"
 
 
+def is_llm_rejected(run: Run) -> bool:
+    """Decided by R20: the LLM API rejected a request (4xx), so the pipeline stopped before its tests ran.
+    Verdict TEST_BROKEN (HARNESS layer), but no generated test was judged."""
+    decided = ((run.get("classification") or {}).get("decided_by")) or {}
+    return decided.get("matched_rule") == "R20"
+
+
+def is_pipeline_aborted(run: Run) -> bool:
+    """Excluded from the "pipeline completed" detection rate: AGENT_FAILED and R20 (counted separately)."""
+    return is_agent_failed(run) or is_llm_rejected(run)
+
+
 def _rate(runs: Iterable[Run], include: Callable[[Run], bool], hit: Callable[[Run], bool]) -> tuple[int, int]:
     pool = [r for r in runs if include(r)]
     return sum(hit(r) for r in pool), len(pool)
@@ -85,11 +97,11 @@ def _test_health(runs: list[Run]) -> dict[str, Any]:
 def compute(runs: list[Run]) -> dict[str, Any]:
     not_blocked_bugged = lambda r: is_bugged(r) and not is_env_blocked(r)  # noqa: E731
     not_blocked_clean = lambda r: not is_bugged(r) and not is_env_blocked(r)  # noqa: E731
-    completed_bugged = lambda r: not_blocked_bugged(r) and not is_agent_failed(r)  # noqa: E731
+    completed_bugged = lambda r: not_blocked_bugged(r) and not is_pipeline_aborted(r)  # noqa: E731
     metrics = {
         "true_detection_rate": _stat(runs, not_blocked_bugged, lambda r: r["verdict"] == "DEFECT_FOUND"),
-        # Same numerator, but only runs where the pipeline produced tests: separates agent reliability
-        # (AGENT_FAILED) from test-design quality (tests that ran but missed the bug).
+        # Same numerator, but only runs where the pipeline produced and ran its tests: separates pipeline
+        # reliability (AGENT_FAILED, R20 LLM request rejected) from test-design quality (tests that ran but missed).
         "true_detection_rate_completed": _stat(runs, completed_bugged, lambda r: r["verdict"] == "DEFECT_FOUND"),
         "surface_detection_rate": _stat(runs, not_blocked_bugged, lambda r: r.get("surface_verdict") == "DEFECT_FOUND"),
         # Main false-positive figure: in real use there is no clean build to compare with, so the user sees
@@ -103,11 +115,12 @@ def compute(runs: list[Run]) -> dict[str, Any]:
     for bug in sorted({b for r in runs for b in r.get("sut_bugs", [])}):
         mine = [r for r in runs if bug in r.get("sut_bugs", [])]
         usable = [r for r in mine if not is_env_blocked(r)]
-        completed = [r for r in usable if not is_agent_failed(r)]
+        completed = [r for r in usable if not is_pipeline_aborted(r)]
         per_bug[bug] = {
             "verified": f"{sum(r['verdict'] == 'DEFECT_FOUND' for r in usable)}/{len(usable)}",
             "completed": f"{sum(r['verdict'] == 'DEFECT_FOUND' for r in completed)}/{len(completed)}",
-            "agent_failed": f"{len(usable) - len(completed)}/{len(usable)}",
+            "agent_failed": f"{sum(is_agent_failed(r) for r in usable)}/{len(usable)}",
+            "llm_rejected": f"{sum(is_llm_rejected(r) and not is_agent_failed(r) for r in usable)}/{len(usable)}",
             "surface": f"{sum(r.get('surface_verdict') == 'DEFECT_FOUND' for r in usable)}/{len(usable)}",
             "env_blocked": f"{len(mine) - len(usable)}/{len(mine)}",
         }

@@ -71,7 +71,7 @@ def render_metrics_zh(m: dict[str, Any]) -> str:
         _row("真實偵測率（交叉驗證）", m["true_detection_rate"]),
     ]
     if "true_detection_rate_completed" in m:
-        lines.append(_row("偵測率（pipeline 完成時，排除 AGENT_FAILED）", m["true_detection_rate_completed"]))
+        lines.append(_row("偵測率（pipeline 完成時，排除 AGENT_FAILED 與 R20）", m["true_detection_rate_completed"]))
     lines += [
         _row("表面偵測率（未交叉驗證）", m["surface_detection_rate"]),
         _row("**誤報率（surface，主要數字）**", m["false_positive_rate_surface"]),
@@ -87,16 +87,16 @@ def render_metrics_zh(m: dict[str, Any]) -> str:
     ]
     per_bug = m["per_bug_detection"]
     has_completed = any("completed" in v for v in per_bug.values())
-    header = "| Bug | 交叉驗證 |" + (" pipeline 完成時 | AGENT_FAILED |" if has_completed else "") + " Surface | 環境阻擋 |"
-    lines += [header, "|---|---|" + ("---|---|" if has_completed else "") + "---|---|"]
+    header = "| Bug | 交叉驗證 |" + (" pipeline 完成時 | AGENT_FAILED | R20 |" if has_completed else "") + " Surface | 環境阻擋 |"
+    lines += [header, "|---|---|" + ("---|---|---|" if has_completed else "") + "---|---|"]
     for bug, v in per_bug.items():
-        completed = f" {v['completed']} | {v['agent_failed']} |" if has_completed else ""
+        completed = f" {v['completed']} | {v['agent_failed']} | {v.get('llm_rejected', '0/0')} |" if has_completed else ""
         lines.append(f"| {bug} | {v['verified']} |{completed} {v['surface']} | {v['env_blocked']} |")
     if has_completed:
         lines += [
             "",
             "- 「交叉驗證」欄把 AGENT_FAILED 算成未抓到，反映整條 pipeline 的表現；",
-            "  「pipeline 完成時」欄排除 AGENT_FAILED，只看產生出來的測試能不能抓到 bug（測試設計品質）；",
+            "  「pipeline 完成時」欄排除 AGENT_FAILED 與 R20（LLM API 拒絕請求、pipeline 中止），只看產生出來的測試能不能抓到 bug（測試設計品質）；",
             "  兩者的差距就是 Agent 可靠度造成的損失。",
         ]
     return "\n".join(lines) + "\n"
