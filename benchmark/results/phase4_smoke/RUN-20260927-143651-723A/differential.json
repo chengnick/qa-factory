@@ -1,0 +1,160 @@
+{
+  "status": "COMPLETE",
+  "verdict": "PASS",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 0,
+    "passed": 5,
+    "tests": 5
+  },
+  "test_health": {
+    "healthy": 5,
+    "total": 5
+  },
+  "file_hashes": {
+    "generated/test_req002_api.py": "6e662c3412199f65ea529214e7915cb3d7c2cb3fc8eaa0f2c74dd613d127c4d6"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_title_lengths",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths_422",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_task_boundary_priority_values",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_create_task_invalid_priority_values_422",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc5_update_task_invalid_boundaries_422",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-4b2242.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_title_lengths",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths_422",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_task_boundary_priority_values",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_create_task_invalid_priority_values_422",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc5_update_task_invalid_boundaries_422",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-0b8a16.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_title_lengths",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths_422",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc3_create_task_boundary_priority_values",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc4_create_task_invalid_priority_values_422",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc5_update_task_invalid_boundaries_422",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    }
+  ]
+}

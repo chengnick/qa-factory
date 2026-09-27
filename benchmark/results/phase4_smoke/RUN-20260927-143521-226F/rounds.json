@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req005_api.py",
+          "snapshot": "generated/round1/test_req005_api.py",
+          "sha256": "15c995882dfd2c7fb6eb53cf0a6457a21fbe342e4c580024112784d5208f3757"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_forbidden_transition_from_done",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transitions_various",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_value",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req002_api.py",
+          "snapshot": "generated/round1/test_req002_api.py",
+          "sha256": "17cb0819fcab66f05236bee6a07732944f9c04071b0407bef6dc705c59af7d7a"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_titles",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_titles",
+          "outcome": "FAIL",
+          "message": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_task_boundary_priorities",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_create_task_invalid_priorities",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Create task with boundary title lengths and default priority",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"a\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"[100 characters string]\"} as alice"
+      ],
+      "expected": "title 長度為 100 字元時應被接受（回傳 201 或 200）。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Create task with invalid title lengths and blank title returning 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"[101 characters string]\"} as alice"
+      ],
+      "expected": "title 長度超過 100 字元或為空白時應回傳 422，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Create task with boundary priority values 1 and 5",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\", \"priority\": 1} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 2\", \"priority\": 5} as alice"
+      ],
+      "expected": "priority 為 1 或 5 時應被接受，若為 0 或 6 則應回傳 422。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Create task with invalid priority values 0 and 6 returning 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\", \"priority\": 0} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 2\", \"priority\": 6} as alice"
+      ],
+      "expected": "priority 為 1 或 5 時應被接受，若為 0 或 6 則應回傳 422。"
+    },
+    {
+      "id": "TC-5",
+      "title": "Update task title and priority with invalid boundaries returning 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Valid Title\"} as alice",
+        "PATCH /api/tasks/{tid} with {\"title\": \"\"} as alice",
+        "PATCH /api/tasks/{tid} with {\"priority\": 0} as alice"
+      ],
+      "expected": "title 長度超過 100 字元或為空白時應回傳 422，且不得回傳 5xx。"
+    }
+  ]
+}

@@ -36,6 +36,20 @@ Not verified yet: the new tests on ubuntu (CI has not run; the repo is not pushe
 - W01–W04: no violations (the runs have one round and no executed security events).
 - W05 (not in acceptance mode for this check): each run lacks exactly `security_events.json`, `classification.json` and `rounds.json`, the files Phases 3 and 4 added. Expected for the older layout; the runs are not modified.
 
+## Live smoke run under L1 (after Phase 4)
+
+One round of the dev set with the real model, same conditions as Phase 2R (`gemini-3.5-flash-lite`, temperature 0, prompt v3), commit `05cb0fb`, results in [`../phase4_smoke/`](../phase4_smoke/summary.md). Purpose: check that the Phase 4 changes (L1 guard, new page fixture) do not interfere with real generated tests before anything is frozen.
+
+| | Phase 4 smoke (1 round) | Phase 2R (5 rounds) |
+|---|---|---|
+| Cross-validated detection | 3/3 (B02, B03, B04 each 1/1) | 12/15 (B02 3/5, B03 5/5, B04 4/5) |
+| Surface false positives (clean runs) | 0/3 | 1/15 |
+| Test health | 23/23 | 101/103 |
+| L1 refusals | 0 in all 6 runs | (no L1) |
+| Evidence complete (W05, acceptance mode) | 6/6 | (W05 did not exist) |
+
+One round says little about rates (see README on variance at temperature 0); what it shows is that real generated tests run normally under L1, with no refusals and complete evidence.
+
 ## Not done
 
 - **LLM-driven revision rounds** (D21): the real AutomationAgent does not revise, so W01–W03 have been shown on scripted histories only.

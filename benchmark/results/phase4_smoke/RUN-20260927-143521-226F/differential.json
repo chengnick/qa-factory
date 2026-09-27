@@ -1,0 +1,141 @@
+{
+  "status": "COMPLETE",
+  "verdict": "PASS",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 0,
+    "passed": 4,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 4,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req005_api.py": "f40155e4221456a64daae692029dd0a68310a1650372337520b6235e8833f286"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_forbidden_transition_from_done",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transitions_various",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_value",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-8516f4.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc2_forbidden_transition_from_done",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transitions_various",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_value",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req005_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req005_api-cc7ed3.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req005_api.py::test_tc1_allowed_transitions",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc2_forbidden_transition_from_done",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc3_forbidden_transitions_various",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req005_api.py::test_tc4_invalid_status_value",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "requirement_id": "REQ-002",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "5 passed in 2.46s",
+      "error": null,
+      "data": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req002_api.py"
+        ],
+        "junit": "reports/junit-test_req002_api-6b435d.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_title_lengths",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths_422",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc3_create_task_boundary_priority_values",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc4_create_task_invalid_priority_values_422",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc5_update_task_invalid_boundaries_422",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

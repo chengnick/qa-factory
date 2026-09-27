@@ -1,0 +1,346 @@
+{
+  "dataset": "dev",
+  "rounds": 1,
+  "conditions": {
+    "llm": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "models_seen": [
+      "gemini-3.5-flash-lite"
+    ],
+    "temperature": 0.0,
+    "prompt_version": "v3",
+    "git_commit": {
+      "sha": "05cb0fbcfc4d55283f3bebbe46bb31fc10482f2c",
+      "dirty": false
+    },
+    "lockfile_sha256": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6"
+  },
+  "metrics": {
+    "true_detection_rate": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "n_rounds": 1,
+      "pooled": "3/3",
+      "ci95": [
+        0.43849391955098227,
+        1.0
+      ],
+      "per_round": {
+        "1": 1.0
+      }
+    },
+    "true_detection_rate_completed": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "n_rounds": 1,
+      "pooled": "3/3",
+      "ci95": [
+        0.43849391955098227,
+        1.0
+      ],
+      "per_round": {
+        "1": 1.0
+      }
+    },
+    "surface_detection_rate": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "n_rounds": 1,
+      "pooled": "3/3",
+      "ci95": [
+        0.43849391955098227,
+        1.0
+      ],
+      "per_round": {
+        "1": 1.0
+      }
+    },
+    "false_positive_rate_surface": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "n_rounds": 1,
+      "pooled": "0/3",
+      "ci95": [
+        0.0,
+        0.5615060804490177
+      ],
+      "per_round": {
+        "1": 0.0
+      }
+    },
+    "false_positive_rate_verified": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "n_rounds": 1,
+      "pooled": "0/3",
+      "ci95": [
+        0.0,
+        0.5615060804490177
+      ],
+      "per_round": {
+        "1": 0.0
+      }
+    },
+    "test_health": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "n_rounds": 1,
+      "pooled": "23/23",
+      "ci95": [
+        0.8568788745827374,
+        1.0
+      ],
+      "per_round": {
+        "1": 1.0
+      }
+    },
+    "env_blocked_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "n_rounds": 1,
+      "pooled": "0/6",
+      "ci95": [
+        0.0,
+        0.3903430336530645
+      ],
+      "per_round": {
+        "1": 0.0
+      }
+    },
+    "per_bug_detection": {
+      "B02": {
+        "verified": "1/1",
+        "completed": "1/1",
+        "agent_failed": "0/1",
+        "llm_rejected": "0/1",
+        "surface": "1/1",
+        "env_blocked": "0/1"
+      },
+      "B03": {
+        "verified": "1/1",
+        "completed": "1/1",
+        "agent_failed": "0/1",
+        "llm_rejected": "0/1",
+        "surface": "1/1",
+        "env_blocked": "0/1"
+      },
+      "B04": {
+        "verified": "1/1",
+        "completed": "1/1",
+        "agent_failed": "0/1",
+        "llm_rejected": "0/1",
+        "surface": "1/1",
+        "env_blocked": "0/1"
+      }
+    },
+    "unknown_classification_rate": {
+      "mean": null,
+      "min": null,
+      "max": null,
+      "n_rounds": 0,
+      "pooled": "0/3",
+      "ci95": [
+        0.0,
+        0.5615060804490177
+      ],
+      "per_round": {},
+      "runs_with_classification": 6
+    },
+    "inconclusive_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "n_rounds": 1,
+      "pooled": "0/6",
+      "ci95": [
+        0.0,
+        0.3903430336530645
+      ],
+      "per_round": {
+        "1": 0.0
+      }
+    },
+    "cost": {
+      "mean_tokens": 5341.833333333333,
+      "mean_duration_s": 33.31666666666666,
+      "n": 6
+    }
+  },
+  "runs": [
+    {
+      "round": 1,
+      "run_id": "RUN-20260927-143251-EF3A",
+      "trace_id": "67bc29ccbd2c1c1c80b4d8b1e482c155",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "run_id": "RUN-20260927-143345-ACF4",
+      "trace_id": "3c1922a73629834aa43d0243afd01753",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "run_id": "RUN-20260927-143437-284C",
+      "trace_id": "82a211e92a4b9d26989fb1f71918e933",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "run_id": "RUN-20260927-143521-226F",
+      "trace_id": "0260ed70f2a4dbad4d8b8a9c9aaecba0",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "run_id": "RUN-20260927-143607-8CF2",
+      "trace_id": "adc1b3f8f5feb87bf5f3e5f19dc646aa",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 3,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "run_id": "RUN-20260927-143651-723A",
+      "trace_id": "adf5cdaf6597edf45af32436574261a9",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 5,
+          "tests": 5
+        },
+        "test_health": {
+          "healthy": 5,
+          "total": 5
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    }
+  ]
+}

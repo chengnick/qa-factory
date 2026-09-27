@@ -1,0 +1,56 @@
+{
+  "requirement_id": "REQ-007",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 2 passed in 4.41s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req007_api.py"
+        ],
+        "junit": "reports/junit-test_req007_api-caaa64.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req007_api.py::test_project_member_can_read_project_task_list_and_detail",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_non_project_member_is_forbidden_to_read",
+            "outcome": "FAIL",
+            "message": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Test Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-27T14:34:00.939+00:00\",\"updated_at\":\"2026-09-27T14:34:00.939+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code"
+          },
+          {
+            "node_id": "generated/test_req007_api.py::test_system_returns_404_for_non_existent_resources",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

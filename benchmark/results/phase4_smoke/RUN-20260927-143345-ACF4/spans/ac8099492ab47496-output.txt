@@ -1,0 +1,41 @@
+{
+  "requirement_id": "REQ-007",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project member can successfully read project, task list, and task detail",
+      "surface": "api",
+      "steps": [
+        "Alice creates a project via POST /api/projects with X-User: alice",
+        "Alice creates a task in the project via POST /api/projects/{pid}/tasks with X-User: alice",
+        "Alice gets the project details via GET /api/projects/{pid} with X-User: alice",
+        "Alice gets the task list via GET /api/projects/{pid}/tasks with X-User: alice",
+        "Alice gets the task detail via GET /api/tasks/{tid} with X-User: alice"
+      ],
+      "expected": "專案成員可以成功讀取專案、任務列表與任務詳情（GET /api/tasks/{tid}）"
+    },
+    {
+      "id": "TC-2",
+      "title": "Non-project member is forbidden from reading project, task list, and task detail",
+      "surface": "api",
+      "steps": [
+        "Alice creates a project and a task inside it with X-User: alice",
+        "Bob (non-member) attempts to read the project via GET /api/projects/{pid} with X-User: bob",
+        "Bob attempts to read the task list via GET /api/projects/{pid}/tasks with X-User: bob",
+        "Bob attempts to read the task detail via GET /api/tasks/{tid} with X-User: bob"
+      ],
+      "expected": "非專案成員嘗試讀取時，系統應回傳 403 錯誤"
+    },
+    {
+      "id": "TC-3",
+      "title": "System returns 404 when requested project, task list, or task detail does not exist",
+      "surface": "api",
+      "steps": [
+        "Alice attempts to read a non-existent project via GET /api/projects/99999 with X-User: alice",
+        "Alice attempts to read task list for a non-existent project via GET /api/projects/99999/tasks with X-User: alice",
+        "Alice attempts to read a non-existent task detail via GET /api/tasks/99999 with X-User: alice"
+      ],
+      "expected": "當請求的資源不存在時，系統應回傳 404 錯誤"
+    }
+  ]
+}

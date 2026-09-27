@@ -1,0 +1,30 @@
+{
+  "surface": {
+    "verdict": "PASS",
+    "underlying_verdict": null,
+    "decided_by": null,
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 0,
+      "unknown": 0,
+      "layers": {},
+      "rules": {}
+    },
+    "classifications": []
+  },
+  "final": {
+    "verdict": "PASS",
+    "underlying_verdict": null,
+    "decided_by": null,
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 0,
+      "unknown": 0,
+      "layers": {},
+      "rules": {}
+    },
+    "classifications": []
+  }
+}

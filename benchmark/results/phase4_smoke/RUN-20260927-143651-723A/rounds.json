@@ -1,0 +1,46 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req002_api.py",
+          "snapshot": "generated/round1/test_req002_api.py",
+          "sha256": "5649104f7915efc741952b3e3052343201e272726c28a5d267b7550d38c724e4"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_title_lengths",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_task_boundary_priority_values",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_create_task_invalid_priority_values_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc5_update_task_invalid_boundaries_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}
