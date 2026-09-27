@@ -75,3 +75,26 @@ def tmp_dir() -> Iterator[Path]:
     # Own temp dir: pytest's tmp_path base directory is not writable on every dev machine.
     with tempfile.TemporaryDirectory(prefix="qa-obs-") as d:
         yield Path(d)
+
+
+def pytest_configure(config):
+    """Live tests are opt-in: only with QA_LIVE=1 is the local .env loaded (before collection)."""
+    import os
+
+    if os.environ.get("QA_LIVE") == "1":
+        from app import ENV_FILE, load_env_file
+
+        load_env_file(ENV_FILE)
+
+
+def pytest_collection_modifyitems(config, items):
+    """Second guard for live tests (spec v3.1 §15.5.4): without GEMINI_API_KEY in the environment they are
+    skipped, even if someone runs them without `-m "not live"`. CI also deselects them with `-m "not live"`."""
+    import os
+
+    if os.environ.get("GEMINI_API_KEY"):
+        return
+    skip = pytest.mark.skip(reason="live test: GEMINI_API_KEY is not set")
+    for item in items:
+        if item.get_closest_marker("live"):
+            item.add_marker(skip)

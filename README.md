@@ -2,7 +2,12 @@
 
 A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3).
 
-## Current status: Phase 3 (failure attribution, permission gate, fault injection)
+## Current status: Phase 3.5 (policy file, CI)
+
+- **Policy file** ([config/agent_policy.yaml](config/agent_policy.yaml), [permissions/policy.py](permissions/policy.py)): the permission table, protected and evidence paths, and the generated-code rules. Validated strictly at startup: an invalid policy stops the program before any run exists. Every permission check, allowed or denied, is a `qa.permission.check` span event and is counted in `meta.json`.
+- **CI** ([.github/workflows/ci.yml](.github/workflows/ci.yml)): runs the tests (`-m "not live"`) and the Phase 0 matrix on ubuntu-latest and windows-latest with the pinned Python version (`.python-version`) and `requirements.lock`, plus a non-blocking Python 3.14 canary. No real LLM, no secrets. CI verifies one Python version on two operating systems, nothing more.
+
+### Phase 3 (failure attribution, permission gate, fault injection)
 
 ### Architecture fact: tool routing is fixed
 
@@ -117,6 +122,12 @@ pytest tests                       # flag mechanism + manifest consistency
 - **Clean runs cannot show a cross-validated false positive.** Both builds are clean, so a failing test is R12/R13, never R11. The main false-positive figure is therefore the **surface** rate: in real use there is no clean build to compare with, and the user sees the surface verdict.
 
 ## Isolation (current level: L0+)
+
+> **Policy decides what an agent should be allowed to do. Isolation determines what it actually can do.**
+>
+> - Policy: tool-level allowlist in [config/agent_policy.yaml](config/agent_policy.yaml), validated at startup, hash recorded in every trace (`qa.policy.hash`) and in `meta.json` (`policy_hash`)
+> - Isolation: currently L0+ (see the table below and Known limitations); L1 planned in Phase 4
+
 
 Measured against spec v3 §8.2. Generated test code can still read and write local files until L1.
 

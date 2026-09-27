@@ -1,19 +1,15 @@
 """PROBE (spec v3 §15): live connectivity check against the real Gemini API.
 
 It bypasses TracedLLM on purpose, so it leaves no trace and must never be used for acceptance.
-Skipped unless QA_LIVE=1 and GEMINI_API_KEY is set.
+Skipped unless QA_LIVE=1 and GEMINI_API_KEY is set. The .env file is loaded only by tests/conftest.py and only
+when QA_LIVE=1, never at import time, so the "no key -> skip" guard cannot be bypassed by importing this module.
 """
 
 import json
 import os
-from pathlib import Path
-
 import pytest
 
-from app import load_env_file
 from llm.client import Message
-
-load_env_file(Path(__file__).resolve().parents[2] / ".env")
 
 pytestmark = [
     pytest.mark.live,
