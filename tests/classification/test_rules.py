@@ -12,6 +12,8 @@ CASES: dict[str, Unit] = {
     "R2": Unit("llm", exception="LLMRateLimitError", message="Gemini API error 429"),
     "R3": Unit("llm", exception="LLMUnavailableError", message="Gemini API error 503"),
     "R4": Unit("llm", exception="LLMTimeoutError", message="timed out"),
+    "R19": Unit("llm", exception="LLMConfigError", message="Gemini API error 401: API key not valid"),
+    "R20": Unit("llm", exception="LLMRequestError", message="Gemini API error 400: invalid argument"),
     "R5": Unit("agent", agent="automation", exception="AgentOutputError", message="LLM output is not valid JSON"),
     "R6": Unit("tool", tool="rm_rf", exception="UnknownToolError", message="tool 'rm_rf' is not registered"),
     "R7": Unit("agent", agent="test_design", exception="HandoffError", message="acceptance_criteria missing", upstream="requirement"),
@@ -19,6 +21,7 @@ CASES: dict[str, Unit] = {
     "R9": Unit("tool", tool="pytest", exit_code=2, collection_error=True, message="1 error"),
     "R8": Unit("tool", tool="pytest", exit_code=4, message="usage error"),
     "R17": Unit("tool", tool="pytest", exception="ToolTimeoutError", message="pytest did not finish within 120s"),
+    "R21": Unit("tool", agent="qa", tool="http_request", exception="ToolConnectionError", message="GET /api/tasks/1: ConnectError"),
     "R14": Unit("test", tool="playwright", test_id="t::ui", outcome="ERROR", health_ok=True,
                 message="TimeoutError: Locator.click: Timeout 5000ms exceeded"),  # fmt: skip
     "R15": Unit("test", tool="playwright", test_id="t::ui", outcome="ERROR", health_ok=False,
@@ -32,7 +35,10 @@ CASES: dict[str, Unit] = {
     "R13": Unit("diff", test_id="t::a", outcome="PASS", decision_rule="R13", message="clean build: assert 409 == 200"),
 }
 
-EXPECTED_ORDER = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R18", "R9", "R8", "R17", "R14", "R15", "R16", "R10", "R11", "R11U", "R12", "R13"]
+EXPECTED_ORDER = [
+    "R1", "R2", "R3", "R4", "R19", "R20", "R5", "R6", "R7", "R18", "R9", "R8", "R17", "R21",
+    "R14", "R15", "R16", "R10", "R11", "R11U", "R12", "R13",
+]  # fmt: skip
 
 
 def test_every_rule_has_a_reachability_case():
@@ -118,3 +124,14 @@ def test_evidence_is_redacted():
 def test_http_5xx_symptom_only_from_the_failed_comparison(message, symptom):
     assert classify_unit(Unit("test", test_id="t::a", outcome="FAIL", message=message)).symptom == symptom
     assert classify_unit(Unit("diff", test_id="t::a", outcome="FAIL", decision_rule="R11", message=message)).symptom == symptom
+
+
+def test_empty_llm_response_is_r5():
+    unit = Unit("llm", exception="LLMEmptyResponseError", message="Gemini returned no text (finish_reason=SAFETY)")
+    assert (classify_unit(unit).matched_rule, classify_unit(unit).layer) == ("R5", "AGENT")
+
+
+def test_generic_llm_and_tool_errors_stay_unknown():
+    """Nothing specific is known about them: they stay UNKNOWN (INCONCLUSIVE) instead of being guessed."""
+    assert classify_unit(Unit("llm", exception="LLMError", message="?")).layer == "UNKNOWN"
+    assert classify_unit(Unit("tool", tool="file_write", exception="ToolError", message="?")).layer == "UNKNOWN"

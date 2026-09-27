@@ -72,17 +72,19 @@ def _tool_failure(trace, exc):
         (_llm_failure, "LLMUnavailableError", "ENV_BLOCKED", "R3"),
         (_llm_failure, "LLMTimeoutError", "ENV_BLOCKED", "R4"),
         (_llm_failure, "LLMConnectionError", "ENV_BLOCKED", "R4"),
-        # changed: was ENV_BLOCKED; no v3 rule covers a bad/missing API key -> UNKNOWN
-        (_llm_failure, "LLMConfigError", "INCONCLUSIVE", None),
-        # changed: was AGENT_FAILED; a non-provider LLM error (400, empty response) has no v3 rule -> UNKNOWN
+        # Phase 3: no rule (INCONCLUSIVE); after Phase 3: R19, a bad or missing API key is a local ENV problem
+        (_llm_failure, "LLMConfigError", "ENV_BLOCKED", "R19"),
+        (_llm_failure, "LLMRequestError", "TEST_BROKEN", "R20"),
+        (_llm_failure, "LLMEmptyResponseError", "AGENT_FAILED", "R5"),
+        # a bare LLMError (none of the specific subclasses) still has no rule -> UNKNOWN
         (_llm_failure, "LLMError", "INCONCLUSIVE", None),
         (_agent_failure, "AgentOutputError", "AGENT_FAILED", "R5"),
         (_tool_failure, "UnknownToolError", "AGENT_FAILED", "R6"),
         (_tool_failure, "ToolArgumentError", "AGENT_FAILED", "R6"),
         # changed: was ENV_BLOCKED; a tool (not health check) timing out after retries is R17
         (_tool_failure, "ToolTimeoutError", "TEST_BROKEN", "R17"),
-        # changed: was ENV_BLOCKED; only the SUT health check is R1, other connection failures have no rule
-        (_tool_failure, "ToolConnectionError", "INCONCLUSIVE", None),
+        # Phase 3: no rule (INCONCLUSIVE); after Phase 3: R21, a tool could not reach its target
+        (_tool_failure, "ToolConnectionError", "ENV_BLOCKED", "R21"),
         # changed: was TEST_BROKEN; a generic tool error has no v3 rule -> UNKNOWN
         (_tool_failure, "ToolError", "INCONCLUSIVE", None),
         # changed: was re-raised (crash); an unmatched exception is now UNKNOWN -> INCONCLUSIVE with evidence

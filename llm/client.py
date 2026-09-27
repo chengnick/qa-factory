@@ -49,3 +49,11 @@ class LLMConfigError(LLMError):
 
 class LLMUnavailableError(LLMError):
     """The provider answered with a server error (HTTP 5xx other than 504), e.g. 503 overloaded. Retryable."""
+
+
+class LLMRequestError(LLMError):
+    """The provider rejected the request itself (HTTP 4xx other than 401/403/408/429): our request is malformed."""
+
+
+class LLMEmptyResponseError(LLMError):
+    """The provider answered but with no usable text (e.g. blocked by a safety filter)."""

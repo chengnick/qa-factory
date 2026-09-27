@@ -1,12 +1,16 @@
 """Rule table (spec v3 §5.4, as amended in Phase 3). Order matters: the first matching rule wins.
 
 Ordering principle: specific rules before general ones.
-    R1-R7 -> R18 -> R9 -> R8 -> R17 -> R14-R16 -> R10 -> R11 / R11U -> R12 -> R13
+    R1-R4 -> R19 -> R20 -> R5-R7 -> R18 -> R9 -> R8 -> R17 -> R21 -> R14-R16 -> R10 -> R11 / R11U -> R12 -> R13
 
-R17, R18 and R11U are Phase 3 additions (see docs/spec.md §5.4):
+R17, R18, R11U (Phase 3) and R19-R21 (after Phase 3) are additions to the v3 table (see docs/spec.md §5.4):
     R17  a pytest / tool call timed out after its retries          -> HARNESS / TIMEOUT
     R18  the permission gate or the generated-code policy refused   -> AGENT / PERMISSION_DENIED
     R11U an assertion failed and no cross-validation was available  -> SUT / ASSERTION, unverified
+    R19  LLM API key invalid or missing (401 / 403)                  -> ENV / PERMISSION_DENIED
+    R20  LLM API rejected the request (other 4xx, e.g. 400)          -> HARNESS / HTTP_4XX
+    R21  a tool could not reach its target (not the health check)   -> ENV / CONNECTION
+R5 also covers an LLM response with no usable text (LLMEmptyResponseError).
 """
 
 from __future__ import annotations
@@ -53,8 +57,12 @@ RULES: tuple[Rule, ...] = (
         "R4", "PROVIDER", lambda u: "TIMEOUT" if u.exception == "LLMTimeoutError" else "CONNECTION",
         "LLM API timeout or connection failure", lambda u: u.kind == "llm" and _exc("LLMTimeoutError", "LLMConnectionError")(u),
     ),  # fmt: skip
-    Rule("R5", "AGENT", "INVALID_OUTPUT", "LLM output could not be parsed into the expected structure",
-         lambda u: u.kind == "agent" and _exc("AgentOutputError")(u)),  # fmt: skip
+    Rule("R19", "ENV", "PERMISSION_DENIED", "LLM API key invalid or missing (401 / 403)",
+         lambda u: u.kind == "llm" and _exc("LLMConfigError")(u)),  # fmt: skip
+    Rule("R20", "HARNESS", "HTTP_4XX", "LLM API rejected the request (4xx other than 401/403/408/429)",
+         lambda u: u.kind == "llm" and _exc("LLMRequestError")(u)),  # fmt: skip
+    Rule("R5", "AGENT", "INVALID_OUTPUT", "LLM output could not be parsed into the expected structure, or was empty",
+         lambda u: (u.kind == "agent" and _exc("AgentOutputError")(u)) or (u.kind == "llm" and _exc("LLMEmptyResponseError")(u))),  # fmt: skip
     Rule("R6", "AGENT", "INVALID_OUTPUT", "unregistered tool, arguments not matching the schema, or a repeated failing call",
          lambda u: u.kind == "tool" and _exc("UnknownToolError", "ToolArgumentError", "RepeatedToolCallError")(u)),  # fmt: skip
     Rule("R7", "AGENT", "SCHEMA_MISMATCH", "handoff missing required fields (attributed to the upstream agent)",
@@ -67,6 +75,8 @@ RULES: tuple[Rule, ...] = (
          lambda u: u.kind == "tool" and u.tool in RUNNERS and u.exit_code in (2, 3, 4)),  # fmt: skip
     Rule("R17", "HARNESS", "TIMEOUT", "pytest or tool call timed out after its retries",
          lambda u: u.kind == "tool" and _exc("ToolTimeoutError")(u)),  # fmt: skip
+    Rule("R21", "ENV", "CONNECTION", "a tool could not reach its target (other than the SUT health check)",
+         lambda u: u.kind == "tool" and _exc("ToolConnectionError")(u)),  # fmt: skip
     Rule("R14", "TEST", "TIMEOUT", "Playwright locator timeout while the page loads normally",
          lambda u: u.kind in ("test", "diff") and u.outcome == "ERROR" and u.health_ok is True
          and bool(_LOCATOR_TIMEOUT.search(u.message)) and bool(_LOCATOR.search(u.message)) and not _NAVIGATION_TIMEOUT.search(u.message)),  # fmt: skip

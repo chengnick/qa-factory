@@ -204,22 +204,26 @@ artifacts/
 | 2 | R2 | LLM API 回 429 | PROVIDER | RATE_LIMIT |
 | 3 | R3 | LLM API 回 5xx | PROVIDER | HTTP_5XX |
 | 4 | R4 | LLM API timeout 或連線失敗 | PROVIDER | TIMEOUT / CONNECTION |
-| 5 | R5 | LLM 輸出無法 parse 成預期結構 | AGENT | INVALID_OUTPUT |
-| 6 | R6 | Agent 呼叫未註冊的工具、參數不符 schema，或重複要求同一個已失敗的工具呼叫 | AGENT | INVALID_OUTPUT |
-| 7 | R7 | handoff 時缺少必要欄位（歸因到上游 Agent） | AGENT | SCHEMA_MISMATCH |
-| 8 | R18 | 權限閘門或產生程式碼的靜態檢查拒絕了動作（Phase 3 新增） | AGENT | PERMISSION_DENIED |
-| 9 | R9 | pytest collection error、ImportError、SyntaxError | TEST | CRASH |
-| 10 | R8 | pytest exit code 2 / 3 / 4 | HARNESS | CRASH |
-| 11 | R17 | pytest 或工具層級逾時（重試用完）（Phase 3 新增） | HARNESS | TIMEOUT |
-| 12 | R14 | Playwright locator timeout，且頁面可正常載入 | TEST | TIMEOUT |
-| 13 | R15 | Playwright 導頁 timeout，且 health check 失敗 | ENV | TIMEOUT |
-| 14 | R16 | 瀏覽器無法啟動 | ENV | CRASH |
-| 15 | R10 | 測試執行時出現非 AssertionError 的例外（AttributeError、TypeError、fixture 錯誤等） | TEST | CRASH |
-| 16 | R11 | 交叉驗證：開 bug 版 FAIL，乾淨版 PASS | SUT | ASSERTION / HTTP_5XX |
-| 17 | R11U | 非評估模式：assertion 失敗，沒有乾淨版可比對（`unverified: true`）（Phase 3 新增） | SUT | ASSERTION / HTTP_5XX |
-| 18 | R12 | 交叉驗證：兩版都 FAIL（失敗與注入的 bug 無關，見 §6.4） | TEST | ASSERTION |
-| 19 | R13 | 交叉驗證：開 bug 版 PASS，乾淨版 FAIL | TEST | ASSERTION |
+| 5 | R19 | LLM API key 無效或缺少（401 / 403）（Phase 3 後新增） | ENV | PERMISSION_DENIED |
+| 6 | R20 | LLM API 拒絕請求（401/403/408/429 以外的 4xx，例如 400）（Phase 3 後新增） | HARNESS | HTTP_4XX |
+| 7 | R5 | LLM 輸出無法 parse 成預期結構，或沒有可用的文字（例如被安全機制擋下） | AGENT | INVALID_OUTPUT |
+| 8 | R6 | Agent 呼叫未註冊的工具、參數不符 schema，或重複要求同一個已失敗的工具呼叫 | AGENT | INVALID_OUTPUT |
+| 9 | R7 | handoff 時缺少必要欄位（歸因到上游 Agent） | AGENT | SCHEMA_MISMATCH |
+| 10 | R18 | 權限閘門或產生程式碼的靜態檢查拒絕了動作（Phase 3 新增） | AGENT | PERMISSION_DENIED |
+| 11 | R9 | pytest collection error、ImportError、SyntaxError | TEST | CRASH |
+| 12 | R8 | pytest exit code 2 / 3 / 4 | HARNESS | CRASH |
+| 13 | R17 | pytest 或工具層級逾時（重試用完）（Phase 3 新增） | HARNESS | TIMEOUT |
+| 14 | R21 | 工具連不到目標（SUT health check 以外）（Phase 3 後新增） | ENV | CONNECTION |
+| 15 | R14 | Playwright locator timeout，且頁面可正常載入 | TEST | TIMEOUT |
+| 16 | R15 | Playwright 導頁 timeout，且 health check 失敗 | ENV | TIMEOUT |
+| 17 | R16 | 瀏覽器無法啟動 | ENV | CRASH |
+| 18 | R10 | 測試執行時出現非 AssertionError 的例外（AttributeError、TypeError、fixture 錯誤等） | TEST | CRASH |
+| 19 | R11 | 交叉驗證：開 bug 版 FAIL，乾淨版 PASS | SUT | ASSERTION / HTTP_5XX |
+| 20 | R11U | 非評估模式：assertion 失敗，沒有乾淨版可比對（`unverified: true`）（Phase 3 新增） | SUT | ASSERTION / HTTP_5XX |
+| 21 | R12 | 交叉驗證：兩版都 FAIL（失敗與注入的 bug 無關，見 §6.4） | TEST | ASSERTION |
+| 22 | R13 | 交叉驗證：開 bug 版 PASS，乾淨版 FAIL | TEST | ASSERTION |
 
+- 不屬於任何具體類型的 LLM 錯誤與工具錯誤（純 `LLMError`、純 `ToolError`），以及程式本身的例外，仍維持 `UNKNOWN` → `INCONCLUSIVE`，不做猜測。
 - 每筆分類必須輸出 `matched_rule` 與 `evidence`（觸發規則的原始片段），不輸出 confidence 數值。
 - R9 排在 R8 之前：收集失敗時 pytest 的 exit code 也是 2，若 R8 在前 R9 永遠不會觸發。
 - R14–R16 排在 R10 之前：Playwright 的錯誤都是非 AssertionError 的例外，若 R10 在前它們永遠不會觸發。

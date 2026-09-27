@@ -19,8 +19,10 @@ from llm.client import (
     ChatResponse,
     LLMConfigError,
     LLMConnectionError,
+    LLMEmptyResponseError,
     LLMError,
     LLMRateLimitError,
+    LLMRequestError,
     LLMTimeoutError,
     LLMUnavailableError,
     Message,
@@ -88,7 +90,7 @@ class GeminiClient:
         text = response.text
         if not text:
             reason = _finish_reason(response)
-            raise LLMError(f"Gemini returned no text (finish_reason={reason})")
+            raise LLMEmptyResponseError(f"Gemini returned no text (finish_reason={reason})")
         usage = response.usage_metadata
         input_tokens = getattr(usage, "prompt_token_count", None) if usage else None
         output_tokens = None
@@ -107,6 +109,8 @@ def _map_api_error(exc: errors.APIError) -> LLMError:
         return LLMUnavailableError(message)
     if exc.code in (401, 403):
         return LLMConfigError(message)
+    if 400 <= exc.code < 500:
+        return LLMRequestError(message)
     return LLMError(message)
 
 

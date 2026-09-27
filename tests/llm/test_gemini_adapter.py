@@ -18,7 +18,9 @@ from llm.adapters.gemini import GEMINI_RETRY, GeminiClient
 from llm.client import (
     LLMConfigError,
     LLMConnectionError,
+    LLMEmptyResponseError,
     LLMError,
+    LLMRequestError,
     LLMRateLimitError,
     LLMTimeoutError,
     LLMUnavailableError,
@@ -105,7 +107,8 @@ def test_missing_usage_is_none_not_zero():
         (_api_error(401), LLMConfigError),
         (_api_error(500), LLMUnavailableError),  # spec v3 R3: every provider 5xx is PROVIDER
         (_api_error(502), LLMUnavailableError),
-        (_api_error(400), LLMError),
+        (_api_error(400), LLMRequestError),
+        (_api_error(404), LLMRequestError),
         (httpx.ReadTimeout("slow"), LLMTimeoutError),
         (httpx.ConnectError("refused"), LLMConnectionError),
     ],
@@ -127,7 +130,7 @@ def test_rate_limit_is_not_mistaken_for_generic_error():
 def test_empty_response_raises_with_finish_reason():
     llm, _ = _client(_response(text=None))
 
-    with pytest.raises(LLMError, match="SAFETY"):
+    with pytest.raises(LLMEmptyResponseError, match="SAFETY"):
         llm.chat([Message("user", "hi")])
 
 
@@ -219,10 +222,11 @@ def test_provider_failures_are_layer_provider_and_env_blocked(harness, error, sy
 
 
 def test_non_provider_llm_error_is_not_provider(harness):
-    """A 400 is not a provider outage (R2-R4) and no v3 rule covers it: UNKNOWN -> INCONCLUSIVE."""
+    """A 400 is not a provider outage (R2-R4): our request was rejected -> HARNESS/HTTP_4XX (R20)."""
     llm, _ = _client(_api_error(400))
 
     result = harness.run(llm=llm)
 
-    assert result.verdict == "INCONCLUSIVE"
+    assert result.verdict == "TEST_BROKEN"
+    assert harness.one("qa.run").attributes["qa.failure.rule"] == "R20"
     assert "qa.failure.layer" not in harness.one("llm.chat").attributes
