@@ -26,7 +26,7 @@ from typing import Any
 
 from agents.contracts import RequirementInput
 from agents.version import PROMPT_VERSION
-from benchmark.datasets import DEV_COMBINATIONS, dataset_of
+from benchmark.datasets import DEV_COMBINATIONS, DEV_REQUIREMENTS, TEST_CLEAN_REQUIREMENTS, TEST_COMBINATIONS, dataset_of, set_of
 from evaluation import workflow as wf
 from evaluation.differential import SutFactory, run_differential
 from evaluation.metrics import compute
@@ -196,13 +196,14 @@ def execute_run(
     round_no: int | None = None,
     clock: Clock | None = None,
     policy: Policy | None = None,
+    extra_meta: dict[str, Any] | None = None,
 ) -> tuple[Path, dict[str, Any]]:
     """One live run with real tools. Returns (workspace, meta). meta.json is always written."""
     policy = policy or default_policy()
     run_id = new_run_id()
     workspace = create_run_workspace(artifacts_dir, run_id)
     meta = base_meta(run_id, requirement_id, llm=llm_kind, model=model, temperature=temperature, sut_bugs=sut_bugs, policy=policy)
-    meta.update(round=round_no, sut_url=sut_url, evaluation_mode=differential)
+    meta.update(round=round_no, sut_url=sut_url, evaluation_mode=differential, **(extra_meta or {}))
     requirement = RequirementInput(requirement_id, (REQUIREMENTS_DIR / f"{requirement_id}.md").read_text(encoding="utf-8"))
     started = time.monotonic()
     sut = contextlib.nullcontext(sut_url) if sut_url else sut_factory(sut_bugs)
@@ -259,16 +260,35 @@ def execute_run(
 # --------------------------------------------------------------------------- dataset
 
 
+DATASETS = ("dev", "test", "phase5")
+
+
 def combinations(dataset: str) -> list[tuple[str, list[str]]]:
+    """dev: the 3 dev bugs + their clean runs. test: the 7 held-out bugs + the clean runs of the test requirements.
+    phase5: both (18 combinations). test and phase5 need benchmark/frozen.yaml (spec v3 §3.3)."""
+    dev = [(req, [bug]) for req, bug in DEV_COMBINATIONS] + [(req, []) for req in DEV_REQUIREMENTS]
     if dataset == "dev":
-        bugged = [(req, [bug]) for req, bug in DEV_COMBINATIONS]
-        clean = [(req, []) for req, _ in DEV_COMBINATIONS]
-        return bugged + clean
-    if dataset == "test":
+        return dev
+    if dataset in ("test", "phase5"):
         if not FROZEN.is_file():
             raise RunnerRefused(f"{FROZEN} does not exist (benchmark/frozen.yaml): the test set stays sealed (spec v3 §3.3)")
-        raise RunnerRefused("test-set evaluation is Phase 5 and not implemented yet")
+        test = [(req, [bug]) for req, bug in TEST_COMBINATIONS] + [(req, []) for req in TEST_CLEAN_REQUIREMENTS]
+        return test if dataset == "test" else dev + test
     raise RunnerRefused(f"unknown dataset {dataset!r}")
+
+
+def check_frozen(model: str, policy: Policy | None = None, path: Path | None = None) -> str:
+    """Refuse unless every frozen condition matches the current checkout; returns the freeze file's sha256."""
+    from evaluation import frozen
+
+    path = path or FROZEN
+    doc = frozen.load(path)
+    if doc is None:
+        raise RunnerRefused(f"{path} does not exist: the test set stays sealed (spec v3 §3.3)")
+    problems = frozen.mismatches(doc, frozen.current_conditions(model, policy))
+    if problems:
+        raise RunnerRefused("conditions differ from benchmark/frozen.yaml, test-set results would be contaminated: " + "; ".join(problems))
+    return frozen.file_sha256(path)
 
 
 def contains_secret(path: Path) -> bool:
@@ -305,6 +325,7 @@ def run_dataset(
     sleep: Callable[[float], None] = time.sleep,
     log: Callable[[str], None] = print,
     policy: Policy | None = None,
+    frozen_sha256: str | None = None,
 ) -> dict[str, Any]:
     plan = list(only) if only is not None else combinations(dataset)
     if (results_dir / "summary.json").exists():
@@ -328,6 +349,7 @@ def run_dataset(
                 sut_factory=sut_factory,
                 round_no=rnd,
                 policy=policy,
+                extra_meta={"set": set_of(requirement_id, bugs), **({"frozen_sha256": frozen_sha256} if frozen_sha256 else {})},
             )
             copied = copy_run(workspace, results_dir)
             meta["copied_to_results"] = copied is not None
@@ -346,10 +368,17 @@ def run_dataset(
             "prompt_version": PROMPT_VERSION,
             "git_commit": git_commit(),
             "lockfile_sha256": lockfile_sha256(),
+            **({"frozen_sha256": frozen_sha256} if frozen_sha256 else {}),
         },
         "metrics": compute(runs),
+        **(
+            {"metrics_by_set": {name: compute([r for r in runs if r.get("set") == name]) for name in ("dev", "test")
+                                if any(r.get("set") == name for r in runs)}}  # fmt: skip
+            if len({r.get("set") for r in runs}) > 1
+            else {}
+        ),
         "runs": [
-            {k: r.get(k) for k in ("round", "run_id", "trace_id", "requirement_id", "sut_bugs", "surface_verdict", "verdict", "differential", "error", "copied_to_results")}
+            {k: r.get(k) for k in ("round", "set", "run_id", "trace_id", "requirement_id", "sut_bugs", "surface_verdict", "verdict", "differential", "error", "copied_to_results")}
             for r in runs
         ],
     }
@@ -370,20 +399,13 @@ def _fmt_rate(stat: dict[str, Any]) -> str:
     return f"{stat['mean']:.0%} (range {stat['min']:.0%}–{stat['max']:.0%}, rounds n={stat['n_rounds']}; pooled {stat['pooled']}{ci_text})"
 
 
-def render_summary(summary: dict[str, Any]) -> str:
-    m, c = summary["metrics"], summary["conditions"]
-    lines = [
-        f"# Evaluation summary: dataset `{summary['dataset']}`, {summary['rounds']} rounds",
+SET_TITLES = {"dev": "Dev set (B02-B04; used for prompt tuning)", "test": "Test set (held out; first run after the freeze)"}
+
+
+def _metric_lines(m: dict[str, Any], title: str) -> list[str]:
+    return [
         "",
-        f"- Model: `{c['model']}` (reported by provider: {', '.join(c['models_seen']) or 'n/a'}), temperature {c['temperature']}",
-        f"- Prompt version: `{c['prompt_version']}`; git commit `{c['git_commit']['sha']}` (dirty: {c['git_commit']['dirty']}); lockfile sha256 `{c['lockfile_sha256']}`",
-        *(
-            [f"- Summary regenerated from the {summary['regenerated']['runs_read']} run directories on {summary['regenerated']['at']} "
-             f"(commit `{summary['regenerated']['git_commit']['sha']}`); no pipeline was re-run."]
-            if summary.get("regenerated") else []
-        ),
-        "",
-        "## Metrics (spec v3 §11.2)",
+        f"## {title}",
         "",
         "Mean and range are over per-round rates; the 95% CI is a Wilson interval on the pooled count.",
         "",
@@ -406,7 +428,7 @@ def render_summary(summary: dict[str, Any]) -> str:
             else []
         ),
         "",
-        "## Per-bug detection",
+        "### Per-bug detection",
         "",
         "| Bug | Cross-validated | Pipeline completed | AGENT_FAILED | R20 (LLM request rejected) | Surface | ENV_BLOCKED |",
         "|---|---|---|---|---|---|---|",
@@ -416,11 +438,32 @@ def render_summary(summary: dict[str, Any]) -> str:
         ],
         "",
         f"Cost: mean tokens {m['cost']['mean_tokens']}, mean duration {m['cost']['mean_duration_s']} s, n={m['cost']['n']}",
+    ]
+
+
+def render_summary(summary: dict[str, Any]) -> str:
+    c = summary["conditions"]
+    lines = [
+        f"# Evaluation summary: dataset `{summary['dataset']}`, {summary['rounds']} rounds",
+        "",
+        f"- Model: `{c['model']}` (reported by provider: {', '.join(c['models_seen']) or 'n/a'}), temperature {c['temperature']}",
+        f"- Prompt version: `{c['prompt_version']}`; git commit `{c['git_commit']['sha']}` (dirty: {c['git_commit']['dirty']}); lockfile sha256 `{c['lockfile_sha256']}`",
+        *([f"- Frozen conditions: `benchmark/frozen.yaml` sha256 `{c['frozen_sha256']}`, every field matched"] if c.get("frozen_sha256") else []),
+        *(
+            [f"- Summary regenerated from the {summary['regenerated']['runs_read']} run directories on {summary['regenerated']['at']} "
+             f"(commit `{summary['regenerated']['git_commit']['sha']}`); no pipeline was re-run."]
+            if summary.get("regenerated") else []
+        ),
+        *(
+            _metric_lines(summary["metrics"], "Metrics (spec v3 §11.2)")
+            if "metrics_by_set" not in summary
+            else [line for name, sm in summary["metrics_by_set"].items() for line in _metric_lines(sm, SET_TITLES.get(name, name))]
+        ),
         "",
         "## Runs",
         "",
-        "| Round | run_id | Requirement | Bugs | Surface | Verdict | Cross-validation | detected / broken / tests | Note |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "| Round | Set | run_id | Requirement | Bugs | Surface | Verdict | Cross-validation | detected / broken / tests | Note |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in summary["runs"]:
         d = r.get("differential") or {}
@@ -431,7 +474,7 @@ def render_summary(summary: dict[str, Any]) -> str:
         if not r.get("copied_to_results"):
             note = ("NOT COPIED; " + note).strip()
         bugs = ",".join(r["sut_bugs"]) or "(clean)"
-        lines.append(f"| {r['round']} | `{r['run_id']}` | {r['requirement_id']} | {bugs} | {r['surface_verdict']} | {r['verdict']} | {cv} | {tally} | {note} |")
+        lines.append(f"| {r['round']} | {r.get('set') or '-'} | `{r['run_id']}` | {r['requirement_id']} | {bugs} | {r['surface_verdict']} | {r['verdict']} | {cv} | {tally} | {note} |")
     return "\n".join(lines) + "\n"
 
 
@@ -448,7 +491,7 @@ def require_clean_worktree() -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--dataset", required=True, choices=["dev", "test"])
+    parser.add_argument("--dataset", required=True, choices=list(DATASETS), help="phase5 = dev + test (18 combinations)")
     parser.add_argument("--rounds", type=int, default=5)
     parser.add_argument("--llm", choices=["gemini", "fake"], required=True)
     parser.add_argument("--model", help="gemini model id (required for --llm gemini; fixed for the whole evaluation)")
@@ -471,10 +514,12 @@ def main(argv: list[str] | None = None) -> int:
             load_env_file(ENV_FILE)
             GeminiClient(args.model)  # fail fast on a missing key, before any SUT starts
             factory, retry, temperature, model = (lambda: GeminiClient(args.model)), GEMINI_RETRY, 0.0, args.model
+            frozen_sha = check_frozen(model, policy) if args.dataset != "dev" else None
         else:
             from testing.scripts import dry_run_llm
 
             factory, retry, temperature, model = dry_run_llm, NO_RETRY, None, "fake-model"
+            frozen_sha = None  # a scripted LLM cannot contaminate anything
     except PolicyError as exc:
         print(f"policy error: {exc}", file=sys.stderr)
         return 2
@@ -497,6 +542,7 @@ def main(argv: list[str] | None = None) -> int:
             llm_retry=retry,
             pause_s=args.pause_s if args.llm == "gemini" else 0.0,
             policy=policy,
+            frozen_sha256=frozen_sha,
         )
     except RunnerRefused as exc:
         print(f"refused: {exc}", file=sys.stderr)
