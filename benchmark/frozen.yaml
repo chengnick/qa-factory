@@ -1,0 +1,52 @@
+# Phase 5 freeze (spec v3 §3.3). Written once by `python -m evaluation.frozen write`; never edited.
+frozen_at: '2026-09-28T15:54:08+00:00'
+frozen_commit: 219dfbe2ed3d93bea695675db0546c85f6d1c79d
+prompt_version: v3
+prompt_sha256: 7b8edba0f976b7cbf9a9dc2af30c693c910319a67e518575499855def42e82b0
+model: gemini-3.5-flash-lite
+temperature: 0.0
+lockfile_sha256: e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6
+policy_hash: ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55
+conftest_sha256: 1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac
+isolation: L1
+max_rounds: 1
+rounds: 5
+combinations:
+  dev:
+  - - REQ-005
+    - - B02
+  - - REQ-007
+    - - B03
+  - - REQ-002
+    - - B04
+  - - REQ-005
+    - []
+  - - REQ-007
+    - []
+  - - REQ-002
+    - []
+  test:
+  - - REQ-003
+    - - B01
+  - - REQ-004
+    - - B05
+  - - REQ-002
+    - - B06
+  - - REQ-008
+    - - B07
+  - - REQ-006
+    - - B08
+  - - REQ-009
+    - - B09
+  - - REQ-004
+    - - B10
+  - - REQ-003
+    - []
+  - - REQ-004
+    - []
+  - - REQ-008
+    - []
+  - - REQ-006
+    - []
+  - - REQ-009
+    - []
