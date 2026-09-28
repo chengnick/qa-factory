@@ -1,0 +1,49 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "驗證 title 邊界長度 1 和 100 字元以及預設 priority 3",
+      "surface": "api",
+      "steps": [
+        "送出 POST /api/projects 建立專案",
+        "使用 title 長度為 1 字元與預設 priority 呼叫 POST /api/projects/{pid}/tasks",
+        "使用 title 長度為 100 字元呼叫 POST /api/projects/{pid}/tasks"
+      ],
+      "expected": "title 為必填欄位，長度須介於 1 至 100 字元之間（含邊界）。title 長度為 100 字元時應成功接受，回傳 201 或 200。priority 須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。"
+    },
+    {
+      "id": "TC-2",
+      "title": "驗證 title 超過 101 字元或為空白時的 422 錯誤",
+      "surface": "api",
+      "steps": [
+        "送出 POST /api/projects 建立專案",
+        "使用超過 101 字元的 title 呼叫 POST /api/projects/{pid}/tasks",
+        "使用空白 title 呼叫 POST /api/projects/{pid}/tasks"
+      ],
+      "expected": "title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "驗證 priority 邊界值 1 與 5",
+      "surface": "api",
+      "steps": [
+        "送出 POST /api/projects 建立專案",
+        "使用 valid title 且 priority 為 1 呼叫 POST /api/projects/{pid}/tasks",
+        "使用 valid title 且 priority 為 5 呼叫 POST /api/projects/{pid}/tasks"
+      ],
+      "expected": "priority 為 1 或 5 時應被接受"
+    },
+    {
+      "id": "TC-4",
+      "title": "驗證 priority 非法邊界值 0 與 6 的 422 錯誤",
+      "surface": "api",
+      "steps": [
+        "送出 POST /api/projects 建立專案",
+        "使用 priority 為 0 呼叫 POST /api/projects/{pid}/tasks",
+        "使用 priority 為 6 呼叫 POST /api/projects/{pid}/tasks"
+      ],
+      "expected": "若為 0 或 6 則應回傳 422 錯誤。"
+    }
+  ]
+}

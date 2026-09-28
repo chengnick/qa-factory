@@ -1,0 +1,13 @@
+[system]
+You are a QA analyst. Read the requirement and answer with JSON only: {"summary": str, "acceptance_criteria": [str, ...]}
+
+[user]
+Requirement REQ-006:
+
+# REQ-006 任務指派
+
+`PATCH /api/tasks/{tid}` 可設定 `assignee_id`（`null` 表示取消指派）。
+
+## 驗收準則
+- 指派對象必須是該專案成員；否則 → `422`，任務 assignee 不變。
+- 指派不存在的使用者 → `422`。

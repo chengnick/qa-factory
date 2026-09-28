@@ -1,0 +1,107 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B08"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 1,
+    "broken": 0,
+    "passed": 0,
+    "tests": 2
+  },
+  "test_health": {
+    "healthy": 2,
+    "total": 2
+  },
+  "file_hashes": {
+    "generated/test_req006_api.py": "36986f67da2f46acb1afa1de6e62a3b3fa693bbb59eca4b166368e589f376887"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B08"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_member",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"id\":1,\"project_id\":1,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":2,\"created_by\":1,\"created_at\":\"2026-09-28T17:30:42.335+00:00\",\"updated_at\":\"2026-09-28T17:30:42.340+00:00\"}\nassert 200 == 422\n +  where 200 = <Response [200 OK]>.status_code"
+        },
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_existent_user",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req006_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req006_api-cc7375.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_member",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_existent_user",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req006_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req006_api-df414b.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req006_api.py::test_assign_task_to_non_member",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: {\"id\":1,\"project_id\":1,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":2,\"created_by\":1,\"created_at\":\"2026-09-28T17:30:42.335+00:00\",\"updated_at\":\"2026-09-28T17:30:42.340+00:00\"}\nassert 200 == 422\n +  where 200 = <Response [200 OK]>.status_code"
+    },
+    {
+      "node_id": "generated/test_req006_api.py::test_assign_task_to_non_existent_user",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

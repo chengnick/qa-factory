@@ -1,0 +1,4 @@
+{
+  "requirement_id": "REQ-004",
+  "summary": "REQ-004: 2 tool execution(s)\n- http_request: ok (attempts=1, exit=None) - {\"status\":\"ok\"}\n- playwright: FAILED (attempts=1, exit=1) - 3 failed in 12.37s"
+}

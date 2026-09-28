@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "86a79f704b234e2b20b9fe174662b4224f75e395c4712b2fa0ea057065001c57"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc1_preselect_user_and_project",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc2_create_task_updates_list_immediately",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+          "outcome": "FAIL",
+          "message": "assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='http://127.0.0.1:53604/?user=alice&project=999999'> selector='internal:testid=[data-testid=\"error\"s]'>.inner_text",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "trace_id": "3247795e23bc4923e4669b4a1d25de5e",
+  "run": {
+    "requirement_id": "REQ-006",
+    "sut_bugs": [
+      "B08"
+    ],
+    "started_at": "2026-09-28T16:16:08.247Z",
+    "duration_ms": 81556.452,
+    "verdict": "ENV_BLOCKED"
+  },
+  "spans": [
+    {
+      "span_id": "e52d4955ca71b623",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T16:16:08.247Z",
+      "end_time": "2026-09-28T16:17:29.804Z",
+      "duration_ms": 81556.452,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-006",
+        "qa.run.sut_bugs": [
+          "B08"
+        ],
+        "qa.run.id": "RUN-20260928-161605-5994",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "test",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "ENV_BLOCKED",
+        "qa.verdict.surface": "ENV_BLOCKED",
+        "qa.classification.total": 1,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.rule": "R3",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:17:29.802Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2b5f5150e77beef5",
+      "parent_span_id": "e52d4955ca71b623",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T16:16:08.247Z",
+      "end_time": "2026-09-28T16:17:29.802Z",
+      "duration_ms": 81554.455,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.agent.name": "requirement",
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:17:29.802Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "66a223a7cd774560",
+      "parent_span_id": "2b5f5150e77beef5",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T16:16:08.247Z",
+      "end_time": "2026-09-28T16:17:29.802Z",
+      "duration_ms": 81554.455,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T16:16:08.251Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-006:\n\n# REQ-006 任務指派\n\n`PATCH /api/tasks/{tid}` 可設定 `assignee_id`（`null` 表示取消指派）。\n\n## 驗收準則\n- 指派對象必須是該專案成員；否則 → `422`，任務 assignee 不變。\n- 指派不存在的使用者 → `422`。\n",
+            "length": 308,
+            "truncated": false,
+            "artifact": "prompts/66a223a7cd774560-prompt.txt"
+          }
+        },
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:17:29.802Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "932a1198e662edfc",
+      "parent_span_id": "66a223a7cd774560",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:16:08.251Z",
+      "end_time": "2026-09-28T16:16:09.466Z",
+      "duration_ms": 1214.525,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:16:09.466Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "99708d31a8a9d532",
+      "parent_span_id": "66a223a7cd774560",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:16:14.467Z",
+      "end_time": "2026-09-28T16:16:15.206Z",
+      "duration_ms": 739.575,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:16:15.206Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "9279e892bdaa5d5a",
+      "parent_span_id": "66a223a7cd774560",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:16:25.207Z",
+      "end_time": "2026-09-28T16:16:26.378Z",
+      "duration_ms": 1170.844,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 3,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:16:26.378Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f10ad81fd4563676",
+      "parent_span_id": "66a223a7cd774560",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:16:46.379Z",
+      "end_time": "2026-09-28T16:16:48.416Z",
+      "duration_ms": 2036.781,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 4,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:16:48.416Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "25e711ca5b41e469",
+      "parent_span_id": "66a223a7cd774560",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:17:28.418Z",
+      "end_time": "2026-09-28T16:17:29.802Z",
+      "duration_ms": 1384.362,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 5,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:17:29.802Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B06"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 3,
+    "broken": 0,
+    "passed": 0,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 4,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req002_api.py": "1b0d68f500fdf3327aa7081e89362f574ce2a779c1f85045da88977a0b2f189b"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B06"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_title_lengths",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_task_priorities",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 == 201\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_task_priority_boundaries_and_patch",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-619fef.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_title_lengths",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_task_priorities",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_task_priority_boundaries_and_patch",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-ce41b1.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req002_api.py::test_tc1_create_task_title_lengths",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc3_create_task_priorities",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 == 201\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_tc4_task_priority_boundaries_and_patch",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

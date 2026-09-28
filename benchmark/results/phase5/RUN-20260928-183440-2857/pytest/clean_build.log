@@ -1,0 +1,51 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+.FF                                                                      [100%]
+================================== FAILURES ===================================
+______________ test_tc2_task_title_with_html_rendered_as_literal ______________
+
+page = <Page url='http://127.0.0.1:64836/?user=alice&project=2'>
+base_url = 'http://127.0.0.1:64836'
+new_project = <function new_project.<locals>.create at 0x0000023CC46211C0>
+
+    def test_tc2_task_title_with_html_rendered_as_literal(page, base_url, new_project):
+        pid = new_project(owner="alice", members=())
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        html_title = "<b>Bold Title</b>"
+        page.get_by_test_id("new-title").fill(html_title)
+        page.get_by_test_id("create-btn").click()
+    
+        task_title_el = page.get_by_test_id("task-title")
+        expect(task_title_el).to_be_visible()
+>       expect(task_title_el).not_to_have_JS_property("innerHTML", lambda val: "<b>" in val)
+E       AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property'
+
+generated\test_req004_ui.py:26: AttributeError
+______________ test_tc3_api_error_displays_message_in_error_area ______________
+
+page = <Page url='http://127.0.0.1:64836/?user=alice&project=99999'>
+base_url = 'http://127.0.0.1:64836'
+
+    def test_tc3_api_error_displays_message_in_error_area(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=99999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_area = page.get_by_test_id("error")
+        expect(error_area).to_be_visible()
+>       expect(error_area).not_to_have_text("")
+E       AssertionError: Locator expected not to have text ''
+E       Actual value:  
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value ""
+
+generated\test_req004_ui.py:35: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-183440-2857\reports\junit-test_req004_ui-ce014a.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal
+FAILED generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area
+2 failed, 1 passed in 12.53s
+

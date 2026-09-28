@@ -1,0 +1,50 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Case-insensitive substring matching on task titles",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project A\"} as alice",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"Fix Login Bug\"}",
+      "GET /api/projects/{pid}/tasks?q=login as alice"
+    ],
+    "expected": "Search must be case-insensitive (ASCII), e.g., 'q=login' must match 'Fix Login Bug'."
+  },
+  {
+    "id": "TC-2",
+    "title": "Literal handling of special character % in search queries",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project B\"} as alice",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"100% complete\"}",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"1000 complete\"}",
+      "GET /api/projects/{pid}/tasks?q=100% as alice"
+    ],
+    "expected": "Special characters '%' and '_' must be treated as literal characters, not as wildcards."
+  },
+  {
+    "id": "TC-3",
+    "title": "Literal handling of special character _ in search queries",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project C\"} as alice",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"user_name\"}",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"userXname\"}",
+      "GET /api/projects/{pid}/tasks?q=user_name as alice"
+    ],
+    "expected": "Special characters '%' and '_' must be treated as literal characters, not as wildcards."
+  },
+  {
+    "id": "TC-4",
+    "title": "Concurrent use of search query with status filtering and pagination",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with {\"name\": \"Project D\"} as alice",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"Alpha Test 1\"}",
+      "POST /api/projects/{pid}/tasks with {\"title\": \"Alpha Test 2\"}",
+      "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} for the first task",
+      "GET /api/projects/{pid}/tasks?q=Alpha&status=in_progress&limit=10&offset=0 as alice"
+    ],
+    "expected": "The search query must be combinable with status filtering and pagination parameters."
+  }
+]}

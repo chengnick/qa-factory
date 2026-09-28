@@ -1,0 +1,70 @@
+{
+  "run_id": "RUN-20260928-190713-1408",
+  "trace_id": "a34d90bb1b2ee9b779458e7e4f0ed02b",
+  "meta": {
+    "requirement_id": "REQ-004",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_version": "v3",
+    "dataset": "test",
+    "sut_bugs": [
+      "B05"
+    ],
+    "git_commit": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "git_dirty": false,
+    "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+    "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac"
+  },
+  "verdict": "DEFECT_FOUND",
+  "surface_verdict": "DEFECT_FOUND",
+  "underlying_verdict": null,
+  "differential": {
+    "status": "COMPLETE",
+    "detected": 2,
+    "broken": 1,
+    "missed": 0
+  },
+  "attribution": [
+    {
+      "span": "",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAr",
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly"
+    },
+    {
+      "span": "",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combob",
+      "test_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped"
+    },
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12",
+      "evidence": "bug build: AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | clean build: Assertio",
+      "test_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed"
+    }
+  ],
+  "reliability": {
+    "retries": 0,
+    "flaky": false
+  },
+  "security": {
+    "events": 0,
+    "breach": false
+  },
+  "workflow": {
+    "workflow_status": "PASS",
+    "violations": [],
+    "goal_drift": false,
+    "rounds": 1
+  },
+  "isolation_level": "L1",
+  "isolation_note": "in-process audit hook (tools/l1_guard.py): writes, network and processes limited; not an OS sandbox",
+  "artifacts_complete": true,
+  "missing_evidence": []
+}

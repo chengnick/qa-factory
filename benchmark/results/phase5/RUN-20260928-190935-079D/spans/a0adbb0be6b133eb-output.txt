@@ -1,0 +1,49 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Title boundary lengths and default priority",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"a\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"A\" repeat 100 times} as alice"
+      ],
+      "expected": "title 為必填欄位，長度限制為 1 至 100 字元（包含邊界）。title 長度為 100 字元時應被接受並回傳成功狀態碼（201 或 200）。priority 未提供時預設為 3。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Title length exceeding maximum or empty",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project B\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"A\" repeat 101 times} as alice"
+      ],
+      "expected": "title 長度超過 100 字元或為空白時，應回傳 422 錯誤狀態碼，且不得回傳 5xx 錯誤。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Priority boundary values (1 and 5)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project C\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\", \"priority\": 1} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 5\", \"priority\": 5} as alice"
+      ],
+      "expected": "priority 必須為整數，有效範圍為 1 至 5（包含邊界）。priority 值為 1 或 5 時應被接受。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Priority invalid boundary values (0 and 6)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project D\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 0\", \"priority\": 0} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 6\", \"priority\": 6} as alice"
+      ],
+      "expected": "priority 值為 0 或 6 時應回傳 422 錯誤狀態碼。"
+    }
+  ]
+}

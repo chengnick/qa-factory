@@ -1,0 +1,55 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Create task with boundary title lengths (1 and 100 characters)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with title of 1 character and no priority",
+        "POST /api/projects/{pid}/tasks with title of 100 characters (max boundary)"
+      ],
+      "expected": "title 必填，長度須在 1 至 100 字元之間（包含邊界）。title 長度為 100 字元時應被接受並回傳 201 或 200。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Create and update task with invalid title lengths or empty title",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with title of \"\" (empty)",
+        "POST /api/projects/{pid}/tasks with title exceeding 100 characters",
+        "POST /api/projects/{pid}/tasks with valid title to create task",
+        "PATCH /api/tasks/{tid} with title of \"\" (empty)"
+      ],
+      "expected": "title 長度超過 100 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Create task with priority boundary values and default value",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with title 'Task default' without priority",
+        "POST /api/projects/{pid}/tasks with title 'Task min' and priority 1",
+        "POST /api/projects/{pid}/tasks with title 'Task max' and priority 5"
+      ],
+      "expected": "priority 須為整數，範圍介於 1 至 5 之間（包含邊界），預設值為 3。priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Create and patch task with invalid priority values (0 and 6)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with valid title and priority 0",
+        "POST /api/projects/{pid}/tasks with valid title and priority 6",
+        "POST /api/projects/{pid}/tasks with valid title to create a valid task",
+        "PATCH /api/tasks/{tid} with priority 0",
+        "PATCH /api/tasks/{tid} with priority 6"
+      ],
+      "expected": "priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。"
+    }
+  ]
+}

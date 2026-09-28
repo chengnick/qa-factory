@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-003",
+  "summary": "Implement pagination for the project task list API (GET /api/projects/{pid}/tasks) with limit, offset, and sorting by task id ascending.",
+  "acceptance_criteria": [
+    "limit defaults to 20, valid range is 1-100; offset defaults to 0, must be >= 0; out of range returns 422.",
+    "total represents the total number of matching tasks, unaffected by pagination.",
+    "Iterating through pages from offset=0 with a fixed limit to the end must yield the exact set of all tasks without duplicates or omissions.",
+    "items must be an empty array when offset >= total."
+  ]
+}

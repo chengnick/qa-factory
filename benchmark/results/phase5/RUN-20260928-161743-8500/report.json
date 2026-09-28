@@ -1,0 +1,49 @@
+{
+  "run_id": "RUN-20260928-161743-8500",
+  "trace_id": "4fa7c54a2f6747eff96513aa8293f916",
+  "meta": {
+    "requirement_id": "REQ-009",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_version": "v3",
+    "dataset": "test",
+    "sut_bugs": [
+      "B09"
+    ],
+    "git_commit": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "git_dirty": false,
+    "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+    "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac"
+  },
+  "verdict": "ENV_BLOCKED",
+  "surface_verdict": "ENV_BLOCKED",
+  "underlying_verdict": null,
+  "differential": null,
+  "attribution": [
+    {
+      "span": "llm.chat",
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3",
+      "evidence": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "test_id": null
+    }
+  ],
+  "reliability": {
+    "retries": 4,
+    "flaky": false
+  },
+  "security": {
+    "events": 0,
+    "breach": false
+  },
+  "workflow": {
+    "workflow_status": "PASS",
+    "violations": [],
+    "goal_drift": false,
+    "rounds": 0
+  },
+  "isolation_level": null,
+  "isolation_note": null,
+  "artifacts_complete": true,
+  "missing_evidence": []
+}

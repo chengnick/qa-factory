@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "3 failed in 22.24s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 3,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-c456db.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combob"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combobox \"Project\":\n    - option \"gen-3c69351d\"\n    - option \"gen-915df31b\" [selected]"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+          }
+        ],
+        "isolation": "L1",
+        "evidence": [
+          "playwright/test_req004_ui-c456db/test_tc1_create_task_updates_list_instantly",
+          "playwright/test_req004_ui-c456db/test_tc2_task_title_html_escaped",
+          "playwright/test_req004_ui-c456db/test_tc3_api_errors_displayed"
+        ]
+      }
+    }
+  ]
+}

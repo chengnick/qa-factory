@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req007_api.py",
+          "snapshot": "generated/round1/test_req007_api.py",
+          "sha256": "b6ffe4a86fec3062a238003e589c13c113e43d5f8eea96d3b7a2ca0b11b3c1bd"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_tc1_project_member_can_read",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_tc2_non_member_cannot_read",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"id\":2,\"project_id\":2,\"title\":\"Secret Task\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-28T18:05:25.848+00:00\",\"updated_at\":\"2026-09-28T18:05:25.848+00:00\"}\nassert 200 == 403\n +  where 200 = <Response [200 OK]>.status_code",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_tc3_non_existent_resources_return_404",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

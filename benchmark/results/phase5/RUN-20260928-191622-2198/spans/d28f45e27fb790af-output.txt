@@ -1,0 +1,43 @@
+{
+  "requirement_id": "REQ-009",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Search is case-insensitive for ASCII text",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project Alpha\"} using header X-User: alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Fix Login Bug\"} using header X-User: alice",
+        "GET /api/projects/1/tasks?q=login using header X-User: alice"
+      ],
+      "expected": "Search is case-insensitive (ASCII): q=login must find titles like 'Fix Login Bug'."
+    },
+    {
+      "id": "TC-2",
+      "title": "SQL wildcard characters '%' and '_' are treated literally",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project Beta\"} using header X-User: alice",
+        "POST /api/projects/1/tasks with {\"title\": \"100% complete\"} using header X-User: alice",
+        "POST /api/projects/1/tasks with {\"title\": \"task_one\"} using header X-User: alice",
+        "GET /api/projects/1/tasks?q=100%25 using header X-User: alice",
+        "GET /api/projects/1/tasks?q=_one using header X-User: alice"
+      ],
+      "expected": "Characters '%' and '_' are treated as literal characters, not as SQL wildcards."
+    },
+    {
+      "id": "TC-3",
+      "title": "Search used simultaneously with status filtering and pagination",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project Gamma\"} using header X-User: alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Report Login Issue\"} using header X-User: alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Login Screen Redesign\"} using header X-User: alice",
+        "POST /api/projects/1/tasks with {\"title\": \"Login API\"} using header X-User: alice",
+        "POST /api/tasks/2/transition with {\"to\": \"in_progress\"} using header X-User: alice",
+        "GET /api/projects/1/tasks?q=Login&status=in_progress&limit=1&offset=0 using header X-User: alice"
+      ],
+      "expected": "Can be used simultaneously with status filtering and pagination."
+    }
+  ]
+}

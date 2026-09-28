@@ -1,0 +1,14 @@
+[system]
+You are a QA analyst. Read the requirement and answer with JSON only: {"summary": str, "acceptance_criteria": [str, ...]}
+
+[user]
+Requirement REQ-008:
+
+# REQ-008 任務刪除權限
+
+`DELETE /api/tasks/{tid}` 成功回 `204`。
+
+## 驗收準則
+- 僅**專案 owner** 或**任務建立者**可刪除任務。
+- 其他專案成員 → `403`，任務仍存在。
+- 非成員 → `403`。

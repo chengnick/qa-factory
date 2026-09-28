@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "eb9c819f961ab887473f4c4253b300b984911c5c8b7ca3657afefbfe59f40ba5"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload",
+          "outcome": "ERROR",
+          "message": "AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_displayed_as_plain_text",
+          "outcome": "ERROR",
+          "message": "AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\"",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

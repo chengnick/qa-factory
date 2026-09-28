@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req009_api.py",
+          "snapshot": "generated/round1/test_req009_api.py",
+          "sha256": "2df5c9013d087ed5e656584b8ba3c8b267b00820cdff54194eeb1b8bc0f3e231"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+          "outcome": "FAIL",
+          "message": "AssertionError: []\nassert 0 == 1\n +  where 0 = len([])",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_literal_percent_and_underscore",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_search_status_pagination",
+          "outcome": "FAIL",
+          "message": "AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two']",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

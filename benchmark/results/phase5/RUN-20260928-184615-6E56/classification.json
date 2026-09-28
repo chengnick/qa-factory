@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_priority_boundary_values (FAIL)",
+      "span_id": "620aaa80232cffa2",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_priority_boundary_values (FAIL)",
+        "span_id": "620aaa80232cffa2",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_priority_boundary_values (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_priority_boundary_values (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+        "unverified": false
+      }
+    ]
+  }
+}

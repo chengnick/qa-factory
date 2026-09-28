@@ -1,0 +1,11 @@
+[system]
+You are a QA analyst. Read the requirement and answer with JSON only: {"summary": str, "acceptance_criteria": [str, ...]}
+
+[user]
+Requirement REQ-007:
+
+# REQ-007 任務讀取權限
+
+## 驗收準則
+- 專案、任務列表、任務詳情（`GET /api/tasks/{tid}`）僅限該專案成員讀取。
+- 非成員 → `403`；資源不存在 → `404`。

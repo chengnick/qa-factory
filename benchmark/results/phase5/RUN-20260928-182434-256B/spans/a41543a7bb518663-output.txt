@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-002",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 3 passed in 2.88s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req002_api.py"
+        ],
+        "junit": "reports/junit-test_req002_api-79f8c0.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req002_api.py::test_tc1_create_task_title_lengths",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_lengths",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc3_create_task_priorities",
+            "outcome": "FAIL",
+            "message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 == 201\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc4_task_priority_boundaries_and_patch",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

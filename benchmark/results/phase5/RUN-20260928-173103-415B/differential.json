@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B09"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 1,
+    "broken": 1,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 2,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req009_api.py": "3b08360af7e396f24a88d12e8ea3368b17409cb90a5ea7eb6341ac011bf25cbe"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B09"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+          "outcome": "FAIL",
+          "message": "AssertionError: []\nassert 0 == 1\n +  where 0 = len([])"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_literal_percent_and_underscore",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_search_status_pagination",
+          "outcome": "FAIL",
+          "message": "AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two']"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req009_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req009_api-fdf46e.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_literal_percent_and_underscore",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_search_status_pagination",
+          "outcome": "FAIL",
+          "message": "AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two', 'Feature bug']"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req009_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req009_api-aefceb.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: []\nassert 0 == 1\n +  where 0 = len([])"
+    },
+    {
+      "node_id": "generated/test_req009_api.py::test_req009_tc2_literal_percent_and_underscore",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req009_api.py::test_req009_tc3_search_status_pagination",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "FAIL",
+      "decision": "BROKEN",
+      "rule": "R12",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two'] | clean build: AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two', 'Feature bug']"
+    }
+  ]
+}

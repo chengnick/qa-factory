@@ -1,0 +1,66 @@
+{
+  "requirement_id": "REQ-003",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "5 passed in 2.49s",
+      "error": null,
+      "data": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req003_api.py"
+        ],
+        "junit": "reports/junit-test_req003_api-987d69.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req003_api.py::test_default_pagination_and_sorting",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_limit_boundary_values",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_offset_boundary_and_invalid_values",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_total_count_independence_from_pagination",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_offset_greater_than_or_equal_to_total_returns_empty",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "summary": "Implement pagination for the project tasks API (GET /api/projects/{pid}/tasks) with limit and offset parameters, ensuring ascending order by task id and accurate total counts.",
+  "acceptance_criteria": [
+    "limit defaults to 20 with a valid range of 1 to 100; offset defaults to 0 with a requirement of being >= 0; out-of-range parameters return a 422 error.",
+    "total represents the total number of matching tasks and is not affected by pagination.",
+    "Fetching sequentially with a fixed limit from offset=0 to the end collects all tasks exactly without duplication or omission.",
+    "items is an empty array when offset >= total."
+  ]
+}

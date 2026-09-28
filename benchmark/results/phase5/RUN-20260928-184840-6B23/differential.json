@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B09"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 2,
+    "broken": 0,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 3,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req009_api.py": "d8d7fdea597a59addf363e350b68ae071200c3f2d912b3ac0a047fdb7164483a"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B09"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+          "outcome": "FAIL",
+          "message": "AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([])"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_search_wildcard_literal",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_search_combined_with_status_and_pagination",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req009_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req009_api-a4bc6a.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_search_wildcard_literal",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_search_combined_with_status_and_pagination",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req009_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req009_api-d5665d.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([])"
+    },
+    {
+      "node_id": "generated/test_req009_api.py::test_req009_tc2_search_wildcard_literal",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req009_api.py::test_req009_tc3_search_combined_with_status_and_pagination",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

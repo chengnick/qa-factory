@@ -1,0 +1,8 @@
+{
+  "summary": "Implement authorization check for task deletion endpoint DELETE /api/tasks/{tid}, allowing only the project owner or task creator to successfully delete a task (returning 204), while restricting other project members and non-members with a 403 Forbidden response and ensuring the task remains intact.",
+  "acceptance_criteria": [
+    "Only the project owner or the task creator can successfully delete a task, resulting in a 204 No Content response.",
+    "Other project members attempting to delete the task receive a 403 Forbidden response, and the task remains in the system.",
+    "Non-members attempting to delete the task receive a 403 Forbidden response."
+  ]
+}

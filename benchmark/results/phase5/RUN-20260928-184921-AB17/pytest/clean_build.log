@@ -1,0 +1,33 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+..F                                                                      [100%]
+================================== FAILURES ===================================
+_____________________ test_tc3_api_errors_display_message _____________________
+
+page = <Page url='http://127.0.0.1:53474/?user=alice&project=3'>
+base_url = 'http://127.0.0.1:53474'
+new_project = <function new_project.<locals>.create at 0x0000016B70800040>
+
+    def test_tc3_api_errors_display_message(page, base_url, new_project):
+        pid = new_project(owner="alice", members=())
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("")
+        page.get_by_test_id("create-btn").click()
+    
+        error_el = page.get_by_test_id("error")
+>       expect(error_el).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:37: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-184921-AB17\reports\junit-test_req004_ui-c546a7.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc3_api_errors_display_message - Ass...
+1 failed, 2 passed in 12.33s
+

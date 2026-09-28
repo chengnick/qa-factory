@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-004",
+  "files": [
+    {
+      "path": "generated/test_req004_ui.py",
+      "content": "from playwright.sync_api import expect\n\ndef test_tc1_pre_select_user_and_project(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    user_select = page.get_by_test_id(\"user-select\")\n    project_select = page.get_by_test_id(\"project-select\")\n    \n    assert user_select.input_value() == \"alice\" or user_select.inner_text() == \"alice\" or user_select.evaluate(\"el => el.value\") == \"alice\"\n    assert str(project_select.evaluate(\"el => el.value\")) == str(pid)\n\ndef test_tc2_instant_task_list_update(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    page.get_by_test_id(\"new-title\").fill(\"New UI Task\")\n    page.get_by_test_id(\"create-btn\").click()\n    \n    task_list = page.get_by_test_id(\"task-list\")\n    expect(task_list).to_contain_text(\"New UI Task\")\n\ndef test_tc3_render_task_title_as_plain_text_xss(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    xss_payload = \"<script>alert(1)</script>\"\n    page.get_by_test_id(\"new-title\").fill(xss_payload)\n    page.get_by_test_id(\"create-btn\").click()\n    \n    task_title_elem = page.get_by_test_id(\"task-title\").first\n    expect(task_title_elem).to_have_text(xss_payload)\n\ndef test_tc4_display_error_message_upon_api_error(page, base_url):\n    page.goto(f\"{base_url}/?user=alice&project=99999\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    error_area = page.get_by_test_id(\"error\")\n    expect(error_area).not_to_be_empty()\n",
+      "surface": "ui"
+    }
+  ]
+}

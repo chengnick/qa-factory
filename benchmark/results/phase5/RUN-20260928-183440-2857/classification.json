@@ -1,0 +1,113 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | test generated/test_req004_ui.py",
+      "span_id": "b1e9caaa47d47a31",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 2,
+      "unknown": 0,
+      "layers": {
+        "TEST": 1,
+        "SUT": 1
+      },
+      "rules": {
+        "R10": 1,
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property' | test generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal (ERROR)",
+        "span_id": "b1e9caaa47d47a31",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal",
+        "unverified": false
+      },
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | test generated/test_req004_ui.py",
+        "span_id": "b1e9caaa47d47a31",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property' | test generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal (ERROR) | cross-validation R10",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 2,
+      "unknown": 0,
+      "layers": {
+        "TEST": 2
+      },
+      "rules": {
+        "R10": 1,
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property' | test generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "fails on a clean SUT: AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | test gener",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+        "unverified": false
+      }
+    ]
+  }
+}

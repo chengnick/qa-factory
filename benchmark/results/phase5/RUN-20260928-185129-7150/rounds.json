@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "41be67c5fe3318c8e3c4138fab59f5bd8c3d5dc0427eb363d6fab00d6fad7b67"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_pre_select_user_and_project",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_instant_task_list_update",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_render_task_title_as_plain_text_xss",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\"",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

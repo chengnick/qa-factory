@@ -1,0 +1,42 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Out-of-range limit and offset parameters return 422 error",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/1/tasks?limit=0 with header X-User: alice",
+      "GET /api/projects/1/tasks?limit=101 with header X-User: alice",
+      "GET /api/projects/1/tasks?offset=-1 with header X-User: alice"
+    ],
+    "expected": "out-of-range parameters return a 422 error."
+  },
+  {
+    "id": "TC-2",
+    "title": "Total represents the total number of matching tasks and is not affected by pagination",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/1/tasks?limit=1&offset=0 with header X-User: alice",
+      "GET /api/projects/1/tasks?limit=5&offset=1 with header X-User: alice"
+    ],
+    "expected": "total represents the total number of matching tasks and is not affected by pagination."
+  },
+  {
+    "id": "TC-3",
+    "title": "Fetching sequentially with a fixed limit from offset=0 collects all tasks without duplication or omission",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/1/tasks?limit=2&offset=0 with header X-User: alice",
+      "GET /api/projects/1/tasks?limit=2&offset=2 with header X-User: alice"
+    ],
+    "expected": "Fetching sequentially with a fixed limit from offset=0 to the end collects all tasks exactly without duplication or omission."
+  },
+  {
+    "id": "TC-4",
+    "title": "Items is an empty array when offset >= total",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/1/tasks?limit=20&offset=100 with header X-User: alice"
+    ],
+    "expected": "items is an empty array when offset >= total."
+  }
+]}

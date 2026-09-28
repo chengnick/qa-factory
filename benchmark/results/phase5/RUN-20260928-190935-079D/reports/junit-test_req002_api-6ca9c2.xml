@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="2.879" timestamp="2026-09-29T03:11:27.253932+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req002_api" name="test_tc1_title_boundaries_and_default_priority" time="2.314" /><testcase classname="generated.test_req002_api" name="test_tc2_title_invalid_boundaries" time="0.009" /><testcase classname="generated.test_req002_api" name="test_tc3_priority_valid_boundaries" time="0.007"><failure message="AssertionError: {&quot;detail&quot;:[{&quot;loc&quot;:[&quot;body&quot;,&quot;priority&quot;],&quot;msg&quot;:&quot;priority must be between 1 and 5&quot;}]}&#10;assert 422 == 201&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000002110BC220C0&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000002110BE31440&gt;
+
+    def test_tc3_priority_valid_boundaries(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Priority 1
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task 1", "priority": 1})
+        assert r1.status_code == 201, r1.text
+        assert r1.json()["priority"] == 1
+    
+        # Priority 5
+        r2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task 5", "priority": 5})
+&gt;       assert r2.status_code == 201, r2.text
+E       AssertionError: {"detail":[{"loc":["body","priority"],"msg":"priority must be between 1 and 5"}]}
+E       assert 422 == 201
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+generated\test_req002_api.py:46: AssertionError</failure></testcase><testcase classname="generated.test_req002_api" name="test_tc4_priority_invalid_boundaries" time="0.007" /></testsuite></testsuites>

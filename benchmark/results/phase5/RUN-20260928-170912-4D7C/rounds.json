@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "61eb64e73287c32a540db4ae0a335b4d32dfe399b761451cc389f4a6f2d05c24"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

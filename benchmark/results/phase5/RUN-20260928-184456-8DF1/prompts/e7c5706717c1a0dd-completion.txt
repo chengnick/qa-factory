@@ -1,0 +1,38 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Create task via form updates list immediately without reload",
+    "surface": "ui",
+    "steps": [
+      "Open /?user=alice&project=1",
+      "Wait for body[data-ready='true']",
+      "Type 'New UI Task' into input[data-testid='new-title']",
+      "Click button[data-testid='create-btn']"
+    ],
+    "expected": "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。"
+  },
+  {
+    "id": "TC-2",
+    "title": "Task title containing HTML tags is displayed as plain text",
+    "surface": "ui",
+    "steps": [
+      "Open /?user=alice&project=1",
+      "Wait for body[data-ready='true']",
+      "Type '<b>x</b>' into input[data-testid='new-title']",
+      "Click button[data-testid='create-btn']"
+    ],
+    "expected": "任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。"
+  },
+  {
+    "id": "TC-3",
+    "title": "API error displays message in the error area",
+    "surface": "ui",
+    "steps": [
+      "Open /?user=alice&project=1",
+      "Wait for body[data-ready='true']",
+      "Trigger an invalid action resulting in an API error (e.g., submit empty title if validated or force API failure)",
+      "Check element[data-testid='error'] text content"
+    ],
+    "expected": "API 錯誤時於錯誤區顯示訊息。"
+  }
+]}

@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "建立任務時標題與優先級邊界值驗證（100字元與優先級1/5）",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects 帶入有效 name 建立專案",
+        "POST /api/projects/{pid}/tasks 帶入長度 100 字元的 title 與 priority 為 1",
+        "POST /api/projects/{pid}/tasks 帶入 title 與 priority 為 5"
+      ],
+      "expected": "title 長度為 100 字元時應被接受，並回傳 201（建立）或 200（更新）；priority 數值為 1 或 5 時應被接受。"
+    },
+    {
+      "id": "TC-2",
+      "title": "更新任務時標題長度與未提供優先級的預設值驗證",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects 帶入有效 name 建立專案",
+        "POST /api/projects/{pid}/tasks 建立一個預設任務",
+        "PATCH /api/tasks/{tid} 帶入長度 100 字元的 title 且不提供 priority"
+      ],
+      "expected": "title 長度為 100 字元時應被接受，並回傳 201（建立）或 200（更新）；priority 未提供時預設為 3。"
+    },
+    {
+      "id": "TC-3",
+      "title": "建立任務時標題過長或空白的錯誤驗證",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects 帶入有效 name 建立專案",
+        "POST /api/projects/{pid}/tasks 帶入長度 101 字元的 title",
+        "POST /api/projects/{pid}/tasks 帶入空白的 title"
+      ],
+      "expected": "title 長度超過 101 字元或為空白時，系統應回傳 422 狀態碼，且不得回傳 5xx 錯誤。"
+    },
+    {
+      "id": "TC-4",
+      "title": "建立任務時優先級超出範圍的錯誤驗證",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects 帶入有效 name 建立專案",
+        "POST /api/projects/{pid}/tasks 帶入有效 title 與 priority 為 0",
+        "POST /api/projects/{pid}/tasks 帶入有效 title 與 priority 為 6"
+      ],
+      "expected": "priority 數值為 0 或 6（超出範圍）時應回傳 422 狀態碼。"
+    },
+    {
+      "id": "TC-5",
+      "title": "更新任務時優先級為非整數或超出範圍的錯誤驗證",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects 帶入有效 name 建立專案",
+        "POST /api/projects/{pid}/tasks 建立有效任務",
+        "PATCH /api/tasks/{tid} 帶入 priority 為 0",
+        "PATCH /api/tasks/{tid} 帶入 priority 為 6"
+      ],
+      "expected": "priority 必須為整數，有效範圍為 1 至 5（包含邊界）；priority 數值為 0 或 6（超出範圍）時應回傳 422 狀態碼。"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+.FF                                                                      [100%]
+================================== FAILURES ===================================
+______________________ test_tc2_task_title_html_escaped _______________________
+
+page = <Page url='http://127.0.0.1:58009/?user=alice&project=2'>
+base_url = 'http://127.0.0.1:58009'
+new_project = <function new_project.<locals>.create at 0x0000021FA526D120>
+
+    def test_tc2_task_title_html_escaped(page, base_url, new_project):
+        pid = new_project(owner="alice", members=())
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true", timeout=10000)
+    
+        page.get_by_test_id("new-title").fill("<b>x</b>")
+        page.get_by_test_id("create-btn").click()
+    
+        task_title = page.get_by_test_id("task-title").first
+>       expect(task_title).to_have_text("<b>x</b>")
+E       AssertionError: Locator expected to have text '<b>x</b>'
+E       Actual value: x 
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-title").first
+E           13 × locator resolved to <span class="title" data-testid="task-title">…</span>
+E              - unexpected value "x"
+E       
+E       Aria snapshot:
+E       - text: x
+
+generated\test_req004_ui.py:24: AssertionError
+_______________________ test_tc3_display_error_message ________________________
+
+page = <Page url='http://127.0.0.1:58009/?user=alice&project=999999'>
+base_url = 'http://127.0.0.1:58009'
+
+    def test_tc3_display_error_message(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=999999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true", timeout=10000)
+    
+        error_area = page.get_by_test_id("error")
+>       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:31: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-183145-5B06\reports\junit-test_req004_ui-5e7482.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc2_task_title_html_escaped - Assert...
+FAILED generated/test_req004_ui.py::test_tc3_display_error_message - Assertio...
+2 failed, 1 passed in 17.25s

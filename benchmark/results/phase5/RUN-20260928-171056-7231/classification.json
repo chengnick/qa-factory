@@ -1,0 +1,100 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default (FAIL)",
+      "span_id": "b7f35f254e73ad17",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+      "unverified": true
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 3 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default (FAIL)",
+        "span_id": "b7f35f254e73ad17",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default (FAIL) | c",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+      "unverified": false
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 3 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default (FAIL) | c",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+        "unverified": false
+      }
+    ]
+  }
+}

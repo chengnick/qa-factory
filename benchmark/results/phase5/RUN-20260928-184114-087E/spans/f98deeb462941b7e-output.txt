@@ -1,0 +1,39 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "驗證 title 長度邊界（1字元與100字元）與 priority 邊界（1與5）以及預設值",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立一個專案",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，title 為 1 字元長度，不帶 priority",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，title 為 100 字元長度，priority 設為 1",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，title 為 50 字元長度，priority 設為 5"
+      ],
+      "expected": "title 欄位為必填，長度限制為 1 至 100 字元（含邊界），長度為 100 時應接受請求並回傳 201 或 200。priority 欄位必須為整數，範圍為 1 至 5（含邊界），預設值為 3。"
+    },
+    {
+      "id": "TC-2",
+      "title": "驗證 title 過長（>100字元）或為空白時系統回傳 422 狀態碼，不得回傳 5xx",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立一個專案",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，title 為 101 字元長度",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，title 為空字串 \"\""
+      ],
+      "expected": "title 長度超過 100 字元或為空白時，系統應回傳 422 狀態碼，不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "驗證 priority 超出範圍（0、6 或其他超出範圍的值）系統回傳 422 狀態碼",
+      "surface": "api",
+      "steps": [
+        "以 alice 建立一個專案",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，priority 設為 0",
+        "使用 POST /api/projects/{pid}/tasks 建立 task，priority 設為 6"
+      ],
+      "expected": "priority 為 1 或 5 時應接受請求；若為 0、6 或其他超出範圍的值，系統應回傳 422 狀態碼。"
+    }
+  ]
+}

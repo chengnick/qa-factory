@@ -1,0 +1,54 @@
+{
+  "requirement_id": "REQ-005",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Verify allowed task status transitions",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"}"
+      ],
+      "expected": "允許的狀態流轉包含：todo → in_progress、in_progress → done、in_progress → todo。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify forbidden transitions from done terminal state",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Done\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"}"
+      ],
+      "expected": "done 為終態，從 done 出發的任何流轉應返回 409 錯誤，且任務狀態保持不變。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify other unlisted transitions and self-transitions return 409",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Todo\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"}"
+      ],
+      "expected": "其他未列出的流轉（包含 todo → done 以及相同狀態的轉換）應返回 409 錯誤。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify invalid status parameter returns 422 error",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Invalid\"}",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"}"
+      ],
+      "expected": "當請求中的 to 參數不是合法的狀態時，應返回 422 錯誤。"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Verify limit and offset boundary and default validation rules",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/{pid}/tasks (no limit/offset query parameters)",
+      "GET /api/projects/{pid}/tasks?limit=0&offset=0",
+      "GET /api/projects/{pid}/tasks?limit=101&offset=0",
+      "GET /api/projects/{pid}/tasks?limit=20&offset=-1"
+    ],
+    "expected": "limit defaults to 20 and must be between 1 and 100; offset defaults to 0 and must be greater than or equal to 0; out of range values return 422."
+  },
+  {
+    "id": "TC-2",
+    "title": "Verify total represents the total number of matching tasks unaffected by pagination",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/{pid}/tasks?limit=1&offset=0"
+    ],
+    "expected": "total represents the total number of matching tasks, unaffected by pagination."
+  },
+  {
+    "id": "TC-3",
+    "title": "Verify sequential paging collects all tasks without duplication or omission",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/{pid}/tasks?limit=2&offset=0",
+      "GET /api/projects/{pid}/tasks?limit=2&offset=2"
+    ],
+    "expected": "Sequential paging from offset=0 with a fixed limit until the end must collect all tasks without duplication or omission."
+  },
+  {
+    "id": "TC-4",
+    "title": "Verify items is an empty array when offset is greater than or equal to total",
+    "surface": "api",
+    "steps": [
+      "GET /api/projects/{pid}/tasks?limit=20&offset=999"
+    ],
+    "expected": "items must be an empty array when offset is greater than or equal to total."
+  }
+]}

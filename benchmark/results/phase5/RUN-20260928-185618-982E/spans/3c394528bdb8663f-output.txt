@@ -1,0 +1,30 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Create task with boundary title lengths and priorities",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 1\"}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"A\", \"priority\": 1}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"<100-char-string>\", \"priority\": 5}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Default Priority Task\"}"
+      ],
+      "expected": "title 欄位為必填，長度限制為 1 至 100 字元（含邊界），title 長度為 100 字元時應被接受，回傳 201 或 200，priority 欄位必須為整數，範圍介於 1 至 5（含邊界），預設值為 3，priority 為 1 或 5 時應被接受。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Create and update task with invalid title and priority inputs yielding 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project 2\"}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"\", \"priority\": 3}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"<101-char-string>\", \"priority\": 3}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Valid Title\", \"priority\": 0}",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Valid Title\", \"priority\": 6}"
+      ],
+      "expected": "title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx；priority 為 0 或 6 時應回傳 422 錯誤。"
+    }
+  ]
+}

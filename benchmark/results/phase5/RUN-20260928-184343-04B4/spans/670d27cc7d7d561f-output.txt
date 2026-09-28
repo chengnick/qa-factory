@@ -1,0 +1,50 @@
+{
+  "requirement_id": "REQ-002",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Create task with boundary title lengths and default priority",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with title of 1 character as alice",
+        "POST /api/projects/{pid}/tasks with title of 100 characters as alice"
+      ],
+      "expected": "title 為必填欄位，長度限制為 1 至 100 字元（包含邊界）。title 長度為 100 字元時應被接受，回傳 201 或 200。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Create task with invalid title (empty or 101 chars) results in 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project B\"} as alice",
+        "POST /api/projects/{pid}/tasks with title \"\" as alice",
+        "POST /api/projects/{pid}/tasks with title of 101 characters as alice"
+      ],
+      "expected": "title 長度為 101 字元以上或為空白時，應回傳 422 錯誤，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Create and update task with priority boundaries (1 and 5)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project C\"} as alice",
+        "POST /api/projects/{pid}/tasks with title \"Task 1\", priority 1 as alice",
+        "PATCH /api/tasks/{tid} with priority 5 as alice"
+      ],
+      "expected": "priority 必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。priority 值為 1 或 5 時應被接受，值為 0 或 6 時應回傳 422 錯誤。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Update task with invalid priority values (0 and 6) results in 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project D\"} as alice",
+        "POST /api/projects/{pid}/tasks with title \"Task 2\" as alice",
+        "PATCH /api/tasks/{tid} with priority 0 as alice",
+        "PATCH /api/tasks/{tid} with priority 6 as alice"
+      ],
+      "expected": "priority 必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。priority 值為 1 或 5 時應被接受，值為 0 或 6 時應回傳 422 錯誤。"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req006_api.py",
+          "snapshot": "generated/round1/test_req006_api.py",
+          "sha256": "f9f18bf6ea23f47799b4c46f71f7bcbdc3babc79834d7baf3fb6443f1682ec97"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_project_member",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_existent_user",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

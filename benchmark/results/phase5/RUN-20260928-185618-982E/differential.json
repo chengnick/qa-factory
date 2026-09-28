@@ -1,0 +1,107 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B04"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 1,
+    "broken": 0,
+    "passed": 0,
+    "tests": 2
+  },
+  "test_health": {
+    "healthy": 2,
+    "total": 2
+  },
+  "file_hashes": {
+    "generated/test_req002_api.py": "f8d4af17afd14221daa7b9a880be4a2ff09ea913b945a73efdb34b7f6f6e2ec7"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B04"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_req002_tc1_boundary_title_and_priority",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_req002_tc2_invalid_title_and_priority",
+          "outcome": "FAIL",
+          "message": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-25de4a.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_req002_tc1_boundary_title_and_priority",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_req002_tc2_invalid_title_and_priority",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req002_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req002_api-a105ca.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req002_api.py::test_req002_tc1_boundary_title_and_priority",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req002_api.py::test_req002_tc2_invalid_title_and_priority",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "HTTP_5XX",
+      "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code"
+    }
+  ]
+}

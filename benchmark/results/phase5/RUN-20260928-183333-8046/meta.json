@@ -1,0 +1,92 @@
+{
+  "run_id": "RUN-20260928-183333-8046",
+  "trace_id": "3a9b236dff92e231821a74714e0dd6ba",
+  "trace_file": "trace.json",
+  "requirement_id": "REQ-003",
+  "llm": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.0,
+  "prompt_version": "v3",
+  "dataset": "clean",
+  "sut_bugs": [],
+  "git_commit": {
+    "sha": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "dirty": false
+  },
+  "lockfile_sha256": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6",
+  "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac",
+  "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+  "policy_path": "config/agent_policy.yaml",
+  "started_at": "2026-09-28T18:33:33+00:00",
+  "round": 3,
+  "sut_url": null,
+  "evaluation_mode": true,
+  "set": "test",
+  "frozen_sha256": "e919ca706db4e80b32fc9b50495dbe28dda966af9a6a89718dc1e542b9e9f703",
+  "verdict": "PASS",
+  "surface_verdict": "PASS",
+  "error": null,
+  "differential": {
+    "status": "COMPLETE",
+    "verdict": "PASS",
+    "reason": null,
+    "counts": {
+      "detected": 0,
+      "missed": 0,
+      "broken": 0,
+      "passed": 4,
+      "tests": 4
+    },
+    "test_health": {
+      "healthy": 4,
+      "total": 4
+    }
+  },
+  "generated_files": [
+    "generated/test_req003_api.py"
+  ],
+  "finished_at": "2026-09-28T18:34:27+00:00",
+  "duration_s": 54.1,
+  "models_seen": [
+    "gemini-3.5-flash-lite"
+  ],
+  "tokens": {
+    "input": 3261,
+    "output": 2007,
+    "total": 5268
+  },
+  "underlying_verdict": null,
+  "classification": {
+    "counts": {
+      "total": 0,
+      "unknown": 0,
+      "layers": {},
+      "rules": {}
+    },
+    "surface_counts": {
+      "total": 0,
+      "unknown": 0,
+      "layers": {},
+      "rules": {}
+    },
+    "decided_by": null,
+    "flaky": false
+  },
+  "security": {
+    "events": 0,
+    "breach": false,
+    "types": []
+  },
+  "permission_checks": {
+    "permission_checks": 3,
+    "allowed": 3,
+    "denied": 0
+  },
+  "revision_rounds": 1,
+  "workflow": {
+    "status": "PASS",
+    "goal_drift": false,
+    "violations": [],
+    "missing_evidence": 0
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Verify limit and offset boundary validation and out-of-range status code",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/1/tasks with query limit=0",
+        "GET /api/projects/1/tasks with query limit=101",
+        "GET /api/projects/1/tasks with query offset=-1"
+      ],
+      "expected": "limit defaults to 20, range 1-100; offset defaults to 0, must be >= 0; out of range returns 422."
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify total represents the total number of matching records unaffected by pagination",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/1/tasks with query limit=1&offset=0",
+        "GET /api/projects/1/tasks with query limit=50&offset=0"
+      ],
+      "expected": "total represents the total number of matching records, unaffected by pagination."
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify sequential fetching with a fixed limit yields all tasks without duplicates or omissions",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/1/tasks with query limit=2&offset=0",
+        "GET /api/projects/1/tasks with query limit=2&offset=2"
+      ],
+      "expected": "Fetching sequentially with a fixed limit from offset=0 to the end must yield exactly all tasks without duplicates or omissions."
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify empty items array when offset is greater than or equal to total",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/1/tasks with query offset equal to total",
+        "GET /api/projects/1/tasks with query offset greater than total"
+      ],
+      "expected": "When offset >= total, items must be an empty array."
+    }
+  ]
+}

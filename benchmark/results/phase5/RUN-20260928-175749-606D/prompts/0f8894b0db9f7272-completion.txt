@@ -1,0 +1,37 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Case-insensitive substring search for ASCII characters",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with header X-User: alice and body {\"name\": \"Project A\"} to create project 1",
+      "POST /api/projects/1/tasks with header X-User: alice and body {\"title\": \"Fix Login Bug\"}",
+      "GET /api/projects/1/tasks?q=login with header X-User: alice"
+    ],
+    "expected": "Search is case-insensitive for ASCII characters (e.g., q=login matches Fix Login Bug)."
+  },
+  {
+    "id": "TC-2",
+    "title": "Special wildcard characters are treated literally",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with header X-User: alice and body {\"name\": \"Project B\"} to create project 1",
+      "POST /api/projects/1/tasks with header X-User: alice and body {\"title\": \"100% complete_task\"}",
+      "GET /api/projects/1/tasks?q=%25 with header X-User: alice",
+      "GET /api/projects/1/tasks?q=_ with header X-User: alice"
+    ],
+    "expected": "Special characters '%' and '_' are treated as literal characters, not wildcards."
+  },
+  {
+    "id": "TC-3",
+    "title": "Simultaneous usage of search query, status filtering, and pagination",
+    "surface": "api",
+    "steps": [
+      "POST /api/projects with header X-User: alice and body {\"name\": \"Project C\"} to create project 1",
+      "POST /api/projects/1/tasks with header X-User: alice and body {\"title\": \"Alpha Task One\"}",
+      "POST /api/projects/1/tasks with header X-User: alice and body {\"title\": \"Alpha Task Two\"}",
+      "GET /api/projects/1/tasks?q=Alpha&status=todo&limit=1&offset=0 with header X-User: alice"
+    ],
+    "expected": "Can be used simultaneously with status filtering and pagination."
+  }
+]}

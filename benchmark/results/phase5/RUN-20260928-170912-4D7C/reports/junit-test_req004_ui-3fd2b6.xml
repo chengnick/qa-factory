@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="3.055" timestamp="2026-09-29T01:10:24.588818+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_req004_tc1_url_params_preselect" time="2.421"><failure message="NameError: name 'page' is not defined">base_url = 'http://127.0.0.1:53320'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x00000135E97BFCE0&gt;
+
+    def test_req004_tc1_url_params_preselect(base_url, new_project):
+        pid = new_project(owner="alice")
+&gt;       page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:5: NameError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_req004_tc2_task_creation_instant_display" time="0.004"><failure message="NameError: name 'page' is not defined">base_url = 'http://127.0.0.1:53320'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x00000135E97BFEC0&gt;
+
+    def test_req004_tc2_task_creation_instant_display(base_url, new_project):
+        pid = new_project(owner="alice")
+&gt;       page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:14: NameError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_req004_tc3_task_title_html_escaped" time="0.003"><failure message="NameError: name 'page' is not defined">base_url = 'http://127.0.0.1:53320'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x00000135E9A02160&gt;
+
+    def test_req004_tc3_task_title_html_escaped(base_url, new_project):
+        pid = new_project(owner="alice")
+&gt;       page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:27: NameError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_req004_tc4_api_error_message_displayed" time="0.001"><failure message="NameError: name 'page' is not defined">base_url = 'http://127.0.0.1:53320'
+
+    def test_req004_tc4_api_error_message_displayed(base_url):
+&gt;       page.goto(f"{base_url}/?user=alice&amp;project=999999")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:41: NameError</failure></testcase></testsuite></testsuites>

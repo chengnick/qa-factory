@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Assign task to a non-project member returns 422 and keeps assignee unchanged",
+      "surface": "api",
+      "steps": [
+        "Create project with alice",
+        "Create task in project",
+        "Send PATCH /api/tasks/{tid} with assignee_id set to bob (who is not a project member)"
+      ],
+      "expected": "指派對象必須是該專案成員；否則回傳 422 錯誤，且任務 assignee 保持不變。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Assign task to a non-existent user returns 422",
+      "surface": "api",
+      "steps": [
+        "Create project with alice",
+        "Create task in project",
+        "Send PATCH /api/tasks/{tid} with assignee_id set to a non-existent user ID"
+      ],
+      "expected": "指派不存在的使用者時，回傳 422 錯誤。"
+    }
+  ]
+}

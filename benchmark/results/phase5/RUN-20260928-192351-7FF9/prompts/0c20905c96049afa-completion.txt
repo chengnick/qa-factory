@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Preselect user and project via URL parameters",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=1'",
+        "Wait for body attribute 'data-ready' to be 'true'"
+      ],
+      "expected": "支援透過 GET /?user=<username>&project=<pid> 預先選取使用者與專案"
+    },
+    {
+      "id": "TC-2",
+      "title": "Create task via form updates list immediately without reload",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=1'",
+        "Wait for body attribute 'data-ready' to be 'true'",
+        "Type 'Dynamic Task' into element with data-testid 'new-title'",
+        "Click element with data-testid 'create-btn'"
+      ],
+      "expected": "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面"
+    },
+    {
+      "id": "TC-3",
+      "title": "Task title with HTML tags is displayed as literal text and not parsed",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=1'",
+        "Wait for body attribute 'data-ready' to be 'true'",
+        "Type '<script>alert(1)</script>' into element with data-testid 'new-title'",
+        "Click element with data-testid 'create-btn'"
+      ],
+      "expected": "任務標題須以純文字顯示，若含 HTML 標記應顯示字面文字且不得被解析成元素"
+    },
+    {
+      "id": "TC-4",
+      "title": "API error displays corresponding error message in error area",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=999999'",
+        "Wait for body attribute 'data-ready' to be 'true'"
+      ],
+      "expected": "API 發生錯誤時，須於錯誤區顯示對應的錯誤訊息"
+    }
+  ]
+}

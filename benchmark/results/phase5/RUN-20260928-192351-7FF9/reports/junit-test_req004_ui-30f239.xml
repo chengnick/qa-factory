@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="6.943" timestamp="2026-09-29T03:24:55.834239+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_req004_tc1_preselect_user_and_project" time="4.355" /><testcase classname="generated.test_req004_ui" name="test_req004_tc2_create_task_updates_list_immediately" time="0.545" /><testcase classname="generated.test_req004_ui" name="test_req004_tc3_task_title_html_escaped" time="0.570" /><testcase classname="generated.test_req004_ui" name="test_req004_tc4_api_error_displayed" time="1.430"><failure message="assert 0 &gt; 0&#10; +  where 0 = len('')&#10; +    where '' = &lt;built-in method strip of str object at 0x00007FFE53A3C6E0&gt;()&#10; +      where &lt;built-in method strip of str object at 0x00007FFE53A3C6E0&gt; = ''.strip&#10; +        where '' = inner_text()&#10; +          where inner_text = &lt;Locator frame=&lt;Frame name= url='http://127.0.0.1:53604/?user=alice&amp;project=999999'&gt; selector='internal:testid=[data-testid=&quot;error&quot;s]'&gt;.inner_text">page = &lt;Page url='http://127.0.0.1:53604/?user=alice&amp;project=999999'&gt;
+base_url = 'http://127.0.0.1:53604'
+
+    def test_req004_tc4_api_error_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=alice&amp;project=999999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+        error_area = page.get_by_test_id("error")
+        expect(error_area).to_be_visible()
+&gt;       assert len(error_area.inner_text().strip()) &gt; 0
+E       assert 0 &gt; 0
+E        +  where 0 = len('')
+E        +    where '' = &lt;built-in method strip of str object at 0x00007FFE53A3C6E0&gt;()
+E        +      where &lt;built-in method strip of str object at 0x00007FFE53A3C6E0&gt; = ''.strip
+E        +        where '' = inner_text()
+E        +          where inner_text = &lt;Locator frame=&lt;Frame name= url='http://127.0.0.1:53604/?user=alice&amp;project=999999'&gt; selector='internal:testid=[data-testid="error"s]'&gt;.inner_text
+
+generated\test_req004_ui.py:39: AssertionError</failure></testcase></testsuite></testsuites>

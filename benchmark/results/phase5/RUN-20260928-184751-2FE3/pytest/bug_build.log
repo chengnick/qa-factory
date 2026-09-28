@@ -1,0 +1,32 @@
+===== pytest generated/test_req006_api.py (exit 1, attempts 1)
+F.                                                                       [100%]
+================================== FAILURES ===================================
+___________________ test_assign_task_to_non_project_member ____________________
+
+as_user = <function as_user.<locals>.get at 0x000001BC239720C0>
+new_project = <function new_project.<locals>.create at 0x000001BC23972160>
+user_ids = {'alice': 1, 'bob': 2, 'carol': 3, 'dave': 4}
+
+    def test_assign_task_to_non_project_member(as_user, new_project, user_ids):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Create a task as alice
+        task_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Test Task"})
+        assert task_res.status_code == 201, task_res.text
+        task_id = task_res.json()["id"]
+    
+        # Try to assign to bob who is not a project member
+        bob_id = user_ids["bob"]
+        patch_res = alice.patch(f"/api/tasks/{task_id}", json={"assignee_id": bob_id})
+>       assert patch_res.status_code == 422, patch_res.text
+E       AssertionError: {"id":1,"project_id":1,"title":"Test Task","description":"","status":"todo","priority":3,"assignee_id":2,"created_by":1,"created_at":"2026-09-28T18:48:19.341+00:00","updated_at":"2026-09-28T18:48:19.344+00:00"}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+generated\test_req006_api.py:15: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-184751-2FE3\reports\junit-test_req006_api-8a2922.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req006_api.py::test_assign_task_to_non_project_member
+1 failed, 1 passed in 2.87s
+

@@ -1,0 +1,100 @@
+{
+  "run_id": "RUN-20260928-170912-4D7C",
+  "trace_id": "00da3832c18e80ac0cc8eb34ecca7c95",
+  "meta": {
+    "requirement_id": "REQ-004",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_version": "v3",
+    "dataset": "test",
+    "sut_bugs": [
+      "B05"
+    ],
+    "git_commit": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "git_dirty": false,
+    "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+    "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac"
+  },
+  "verdict": "TEST_BROKEN",
+  "surface_verdict": "TEST_BROKEN",
+  "underlying_verdict": null,
+  "differential": {
+    "status": "COMPLETE",
+    "detected": 0,
+    "broken": 4,
+    "missed": 0
+  },
+  "attribution": [
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc1_url_params_preselect (ERROR) | cross-validation R10",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect"
+    },
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display (ERROR) | cross-validation R10",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display"
+    },
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped (ERROR) | cross-validation R10",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped"
+    },
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed (ERROR) | cross-validation R10",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed"
+    }
+  ],
+  "reliability": {
+    "retries": 0,
+    "flaky": false
+  },
+  "security": {
+    "events": 4,
+    "breach": false
+  },
+  "workflow": {
+    "workflow_status": "FAIL",
+    "violations": [
+      {
+        "rule": "W05",
+        "evidence": "missing: playwright/*/test_req004_tc1_url_params_preselect/ (trace.zip, screenshot.png, console.log)"
+      },
+      {
+        "rule": "W05",
+        "evidence": "missing: playwright/*/test_req004_tc2_task_creation_instant_display/ (trace.zip, screenshot.png, console.log)"
+      },
+      {
+        "rule": "W05",
+        "evidence": "missing: playwright/*/test_req004_tc3_task_title_html_escaped/ (trace.zip, screenshot.png, console.log)"
+      },
+      {
+        "rule": "W05",
+        "evidence": "missing: playwright/*/test_req004_tc4_api_error_message_displayed/ (trace.zip, screenshot.png, console.log)"
+      }
+    ],
+    "goal_drift": false,
+    "rounds": 1
+  },
+  "isolation_level": "L1",
+  "isolation_note": "in-process audit hook (tools/l1_guard.py): writes, network and processes limited; not an OS sandbox",
+  "artifacts_complete": false,
+  "missing_evidence": [
+    "playwright/*/test_req004_tc1_url_params_preselect/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_req004_tc2_task_creation_instant_display/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_req004_tc3_task_title_html_escaped/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_req004_tc4_api_error_message_displayed/ (trace.zip, screenshot.png, console.log)"
+  ]
+}

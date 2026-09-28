@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req008_api.py",
+          "snapshot": "generated/round1/test_req008_api.py",
+          "sha256": "c2abb2d6e0d4a8aa331f24b955e1a1b44b9738ef9b773085373d0d311f1bedc5"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req008_api.py::test_tc1_owner_can_delete_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc2_task_creator_can_delete_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task",
+          "outcome": "FAIL",
+          "message": "AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

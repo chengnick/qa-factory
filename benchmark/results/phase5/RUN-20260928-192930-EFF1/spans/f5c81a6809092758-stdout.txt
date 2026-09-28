@@ -1,0 +1,36 @@
+.F.                                                                      [100%]
+================================== FAILURES ===================================
+_________________ test_req009_tc2_literal_special_characters __________________
+
+as_user = <function as_user.<locals>.get at 0x0000021A39692020>
+new_project = <function new_project.<locals>.create at 0x0000021A396922A0>
+
+    def test_req009_tc2_literal_special_characters(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice", members=())
+    
+        r = alice.post(f"/api/projects/{pid}/tasks", json={"title": "100% complete_task"})
+        assert r.status_code == 201, r.text
+    
+        r = alice.post(f"/api/projects/{pid}/tasks", json={"title": "100A complete_taskX"})
+        assert r.status_code == 201, r.text
+    
+        r = alice.get(f"/api/projects/{pid}/tasks?q=100%")
+        assert r.status_code == 200, r.text
+        data = r.json()
+        assert len(data["items"]) == 1, data
+        assert data["items"][0]["title"] == "100% complete_task"
+    
+        r = alice.get(f"/api/projects/{pid}/tasks?q=_complete")
+        assert r.status_code == 200, r.text
+        data = r.json()
+>       assert len(data["items"]) == 1, data
+E       AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+generated\test_req009_api.py:35: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-192930-EFF1\reports\junit-test_req009_api-f05164.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req009_api.py::test_req009_tc2_literal_special_characters
+1 failed, 2 passed in 2.90s

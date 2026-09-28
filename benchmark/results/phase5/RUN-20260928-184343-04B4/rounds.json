@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req002_api.py",
+          "snapshot": "generated/round1/test_req002_api.py",
+          "sha256": "635e46de87221193958eaf5aa1ab4a407c86d8a1ffcc8302a95f25700d263e4f"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_create_task_boundary_title_lengths_and_default_priority",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_create_task_invalid_title_empty_or_101_chars_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_create_and_update_task_priority_boundaries_1_and_5",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_update_task_invalid_priority_values_0_and_6_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

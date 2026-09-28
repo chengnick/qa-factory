@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="2.885" timestamp="2026-09-29T02:26:18.700462+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req002_api" name="test_tc1_create_task_title_lengths" time="2.324" /><testcase classname="generated.test_req002_api" name="test_tc2_create_task_invalid_title_lengths" time="0.008" /><testcase classname="generated.test_req002_api" name="test_tc3_create_task_priorities" time="0.009"><failure message="AssertionError: {&quot;detail&quot;:[{&quot;loc&quot;:[&quot;body&quot;,&quot;priority&quot;],&quot;msg&quot;:&quot;priority must be between 1 and 5&quot;}]}&#10;assert 422 == 201&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000002CCB9072200&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000002CCB92714E0&gt;
+
+    def test_tc3_create_task_priorities(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Default priority
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task Default"})
+        assert r1.status_code == 201, r1.text
+        assert r1.json()["priority"] == 3
+    
+        # Min priority (1)
+        r2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task P1", "priority": 1})
+        assert r2.status_code == 201, r2.text
+        assert r2.json()["priority"] == 1
+    
+        # Max priority (5)
+        r3 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task P5", "priority": 5})
+&gt;       assert r3.status_code == 201, r3.text
+E       AssertionError: {"detail":[{"loc":["body","priority"],"msg":"priority must be between 1 and 5"}]}
+E       assert 422 == 201
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+generated\test_req002_api.py:47: AssertionError</failure></testcase><testcase classname="generated.test_req002_api" name="test_tc4_task_priority_boundaries_and_patch" time="0.013" /></testsuite></testsuites>

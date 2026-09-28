@@ -1,0 +1,15 @@
+[system]
+You are a QA analyst. Read the requirement and answer with JSON only: {"summary": str, "acceptance_criteria": [str, ...]}
+
+[user]
+Requirement REQ-003:
+
+# REQ-003 任務列表分頁
+
+`GET /api/projects/{pid}/tasks?limit=&offset=` 回傳 `{items, total, limit, offset}`，依任務 id 遞增排序。
+
+## 驗收準則
+- `limit` 預設 20，範圍 1–100；`offset` 預設 0，須 ≥ 0；超出範圍 → `422`。
+- `total` 為符合條件的總筆數，不受分頁影響。
+- 以固定 `limit` 從 `offset=0` 依序翻頁到結尾，收集到的任務須**恰好**等於全部任務：不重複、不遺漏。
+- `offset ≥ total` 時 `items` 為空陣列。

@@ -1,0 +1,43 @@
+{
+  "requirement_id": "REQ-004",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Create task via form updates list immediately without page reload",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=1'",
+        "Wait for body attribute 'data-ready' to be 'true'",
+        "Type 'Instant Task' into element with testid 'new-title'",
+        "Click element with testid 'create-btn'"
+      ],
+      "expected": "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Task title containing HTML tags is displayed as literal text preventing XSS",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=1'",
+        "Wait for body attribute 'data-ready' to be 'true'",
+        "Type '<b>x</b>' into element with testid 'new-title'",
+        "Click element with testid 'create-btn'",
+        "Read the text content of the element with testid 'task-title'"
+      ],
+      "expected": "任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。"
+    },
+    {
+      "id": "TC-3",
+      "title": "API errors display message in the error area",
+      "surface": "ui",
+      "steps": [
+        "Open URL '/?user=alice&project=1'",
+        "Wait for body attribute 'data-ready' to be 'true'",
+        "Type '' into element with testid 'new-title'",
+        "Click element with testid 'create-btn'",
+        "Read the text content of the element with testid 'error'"
+      ],
+      "expected": "API 錯誤時於錯誤區顯示訊息。"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "requirement_id": "REQ-009",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 2 passed in 1.86s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req009_api.py"
+        ],
+        "junit": "reports/junit-test_req009_api-e95d45.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req009_api.py::test_tc1_search_case_insensitive",
+            "outcome": "FAIL",
+            "message": "assert 0 == 1\n +  where 0 = len([])"
+          },
+          {
+            "node_id": "generated/test_req009_api.py::test_tc2_sql_wildcards_literal",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req009_api.py::test_tc3_search_status_pagination",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

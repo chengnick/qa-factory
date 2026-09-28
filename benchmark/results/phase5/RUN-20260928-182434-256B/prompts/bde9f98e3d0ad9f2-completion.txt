@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Create task with 1-character and 100-character titles",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"a\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"a\".repeat(100)} as alice"
+      ],
+      "expected": "title 必填，長度介於 1 至 100 字元之間（含邊界），100 字元時接受請求。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Create task with empty or >100-character title returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"a\".repeat(101)} as alice"
+      ],
+      "expected": "title 超過 100 字元或為空白時應回傳 422 狀態碼，且不得回傳 5xx。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Create task with default, min (1) and max (5) priority",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task Default\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task P1\", \"priority\": 1} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task P5\", \"priority\": 5} as alice"
+      ],
+      "expected": "priority 為整數，範圍 1 至 5（含邊界），預設值為 3。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Create or patch task with invalid priority 0 or 6 returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task P0\", \"priority\": 0} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task P6\", \"priority\": 6} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Valid Task\"} as alice",
+        "PATCH /api/tasks/{tid} with {\"priority\": 0} as alice",
+        "PATCH /api/tasks/{tid} with {\"priority\": 6} as alice"
+      ],
+      "expected": "priority 設為 1 或 5 時接受請求，設為 0 或 6 時應回傳 422 狀態碼。"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project owner deletes a task successfully",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: alice"
+      ],
+      "expected": "成功刪除任務時，API `DELETE /api/tasks/{tid}` 應回傳 status code 204。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Task creator who is not the project owner deletes a task successfully",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/members with X-User: alice to add bob as a member",
+        "POST /api/projects/{pid}/tasks with X-User: bob to create a task",
+        "DELETE /api/tasks/{tid} with X-User: bob"
+      ],
+      "expected": "當操作者為專案 owner 或任務建立者時，允許刪除任務。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Other project member who is neither owner nor creator attempts to delete a task",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/members with X-User: alice to add bob as a member",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: bob"
+      ],
+      "expected": "當操作者為其他專案成員時，API 應回傳 403 錯誤且任務仍存在。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Non-project member attempts to delete a task",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: carol"
+      ],
+      "expected": "當操作者為非專案成員時，API 應回傳 403 錯誤。"
+    }
+  ]
+}

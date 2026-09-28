@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='htt",
+      "span_id": "b104ff9d17b5ade3",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='htt",
+        "span_id": "b104ff9d17b5ade3",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12",
+      "evidence": "fails on a clean SUT: assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "TEST": 1
+      },
+      "rules": {
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "fails on a clean SUT: assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+        "unverified": false
+      }
+    ]
+  }
+}

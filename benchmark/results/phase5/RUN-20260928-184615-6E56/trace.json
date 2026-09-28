@@ -1,0 +1,815 @@
+{
+  "trace_id": "01b6bc9252165ad3c8e3247f4ab10f4f",
+  "run": {
+    "requirement_id": "REQ-002",
+    "sut_bugs": [
+      "B06"
+    ],
+    "started_at": "2026-09-28T18:46:18.441Z",
+    "duration_ms": 30213.746,
+    "verdict": "DEFECT_FOUND"
+  },
+  "spans": [
+    {
+      "span_id": "01e1375ec8c16c93",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T18:46:18.441Z",
+      "end_time": "2026-09-28T18:46:48.654Z",
+      "duration_ms": 30213.746,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-002",
+        "qa.run.sut_bugs": [
+          "B06"
+        ],
+        "qa.run.id": "RUN-20260928-184615-6E56",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "test",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "DEFECT_FOUND",
+        "qa.verdict.surface": "DEFECT_FOUND",
+        "qa.classification.total": 1,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "SUT",
+        "qa.failure.symptom": "ASSERTION",
+        "qa.failure.rule": "R11",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "31f019e8d2f0580c",
+      "parent_span_id": "01e1375ec8c16c93",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T18:46:18.441Z",
+      "end_time": "2026-09-28T18:46:20.520Z",
+      "duration_ms": 2079.906,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:46:20.520Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"驗證專案任務的建立與更新 API (`POST /api/projects/{pid}/tasks` 及 `PATCH /api/tasks/{tid}`) 中的欄位驗證邏輯，包含 title 與 priority 的長度與範圍限制。\",\n  \"acceptance_criteria\": [\n    \"title 為必填欄位，長度須介於 1 至 100 字元之間（含邊界）。\",\n    \"title 長度為 100 字元時應成功接受，回傳 201 或 200。\",\n    \"title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\",\n    \"priority 須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，若為 0 或 6 則應回傳 422 錯誤。\"\n  ]\n}",
+            "length": 437,
+            "truncated": false,
+            "artifact": "spans/31f019e8d2f0580c-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "c645feb7866c6678",
+      "parent_span_id": "31f019e8d2f0580c",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:46:18.441Z",
+      "end_time": "2026-09-28T18:46:20.514Z",
+      "duration_ms": 2073.301,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 214,
+        "gen_ai.usage.output_tokens": 232
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:46:18.444Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-002:\n\n# REQ-002 任務欄位驗證\n\n`POST /api/projects/{pid}/tasks` 與 `PATCH /api/tasks/{tid}` 須驗證欄位。\n\n## 驗收準則\n- `title` 必填，長度 1–100 字元（含邊界）。\n  - 100 字元 → 接受（`201` / `200`）。\n  - 101 字元以上或空白 → `422`，**不得回 5xx**。\n- `priority` 為整數，範圍 1–5（含邊界），預設 3。\n  - 1 與 5 → 接受；0 與 6 → `422`。\n",
+            "length": 420,
+            "truncated": false,
+            "artifact": "prompts/c645feb7866c6678-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:46:20.514Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"驗證專案任務的建立與更新 API (`POST /api/projects/{pid}/tasks` 及 `PATCH /api/tasks/{tid}`) 中的欄位驗證邏輯，包含 title 與 priority 的長度與範圍限制。\",\n  \"acceptance_criteria\": [\n    \"title 為必填欄位，長度須介於 1 至 100 字元之間（含邊界）。\",\n    \"title 長度為 100 字元時應成功接受，回傳 201 或 200。\",\n    \"title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\",\n    \"priority 須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，若為 0 或 6 則應回傳 422 錯誤。\"\n  ]\n}",
+            "length": 406,
+            "truncated": false,
+            "artifact": "prompts/c645feb7866c6678-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "0dbfd56b4b273087",
+      "parent_span_id": "c645feb7866c6678",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:46:18.444Z",
+      "end_time": "2026-09-28T18:46:20.507Z",
+      "duration_ms": 2063.164,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "1a4729fdeee87a21",
+      "parent_span_id": "01e1375ec8c16c93",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T18:46:20.520Z",
+      "end_time": "2026-09-28T18:46:27.669Z",
+      "duration_ms": 7148.874,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:46:27.669Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"驗證 title 邊界長度 1 和 100 字元以及預設 priority 3\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用 title 長度為 1 字元與預設 priority 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用 title 長度為 100 字元呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"title 為必填欄位，長度須介於 1 至 100 字元之間（含邊界）。title 長度為 100 字元時應成功接受，回傳 201 或 200。priority 須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"驗證 title 超過 101 字元或為空白時的 422 錯誤\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用超過 101 字元的 title 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用空白 title 呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"驗證 priority 邊界值 1 與 5\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用 valid title 且 priority 為 1 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用 valid title 且 priority 為 5 呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"priority 為 1 或 5 時應被接受\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"驗證 priority 非法邊界值 0 與 6 的 422 錯誤\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用 priority 為 0 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用 priority 為 6 呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"若為 0 或 6 則應回傳 422 錯誤。\"\n    }\n  ]\n}",
+            "length": 1542,
+            "truncated": false,
+            "artifact": "spans/1a4729fdeee87a21-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "709e247dd2763761",
+      "parent_span_id": "1a4729fdeee87a21",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:46:20.520Z",
+      "end_time": "2026-09-28T18:46:27.662Z",
+      "duration_ms": 7141.874,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1275,
+        "gen_ai.usage.output_tokens": 670
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:46:20.524Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"驗證專案任務的建立與更新 API (`POST /api/projects/{pid}/tasks` 及 `PATCH /api/tasks/{tid}`) 中的欄位驗證邏輯，包含 title 與 priority 的長度與範圍限制。\",\n  \"acceptance_criteria\": [\n    \"title 為必填欄位，長度須介於 1 至 100 字元之間（含邊界）。\",\n    \"title 長度為 100 字元時應成功接受，回傳 201 或 200。\",\n    \"title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\",\n    \"priority 須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，若為 0 或 6 則應回傳 422 錯誤。\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User: <username>`.\nSeeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.\n\n## Resources\n\n**Project**: `{id, name, owner_id}`. ",
+            "length": 3924,
+            "truncated": true,
+            "artifact": "prompts/709e247dd2763761-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:46:27.662Z",
+          "attributes": {
+            "text": "{\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"驗證 title 邊界長度 1 和 100 字元以及預設 priority 3\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用 title 長度為 1 字元與預設 priority 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用 title 長度為 100 字元呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"title 為必填欄位，長度須介於 1 至 100 字元之間（含邊界）。title 長度為 100 字元時應成功接受，回傳 201 或 200。priority 須為整數，範圍介於 1 至 5 之間（含邊界），預設值為 3。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"驗證 title 超過 101 字元或為空白時的 422 錯誤\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用超過 101 字元的 title 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用空白 title 呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"title 長度超過 101 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"驗證 priority 邊界值 1 與 5\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用 valid title 且 priority 為 1 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用 valid title 且 priority 為 5 呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"priority 為 1 或 5 時應被接受\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"驗證 priority 非法邊界值 0 與 6 的 422 錯誤\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"送出 POST /api/projects 建立專案\",\n        \"使用 priority 為 0 呼叫 POST /api/projects/{pid}/tasks\",\n        \"使用 priority 為 6 呼叫 POST /api/projects/{pid}/tasks\"\n      ],\n      \"expected\": \"若為 0 或 6 則應回傳 422 錯誤。\"\n    }\n  ]\n}",
+            "length": 1511,
+            "truncated": false,
+            "artifact": "prompts/709e247dd2763761-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "30d2866b4590ea3d",
+      "parent_span_id": "709e247dd2763761",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:46:20.524Z",
+      "end_time": "2026-09-28T18:46:27.656Z",
+      "duration_ms": 7131.629,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "2a51363cd432b1a1",
+      "parent_span_id": "01e1375ec8c16c93",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T18:46:27.669Z",
+      "end_time": "2026-09-28T18:46:30.679Z",
+      "duration_ms": 3009.289,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:46:30.679Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req002_api.py\",\n      \"content\": \"import pytest\\n\\ndef test_tc1_title_boundary_and_default_priority(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Title length 1, default priority (should be 3)\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"a\\\"})\\n    assert r1.status_code == 201, r1.text\\n    task1 = r1.json()\\n    assert task1[\\\"title\\\"] == \\\"a\\\"\\n    assert task1[\\\"priority\\\"] == 3\\n    \\n    # Title length 100\\n    long_title = \\\"a\\\" * 100\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": long_title})\\n    assert r2.status_code in (200, 201), r2.text\\n    task2 = r2.json()\\n    assert task2[\\\"title\\\"] == long_title\\n\\ndef test_tc2_title_invalid_length_or_blank(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Title length 101\\n    too_long_title = \\\"a\\\" * 101\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": too_long_title})\\n    assert r1.status_code == 422, r1.text\\n    \\n    # Blank title\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"\\\"})\\n    assert r2.status_code == 422, r2.text\\n\\ndef test_tc3_priority_boundary_values(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Priority 1\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task P1\\\", \\\"priority\\\": 1})\\n    assert r1.status_code in (200, 201), r1.text\\n    assert r1.json()[\\\"priority\\\"] == 1\\n    \\n    # Priority 5\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task P5\\\", \\\"priority\\\": 5})\\n    assert r2.status_code in (200, 201), r2.text\\n    assert r2.json()[\\\"priority\\\"] == 5\\n\\ndef test_tc4_priority_illegal_boundaries(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\"",
+            "length": 2376,
+            "truncated": true,
+            "artifact": "spans/2a51363cd432b1a1-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "01464352b91f0fb4",
+      "parent_span_id": "2a51363cd432b1a1",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:46:27.669Z",
+      "end_time": "2026-09-28T18:46:30.667Z",
+      "duration_ms": 2997.284,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 2010,
+        "gen_ai.usage.output_tokens": 906
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:46:27.679Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-002:\n{\n  \"requirement_id\": \"REQ-002\",\n  \"cases\": [\n    {\n  ",
+            "length": 5875,
+            "truncated": true,
+            "artifact": "prompts/01464352b91f0fb4-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:46:30.667Z",
+          "attributes": {
+            "text": "{\n  \"files\": [\n    {\n      \"path\": \"generated/test_req002_api.py\",\n      \"surface\": \"api\",\n      \"content\": \"import pytest\\n\\ndef test_tc1_title_boundary_and_default_priority(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Title length 1, default priority (should be 3)\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"a\\\"})\\n    assert r1.status_code == 201, r1.text\\n    task1 = r1.json()\\n    assert task1[\\\"title\\\"] == \\\"a\\\"\\n    assert task1[\\\"priority\\\"] == 3\\n    \\n    # Title length 100\\n    long_title = \\\"a\\\" * 100\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": long_title})\\n    assert r2.status_code in (200, 201), r2.text\\n    task2 = r2.json()\\n    assert task2[\\\"title\\\"] == long_title\\n\\ndef test_tc2_title_invalid_length_or_blank(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Title length 101\\n    too_long_title = \\\"a\\\" * 101\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": too_long_title})\\n    assert r1.status_code == 422, r1.text\\n    \\n    # Blank title\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"\\\"})\\n    assert r2.status_code == 422, r2.text\\n\\ndef test_tc3_priority_boundary_values(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Priority 1\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task P1\\\", \\\"priority\\\": 1})\\n    assert r1.status_code in (200, 201), r1.text\\n    assert r1.json()[\\\"priority\\\"] == 1\\n    \\n    # Priority 5\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task P5\\\", \\\"priority\\\": 5})\\n    assert r2.status_code in (200, 201), r2.text\\n    assert r2.json()[\\\"priority\\\"] == 5\\n\\ndef test_tc4_priority_illegal_boundaries(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    ",
+            "length": 2345,
+            "truncated": true,
+            "artifact": "prompts/01464352b91f0fb4-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "645380658495ad08",
+      "parent_span_id": "01464352b91f0fb4",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:46:27.679Z",
+      "end_time": "2026-09-28T18:46:30.663Z",
+      "duration_ms": 2983.866,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "180add95f42d2089",
+      "parent_span_id": "2a51363cd432b1a1",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T18:46:30.668Z",
+      "end_time": "2026-09-28T18:46:30.676Z",
+      "duration_ms": 8.007,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req002_api.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:46:30.670Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req002_api.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:30.676Z",
+          "attributes": {
+            "text": "wrote 2081 chars to generated/test_req002_api.py",
+            "length": 48,
+            "truncated": false,
+            "artifact": "spans/180add95f42d2089-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "311ec24d2e6b0240",
+      "parent_span_id": "01e1375ec8c16c93",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T18:46:30.682Z",
+      "end_time": "2026-09-28T18:46:34.919Z",
+      "duration_ms": 4237.682,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:46:34.919Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"executions\": [\n    {\n      \"tool\": \"pytest\",\n      \"ok\": false,\n      \"attempts\": 1,\n      \"exit_code\": 1,\n      \"summary\": \"1 failed, 3 passed in 2.90s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 4,\n        \"failures\": 1,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 1,\n        \"exception_failures\": 0,\n        \"files\": [\n          \"generated/test_req002_api.py\"\n        ],\n        \"junit\": \"reports/junit-test_req002_api-41d5a1.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc1_title_boundary_and_default_priority\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc2_title_invalid_length_or_blank\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc3_priority_boundary_values\",\n            \"outcome\": \"FAIL\",\n            \"message\": \"AssertionError: {\\\"detail\\\":[{\\\"loc\\\":[\\\"body\\\",\\\"priority\\\"],\\\"msg\\\":\\\"priority must be between 1 and 5\\\"}]}\\nassert 422 in (200, 201)\\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code\"\n          },\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc4_priority_illegal_boundaries\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          }\n        ],\n        \"isolation\": \"L1\"\n      }\n    },\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    }\n  ]\n}",
+            "length": 1769,
+            "truncated": false,
+            "artifact": "spans/311ec24d2e6b0240-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "620aaa80232cffa2",
+      "parent_span_id": "311ec24d2e6b0240",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:46:30.682Z",
+      "end_time": "2026-09-28T18:46:34.907Z",
+      "duration_ms": 4225.12,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 2.90s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req002_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req002_api-41d5a1.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:46:30.684Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "pytest",
+            "target": "generated/test_req002_api.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.pytest"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T18:46:34.904Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:34.907Z",
+          "attributes": {
+            "text": "..F.                                                                     [100%]\n================================== FAILURES ===================================\n______________________ test_tc3_priority_boundary_values ______________________\n\nas_user = <function as_user.<locals>.get at 0x000001C5A45620C0>\nnew_project = <function new_project.<locals>.create at 0x000001C5A4761440>\n\n    def test_tc3_priority_boundary_values(as_user, new_project):\n        alice = as_user(\"alice\")\n        pid = new_project(owner=\"alice\")\n    \n        # Priority 1\n        r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task P1\", \"priority\": 1})\n        assert r1.status_code in (200, 201), r1.text\n        assert r1.json()[\"priority\"] == 1\n    \n        # Priority 5\n        r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task P5\", \"priority\": 5})\n>       assert r2.status_code in (200, 201), r2.text\nE       AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nE       assert 422 in (200, 201)\nE        +  where 422 = <Response [422 Unprocessable Entity]>.status_code\n\ngenerated\\test_req002_api.py:45: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-184615-6E56\\reports\\junit-test_req002_api-41d5a1.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req002_api.py::test_tc3_priority_boundary_values - Asse...\n1 failed, 3 passed in 2.90s\n",
+            "length": 1488,
+            "truncated": false,
+            "artifact": "spans/620aaa80232cffa2-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "bd62461e565fd92e",
+      "parent_span_id": "620aaa80232cffa2",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:46:30.684Z",
+      "end_time": "2026-09-28T18:46:34.904Z",
+      "duration_ms": 4220.121,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 2.90s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "9a61641b26414f00",
+      "parent_span_id": "311ec24d2e6b0240",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:46:34.907Z",
+      "end_time": "2026-09-28T18:46:34.916Z",
+      "duration_ms": 9.565,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:46:34.907Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:34.916Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/9a61641b26414f00-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "013b15d4161fedb7",
+      "parent_span_id": "01e1375ec8c16c93",
+      "name": "agent.report",
+      "start_time": "2026-09-28T18:46:34.919Z",
+      "end_time": "2026-09-28T18:46:34.921Z",
+      "duration_ms": 2.001,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:46:34.921Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"REQ-002: 2 tool execution(s)\\n- pytest: FAILED (attempts=1, exit=1) - 1 failed, 3 passed in 2.90s\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\"\n}",
+            "length": 213,
+            "truncated": false,
+            "artifact": "spans/013b15d4161fedb7-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "6ae80a3be3c462c7",
+      "parent_span_id": "01e1375ec8c16c93",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T18:46:34.921Z",
+      "end_time": "2026-09-28T18:46:48.649Z",
+      "duration_ms": 13727.953,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [
+          "B06"
+        ],
+        "qa.eval.files": [
+          "generated/test_req002_api.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "DEFECT_FOUND",
+        "qa.eval.detected": 1,
+        "qa.eval.missed": 3,
+        "qa.eval.broken": 0,
+        "qa.eval.passed": 0,
+        "qa.eval.tests": 4
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:46:48.648Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc1_title_boundary_and_default_priority",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:46:48.648Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc2_title_invalid_length_or_blank",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:46:48.649Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+            "qa.test.bug_outcome": "FAIL",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "DETECTED",
+            "qa.test.rule": "R11"
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:46:48.649Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc4_priority_illegal_boundaries",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "c77671d20a4ff5f2",
+      "parent_span_id": "6ae80a3be3c462c7",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T18:46:34.921Z",
+      "end_time": "2026-09-28T18:46:42.028Z",
+      "duration_ms": 7106.773,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": [
+          "B06"
+        ]
+      },
+      "events": []
+    },
+    {
+      "span_id": "264902da14e1877b",
+      "parent_span_id": "c77671d20a4ff5f2",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:46:37.610Z",
+      "end_time": "2026-09-28T18:46:37.618Z",
+      "duration_ms": 7.948,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:37.618Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/264902da14e1877b-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "cced00a90a6448b3",
+      "parent_span_id": "c77671d20a4ff5f2",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:46:37.618Z",
+      "end_time": "2026-09-28T18:46:41.829Z",
+      "duration_ms": 4210.997,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 2.88s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req002_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req002_api-a89a38.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T18:46:41.826Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:41.829Z",
+          "attributes": {
+            "text": "..F.                                                                     [100%]\n================================== FAILURES ===================================\n______________________ test_tc3_priority_boundary_values ______________________\n\nas_user = <function as_user.<locals>.get at 0x0000016913BA20C0>\nnew_project = <function new_project.<locals>.create at 0x0000016913DA1440>\n\n    def test_tc3_priority_boundary_values(as_user, new_project):\n        alice = as_user(\"alice\")\n        pid = new_project(owner=\"alice\")\n    \n        # Priority 1\n        r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task P1\", \"priority\": 1})\n        assert r1.status_code in (200, 201), r1.text\n        assert r1.json()[\"priority\"] == 1\n    \n        # Priority 5\n        r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task P5\", \"priority\": 5})\n>       assert r2.status_code in (200, 201), r2.text\nE       AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nE       assert 422 in (200, 201)\nE        +  where 422 = <Response [422 Unprocessable Entity]>.status_code\n\ngenerated\\test_req002_api.py:45: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-184615-6E56\\reports\\junit-test_req002_api-a89a38.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req002_api.py::test_tc3_priority_boundary_values - Asse...\n1 failed, 3 passed in 2.88s\n",
+            "length": 1488,
+            "truncated": false,
+            "artifact": "spans/cced00a90a6448b3-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "29baa3ce5c435a6c",
+      "parent_span_id": "cced00a90a6448b3",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:46:37.619Z",
+      "end_time": "2026-09-28T18:46:41.826Z",
+      "duration_ms": 4206.974,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 2.88s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "7b516104c64ba69f",
+      "parent_span_id": "6ae80a3be3c462c7",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T18:46:42.033Z",
+      "end_time": "2026-09-28T18:46:48.644Z",
+      "duration_ms": 6611.14,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "3ba825bb42303887",
+      "parent_span_id": "7b516104c64ba69f",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:46:44.726Z",
+      "end_time": "2026-09-28T18:46:44.734Z",
+      "duration_ms": 8.047,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:44.734Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/3ba825bb42303887-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "df1f50958a5e85f0",
+      "parent_span_id": "7b516104c64ba69f",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:46:44.734Z",
+      "end_time": "2026-09-28T18:46:48.450Z",
+      "duration_ms": 3716.45,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req002_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req002_api-10e60e.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:46:48.449Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-184615-6E56\\reports\\junit-test_req002_api-10e60e.xml -\n4 passed in 2.38s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/df1f50958a5e85f0-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "9ea9f2160c6b86d0",
+      "parent_span_id": "df1f50958a5e85f0",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:46:44.734Z",
+      "end_time": "2026-09-28T18:46:48.447Z",
+      "duration_ms": 3713.449,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

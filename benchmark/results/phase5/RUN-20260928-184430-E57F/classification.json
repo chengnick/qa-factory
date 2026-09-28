@@ -1,0 +1,45 @@
+{
+  "surface": {
+    "verdict": "AGENT_FAILED",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "agent",
+      "layer": "AGENT",
+      "symptom": "INVALID_OUTPUT",
+      "matched_rule": "R5",
+      "evidence": "AgentOutputError: test plan has 10 cases; at most 8 allowed",
+      "span_id": "5d26fb8f4f700624",
+      "span": "agent.test_design",
+      "agent": "test_design",
+      "test_id": null,
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "AGENT": 1
+      },
+      "rules": {
+        "R5": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "agent",
+        "layer": "AGENT",
+        "symptom": "INVALID_OUTPUT",
+        "matched_rule": "R5",
+        "evidence": "AgentOutputError: test plan has 10 cases; at most 8 allowed",
+        "span_id": "5d26fb8f4f700624",
+        "span": "agent.test_design",
+        "agent": "test_design",
+        "test_id": null,
+        "unverified": false
+      }
+    ]
+  },
+  "final": null
+}

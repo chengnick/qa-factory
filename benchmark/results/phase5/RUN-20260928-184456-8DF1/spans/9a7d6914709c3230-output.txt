@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "3 failed in 12.37s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 2,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-09a3b1.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload",
+            "outcome": "ERROR",
+            "message": "AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_displayed_as_plain_text",
+            "outcome": "ERROR",
+            "message": "AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\""
+          }
+        ],
+        "isolation": "L1",
+        "evidence": [
+          "playwright/test_req004_ui-09a3b1/test_tc1_create_task_updates_list_without_reload",
+          "playwright/test_req004_ui-09a3b1/test_tc2_task_title_with_html_displayed_as_plain_text",
+          "playwright/test_req004_ui-09a3b1/test_tc3_api_error_displays_message_in_error_area"
+        ]
+      }
+    }
+  ]
+}

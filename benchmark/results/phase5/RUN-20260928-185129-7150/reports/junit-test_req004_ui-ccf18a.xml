@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="12.357" timestamp="2026-09-29T02:51:44.159274+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_tc1_pre_select_user_and_project" time="4.366" /><testcase classname="generated.test_req004_ui" name="test_tc2_instant_task_list_update" time="0.550" /><testcase classname="generated.test_req004_ui" name="test_tc3_render_task_title_as_plain_text_xss" time="0.521" /><testcase classname="generated.test_req004_ui" name="test_tc4_display_error_message_upon_api_error" time="6.878"><failure message="AssertionError: Locator expected not to be empty&#10;Actual value: empty &#10;Call log:&#10;  - Expect &quot;to_be_empty&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;error&quot;)&#10;    14 × locator resolved to &lt;div id=&quot;error&quot; data-testid=&quot;error&quot;&gt;&lt;/div&gt;&#10;       - unexpected value &quot;empty&quot;">page = &lt;Page url='http://127.0.0.1:61637/?user=alice&amp;project=99999'&gt;
+base_url = 'http://127.0.0.1:61637'
+
+    def test_tc4_display_error_message_upon_api_error(page, base_url):
+        page.goto(f"{base_url}/?user=alice&amp;project=99999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_area = page.get_by_test_id("error")
+&gt;       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to &lt;div id="error" data-testid="error"&gt;&lt;/div&gt;
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:42: AssertionError</failure></testcase></testsuite></testsuites>

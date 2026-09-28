@@ -1,0 +1,16 @@
+{
+  "run_id": "RUN-20260928-170140-B71D",
+  "workflow_status": "PASS",
+  "violations": [],
+  "goal_drift": false,
+  "rounds": 0,
+  "rules_checked": [
+    "W01",
+    "W02",
+    "W03",
+    "W04",
+    "W05"
+  ],
+  "acceptance_mode": true,
+  "missing_evidence": []
+}

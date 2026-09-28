@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task (FAIL)",
+      "span_id": "f0eaa7a42e2e5b5f",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task (FAIL)",
+        "span_id": "f0eaa7a42e2e5b5f",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task",
+        "unverified": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="3.015" timestamp="2026-09-29T01:17:13.309179+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req002_api" name="test_tc1_create_task_boundary_titles" time="2.400" /><testcase classname="generated.test_req002_api" name="test_tc2_create_update_invalid_titles" time="0.012" /><testcase classname="generated.test_req002_api" name="test_tc3_create_task_priority_boundaries_and_default" time="0.009"><failure message="AssertionError: {&quot;detail&quot;:[{&quot;loc&quot;:[&quot;body&quot;,&quot;priority&quot;],&quot;msg&quot;:&quot;priority must be between 1 and 5&quot;}]}&#10;assert 422 in (200, 201)&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x0000024EF98D2480&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000024EF9AD16C0&gt;
+
+    def test_tc3_create_task_priority_boundaries_and_default(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Default priority
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task default"})
+        assert r1.status_code in (200, 201), r1.text
+        assert r1.json()["priority"] == 3
+    
+        # Min priority 1
+        r2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task min", "priority": 1})
+        assert r2.status_code in (200, 201), r2.text
+        assert r2.json()["priority"] == 1
+    
+        # Max priority 5
+        r3 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task max", "priority": 5})
+&gt;       assert r3.status_code in (200, 201), r3.text
+E       AssertionError: {"detail":[{"loc":["body","priority"],"msg":"priority must be between 1 and 5"}]}
+E       assert 422 in (200, 201)
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+generated\test_req002_api.py:57: AssertionError</failure></testcase><testcase classname="generated.test_req002_api" name="test_tc4_create_patch_invalid_priorities" time="0.013" /></testsuite></testsuites>

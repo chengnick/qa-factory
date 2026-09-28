@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Case-insensitive search for ASCII characters",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with header 'X-User: alice' and body '{\"name\": \"Project A\"}' to create a project.",
+        "POST /api/projects/1/tasks with header 'X-User: alice' and body '{\"title\": \"Fix Login Bug\"}' to create a task.",
+        "GET /api/projects/1/tasks?q=login with header 'X-User: alice'."
+      ],
+      "expected": "Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug."
+    },
+    {
+      "id": "TC-2",
+      "title": "Special characters percent and underscore treated as literals",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with header 'X-User: alice' and body '{\"name\": \"Project B\"}' to create a project.",
+        "POST /api/projects/1/tasks with header 'X-User: alice' and body '{\"title\": \"100% complete_task\"}' to create a task.",
+        "GET /api/projects/1/tasks?q=100% with header 'X-User: alice'.",
+        "GET /api/projects/1/tasks?q=_task with header 'X-User: alice'."
+      ],
+      "expected": "Special characters '%' and '_' are treated as literal characters and not as wildcards."
+    },
+    {
+      "id": "TC-3",
+      "title": "Simultaneous search with status filtering and pagination",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with header 'X-User: alice' and body '{\"name\": \"Project C\"}' to create a project.",
+        "POST /api/projects/1/tasks with header 'X-User: alice' and body '{\"title\": \"Alpha Test\"}' to create task 1.",
+        "POST /api/projects/1/tasks with header 'X-User: alice' and body '{\"title\": \"Alpha Beta\"}' to create task 2.",
+        "POST /api/tasks/2/transition with header 'X-User: alice' and body '{\"to\": \"in_progress\"}' to transition task 2.",
+        "GET /api/projects/1/tasks?q=Alpha&status=in_progress&limit=10&offset=0 with header 'X-User: alice'."
+      ],
+      "expected": "Search can be used simultaneously with status filtering and pagination."
+    }
+  ]
+}

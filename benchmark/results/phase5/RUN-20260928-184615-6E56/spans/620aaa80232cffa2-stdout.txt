@@ -1,0 +1,28 @@
+..F.                                                                     [100%]
+================================== FAILURES ===================================
+______________________ test_tc3_priority_boundary_values ______________________
+
+as_user = <function as_user.<locals>.get at 0x000001C5A45620C0>
+new_project = <function new_project.<locals>.create at 0x000001C5A4761440>
+
+    def test_tc3_priority_boundary_values(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Priority 1
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task P1", "priority": 1})
+        assert r1.status_code in (200, 201), r1.text
+        assert r1.json()["priority"] == 1
+    
+        # Priority 5
+        r2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task P5", "priority": 5})
+>       assert r2.status_code in (200, 201), r2.text
+E       AssertionError: {"detail":[{"loc":["body","priority"],"msg":"priority must be between 1 and 5"}]}
+E       assert 422 in (200, 201)
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+generated\test_req002_api.py:45: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-184615-6E56\reports\junit-test_req002_api-41d5a1.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req002_api.py::test_tc3_priority_boundary_values - Asse...
+1 failed, 3 passed in 2.90s

@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req002_api.py",
+          "snapshot": "generated/round1/test_req002_api.py",
+          "sha256": "6b2071715339906ac5c38b41af6027aa16ebe4fca94546bbec2a8b8dbe4a6865"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_title_boundary_validation",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_title_violation_validation",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_priority_default_and_boundary",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_priority_violation",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+...F                                                                     [100%]
+================================== FAILURES ===================================
+_____________________ test_req004_tc4_api_error_displayed _____________________
+
+page = <Page url='http://127.0.0.1:61953/?user=alice&project=999999'>
+base_url = 'http://127.0.0.1:61953'
+
+    def test_req004_tc4_api_error_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=999999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+        error_area = page.get_by_test_id("error")
+        expect(error_area).to_be_visible()
+>       assert len(error_area.inner_text().strip()) > 0
+E       assert 0 > 0
+E        +  where 0 = len('')
+E        +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()
+E        +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip
+E        +        where '' = inner_text()
+E        +          where inner_text = <Locator frame=<Frame name= url='http://127.0.0.1:61953/?user=alice&project=999999'> selector='internal:testid=[data-testid="error"s]'>.inner_text
+
+generated\test_req004_ui.py:39: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-192351-7FF9\reports\junit-test_req004_ui-b118f6.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_req004_tc4_api_error_displayed - ass...
+1 failed, 3 passed in 6.90s
+

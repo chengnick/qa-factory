@@ -1,0 +1,9 @@
+{
+  "files": [
+    {
+      "path": "generated/test_req004_ui.py",
+      "surface": "ui",
+      "content": "from playwright.sync_api import expect\n\ndef test_tc1_create_task_updates_list_without_reload(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    page.get_by_test_id(\"new-title\").fill(\"New UI Task\")\n    page.get_by_test_id(\"create-btn\").click()\n    \n    task_item = page.get_by_test_id(\"task-item\").filter(has_text=\"New UI Task\")\n    expect(task_item).toBeVisible()\n\ndef test_tc2_task_title_with_html_displayed_as_plain_text(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    page.get_by_test_id(\"new-title\").fill(\"<b>x</b>\")\n    page.get_by_test_id(\"create-btn\").click()\n    \n    task_title = page.get_by_test_id(\"task-title\").filter(has_text=\"<b>x</b>\")\n    expect(task_title).toBeVisible()\n    # Ensure <b> tag is not rendered as actual HTML element\n    assert page.locator(\"b\").count() == 0 or \"<b>x</b>\" in task_title.inner_html()\n\ndef test_tc3_api_error_displays_message_in_error_area(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n    \n    # Submitting empty title should trigger an API error or validation error\n    page.get_by_test_id(\"new-title\").fill(\"\")\n    page.get_by_test_id(\"create-btn\").click()\n    \n    error_area = page.get_by_test_id(\"error\")\n    expect(error_area).not_to_be_empty()\n"
+    }
+  ]
+}

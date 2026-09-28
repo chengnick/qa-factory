@@ -1,0 +1,90 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc2_literal_special_characters (FAIL)",
+      "span_id": "f5c81a6809092758",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req009_api.py::test_req009_tc2_literal_special_characters",
+      "unverified": true
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc2_literal_special_characters (FAIL)",
+        "span_id": "f5c81a6809092758",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req009_api.py::test_req009_tc2_literal_special_characters",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12",
+      "evidence": "fails on a clean SUT: AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc2_literal_special_characters (FAIL) | cross-validation R12",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req009_api.py::test_req009_tc2_literal_special_characters",
+      "unverified": false
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "TEST": 1
+      },
+      "rules": {
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "fails on a clean SUT: AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc2_literal_special_characters (FAIL) | cross-validation R12",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req009_api.py::test_req009_tc2_literal_special_characters",
+        "unverified": false
+      }
+    ]
+  }
+}

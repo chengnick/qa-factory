@@ -1,0 +1,122 @@
+{
+  "status": "COMPLETE",
+  "verdict": "TEST_BROKEN",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 3,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 0,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req004_ui.py": "aab13f5652249158c1c54ac0fa6d4df411bbc53a245a49fa1b19b4d812070489"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-400fba.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+          "outcome": "ERROR",
+          "message": "NameError: name 'page' is not defined"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-a822b8.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+      "bug_outcome": "ERROR",
+      "clean_outcome": "ERROR",
+      "decision": "BROKEN",
+      "rule": "R10",
+      "symptom": "CRASH",
+      "evidence": "bug build: NameError: name 'page' is not defined"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+      "bug_outcome": "ERROR",
+      "clean_outcome": "ERROR",
+      "decision": "BROKEN",
+      "rule": "R10",
+      "symptom": "CRASH",
+      "evidence": "bug build: NameError: name 'page' is not defined"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+      "bug_outcome": "ERROR",
+      "clean_outcome": "ERROR",
+      "decision": "BROKEN",
+      "rule": "R10",
+      "symptom": "CRASH",
+      "evidence": "bug build: NameError: name 'page' is not defined"
+    }
+  ]
+}

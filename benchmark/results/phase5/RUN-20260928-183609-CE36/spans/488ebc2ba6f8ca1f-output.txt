@@ -1,0 +1,4 @@
+{
+  "requirement_id": "REQ-008",
+  "summary": "REQ-008: 2 tool execution(s)\n- pytest: ok (attempts=1, exit=0) - 4 passed in 4.49s\n- http_request: ok (attempts=1, exit=None) - {\"status\":\"ok\"}"
+}

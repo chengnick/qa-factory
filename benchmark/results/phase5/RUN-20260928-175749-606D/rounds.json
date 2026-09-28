@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req009_api.py",
+          "snapshot": "generated/round1/test_req009_api.py",
+          "sha256": "b67e72a442d4deb0f9247f966f77a67336fe75a79df370332d4d0288cc540e79"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_literal_wildcards",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_simultaneous_search_status_pagination",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

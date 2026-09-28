@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project member can read project, task list, and task detail",
+      "surface": "api",
+      "steps": [
+        "Alice creates a project",
+        "Alice creates a task in the project",
+        "Alice sends GET /api/projects/{pid}",
+        "Alice sends GET /api/projects/{pid}/tasks",
+        "Alice sends GET /api/tasks/{tid}"
+      ],
+      "expected": "專案、任務列表、任務詳情（GET /api/tasks/{tid}）僅限該專案成員讀取"
+    },
+    {
+      "id": "TC-2",
+      "title": "Non-project member cannot read project, task list, or task detail",
+      "surface": "api",
+      "steps": [
+        "Alice creates a project and a task inside it",
+        "Bob (non-member) sends GET /api/projects/{pid}",
+        "Bob (non-member) sends GET /api/projects/{pid}/tasks",
+        "Bob (non-member) sends GET /api/tasks/{tid}"
+      ],
+      "expected": "非專案成員訪問回傳 403"
+    },
+    {
+      "id": "TC-3",
+      "title": "Reading non-existent project, task list of non-existent project, or non-existent task detail returns 404",
+      "surface": "api",
+      "steps": [
+        "Alice sends GET /api/projects/99999",
+        "Alice sends GET /api/projects/99999/tasks",
+        "Alice sends GET /api/tasks/99999"
+      ],
+      "expected": "資源不存在時回傳 404"
+    }
+  ]
+}

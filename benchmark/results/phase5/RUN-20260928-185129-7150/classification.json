@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | test generated/test_req004_",
+      "span_id": "826380fff98a934d",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | test generated/test_req004_",
+        "span_id": "826380fff98a934d",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12",
+      "evidence": "fails on a clean SUT: AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | test ",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "TEST": 1
+      },
+      "rules": {
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "fails on a clean SUT: AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | test ",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error",
+        "unverified": false
+      }
+    ]
+  }
+}

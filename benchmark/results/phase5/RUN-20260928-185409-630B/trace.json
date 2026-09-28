@@ -1,0 +1,775 @@
+{
+  "trace_id": "09b70500d4de0f42b97d366e9139db50",
+  "run": {
+    "requirement_id": "REQ-009",
+    "sut_bugs": [],
+    "started_at": "2026-09-28T18:54:11.958Z",
+    "duration_ms": 24081.364,
+    "verdict": "PASS"
+  },
+  "spans": [
+    {
+      "span_id": "16d81bd939d91893",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T18:54:11.958Z",
+      "end_time": "2026-09-28T18:54:36.039Z",
+      "duration_ms": 24081.364,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-009",
+        "qa.run.sut_bugs": [],
+        "qa.run.id": "RUN-20260928-185409-630B",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "clean",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "PASS",
+        "qa.verdict.surface": "PASS",
+        "qa.classification.total": 0,
+        "qa.classification.unknown": 0,
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "e996fa9edd72fd07",
+      "parent_span_id": "16d81bd939d91893",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T18:54:11.958Z",
+      "end_time": "2026-09-28T18:54:13.167Z",
+      "duration_ms": 1208.919,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:13.166Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-009\",\n  \"summary\": \"Implement task search API GET /api/projects/{pid}/tasks?q=<text> to perform substring matching on task titles.\",\n  \"acceptance_criteria\": [\n    \"Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug.\",\n    \"Special characters '%' and '_' are treated as literal characters and not as wildcards.\",\n    \"Search can be used simultaneously with status filtering and pagination.\"\n  ]\n}",
+            "length": 470,
+            "truncated": false,
+            "artifact": "spans/e996fa9edd72fd07-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "cc73c61ae14c4690",
+      "parent_span_id": "e996fa9edd72fd07",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:54:11.958Z",
+      "end_time": "2026-09-28T18:54:13.163Z",
+      "duration_ms": 1204.966,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 152,
+        "gen_ai.usage.output_tokens": 106
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:54:11.960Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-009:\n\n# REQ-009 任務搜尋\n\n`GET /api/projects/{pid}/tasks?q=<text>` 以標題做子字串搜尋。\n\n## 驗收準則\n- 搜尋**不區分大小寫**（ASCII）：`q=login` 須找到標題 `Fix Login Bug`。\n- `%`、`_` 視為一般字元，不作萬用字元。\n- 可與 `status` 篩選及分頁同時使用。\n",
+            "length": 343,
+            "truncated": false,
+            "artifact": "prompts/cc73c61ae14c4690-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:54:13.163Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"Implement task search API GET /api/projects/{pid}/tasks?q=<text> to perform substring matching on task titles.\",\n  \"acceptance_criteria\": [\n    \"Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug.\",\n    \"Special characters '%' and '_' are treated as literal characters and not as wildcards.\",\n    \"Search can be used simultaneously with status filtering and pagination.\"\n  ]\n}",
+            "length": 439,
+            "truncated": false,
+            "artifact": "prompts/cc73c61ae14c4690-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "748f528c939aac71",
+      "parent_span_id": "cc73c61ae14c4690",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:11.960Z",
+      "end_time": "2026-09-28T18:54:13.118Z",
+      "duration_ms": 1157.664,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "61d96ade892efca9",
+      "parent_span_id": "16d81bd939d91893",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T18:54:13.167Z",
+      "end_time": "2026-09-28T18:54:15.805Z",
+      "duration_ms": 2638.125,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:15.805Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-009\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Case-insensitive search for ASCII characters\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with header 'X-User: alice' and body '{\\\"name\\\": \\\"Project A\\\"}' to create a project.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"Fix Login Bug\\\"}' to create a task.\",\n        \"GET /api/projects/1/tasks?q=login with header 'X-User: alice'.\"\n      ],\n      \"expected\": \"Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug.\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Special characters percent and underscore treated as literals\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with header 'X-User: alice' and body '{\\\"name\\\": \\\"Project B\\\"}' to create a project.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"100% complete_task\\\"}' to create a task.\",\n        \"GET /api/projects/1/tasks?q=100% with header 'X-User: alice'.\",\n        \"GET /api/projects/1/tasks?q=_task with header 'X-User: alice'.\"\n      ],\n      \"expected\": \"Special characters '%' and '_' are treated as literal characters and not as wildcards.\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Simultaneous search with status filtering and pagination\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with header 'X-User: alice' and body '{\\\"name\\\": \\\"Project C\\\"}' to create a project.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"Alpha Test\\\"}' to create task 1.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"Alpha Beta\\\"}' to create task 2.\",\n        \"POST /api/tasks/2/transition with header 'X-User: alice' and body '{\\\"to\\\": \\\"in_progress\\\"}' to transition task 2.\",\n        \"GET /api/projects/1/tasks?q=Alpha&status=in_progress&limit=10&offset=0 ",
+            "length": 2142,
+            "truncated": true,
+            "artifact": "spans/61d96ade892efca9-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "aa3ce245473c41ea",
+      "parent_span_id": "61d96ade892efca9",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:54:13.167Z",
+      "end_time": "2026-09-28T18:54:15.801Z",
+      "duration_ms": 2634.128,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1149,
+        "gen_ai.usage.output_tokens": 637
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:54:13.170Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-009\",\n  \"summary\": \"Implement task search API GET /api/projects/{pid}/tasks?q=<text> to perform substring matching on task titles.\",\n  \"acceptance_criteria\": [\n    \"Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug.\",\n    \"Special characters '%' and '_' are treated as literal characters and not as wildcards.\",\n    \"Search can be used simultaneously with status filtering and pagination.\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User: <username>`.\nSeeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.\n\n## Resources\n\n**Pr",
+            "length": 3957,
+            "truncated": true,
+            "artifact": "prompts/aa3ce245473c41ea-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:54:15.801Z",
+          "attributes": {
+            "text": "{\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Case-insensitive search for ASCII characters\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with header 'X-User: alice' and body '{\\\"name\\\": \\\"Project A\\\"}' to create a project.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"Fix Login Bug\\\"}' to create a task.\",\n        \"GET /api/projects/1/tasks?q=login with header 'X-User: alice'.\"\n      ],\n      \"expected\": \"Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug.\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Special characters percent and underscore treated as literals\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with header 'X-User: alice' and body '{\\\"name\\\": \\\"Project B\\\"}' to create a project.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"100% complete_task\\\"}' to create a task.\",\n        \"GET /api/projects/1/tasks?q=100% with header 'X-User: alice'.\",\n        \"GET /api/projects/1/tasks?q=_task with header 'X-User: alice'.\"\n      ],\n      \"expected\": \"Special characters '%' and '_' are treated as literal characters and not as wildcards.\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Simultaneous search with status filtering and pagination\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with header 'X-User: alice' and body '{\\\"name\\\": \\\"Project C\\\"}' to create a project.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"Alpha Test\\\"}' to create task 1.\",\n        \"POST /api/projects/1/tasks with header 'X-User: alice' and body '{\\\"title\\\": \\\"Alpha Beta\\\"}' to create task 2.\",\n        \"POST /api/tasks/2/transition with header 'X-User: alice' and body '{\\\"to\\\": \\\"in_progress\\\"}' to transition task 2.\",\n        \"GET /api/projects/1/tasks?q=Alpha&status=in_progress&limit=10&offset=0 with header 'X-User: alice'.\"\n ",
+            "length": 2111,
+            "truncated": true,
+            "artifact": "prompts/aa3ce245473c41ea-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "9233edd5a1c48ec0",
+      "parent_span_id": "aa3ce245473c41ea",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:13.170Z",
+      "end_time": "2026-09-28T18:54:15.764Z",
+      "duration_ms": 2593.878,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "5eec00556a2575ba",
+      "parent_span_id": "16d81bd939d91893",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T18:54:15.805Z",
+      "end_time": "2026-09-28T18:54:18.873Z",
+      "duration_ms": 3068.694,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:18.873Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-009\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req009_api.py\",\n      \"content\": \"import pytest\\n\\ndef test_req009_tc1_case_insensitive_search(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    r = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Fix Login Bug\\\"})\\n    assert r.status_code == 201, r.text\\n    \\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?q=login\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1, data\\n    assert data[\\\"items\\\"][0][\\\"title\\\"] == \\\"Fix Login Bug\\\"\\n\\ndef test_req009_tc2_special_characters_literals(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    r = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"100% complete_task\\\"})\\n    assert r.status_code == 201, r.text\\n    \\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?q=100%\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1, data\\n    assert data[\\\"items\\\"][0][\\\"title\\\"] == \\\"100% complete_task\\\"\\n    \\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?q=_task\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1, data\\n    assert data[\\\"items\\\"][0][\\\"title\\\"] == \\\"100% complete_task\\\"\\n\\ndef test_req009_tc3_simultaneous_search_status_pagination(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Alpha Test\\\"})\\n    assert r1.status_code == 201, r1.text\\n    t1_id = r1.json()[\\\"id\\\"]\\n    \\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Alpha Beta\\\"})\\n    assert r2.status_code == 201, r2.text\\n    t2_id = r2.json()[\\\"id\\\"]\\n    \\n    r = alice.post(f\\\"/api/tasks/{t2_id}/transition\\\", json={\\\"to\\\": \\\"in_progress\\\"})\\n    asser",
+            "length": 2447,
+            "truncated": true,
+            "artifact": "spans/5eec00556a2575ba-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f6066da6ad575180",
+      "parent_span_id": "5eec00556a2575ba",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:54:15.805Z",
+      "end_time": "2026-09-28T18:54:18.825Z",
+      "duration_ms": 3019.801,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1977,
+        "gen_ai.usage.output_tokens": 940
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:54:15.813Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-009:\n{\n  \"requirement_id\": \"REQ-009\",\n  \"cases\": [\n    {\n  ",
+            "length": 6475,
+            "truncated": true,
+            "artifact": "prompts/f6066da6ad575180-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:54:18.825Z",
+          "attributes": {
+            "text": "{\n  \"files\": [\n    {\n      \"path\": \"generated/test_req009_api.py\",\n      \"surface\": \"api\",\n      \"content\": \"import pytest\\n\\ndef test_req009_tc1_case_insensitive_search(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    r = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Fix Login Bug\\\"})\\n    assert r.status_code == 201, r.text\\n    \\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?q=login\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1, data\\n    assert data[\\\"items\\\"][0][\\\"title\\\"] == \\\"Fix Login Bug\\\"\\n\\ndef test_req009_tc2_special_characters_literals(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    r = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"100% complete_task\\\"})\\n    assert r.status_code == 201, r.text\\n    \\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?q=100%\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1, data\\n    assert data[\\\"items\\\"][0][\\\"title\\\"] == \\\"100% complete_task\\\"\\n    \\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?q=_task\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1, data\\n    assert data[\\\"items\\\"][0][\\\"title\\\"] == \\\"100% complete_task\\\"\\n\\ndef test_req009_tc3_simultaneous_search_status_pagination(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Alpha Test\\\"})\\n    assert r1.status_code == 201, r1.text\\n    t1_id = r1.json()[\\\"id\\\"]\\n    \\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Alpha Beta\\\"})\\n    assert r2.status_code == 201, r2.text\\n    t2_id = r2.json()[\\\"id\\\"]\\n    \\n    r = alice.post(f\\\"/api/tasks/{t2_id}/transition\\\", json={\\\"to\\\": \\\"in_progress\\\"})\\n    assert r.sta",
+            "length": 2416,
+            "truncated": true,
+            "artifact": "prompts/f6066da6ad575180-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "c9704ec633de194b",
+      "parent_span_id": "f6066da6ad575180",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:15.813Z",
+      "end_time": "2026-09-28T18:54:18.820Z",
+      "duration_ms": 3006.166,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "18e8ce99d1d5328b",
+      "parent_span_id": "5eec00556a2575ba",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T18:54:18.825Z",
+      "end_time": "2026-09-28T18:54:18.869Z",
+      "duration_ms": 44.894,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req009_api.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:54:18.827Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req009_api.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:18.869Z",
+          "attributes": {
+            "text": "wrote 2142 chars to generated/test_req009_api.py",
+            "length": 48,
+            "truncated": false,
+            "artifact": "spans/18e8ce99d1d5328b-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "46e2ab888193d020",
+      "parent_span_id": "16d81bd939d91893",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T18:54:18.876Z",
+      "end_time": "2026-09-28T18:54:22.583Z",
+      "duration_ms": 3706.597,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:22.583Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-009\",\n  \"executions\": [\n    {\n      \"tool\": \"pytest\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": 0,\n      \"summary\": \"3 passed in 2.37s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 3,\n        \"failures\": 0,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 0,\n        \"exception_failures\": 0,\n        \"files\": [\n          \"generated/test_req009_api.py\"\n        ],\n        \"junit\": \"reports/junit-test_req009_api-6a1552.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req009_api.py::test_req009_tc1_case_insensitive_search\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req009_api.py::test_req009_tc2_special_characters_literals\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req009_api.py::test_req009_tc3_simultaneous_search_status_pagination\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          }\n        ],\n        \"isolation\": \"L1\"\n      }\n    },\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    }\n  ]\n}",
+            "length": 1401,
+            "truncated": false,
+            "artifact": "spans/46e2ab888193d020-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "75d6a61015d4b023",
+      "parent_span_id": "46e2ab888193d020",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:54:18.876Z",
+      "end_time": "2026-09-28T18:54:22.572Z",
+      "duration_ms": 3695.423,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req009_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req009_api-6a1552.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 3,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:54:18.878Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "pytest",
+            "target": "generated/test_req009_api.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.pytest"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:22.572Z",
+          "attributes": {
+            "text": "...                                                                      [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-185409-630B\\reports\\junit-test_req009_api-6a1552.xml -\n3 passed in 2.37s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/75d6a61015d4b023-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ec7ecb4cc9890dcb",
+      "parent_span_id": "75d6a61015d4b023",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:18.878Z",
+      "end_time": "2026-09-28T18:54:22.570Z",
+      "duration_ms": 3691.374,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "080864ae6225987b",
+      "parent_span_id": "46e2ab888193d020",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:54:22.572Z",
+      "end_time": "2026-09-28T18:54:22.581Z",
+      "duration_ms": 9.131,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:54:22.572Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:22.581Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/080864ae6225987b-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ab816c387e523bab",
+      "parent_span_id": "16d81bd939d91893",
+      "name": "agent.report",
+      "start_time": "2026-09-28T18:54:22.584Z",
+      "end_time": "2026-09-28T18:54:22.589Z",
+      "duration_ms": 5.063,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:22.589Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-009\",\n  \"summary\": \"REQ-009: 2 tool execution(s)\\n- pytest: ok (attempts=1, exit=0) - 3 passed in 2.37s\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\"\n}",
+            "length": 199,
+            "truncated": false,
+            "artifact": "spans/ab816c387e523bab-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "51e859cd6510f5f6",
+      "parent_span_id": "16d81bd939d91893",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T18:54:22.590Z",
+      "end_time": "2026-09-28T18:54:36.033Z",
+      "duration_ms": 13443.446,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [],
+        "qa.eval.files": [
+          "generated/test_req009_api.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "PASS",
+        "qa.eval.detected": 0,
+        "qa.eval.missed": 0,
+        "qa.eval.broken": 0,
+        "qa.eval.passed": 3,
+        "qa.eval.tests": 3
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:54:36.033Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:54:36.033Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req009_api.py::test_req009_tc2_special_characters_literals",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:54:36.033Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req009_api.py::test_req009_tc3_simultaneous_search_status_pagination",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "9cd5ed2dbe6a42b7",
+      "parent_span_id": "51e859cd6510f5f6",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T18:54:22.590Z",
+      "end_time": "2026-09-28T18:54:29.233Z",
+      "duration_ms": 6642.884,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "e36da253190f2512",
+      "parent_span_id": "9cd5ed2dbe6a42b7",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:54:25.287Z",
+      "end_time": "2026-09-28T18:54:25.295Z",
+      "duration_ms": 8.0,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:25.295Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/e36da253190f2512-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "7aa53a6ab8e5da8e",
+      "parent_span_id": "9cd5ed2dbe6a42b7",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:54:25.295Z",
+      "end_time": "2026-09-28T18:54:29.021Z",
+      "duration_ms": 3725.747,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req009_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req009_api-af883c.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 3,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:29.021Z",
+          "attributes": {
+            "text": "...                                                                      [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-185409-630B\\reports\\junit-test_req009_api-af883c.xml -\n3 passed in 2.38s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/7aa53a6ab8e5da8e-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f3db883fc4a52cc8",
+      "parent_span_id": "7aa53a6ab8e5da8e",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:25.295Z",
+      "end_time": "2026-09-28T18:54:29.018Z",
+      "duration_ms": 3722.747,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "0b5c4e094e2cf5e2",
+      "parent_span_id": "51e859cd6510f5f6",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T18:54:29.281Z",
+      "end_time": "2026-09-28T18:54:36.029Z",
+      "duration_ms": 6748.791,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "6ab89ecb8f6a6254",
+      "parent_span_id": "0b5c4e094e2cf5e2",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:54:32.027Z",
+      "end_time": "2026-09-28T18:54:32.036Z",
+      "duration_ms": 9.51,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:32.036Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/6ab89ecb8f6a6254-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "cf163e55f765664c",
+      "parent_span_id": "0b5c4e094e2cf5e2",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:54:32.036Z",
+      "end_time": "2026-09-28T18:54:35.833Z",
+      "duration_ms": 3796.637,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req009_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req009_api-97bc65.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 3,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:54:35.833Z",
+          "attributes": {
+            "text": "...                                                                      [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-185409-630B\\reports\\junit-test_req009_api-97bc65.xml -\n3 passed in 2.41s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/cf163e55f765664c-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ee156c9efb7f34ad",
+      "parent_span_id": "cf163e55f765664c",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:32.036Z",
+      "end_time": "2026-09-28T18:54:35.831Z",
+      "duration_ms": 3794.64,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

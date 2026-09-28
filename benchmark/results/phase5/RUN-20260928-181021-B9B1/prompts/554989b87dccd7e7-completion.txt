@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project member can read task related information",
+      "surface": "api",
+      "steps": [
+        "User 'alice' creates a project 'Project A'",
+        "User 'alice' creates a task in 'Project A'",
+        "User 'alice' gets project details for 'Project A'",
+        "User 'alice' gets the task list for 'Project A'",
+        "User 'alice' gets the task details for the created task"
+      ],
+      "expected": "專案、任務列表、任務詳情（GET /api/tasks/{tid}）僅限該專案成員讀取。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Non-project member is forbidden from reading task related information",
+      "surface": "api",
+      "steps": [
+        "User 'alice' creates a project 'Project B'",
+        "User 'alice' creates a task in 'Project B'",
+        "User 'bob' (not a member of 'Project B') attempts to get project details for 'Project B'",
+        "User 'bob' attempts to get the task list for 'Project B'",
+        "User 'bob' attempts to get the task details for the task in 'Project B'"
+      ],
+      "expected": "非專案成員存取時應回傳 403 錯誤。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Requesting non-existent resources returns 404",
+      "surface": "api",
+      "steps": [
+        "User 'alice' requests task details for a non-existent task ID '99999'"
+      ],
+      "expected": "請求的資源不存在時應回傳 404 錯誤。"
+    }
+  ]
+}

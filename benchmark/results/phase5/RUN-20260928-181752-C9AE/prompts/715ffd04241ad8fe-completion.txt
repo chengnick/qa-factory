@@ -1,0 +1,51 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "URL parameters preselect user and project on initial page load",
+    "surface": "ui",
+    "steps": [
+      "Open URL '/?user=alice&project=1'",
+      "Wait for body attribute 'data-ready' to equal 'true'",
+      "Assert user select value is 'alice'",
+      "Assert project select value is '1'"
+    ],
+    "expected": "支援透過 GET 參數 ?user=<username>&project=<pid> 預先選取使用者與專案。"
+  },
+  {
+    "id": "TC-2",
+    "title": "Task creation via form immediately updates the list without page reload",
+    "surface": "ui",
+    "steps": [
+      "Open URL '/?user=alice&project=1'",
+      "Wait for body attribute 'data-ready' to equal 'true'",
+      "Type 'New UI Test Task' into new-title input",
+      "Click create-btn",
+      "Assert task-list contains an item with text 'New UI Test Task'"
+    ],
+    "expected": "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。"
+  },
+  {
+    "id": "TC-3",
+    "title": "Task titles containing HTML tags are displayed as literal text resisting XSS",
+    "surface": "ui",
+    "steps": [
+      "Open URL '/?user=alice&project=1'",
+      "Wait for body attribute 'data-ready' to equal 'true'",
+      "Type '<b>x</b>' into new-title input",
+      "Click create-btn",
+      "Assert task-title element inner text is '<b>x' and no bold HTML element is rendered inside the task title container"
+    ],
+    "expected": "任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。"
+  },
+  {
+    "id": "TC-4",
+    "title": "API errors display the error message in the error area",
+    "surface": "ui",
+    "steps": [
+      "Open URL '/?user=unknown_user&project=1'",
+      "Wait for body attribute 'data-ready' to equal 'true'",
+      "Assert error message area contains the API error message"
+    ],
+    "expected": "API 錯誤時於錯誤區顯示訊息。"
+  }
+]}

@@ -1,0 +1,117 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+_________________ test_tc1_create_task_updates_list_instantly _________________
+
+page = <Page url='http://127.0.0.1:53903/?user=alice&project=1'>
+base_url = 'http://127.0.0.1:53903'
+new_project = <function new_project.<locals>.create at 0x000001DC90C4F2E0>
+
+    def test_tc1_create_task_updates_list_instantly(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("Instant Task")
+        page.get_by_test_id("create-btn").click()
+    
+        task_list = page.get_by_test_id("task-list")
+>       expect(task_list).to_contain_text("Instant Task")
+E       AssertionError: Locator expected to contain text 'Instant Task'
+E       Actual value:  
+E       Call log:
+E         - Expect "to_contain_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-list")
+E           14 × locator resolved to <ul id="tasks" data-testid="task-list"></ul>
+E              - unexpected value ""
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User":
+E           - option "alice" [selected]
+E           - option "bob"
+E           - option "carol"
+E           - option "dave"
+E         - text: Project
+E         - combobox "Project":
+E           - option "gen-a303aadc" [selected]
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - list
+
+generated\test_req004_ui.py:13: AssertionError
+______________________ test_tc2_task_title_html_escaped _______________________
+
+page = <Page url='http://127.0.0.1:53903/?user=alice&project=2'>
+base_url = 'http://127.0.0.1:53903'
+new_project = <function new_project.<locals>.create at 0x000001DC90D91940>
+
+    def test_tc2_task_title_html_escaped(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("<b>x</b>")
+        page.get_by_test_id("create-btn").click()
+    
+        task_title_el = page.get_by_test_id("task-title")
+>       expect(task_title_el).to_have_text("<b>x</b>")
+E       AssertionError: Locator expected to have text '<b>x</b>'
+E       Actual value: None
+E       Error: element(s) not found 
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-title")
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User":
+E           - option "alice" [selected]
+E           - option "bob"
+E           - option "carol"
+E           - option "dave"
+E         - text: Project
+E         - combobox "Project":
+E           - option "gen-a303aadc"
+E           - option "gen-fb1af012" [selected]
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - list
+
+generated\test_req004_ui.py:24: AssertionError
+________________________ test_tc3_api_errors_displayed ________________________
+
+page = <Page url='http://127.0.0.1:53903/?user=alice&project=9999'>
+base_url = 'http://127.0.0.1:53903'
+
+    def test_tc3_api_errors_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=9999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_el = page.get_by_test_id("error")
+        expect(error_el).to_be_visible()
+>       expect(error_el).not_to_have_text("")
+E       AssertionError: Locator expected not to have text ''
+E       Actual value:  
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value ""
+
+generated\test_req004_ui.py:36: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-190713-1408\reports\junit-test_req004_ui-c63859.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly
+FAILED generated/test_req004_ui.py::test_tc2_task_title_html_escaped - Assert...
+FAILED generated/test_req004_ui.py::test_tc3_api_errors_displayed - Assertion...
+3 failed in 22.25s
+

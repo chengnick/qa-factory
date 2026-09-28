@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req008_api.py",
+          "snapshot": "generated/round1/test_req008_api.py",
+          "sha256": "de347d5dedf23d4e9f7002fc73003e3f94354e0f9de33b1929ee358bc846b0c1"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req008_api.py::test_tc1_project_owner_deletes_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc2_task_creator_deletes_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc3_other_project_member_attempts_to_delete_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc4_non_project_member_attempts_to_delete_task",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

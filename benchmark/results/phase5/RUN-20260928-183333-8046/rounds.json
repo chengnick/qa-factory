@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req003_api.py",
+          "snapshot": "generated/round1/test_req003_api.py",
+          "sha256": "30bddc08c36fe0d9817541337614013e5d14b46c8a9609e90c3924e9f2fbde87"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_tc1_limit_offset_validation",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_tc2_total_unaffected_by_pagination",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_tc3_sequential_fetching_fixed_limit",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_tc4_empty_items_when_offset_ge_total",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

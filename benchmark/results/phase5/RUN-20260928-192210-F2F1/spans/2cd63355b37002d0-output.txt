@@ -1,0 +1,49 @@
+{
+  "requirement_id": "REQ-003",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Validate limit and offset parameter boundaries and defaults",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/1/tasks with limit=0",
+        "GET /api/projects/1/tasks with limit=101",
+        "GET /api/projects/1/tasks with offset=-1",
+        "GET /api/projects/1/tasks with no limit and offset parameters"
+      ],
+      "expected": "out-of-range values return 422; limit defaults to 20 with a valid range of 1 to 100; offset defaults to 0 and must be greater than or equal to 0"
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify total count represents all matching tasks regardless of pagination",
+      "surface": "api",
+      "steps": [
+        "Create 5 tasks in project 1",
+        "GET /api/projects/1/tasks with limit=2 and offset=0"
+      ],
+      "expected": "total represents the total number of matching tasks regardless of pagination"
+    },
+    {
+      "id": "TC-3",
+      "title": "Verify sequential fetching with a fixed limit yields exact complete set ordered by task id without duplication or omission",
+      "surface": "api",
+      "steps": [
+        "Create 3 tasks in project 1",
+        "GET /api/projects/1/tasks with limit=2 and offset=0",
+        "GET /api/projects/1/tasks with limit=2 and offset=2"
+      ],
+      "expected": "Fetching sequentially with a fixed limit from offset=0 to the end must yield the exact complete set of tasks without duplication or omission, ensuring ascending order by task id"
+    },
+    {
+      "id": "TC-4",
+      "title": "Verify items is an empty array when offset is greater than or equal to total",
+      "surface": "api",
+      "steps": [
+        "Create 2 tasks in project 1",
+        "GET /api/projects/1/tasks with limit=10 and offset=2",
+        "GET /api/projects/1/tasks with limit=10 and offset=5"
+      ],
+      "expected": "items must be an empty array when offset is greater than or equal to total"
+    }
+  ]
+}

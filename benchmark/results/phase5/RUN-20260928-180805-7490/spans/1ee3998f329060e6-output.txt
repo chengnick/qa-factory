@@ -1,0 +1,66 @@
+{
+  "requirement_id": "REQ-005",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "5 passed in 2.48s",
+      "error": null,
+      "data": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req005_api.py"
+        ],
+        "junit": "reports/junit-test_req005_api-d568e4.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req005_api.py::test_tc1_transition_todo_to_in_progress",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc2_transition_in_progress_to_done_and_todo",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc3_transition_from_done_returns_409",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc4_forbidden_transitions_return_409",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req005_api.py::test_tc5_transition_invalid_status_returns_422",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+..F.                                                                     [100%]
+================================== FAILURES ===================================
+_________________________ test_tc3_sequential_paging __________________________
+
+as_user = <function as_user.<locals>.get at 0x000001E6936D2200>
+new_project = <function new_project.<locals>.create at 0x000001E6938D1EE0>
+
+    def test_tc3_sequential_paging(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        created_titles = ["Task A", "Task B", "Task C", "Task D"]
+        for t in created_titles:
+            alice.post(f"/api/projects/{pid}/tasks", json={"title": t})
+    
+        r1 = alice.get(f"/api/projects/{pid}/tasks?limit=2&offset=0")
+        assert r1.status_code == 200, r1.text
+        page1 = r1.json()
+        assert page1["total"] == 4
+        assert len(page1["items"]) == 2
+    
+        r2 = alice.get(f"/api/projects/{pid}/tasks?limit=2&offset=2")
+        assert r2.status_code == 200, r2.text
+        page2 = r2.json()
+        assert page2["total"] == 4
+>       assert len(page2["items"]) == 2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}])
+
+generated\test_req003_api.py:65: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-190326-2D86\reports\junit-test_req003_api-e3c60b.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req003_api.py::test_tc3_sequential_paging - AssertionEr...
+1 failed, 3 passed in 2.98s

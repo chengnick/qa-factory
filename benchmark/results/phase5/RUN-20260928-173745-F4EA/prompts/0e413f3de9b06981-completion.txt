@@ -1,0 +1,51 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Query string preselects user and project on UI load",
+    "surface": "ui",
+    "steps": [
+      "Open page at /?user=alice&project=1",
+      "Wait for body[data-ready='true']",
+      "Assert [data-testid='user-select'] has value 'alice'",
+      "Assert [data-testid='project-select'] has value '1'"
+    ],
+    "expected": "支援 ?user=<username>&project=<pid> 預先選取使用者與專案。"
+  },
+  {
+    "id": "TC-2",
+    "title": "Task title with HTML tags is displayed as literal text without HTML parsing",
+    "surface": "ui",
+    "steps": [
+      "Open page at /?user=alice&project=1",
+      "Wait for body[data-ready='true']",
+      "Type '<b>x</b>' into [data-testid='new-title']",
+      "Click [data-testid='create-btn']",
+      "Assert [data-testid='task-list'] contains a [data-testid='task-title'] displaying '<b>x</b>' as literal text without parsing it into an element"
+    ],
+    "expected": "任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。"
+  },
+  {
+    "id": "TC-3",
+    "title": "Task creation via form updates the task list immediately without page reload",
+    "surface": "ui",
+    "steps": [
+      "Open page at /?user=alice&project=1",
+      "Wait for body[data-ready='true']",
+      "Type 'Instant Task' into [data-testid='new-title']",
+      "Click [data-testid='create-btn']",
+      "Assert [data-testid='task-list'] immediately displays 'Instant Task' in a new task item without refreshing the page"
+    ],
+    "expected": "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。"
+  },
+  {
+    "id": "TC-4",
+    "title": "API error displays message in the error area",
+    "surface": "ui",
+    "steps": [
+      "Open page at /?user=alice&project=999999",
+      "Wait for body[data-ready='true']",
+      "Assert [data-testid='error'] displays an error message"
+    ],
+    "expected": "API 錯誤時於錯誤區顯示訊息。"
+  }
+]}

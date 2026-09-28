@@ -1,0 +1,120 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: []\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_case_insensitive_search (FAIL)",
+      "span_id": "1fba7a03d2a6ef0d",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+      "unverified": true
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 3 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 2,
+      "unknown": 0,
+      "layers": {
+        "SUT": 2
+      },
+      "rules": {
+        "R11U": 2
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: []\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_case_insensitive_search (FAIL)",
+        "span_id": "1fba7a03d2a6ef0d",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+        "unverified": true
+      },
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two'] | test generated/test_req009_api.py::test_req009_tc3_search_status_pagination (FAIL)",
+        "span_id": "1fba7a03d2a6ef0d",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req009_api.py::test_req009_tc3_search_status_pagination",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: []\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_case_insensitive_search (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+      "unverified": false
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 3 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 2,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1,
+        "TEST": 1
+      },
+      "rules": {
+        "R11": 1,
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: []\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_case_insensitive_search (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "bug build: AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two'] | clean build: AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two', 'Feature bug'] | test generated/test_req009_api.py::test_req009_tc3_search_status_pagination (FAIL) | cross-validation R12",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req009_api.py::test_req009_tc3_search_status_pagination",
+        "unverified": false
+      }
+    ]
+  }
+}

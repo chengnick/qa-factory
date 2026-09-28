@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="2.982" timestamp="2026-09-29T03:06:49.957302+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req003_api" name="test_tc1_limit_offset_validation" time="2.401" /><testcase classname="generated.test_req003_api" name="test_tc2_total_unaffected_by_pagination" time="0.012" /><testcase classname="generated.test_req003_api" name="test_tc3_sequential_paging" time="0.015"><failure message="AssertionError: assert 1 == 2&#10; +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}])">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000001E6936D2200&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000001E6938D1EE0&gt;
+
+    def test_tc3_sequential_paging(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        created_titles = ["Task A", "Task B", "Task C", "Task D"]
+        for t in created_titles:
+            alice.post(f"/api/projects/{pid}/tasks", json={"title": t})
+    
+        r1 = alice.get(f"/api/projects/{pid}/tasks?limit=2&amp;offset=0")
+        assert r1.status_code == 200, r1.text
+        page1 = r1.json()
+        assert page1["total"] == 4
+        assert len(page1["items"]) == 2
+    
+        r2 = alice.get(f"/api/projects/{pid}/tasks?limit=2&amp;offset=2")
+        assert r2.status_code == 200, r2.text
+        page2 = r2.json()
+        assert page2["total"] == 4
+&gt;       assert len(page2["items"]) == 2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}])
+
+generated\test_req003_api.py:65: AssertionError</failure></testcase><testcase classname="generated.test_req003_api" name="test_tc4_offset_greater_than_or_equal_to_total" time="0.008" /></testsuite></testsuites>

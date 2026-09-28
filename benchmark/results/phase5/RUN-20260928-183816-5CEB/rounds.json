@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req009_api.py",
+          "snapshot": "generated/round1/test_req009_api.py",
+          "sha256": "2864d8b51b8574e07c5725500a3b641a56a90f538752b682e94415f340f18183"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_tc1_case_insensitive_search",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc2_literal_percent_search",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc3_literal_underscore_search",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc4_search_status_pagination",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

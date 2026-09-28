@@ -1,0 +1,26 @@
+...F                                                                     [100%]
+================================== FAILURES ===================================
+________________ test_tc4_display_error_message_upon_api_error ________________
+
+page = <Page url='http://127.0.0.1:61637/?user=alice&project=99999'>
+base_url = 'http://127.0.0.1:61637'
+
+    def test_tc4_display_error_message_upon_api_error(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=99999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_area = page.get_by_test_id("error")
+>       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:42: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-185129-7150\reports\junit-test_req004_ui-ccf18a.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error
+1 failed, 3 passed in 12.35s

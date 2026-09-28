@@ -1,0 +1,90 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:45.275+00:00', 'created_by': 1, 'description': '', ...}]) | test generated/test_req003_api.py::test_tc3_sequential_paging (FAIL)",
+      "span_id": "d49c9f7182b7671d",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+      "unverified": true
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:45.275+00:00', 'created_by': 1, 'description': '', ...}]) | test generated/test_req003_api.py::test_tc3_sequential_paging (FAIL)",
+        "span_id": "d49c9f7182b7671d",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}]) | test generated/test_req003_api.py::test_tc3_sequential_paging (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+      "unverified": false
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}]) | test generated/test_req003_api.py::test_tc3_sequential_paging (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+        "unverified": false
+      }
+    ]
+  }
+}

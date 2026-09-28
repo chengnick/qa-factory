@@ -1,0 +1,32 @@
+{
+  "requirement_id": "REQ-009",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Search tasks with case-insensitivity on title",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/{pid}/tasks?q=login with header X-User: alice"
+      ],
+      "expected": "Search must be case-insensitive (ASCII): q=login must match the title Fix Login Bug."
+    },
+    {
+      "id": "TC-2",
+      "title": "Search tasks handling wildcard characters literally",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/{pid}/tasks?q=%25_ with header X-User: alice"
+      ],
+      "expected": "Characters '%' and '_' must be treated as regular characters without wildcard functionality."
+    },
+    {
+      "id": "TC-3",
+      "title": "Combine search query simultaneously with status filter and pagination",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/{pid}/tasks?q=Bug&status=todo&limit=10&offset=0 with header X-User: alice"
+      ],
+      "expected": "The search query can be used simultaneously with the status filter and pagination."
+    }
+  ]
+}

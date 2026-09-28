@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="3.982" timestamp="2026-09-29T02:40:48.555209+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req007_api" name="test_tc1_project_member_can_read_task_detail" time="2.348" /><testcase classname="generated.test_req007_api" name="test_tc2_non_project_member_cannot_read_task_detail" time="1.069"><failure message="AssertionError: {&quot;id&quot;:2,&quot;project_id&quot;:2,&quot;title&quot;:&quot;Alice's Task&quot;,&quot;description&quot;:&quot;&quot;,&quot;status&quot;:&quot;todo&quot;,&quot;priority&quot;:3,&quot;assignee_id&quot;:null,&quot;created_by&quot;:1,&quot;created_at&quot;:&quot;2026-09-28T18:40:51.997+00:00&quot;,&quot;updated_at&quot;:&quot;2026-09-28T18:40:51.997+00:00&quot;}&#10;assert 200 == 403&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000001A3AF362020&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000001A3AF3622A0&gt;
+
+    def test_tc2_non_project_member_cannot_read_task_detail(as_user, new_project):
+        alice = as_user("alice")
+        bob = as_user("bob")
+        pid = new_project(owner="alice")
+    
+        task_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Alice's Task"})
+        assert task_res.status_code == 201, task_res.text
+        tid = task_res.json()["id"]
+    
+        res = bob.get(f"/api/tasks/{tid}")
+&gt;       assert res.status_code == 403, res.text
+E       AssertionError: {"id":2,"project_id":2,"title":"Alice's Task","description":"","status":"todo","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-28T18:40:51.997+00:00","updated_at":"2026-09-28T18:40:51.997+00:00"}
+E       assert 200 == 403
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+generated\test_req007_api.py:27: AssertionError</failure></testcase><testcase classname="generated.test_req007_api" name="test_tc3_reading_non_existent_task_returns_404" time="0.003" /></testsuite></testsuites>

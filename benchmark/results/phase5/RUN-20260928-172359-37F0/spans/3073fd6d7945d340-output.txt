@@ -1,0 +1,27 @@
+{
+  "requirement_id": "REQ-006",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Assign task to non-project member returns 422 and keeps assignee unchanged",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with name 'Project A'",
+        "POST /api/projects/{pid}/tasks with title 'Task 1'",
+        "PATCH /api/tasks/{tid} with body '{\"assignee_id\": 999}' where 999 is a valid user ID but not a project member"
+      ],
+      "expected": "指派對象必須是該專案成員；否則回傳 422 狀態碼，且任務 assignee 保持不變。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Assign task to non-existent user returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with name 'Project B'",
+        "POST /api/projects/{pid}/tasks with title 'Task 2'",
+        "PATCH /api/tasks/{tid} with body '{\"assignee_id\": 99999}' where 99999 does not exist"
+      ],
+      "expected": "指派不存在的使用者時，回傳 422 狀態碼。"
+    }
+  ]
+}

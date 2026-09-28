@@ -1,0 +1,45 @@
+{
+  "surface": {
+    "verdict": "ENV_BLOCKED",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "llm",
+      "layer": "PROVIDER",
+      "symptom": "TIMEOUT",
+      "matched_rule": "R4",
+      "evidence": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete.",
+      "span_id": "7922546944e1c71b",
+      "span": "llm.chat",
+      "agent": "requirement",
+      "test_id": null,
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "PROVIDER": 1
+      },
+      "rules": {
+        "R4": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "llm",
+        "layer": "PROVIDER",
+        "symptom": "TIMEOUT",
+        "matched_rule": "R4",
+        "evidence": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete.",
+        "span_id": "7922546944e1c71b",
+        "span": "llm.chat",
+        "agent": "requirement",
+        "test_id": null,
+        "unverified": false
+      }
+    ]
+  },
+  "final": null
+}

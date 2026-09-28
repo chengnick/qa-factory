@@ -1,0 +1,54 @@
+{
+  "run_id": "RUN-20260928-171056-7231",
+  "trace_id": "a61f2ba1601515f4ec2db9de7c399b09",
+  "meta": {
+    "requirement_id": "REQ-002",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_version": "v3",
+    "dataset": "test",
+    "sut_bugs": [
+      "B06"
+    ],
+    "git_commit": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "git_dirty": false,
+    "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+    "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac"
+  },
+  "verdict": "DEFECT_FOUND",
+  "surface_verdict": "DEFECT_FOUND",
+  "underlying_verdict": null,
+  "differential": {
+    "status": "COMPLETE",
+    "detected": 1,
+    "broken": 0,
+    "missed": 3
+  },
+  "attribution": [
+    {
+      "span": "",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default (FAIL) | c",
+      "test_id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default"
+    }
+  ],
+  "reliability": {
+    "retries": 6,
+    "flaky": true
+  },
+  "security": {
+    "events": 0,
+    "breach": false
+  },
+  "workflow": {
+    "workflow_status": "PASS",
+    "violations": [],
+    "goal_drift": false,
+    "rounds": 1
+  },
+  "isolation_level": "L1",
+  "isolation_note": "in-process audit hook (tools/l1_guard.py): writes, network and processes limited; not an OS sandbox",
+  "artifacts_complete": true,
+  "missing_evidence": []
+}

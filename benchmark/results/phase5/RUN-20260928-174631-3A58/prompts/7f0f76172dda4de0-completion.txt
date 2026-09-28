@@ -1,0 +1,57 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Project owner deletes task successfully",
+    "surface": "api",
+    
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: alice"
+      ],
+    
+    "expected": "Only project owners or task creators are allowed to delete a task successfully with a 204 status code."
+  },
+  {
+    "id": "TC-2",
+    "title": "Task creator who is not the project owner deletes task successfully",
+    "surface": "api",
+    
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/members with X-User: alice to add bob as a member",
+        "POST /api/projects/{pid}/tasks with X-User: bob to create a task",
+        "DELETE /api/tasks/{tid} with X-User: bob"
+      ],
+    
+    "expected": "Only project owners or task creators are allowed to delete a task successfully with a 204 status code."
+  },
+  {
+    "id": "TC-3",
+    "title": "Other project member attempting to delete the task receives 403 and task remains intact",
+    "surface": "api",
+    
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/members with X-User: alice to add bob as a member",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: bob",
+        "GET /api/tasks/{tid} with X-User: alice"
+      ],
+    
+    "expected": "Other project members attempting to delete the task receive a 403 status code and the task remains intact."
+  },
+  {
+    "id": "TC-4",
+    "title": "Non-member attempting to delete the task receives 403 status code",
+    "surface": "api",
+    
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: carol"
+      ],
+    
+    "expected": "Non-members attempting to delete the task receive a 403 status code."
+  }
+]}

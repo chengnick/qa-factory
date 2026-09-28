@@ -1,0 +1,48 @@
+{
+  "requirement_id": "REQ-005",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Allowed transitions from todo and in_progress",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} for a task in todo status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} for a task in in_progress status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} for a task in in_progress status"
+      ],
+      "expected": "允許以下狀態流轉：todo 轉為 in_progress、in_progress 轉為 done、in_progress 轉為 todo。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Transitions originating from done status",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} for a task in done status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} for a task in done status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} for a task in done status"
+      ],
+      "expected": "done 為終態，任何從 done出發的流轉均應回傳 409 錯誤且任務狀態保持不變。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Forbidden transitions (todo to done and same status transitions)",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} for a task in todo status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} for a task in todo status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} for a task in in_progress status",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} for a task in done status"
+      ],
+      "expected": "其他未列出的流轉（包含 todo 轉為 done 以及相同狀態之間的轉換）均應回傳 409 錯誤。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Invalid status parameter in transition request",
+      "surface": "api",
+      "steps": [
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"}"
+      ],
+      "expected": "當請求中的 to 參數不是合法的狀態時，應回傳 422 錯誤。"
+    }
+  ]
+}

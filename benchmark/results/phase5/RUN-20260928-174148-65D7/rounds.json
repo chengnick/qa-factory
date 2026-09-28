@@ -1,0 +1,46 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req003_api.py",
+          "snapshot": "generated/round1/test_req003_api.py",
+          "sha256": "902aaf928fa7419bb0e3211825d6d0ebf68c0ca4024c69ca42c1cf3821bf6d10"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_default_pagination_and_sorting",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_limit_boundary_values",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_offset_boundary_and_invalid_values",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_total_count_independence_from_pagination",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_offset_greater_than_or_equal_to_total_returns_empty",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Assign task to a non-project member returns 422 and keeps assignee unchanged",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with body {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with body {\"title\": \"Task 1\"} as alice",
+        "PATCH /api/tasks/{tid} with body {\"assignee_id\": \"bob_id\"} as alice"
+      ],
+      "expected": "指派對象必須是該專案成員；否則回傳 422 錯誤，且任務 assignee 維持不變"
+    },
+    {
+      "id": "TC-2",
+      "title": "Assign task to a non-existent user returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with body {\"name\": \"Project B\"} as alice",
+        "POST /api/projects/{pid}/tasks with body {\"title\": \"Task 2\"} as alice",
+        "PATCH /api/tasks/{tid} with body {\"assignee_id\": \"non_existent_user_id\"} as alice"
+      ],
+      "expected": "指派不存在的使用者時，必須回傳 422 錯誤"
+    }
+  ]
+}

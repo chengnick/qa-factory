@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "edcaf701a4538c9355a17bf65badcf33f6f56db75167d1a33e6595ee8b6f435a"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc1_query_string_preselects_user_and_project",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to contain text '<b>x</b>'\nActual value: xtodo→ in_progress \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    - locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n    - unexpected value \"\"\n    13 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\">…</ul>\n       - unexpected value \"xtodo→ in_progress\"\n\nAria snapshot:\n- list:\n  - listitem:\n    - text: x todo\n    - button \"→ in_progress",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_creation_updates_list_instantly",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displays_message",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\"",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

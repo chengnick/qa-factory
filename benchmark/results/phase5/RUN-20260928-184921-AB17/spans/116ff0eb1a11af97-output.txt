@@ -1,0 +1,60 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "2 failed, 1 passed in 17.38s",
+      "error": null,
+      "data": {
+        "tests": 3,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 2,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-f9cf13.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: x \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\").first\n    13 × locator resolved to <span class=\"title\" data-testid=\"task-title\">…</span>\n       - unexpected value \"x\"\n\nAria snapshot:\n- text: x"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_tc3_api_errors_display_message",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\""
+          }
+        ],
+        "isolation": "L1",
+        "evidence": [
+          "playwright/test_req004_ui-f9cf13/test_tc2_task_title_html_escaped",
+          "playwright/test_req004_ui-f9cf13/test_tc3_api_errors_display_message"
+        ]
+      }
+    }
+  ]
+}

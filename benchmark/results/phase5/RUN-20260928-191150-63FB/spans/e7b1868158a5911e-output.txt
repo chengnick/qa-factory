@@ -1,0 +1,41 @@
+{
+  "requirement_id": "REQ-008",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project owner deletes task successfully",
+      "surface": "api",
+      "steps": [
+        "Send DELETE /api/tasks/{tid} with X-User header set to the project owner"
+      ],
+      "expected": "Only the project owner or task creator can delete the task successfully with a 204 status code."
+    },
+    {
+      "id": "TC-2",
+      "title": "Task creator deletes task successfully",
+      "surface": "api",
+      "steps": [
+        "Send DELETE /api/tasks/{tid} with X-User header set to the task creator (who is not the project owner)"
+      ],
+      "expected": "Only the project owner or task creator can delete the task successfully with a 204 status code."
+    },
+    {
+      "id": "TC-3",
+      "title": "Other project member attempts to delete task",
+      "surface": "api",
+      "steps": [
+        "Send DELETE /api/tasks/{tid} with X-User header set to a project member who is neither the owner nor the task creator"
+      ],
+      "expected": "Other project members attempting to delete the task receive a 403 status code and the task is not deleted."
+    },
+    {
+      "id": "TC-4",
+      "title": "Non-member attempts to delete task",
+      "surface": "api",
+      "steps": [
+        "Send DELETE /api/tasks/{tid} with X-User header set to a user who is not a member of the project"
+      ],
+      "expected": "Non-members attempting to delete the task receive a 403 status code and the task is not deleted."
+    }
+  ]
+}

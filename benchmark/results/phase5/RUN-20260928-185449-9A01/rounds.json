@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req005_api.py",
+          "snapshot": "generated/round1/test_req005_api.py",
+          "sha256": "2403c944688e06d3814c6a5c191a429cfba5a0734afbf329f189d108012bb0aa"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc1_allowed_status_transitions",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-28T18:55:03.771+00:00\",\"updated_at\":\"2026-09-28T18:55:03.778+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc3_forbidden_transitions",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req005_api.py::test_req005_tc4_invalid_to_field_value_returns_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

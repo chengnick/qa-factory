@@ -1,0 +1,66 @@
+{
+  "requirement_id": "REQ-003",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 4 passed in 2.92s",
+      "error": null,
+      "data": {
+        "tests": 5,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req003_api.py"
+        ],
+        "junit": "reports/junit-test_req003_api-2b11dd.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req003_api.py::test_req003_tc1_limit_offset_validation",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_req003_tc2_default_limit_offset",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_req003_tc3_total_unaffected_by_pagination",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+            "outcome": "FAIL",
+            "message": "assert 0 == 1\n +  where 0 = len([])"
+          },
+          {
+            "node_id": "generated/test_req003_api.py::test_req003_tc5_offset_gte_total_empty_items",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

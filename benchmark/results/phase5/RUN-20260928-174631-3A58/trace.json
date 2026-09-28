@@ -1,0 +1,927 @@
+{
+  "trace_id": "38451857b0a07692aa7056a87e592250",
+  "run": {
+    "requirement_id": "REQ-008",
+    "sut_bugs": [],
+    "started_at": "2026-09-28T17:46:34.964Z",
+    "duration_ms": 476096.282,
+    "verdict": "FLAKY"
+  },
+  "spans": [
+    {
+      "span_id": "940200ea2e986b5b",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T17:46:34.964Z",
+      "end_time": "2026-09-28T17:54:31.060Z",
+      "duration_ms": 476096.282,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-008",
+        "qa.run.sut_bugs": [],
+        "qa.run.id": "RUN-20260928-174631-3A58",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "clean",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "FLAKY",
+        "qa.verdict.surface": "FLAKY",
+        "qa.verdict.underlying": "PASS",
+        "qa.classification.total": 0,
+        "qa.classification.unknown": 0,
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "8febdc7c1e32e30b",
+      "parent_span_id": "940200ea2e986b5b",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T17:46:34.964Z",
+      "end_time": "2026-09-28T17:47:27.109Z",
+      "duration_ms": 52144.966,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:47:27.109Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-008\",\n  \"summary\": \"Implement authorization check for task deletion endpoint DELETE /api/tasks/{tid} allowing only the project owner or task creator to delete the task, while returning 403 for other members and non-members.\",\n  \"acceptance_criteria\": [\n    \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\",\n    \"Other project members attempting to delete the task receive a 403 status code and the task remains intact.\",\n    \"Non-members attempting to delete the task receive a 403 status code.\"\n  ]\n}",
+            "length": 584,
+            "truncated": false,
+            "artifact": "spans/8febdc7c1e32e30b-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f801c7956bce515f",
+      "parent_span_id": "8febdc7c1e32e30b",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:46:34.964Z",
+      "end_time": "2026-09-28T17:47:26.831Z",
+      "duration_ms": 51866.594,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 129,
+        "gen_ai.usage.output_tokens": 132
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:46:34.967Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-008:\n\n# REQ-008 任務刪除權限\n\n`DELETE /api/tasks/{tid}` 成功回 `204`。\n\n## 驗收準則\n- 僅**專案 owner** 或**任務建立者**可刪除任務。\n- 其他專案成員 → `403`，任務仍存在。\n- 非成員 → `403`。\n",
+            "length": 297,
+            "truncated": false,
+            "artifact": "prompts/f801c7956bce515f-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:47:26.831Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"Implement authorization check for task deletion endpoint DELETE /api/tasks/{tid} allowing only the project owner or task creator to delete the task, while returning 403 for other members and non-members.\",\n  \"acceptance_criteria\": [\n    \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\",\n    \"Other project members attempting to delete the task receive a 403 status code and the task remains intact.\",\n    \"Non-members attempting to delete the task receive a 403 status code.\"\n  ]\n}",
+            "length": 553,
+            "truncated": false,
+            "artifact": "prompts/f801c7956bce515f-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "e2217ebdf7533afd",
+      "parent_span_id": "f801c7956bce515f",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:46:34.967Z",
+      "end_time": "2026-09-28T17:47:26.825Z",
+      "duration_ms": 51857.846,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "ef6d84c6f6c0c2df",
+      "parent_span_id": "940200ea2e986b5b",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T17:47:27.110Z",
+      "end_time": "2026-09-28T17:52:38.809Z",
+      "duration_ms": 311698.743,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:52:38.809Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-008\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Project owner deletes task successfully\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/tasks with X-User: alice to create a task\",\n        \"DELETE /api/tasks/{tid} with X-User: alice\"\n      ],\n      \"expected\": \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Task creator who is not the project owner deletes task successfully\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/members with X-User: alice to add bob as a member\",\n        \"POST /api/projects/{pid}/tasks with X-User: bob to create a task\",\n        \"DELETE /api/tasks/{tid} with X-User: bob\"\n      ],\n      \"expected\": \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Other project member attempting to delete the task receives 403 and task remains intact\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/members with X-User: alice to add bob as a member\",\n        \"POST /api/projects/{pid}/tasks with X-User: alice to create a task\",\n        \"DELETE /api/tasks/{tid} with X-User: bob\",\n        \"GET /api/tasks/{tid} with X-User: alice\"\n      ],\n      \"expected\": \"Other project members attempting to delete the task receive a 403 status code and the task remains intact.\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Non-member attempting to delete the task receives 403 status code\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/tasks with ",
+            "length": 2195,
+            "truncated": true,
+            "artifact": "spans/ef6d84c6f6c0c2df-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "7f0f76172dda4de0",
+      "parent_span_id": "ef6d84c6f6c0c2df",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:47:27.110Z",
+      "end_time": "2026-09-28T17:52:38.534Z",
+      "duration_ms": 311424.284,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1175,
+        "gen_ai.usage.output_tokens": 645
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:47:27.113Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-008\",\n  \"summary\": \"Implement authorization check for task deletion endpoint DELETE /api/tasks/{tid} allowing only the project owner or task creator to delete the task, while returning 403 for other members and non-members.\",\n  \"acceptance_criteria\": [\n    \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\",\n    \"Other project members attempting to delete the task receive a 403 status code and the task remains intact.\",\n    \"Non-members attempting to delete the task receive a 403 status code.\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User",
+            "length": 4071,
+            "truncated": true,
+            "artifact": "prompts/7f0f76172dda4de0-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:52:38.534Z",
+          "attributes": {
+            "text": "{\"cases\": [\n  {\n    \"id\": \"TC-1\",\n    \"title\": \"Project owner deletes task successfully\",\n    \"surface\": \"api\",\n    \n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/tasks with X-User: alice to create a task\",\n        \"DELETE /api/tasks/{tid} with X-User: alice\"\n      ],\n    \n    \"expected\": \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\"\n  },\n  {\n    \"id\": \"TC-2\",\n    \"title\": \"Task creator who is not the project owner deletes task successfully\",\n    \"surface\": \"api\",\n    \n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/members with X-User: alice to add bob as a member\",\n        \"POST /api/projects/{pid}/tasks with X-User: bob to create a task\",\n        \"DELETE /api/tasks/{tid} with X-User: bob\"\n      ],\n    \n    \"expected\": \"Only project owners or task creators are allowed to delete a task successfully with a 204 status code.\"\n  },\n  {\n    \"id\": \"TC-3\",\n    \"title\": \"Other project member attempting to delete the task receives 403 and task remains intact\",\n    \"surface\": \"api\",\n    \n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/members with X-User: alice to add bob as a member\",\n        \"POST /api/projects/{pid}/tasks with X-User: alice to create a task\",\n        \"DELETE /api/tasks/{tid} with X-User: bob\",\n        \"GET /api/tasks/{tid} with X-User: alice\"\n      ],\n    \n    \"expected\": \"Other project members attempting to delete the task receive a 403 status code and the task remains intact.\"\n  },\n  {\n    \"id\": \"TC-4\",\n    \"title\": \"Non-member attempting to delete the task receives 403 status code\",\n    \"surface\": \"api\",\n    \n      \"steps\": [\n        \"POST /api/projects with X-User: alice to create a project\",\n        \"POST /api/projects/{pid}/tasks with X-User: alice to create a task\",\n        \"D",
+            "length": 2150,
+            "truncated": true,
+            "artifact": "prompts/7f0f76172dda4de0-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f68f74c96bdc73b2",
+      "parent_span_id": "7f0f76172dda4de0",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:47:27.114Z",
+      "end_time": "2026-09-28T17:49:26.751Z",
+      "duration_ms": 119636.878,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:49:26.751Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "543fb8a810ac94ed",
+      "parent_span_id": "7f0f76172dda4de0",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:49:31.752Z",
+      "end_time": "2026-09-28T17:51:31.243Z",
+      "duration_ms": 119490.175,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:51:31.243Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "c88dde62061334fc",
+      "parent_span_id": "7f0f76172dda4de0",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:51:41.244Z",
+      "end_time": "2026-09-28T17:51:48.033Z",
+      "duration_ms": 6788.447,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 3,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:51:48.033Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "704f5bd1d116aa31",
+      "parent_span_id": "7f0f76172dda4de0",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:52:08.035Z",
+      "end_time": "2026-09-28T17:52:38.530Z",
+      "duration_ms": 30495.558,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 4
+      },
+      "events": []
+    },
+    {
+      "span_id": "e341625e0afb2c19",
+      "parent_span_id": "940200ea2e986b5b",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T17:52:38.809Z",
+      "end_time": "2026-09-28T17:54:07.480Z",
+      "duration_ms": 88671.102,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:54:07.479Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-008\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req008_api.py\",\n      \"content\": \"import pytest\\n\\ndef test_tc1_owner_deletes_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Create task\\n    r_task = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task by owner\\\"})\\n    assert r_task.status_code == 201, r_task.text\\n    tid = r_task.json()[\\\"id\\\"]\\n    \\n    # Delete task\\n    r_del = alice.delete(f\\\"/api/tasks/{tid}\\\")\\n    assert r_del.status_code == 204, r_del.text\\n\\n\\ndef test_tc2_creator_deletes_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    bob = as_user(\\\"bob\\\")\\n    pid = new_project(owner=\\\"alice\\\", members=(\\\"bob\\\",))\\n    \\n    # Create task by bob (who is not the owner)\\n    r_task = bob.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task by creator bob\\\"})\\n    assert r_task.status_code == 201, r_task.text\\n    tid = r_task.json()[\\\"id\\\"]\\n    \\n    # Delete task by bob\\n    r_del = bob.delete(f\\\"/api/tasks/{tid}\\\")\\n    assert r_del.status_code == 204, r_del.text\\n\\n\\ndef test_tc3_other_member_cannot_delete_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    bob = as_user(\\\"bob\\\")\\n    pid = new_project(owner=\\\"alice\\\", members=(\\\"bob\\\",))\\n    \\n    # Create task by alice\\n    r_task = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task by alice\\\"})\\n    assert r_task.status_code == 201, r_task.text\\n    tid = r_task.json()[\\\"id\\\"]\\n    \\n    # Bob attempts to delete alice's task\\n    r_del = bob.delete(f\\\"/api/tasks/{tid}\\\")\\n    assert r_del.status_code == 403, r_del.text\\n    \\n    # Verify task remains intact\\n    r_get = alice.get(f\\\"/api/tasks/{tid}\\\")\\n    assert r_get.status_code == 200, r_get.text\\n    assert r_get.json()[\\\"id\\\"] == tid\\n\\n\\ndef test_tc4_non_member_cannot_delete_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")",
+            "length": 2481,
+            "truncated": true,
+            "artifact": "spans/e341625e0afb2c19-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "83f4a525d0a93b83",
+      "parent_span_id": "e341625e0afb2c19",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:52:38.810Z",
+      "end_time": "2026-09-28T17:54:07.187Z",
+      "duration_ms": 88377.752,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1975,
+        "gen_ai.usage.output_tokens": 940
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:52:38.819Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-008:\n{\n  \"requirement_id\": \"REQ-008\",\n  \"cases\": [\n    {\n  ",
+            "length": 6528,
+            "truncated": true,
+            "artifact": "prompts/83f4a525d0a93b83-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:54:07.187Z",
+          "attributes": {
+            "text": "{\n  \"files\": [\n    {\n      \"path\": \"generated/test_req008_api.py\",\n      \"surface\": \"api\",\n      \"content\": \"import pytest\\n\\ndef test_tc1_owner_deletes_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Create task\\n    r_task = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task by owner\\\"})\\n    assert r_task.status_code == 201, r_task.text\\n    tid = r_task.json()[\\\"id\\\"]\\n    \\n    # Delete task\\n    r_del = alice.delete(f\\\"/api/tasks/{tid}\\\")\\n    assert r_del.status_code == 204, r_del.text\\n\\n\\ndef test_tc2_creator_deletes_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    bob = as_user(\\\"bob\\\")\\n    pid = new_project(owner=\\\"alice\\\", members=(\\\"bob\\\",))\\n    \\n    # Create task by bob (who is not the owner)\\n    r_task = bob.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task by creator bob\\\"})\\n    assert r_task.status_code == 201, r_task.text\\n    tid = r_task.json()[\\\"id\\\"]\\n    \\n    # Delete task by bob\\n    r_del = bob.delete(f\\\"/api/tasks/{tid}\\\")\\n    assert r_del.status_code == 204, r_del.text\\n\\n\\ndef test_tc3_other_member_cannot_delete_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    bob = as_user(\\\"bob\\\")\\n    pid = new_project(owner=\\\"alice\\\", members=(\\\"bob\\\",))\\n    \\n    # Create task by alice\\n    r_task = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task by alice\\\"})\\n    assert r_task.status_code == 201, r_task.text\\n    tid = r_task.json()[\\\"id\\\"]\\n    \\n    # Bob attempts to delete alice's task\\n    r_del = bob.delete(f\\\"/api/tasks/{tid}\\\")\\n    assert r_del.status_code == 403, r_del.text\\n    \\n    # Verify task remains intact\\n    r_get = alice.get(f\\\"/api/tasks/{tid}\\\")\\n    assert r_get.status_code == 200, r_get.text\\n    assert r_get.json()[\\\"id\\\"] == tid\\n\\n\\ndef test_tc4_non_member_cannot_delete_task(as_user, new_project, user_ids):\\n    alice = as_user(\\\"alice\\\")\\n    c",
+            "length": 2450,
+            "truncated": true,
+            "artifact": "prompts/83f4a525d0a93b83-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b974ddea61d6d64a",
+      "parent_span_id": "83f4a525d0a93b83",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:52:38.819Z",
+      "end_time": "2026-09-28T17:52:41.004Z",
+      "duration_ms": 2185.523,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:52:41.004Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "eaf50e3eddc90506",
+      "parent_span_id": "83f4a525d0a93b83",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:52:46.005Z",
+      "end_time": "2026-09-28T17:52:51.092Z",
+      "duration_ms": 5086.365,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:52:51.092Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f09bb5298fc0e602",
+      "parent_span_id": "83f4a525d0a93b83",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:53:01.093Z",
+      "end_time": "2026-09-28T17:54:07.183Z",
+      "duration_ms": 66090.817,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 3
+      },
+      "events": []
+    },
+    {
+      "span_id": "58cdb0da10379e94",
+      "parent_span_id": "e341625e0afb2c19",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T17:54:07.187Z",
+      "end_time": "2026-09-28T17:54:07.476Z",
+      "duration_ms": 288.389,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req008_api.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:54:07.189Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req008_api.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:07.476Z",
+          "attributes": {
+            "text": "wrote 2194 chars to generated/test_req008_api.py",
+            "length": 48,
+            "truncated": false,
+            "artifact": "spans/58cdb0da10379e94-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "15351f8083104a3c",
+      "parent_span_id": "940200ea2e986b5b",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T17:54:07.486Z",
+      "end_time": "2026-09-28T17:54:13.347Z",
+      "duration_ms": 5861.582,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:54:13.347Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-008\",\n  \"executions\": [\n    {\n      \"tool\": \"pytest\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": 0,\n      \"summary\": \"4 passed in 4.46s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 4,\n        \"failures\": 0,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 0,\n        \"exception_failures\": 0,\n        \"files\": [\n          \"generated/test_req008_api.py\"\n        ],\n        \"junit\": \"reports/junit-test_req008_api-ec893f.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req008_api.py::test_tc1_owner_deletes_task\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req008_api.py::test_tc2_creator_deletes_task\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          }\n        ],\n        \"isolation\": \"L1\"\n      }\n    },\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    }\n  ]\n}",
+            "length": 1539,
+            "truncated": false,
+            "artifact": "spans/15351f8083104a3c-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "e9f1dc6410901b7a",
+      "parent_span_id": "15351f8083104a3c",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T17:54:07.486Z",
+      "end_time": "2026-09-28T17:54:13.334Z",
+      "duration_ms": 5848.535,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req008_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req008_api-ec893f.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:54:07.488Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "pytest",
+            "target": "generated/test_req008_api.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.pytest"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:13.334Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-174631-3A58\\reports\\junit-test_req008_api-ec893f.xml -\n4 passed in 4.46s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/e9f1dc6410901b7a-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "1c19fb87fbb4129b",
+      "parent_span_id": "e9f1dc6410901b7a",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:54:07.488Z",
+      "end_time": "2026-09-28T17:54:13.331Z",
+      "duration_ms": 5843.522,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "a84b39ebc561fab7",
+      "parent_span_id": "15351f8083104a3c",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:54:13.334Z",
+      "end_time": "2026-09-28T17:54:13.344Z",
+      "duration_ms": 10.05,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:54:13.334Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:13.344Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/a84b39ebc561fab7-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "9f8d213aceced35b",
+      "parent_span_id": "940200ea2e986b5b",
+      "name": "agent.report",
+      "start_time": "2026-09-28T17:54:13.347Z",
+      "end_time": "2026-09-28T17:54:13.349Z",
+      "duration_ms": 2.001,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:54:13.349Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-008\",\n  \"summary\": \"REQ-008: 2 tool execution(s)\\n- pytest: ok (attempts=1, exit=0) - 4 passed in 4.46s\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\"\n}",
+            "length": 199,
+            "truncated": false,
+            "artifact": "spans/9f8d213aceced35b-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "0a262aba55f2996e",
+      "parent_span_id": "940200ea2e986b5b",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T17:54:13.349Z",
+      "end_time": "2026-09-28T17:54:31.054Z",
+      "duration_ms": 17704.991,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [],
+        "qa.eval.files": [
+          "generated/test_req008_api.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "PASS",
+        "qa.eval.detected": 0,
+        "qa.eval.missed": 0,
+        "qa.eval.broken": 0,
+        "qa.eval.passed": 4,
+        "qa.eval.tests": 4
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:54:31.054Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req008_api.py::test_tc1_owner_deletes_task",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:54:31.054Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req008_api.py::test_tc2_creator_deletes_task",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:54:31.054Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:54:31.054Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "PASS",
+            "qa.test.rule": ""
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "5db512fb3973a509",
+      "parent_span_id": "0a262aba55f2996e",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T17:54:13.350Z",
+      "end_time": "2026-09-28T17:54:22.111Z",
+      "duration_ms": 8760.458,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "0f4d35692c17fc23",
+      "parent_span_id": "5db512fb3973a509",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:54:16.063Z",
+      "end_time": "2026-09-28T17:54:16.075Z",
+      "duration_ms": 12.364,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:16.075Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/0f4d35692c17fc23-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2a3c9172568126ce",
+      "parent_span_id": "5db512fb3973a509",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T17:54:16.075Z",
+      "end_time": "2026-09-28T17:54:21.910Z",
+      "duration_ms": 5834.239,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req008_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req008_api-d04a61.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:21.910Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-174631-3A58\\reports\\junit-test_req008_api-d04a61.xml -\n4 passed in 4.46s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/2a3c9172568126ce-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "4a9ca3a54fec0930",
+      "parent_span_id": "2a3c9172568126ce",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:54:16.075Z",
+      "end_time": "2026-09-28T17:54:21.908Z",
+      "duration_ms": 5832.238,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "35ad4407d9d48520",
+      "parent_span_id": "0a262aba55f2996e",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T17:54:22.115Z",
+      "end_time": "2026-09-28T17:54:31.050Z",
+      "duration_ms": 8935.466,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "36bad55405715e6c",
+      "parent_span_id": "35ad4407d9d48520",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:54:24.873Z",
+      "end_time": "2026-09-28T17:54:24.882Z",
+      "duration_ms": 9.508,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:24.882Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/36bad55405715e6c-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "920dced8097b08af",
+      "parent_span_id": "35ad4407d9d48520",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T17:54:24.882Z",
+      "end_time": "2026-09-28T17:54:30.853Z",
+      "duration_ms": 5970.354,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req008_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req008_api-77a27a.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:54:30.853Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-174631-3A58\\reports\\junit-test_req008_api-77a27a.xml -\n4 passed in 4.53s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/920dced8097b08af-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "4e24fbdad510fa94",
+      "parent_span_id": "920dced8097b08af",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:54:24.882Z",
+      "end_time": "2026-09-28T17:54:30.850Z",
+      "duration_ms": 5967.354,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

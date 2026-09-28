@@ -1,0 +1,51 @@
+{
+  "requirement_id": "REQ-002",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 1 passed in 3.01s",
+      "error": null,
+      "data": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req002_api.py"
+        ],
+        "junit": "reports/junit-test_req002_api-86b966.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req002_api.py::test_req002_tc1_boundary_title_and_priority",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_req002_tc2_invalid_title_and_priority",
+            "outcome": "FAIL",
+            "message": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code"
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

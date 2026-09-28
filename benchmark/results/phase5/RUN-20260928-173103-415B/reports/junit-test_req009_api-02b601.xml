@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="2.879" timestamp="2026-09-29T01:37:14.334167+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req009_api" name="test_req009_tc1_case_insensitive_search" time="2.317"><failure message="AssertionError: []&#10;assert 0 == 1&#10; +  where 0 = len([])">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000002C2BDD42160&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000002C2BDD42200&gt;
+
+    def test_req009_tc1_case_insensitive_search(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Fix Login Bug"})
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Other task"})
+    
+        r = alice.get(f"/api/projects/{pid}/tasks", params={"q": "login"})
+        assert r.status_code == 200, r.text
+        data = r.json()
+&gt;       assert len(data["items"]) == 1, data["items"]
+E       AssertionError: []
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+generated\test_req009_api.py:13: AssertionError</failure></testcase><testcase classname="generated.test_req009_api" name="test_req009_tc2_literal_percent_and_underscore" time="0.012" /><testcase classname="generated.test_req009_api" name="test_req009_tc3_search_status_pagination" time="0.013"><failure message="AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two']">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000002C2BDD42160&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000002C2BDF98180&gt;
+
+    def test_req009_tc3_search_status_pagination(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Bug one"})
+        t2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Bug two"}).json()
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Feature bug"})
+    
+        alice.post(f"/api/projects/{pid}/tasks/{t2['id']}/transition", json={"to": "in_progress"})
+    
+        r = alice.get(f"/api/projects/{pid}/tasks", params={"q": "Bug", "status": "todo", "limit": 10, "offset": 0})
+        assert r.status_code == 200, r.text
+        data = r.json()
+        titles = [item["title"] for item in data["items"]]
+&gt;       assert "Bug two" not in titles
+E       AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two']
+
+generated\test_req009_api.py:44: AssertionError</failure></testcase></testsuite></testsuites>

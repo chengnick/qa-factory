@@ -1,0 +1,66 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "3 failed, 1 passed in 22.54s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 3,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-60b9f8.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_updates_list",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to contain text 'New UI Test Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - co"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\").first\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combobox \"Project\":\n    - option \"gen-217bed57\"\n    - option \"gen-61d121ce\"\n    "
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_errors_displayed",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to have attribute 'true'\nActual value: None \nCall log:\n  - Expect \"to_have_attribute\" with timeout 5000ms\n  - waiting for locator(\"body\")\n    14 × locator resolved to <body>…</body>\n       - unexpected value \"null\"\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\"\n  - text: Project\n  - combobox \"Project\"\n  - textbox \"New project\"\n  - button \"Add project\"\n- textbox \"New task title\"\n- button \"Create\"\n- text: \"401 {\\\"detail"
+          }
+        ],
+        "isolation": "L1",
+        "evidence": [
+          "playwright/test_req004_ui-60b9f8/test_req004_tc2_task_creation_updates_list",
+          "playwright/test_req004_ui-60b9f8/test_req004_tc3_task_title_html_escaped",
+          "playwright/test_req004_ui-60b9f8/test_req004_tc4_api_errors_displayed"
+        ]
+      }
+    }
+  ]
+}

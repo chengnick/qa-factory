@@ -1,0 +1,40 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req002_api.py",
+          "snapshot": "generated/round1/test_req002_api.py",
+          "sha256": "7f391c7527b413d5db854c3a4fbec1dd58b85ad261e2e86f7387481c6a386bf4"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req002_api.py::test_tc1_title_boundary_and_default_priority",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc2_title_invalid_length_or_blank",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc3_priority_boundary_values",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req002_api.py::test_tc4_priority_illegal_boundaries",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

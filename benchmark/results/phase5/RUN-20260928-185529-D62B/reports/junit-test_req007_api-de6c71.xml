@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="4.108" timestamp="2026-09-29T02:55:52.386814+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req007_api" name="test_tc1_project_member_can_read_task_detail" time="2.517" /><testcase classname="generated.test_req007_api" name="test_tc2_non_member_receives_403_reading_task_detail" time="1.044"><failure message="AssertionError: {&quot;id&quot;:2,&quot;project_id&quot;:2,&quot;title&quot;:&quot;Secret Task&quot;,&quot;description&quot;:&quot;&quot;,&quot;status&quot;:&quot;todo&quot;,&quot;priority&quot;:3,&quot;assignee_id&quot;:null,&quot;created_by&quot;:1,&quot;created_at&quot;:&quot;2026-09-28T18:55:55.982+00:00&quot;,&quot;updated_at&quot;:&quot;2026-09-28T18:55:55.982+00:00&quot;}&#10;assert 200 == 403&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000001C8F1CE20C0&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000001C8F1CE2340&gt;
+
+    def test_tc2_non_member_receives_403_reading_task_detail(as_user, new_project):
+        pid = new_project(owner="alice", members=())
+        alice = as_user("alice")
+        bob = as_user("bob")
+    
+        # Create a task as alice
+        create_resp = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Secret Task"})
+        assert create_resp.status_code == 201, create_resp.text
+        task_id = create_resp.json()["id"]
+    
+        # Try to read task detail as bob (non-member)
+        get_resp = bob.get(f"/api/tasks/{task_id}")
+&gt;       assert get_resp.status_code == 403, get_resp.text
+E       AssertionError: {"id":2,"project_id":2,"title":"Secret Task","description":"","status":"todo","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-28T18:55:55.982+00:00","updated_at":"2026-09-28T18:55:55.982+00:00"}
+E       assert 200 == 403
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+generated\test_req007_api.py:30: AssertionError</failure></testcase><testcase classname="generated.test_req007_api" name="test_tc3_non_member_receives_403_reading_project_tasks" time="0.007" /><testcase classname="generated.test_req007_api" name="test_tc4_non_existent_task_returns_404" time="0.003" /></testsuite></testsuites>

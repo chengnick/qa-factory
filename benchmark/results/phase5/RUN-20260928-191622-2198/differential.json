@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B09"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 2,
+    "broken": 0,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 3,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req009_api.py": "7f522734857cb21ae0ba9450e100d41247f0825300da67cf0034dcf44d23363b"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B09"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_tc1_search_case_insensitive",
+          "outcome": "FAIL",
+          "message": "assert 0 == 1\n +  where 0 = len([])"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc2_sql_wildcards_literal",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc3_search_status_pagination",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req009_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req009_api-9c80b0.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_tc1_search_case_insensitive",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc2_sql_wildcards_literal",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_tc3_search_status_pagination",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req009_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req009_api-241a4c.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req009_api.py::test_tc1_search_case_insensitive",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: assert 0 == 1\n +  where 0 = len([])"
+    },
+    {
+      "node_id": "generated/test_req009_api.py::test_tc2_sql_wildcards_literal",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req009_api.py::test_tc3_search_status_pagination",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

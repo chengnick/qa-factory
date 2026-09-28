@@ -1,0 +1,46 @@
+{
+  "run_id": "RUN-20260928-170912-4D7C",
+  "breach": false,
+  "events": [
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-170912-4D7C",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_req004_tc1_url_params_preselect/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_req004_tc1_url_params_preselect/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-170912-4D7C",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_req004_tc2_task_creation_instant_display/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_req004_tc2_task_creation_instant_display/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-170912-4D7C",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_req004_tc3_task_title_html_escaped/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_req004_tc3_task_title_html_escaped/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-170912-4D7C",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_req004_tc4_api_error_message_displayed/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_req004_tc4_api_error_message_displayed/ (trace.zip, screenshot.png, console.log)"
+    }
+  ]
+}

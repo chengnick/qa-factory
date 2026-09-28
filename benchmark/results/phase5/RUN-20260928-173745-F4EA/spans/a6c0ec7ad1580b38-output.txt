@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-004",
+  "files": [
+    {
+      "path": "generated/test_req004_ui.py",
+      "content": "from playwright.sync_api import expect\n\ndef test_req004_tc1_query_string_preselects_user_and_project(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n\n    user_select = page.get_by_test_id(\"user-select\")\n    project_select = page.get_by_test_id(\"project-select\")\n\n    expect(user_select).to_have_value(\"alice\")\n    expect(project_select).to_have_value(str(pid))\n\n\ndef test_req004_tc2_task_title_html_escaped(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n\n    page.get_by_test_id(\"new-title\").fill(\"<b>x</b>\")\n    page.get_by_test_id(\"create-btn\").click()\n\n    task_list = page.get_by_test_id(\"task-list\")\n    expect(task_list).to_contain_text(\"<b>x</b>\")\n\n\ndef test_req004_tc3_task_creation_updates_list_instantly(page, base_url, new_project):\n    pid = new_project(owner=\"alice\")\n    page.goto(f\"{base_url}/?user=alice&project={pid}\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n\n    page.get_by_test_id(\"new-title\").fill(\"Instant Task\")\n    page.get_by_test_id(\"create-btn\").click()\n\n    task_list = page.get_by_test_id(\"task-list\")\n    expect(task_list).to_contain_text(\"Instant Task\")\n\n\ndef test_req004_tc4_api_error_displays_message(page, base_url):\n    page.goto(f\"{base_url}/?user=alice&project=999999\")\n    expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\")\n\n    error_area = page.get_by_test_id(\"error\")\n    expect(error_area).not_to_be_empty()\n",
+      "surface": "ui"
+    }
+  ]
+}

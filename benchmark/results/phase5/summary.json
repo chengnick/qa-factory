@@ -1,0 +1,2898 @@
+{
+  "dataset": "phase5",
+  "rounds": 5,
+  "conditions": {
+    "llm": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "models_seen": [
+      "gemini-3.5-flash-lite"
+    ],
+    "temperature": 0.0,
+    "prompt_version": "v3",
+    "git_commit": {
+      "sha": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+      "dirty": false
+    },
+    "lockfile_sha256": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6",
+    "frozen_sha256": "e919ca706db4e80b32fc9b50495dbe28dda966af9a6a89718dc1e542b9e9f703"
+  },
+  "metrics": {
+    "true_detection_rate": {
+      "mean": 0.9142857142857143,
+      "min": 0.8,
+      "max": 1.0,
+      "n_rounds": 4,
+      "pooled": "34/37",
+      "ci95": [
+        0.7869900750149847,
+        0.9720399336036787
+      ],
+      "per_round": {
+        "2": 0.8571428571428571,
+        "3": 1.0,
+        "4": 0.8,
+        "5": 1.0
+      }
+    },
+    "true_detection_rate_completed": {
+      "mean": 0.9365079365079365,
+      "min": 0.8571428571428571,
+      "max": 1.0,
+      "n_rounds": 4,
+      "pooled": "34/36",
+      "ci95": [
+        0.8185502589238878,
+        0.9846303362329332
+      ],
+      "per_round": {
+        "2": 0.8571428571428571,
+        "3": 1.0,
+        "4": 0.8888888888888888,
+        "5": 1.0
+      }
+    },
+    "surface_detection_rate": {
+      "mean": 0.9392857142857143,
+      "min": 0.8571428571428571,
+      "max": 1.0,
+      "n_rounds": 4,
+      "pooled": "35/37",
+      "ci95": [
+        0.822950349364601,
+        0.9850493372294601
+      ],
+      "per_round": {
+        "2": 0.8571428571428571,
+        "3": 1.0,
+        "4": 0.9,
+        "5": 1.0
+      }
+    },
+    "false_positive_rate_surface": {
+      "mean": 0.125,
+      "min": 0.0,
+      "max": 0.25,
+      "n_rounds": 4,
+      "pooled": "4/29",
+      "ci95": [
+        0.05497350852047822,
+        0.30559357712699325
+      ],
+      "per_round": {
+        "2": 0.0,
+        "3": 0.125,
+        "4": 0.125,
+        "5": 0.25
+      }
+    },
+    "false_positive_rate_verified": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "n_rounds": 4,
+      "pooled": "0/29",
+      "ci95": [
+        0.0,
+        0.11697359446555587
+      ],
+      "per_round": {
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    "test_health": {
+      "mean": 0.8931799311098887,
+      "min": 0.7857142857142857,
+      "max": 0.9402985074626866,
+      "n_rounds": 4,
+      "pooled": "205/227",
+      "ci95": [
+        0.8576260008325065,
+        0.9351253923305975
+      ],
+      "per_round": {
+        "2": 0.7857142857142857,
+        "3": 0.9402985074626866,
+        "4": 0.9122807017543859,
+        "5": 0.9344262295081968
+      }
+    },
+    "env_blocked_rate": {
+      "mean": 0.26666666666666666,
+      "min": 0.0,
+      "max": 1.0,
+      "n_rounds": 5,
+      "pooled": "24/90",
+      "ci95": [
+        0.18623692042961365,
+        0.3662003781671706
+      ],
+      "per_round": {
+        "1": 1.0,
+        "2": 0.3333333333333333,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    "per_bug_detection": {
+      "B01": {
+        "verified": "3/4",
+        "completed": "3/3",
+        "agent_failed": "1/4",
+        "llm_rejected": "0/4",
+        "surface": "3/4",
+        "env_blocked": "1/5"
+      },
+      "B02": {
+        "verified": "3/3",
+        "completed": "3/3",
+        "agent_failed": "0/3",
+        "llm_rejected": "0/3",
+        "surface": "3/3",
+        "env_blocked": "2/5"
+      },
+      "B03": {
+        "verified": "3/3",
+        "completed": "3/3",
+        "agent_failed": "0/3",
+        "llm_rejected": "0/3",
+        "surface": "3/3",
+        "env_blocked": "2/5"
+      },
+      "B04": {
+        "verified": "3/3",
+        "completed": "3/3",
+        "agent_failed": "0/3",
+        "llm_rejected": "0/3",
+        "surface": "3/3",
+        "env_blocked": "2/5"
+      },
+      "B05": {
+        "verified": "2/4",
+        "completed": "2/4",
+        "agent_failed": "0/4",
+        "llm_rejected": "0/4",
+        "surface": "3/4",
+        "env_blocked": "1/5"
+      },
+      "B06": {
+        "verified": "4/4",
+        "completed": "4/4",
+        "agent_failed": "0/4",
+        "llm_rejected": "0/4",
+        "surface": "4/4",
+        "env_blocked": "1/5"
+      },
+      "B07": {
+        "verified": "4/4",
+        "completed": "4/4",
+        "agent_failed": "0/4",
+        "llm_rejected": "0/4",
+        "surface": "4/4",
+        "env_blocked": "1/5"
+      },
+      "B08": {
+        "verified": "4/4",
+        "completed": "4/4",
+        "agent_failed": "0/4",
+        "llm_rejected": "0/4",
+        "surface": "4/4",
+        "env_blocked": "1/5"
+      },
+      "B09": {
+        "verified": "4/4",
+        "completed": "4/4",
+        "agent_failed": "0/4",
+        "llm_rejected": "0/4",
+        "surface": "4/4",
+        "env_blocked": "1/5"
+      },
+      "B10": {
+        "verified": "4/4",
+        "completed": "4/4",
+        "agent_failed": "0/4",
+        "llm_rejected": "0/4",
+        "surface": "4/4",
+        "env_blocked": "1/5"
+      }
+    },
+    "unknown_classification_rate": {
+      "mean": null,
+      "min": null,
+      "max": null,
+      "n_rounds": 0,
+      "pooled": "0/84",
+      "ci95": [
+        0.0,
+        0.043733265332143306
+      ],
+      "per_round": {},
+      "runs_with_classification": 90
+    },
+    "inconclusive_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "n_rounds": 4,
+      "pooled": "0/66",
+      "ci95": [
+        0.0,
+        0.05500446725160935
+      ],
+      "per_round": {
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    "cost": {
+      "mean_tokens": 4767.073529411765,
+      "mean_duration_s": 131.11,
+      "n": 90
+    }
+  },
+  "metrics_by_set": {
+    "dev": {
+      "true_detection_rate": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0,
+        "n_rounds": 3,
+        "pooled": "9/9",
+        "ci95": [
+          0.7008472464490407,
+          1.0
+        ],
+        "per_round": {
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0
+        }
+      },
+      "true_detection_rate_completed": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0,
+        "n_rounds": 3,
+        "pooled": "9/9",
+        "ci95": [
+          0.7008472464490407,
+          1.0
+        ],
+        "per_round": {
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0
+        }
+      },
+      "surface_detection_rate": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0,
+        "n_rounds": 3,
+        "pooled": "9/9",
+        "ci95": [
+          0.7008472464490407,
+          1.0
+        ],
+        "per_round": {
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0
+        }
+      },
+      "false_positive_rate_surface": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "n_rounds": 3,
+        "pooled": "0/9",
+        "ci95": [
+          0.0,
+          0.2991527535509594
+        ],
+        "per_round": {
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "false_positive_rate_verified": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "n_rounds": 3,
+        "pooled": "0/9",
+        "ci95": [
+          0.0,
+          0.2991527535509594
+        ],
+        "per_round": {
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "test_health": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0,
+        "n_rounds": 3,
+        "pooled": "66/66",
+        "ci95": [
+          0.9449955327483907,
+          1.0
+        ],
+        "per_round": {
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0
+        }
+      },
+      "env_blocked_rate": {
+        "mean": 0.4,
+        "min": 0.0,
+        "max": 1.0,
+        "n_rounds": 5,
+        "pooled": "12/30",
+        "ci95": [
+          0.24590394326083403,
+          0.5767994750172616
+        ],
+        "per_round": {
+          "1": 1.0,
+          "2": 1.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "per_bug_detection": {
+        "B02": {
+          "verified": "3/3",
+          "completed": "3/3",
+          "agent_failed": "0/3",
+          "llm_rejected": "0/3",
+          "surface": "3/3",
+          "env_blocked": "2/5"
+        },
+        "B03": {
+          "verified": "3/3",
+          "completed": "3/3",
+          "agent_failed": "0/3",
+          "llm_rejected": "0/3",
+          "surface": "3/3",
+          "env_blocked": "2/5"
+        },
+        "B04": {
+          "verified": "3/3",
+          "completed": "3/3",
+          "agent_failed": "0/3",
+          "llm_rejected": "0/3",
+          "surface": "3/3",
+          "env_blocked": "2/5"
+        }
+      },
+      "unknown_classification_rate": {
+        "mean": null,
+        "min": null,
+        "max": null,
+        "n_rounds": 0,
+        "pooled": "0/21",
+        "ci95": [
+          0.0,
+          0.15464382326420195
+        ],
+        "per_round": {},
+        "runs_with_classification": 30
+      },
+      "inconclusive_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "n_rounds": 3,
+        "pooled": "0/18",
+        "ci95": [
+          0.0,
+          0.1758845505823749
+        ],
+        "per_round": {
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "cost": {
+        "mean_tokens": 4791.2,
+        "mean_duration_s": 126.25333333333333,
+        "n": 30
+      }
+    },
+    "test": {
+      "true_detection_rate": {
+        "mean": 0.8928571428571428,
+        "min": 0.7142857142857143,
+        "max": 1.0,
+        "n_rounds": 4,
+        "pooled": "25/28",
+        "ci95": [
+          0.7280377463234293,
+          0.9628823079452005
+        ],
+        "per_round": {
+          "2": 0.8571428571428571,
+          "3": 1.0,
+          "4": 0.7142857142857143,
+          "5": 1.0
+        }
+      },
+      "true_detection_rate_completed": {
+        "mean": 0.9226190476190477,
+        "min": 0.8333333333333334,
+        "max": 1.0,
+        "n_rounds": 4,
+        "pooled": "25/27",
+        "ci95": [
+          0.7663002270926937,
+          0.9794457783026165
+        ],
+        "per_round": {
+          "2": 0.8571428571428571,
+          "3": 1.0,
+          "4": 0.8333333333333334,
+          "5": 1.0
+        }
+      },
+      "surface_detection_rate": {
+        "mean": 0.9285714285714286,
+        "min": 0.8571428571428571,
+        "max": 1.0,
+        "n_rounds": 4,
+        "pooled": "26/28",
+        "ci95": [
+          0.7735426157408214,
+          0.9801883525522292
+        ],
+        "per_round": {
+          "2": 0.8571428571428571,
+          "3": 1.0,
+          "4": 0.8571428571428571,
+          "5": 1.0
+        }
+      },
+      "false_positive_rate_surface": {
+        "mean": 0.2,
+        "min": 0.0,
+        "max": 0.4,
+        "n_rounds": 4,
+        "pooled": "4/20",
+        "ci95": [
+          0.0806563532712,
+          0.41602172202575993
+        ],
+        "per_round": {
+          "2": 0.0,
+          "3": 0.2,
+          "4": 0.2,
+          "5": 0.4
+        }
+      },
+      "false_positive_rate_verified": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "n_rounds": 4,
+        "pooled": "0/20",
+        "ci95": [
+          0.0,
+          0.16113012549493322
+        ],
+        "per_round": {
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "test_health": {
+        "mean": 0.8634505352528609,
+        "min": 0.7857142857142857,
+        "max": 0.9069767441860465,
+        "n_rounds": 4,
+        "pooled": "139/161",
+        "ci95": [
+          0.8017724779478174,
+          0.9079998125419618
+        ],
+        "per_round": {
+          "2": 0.7857142857142857,
+          "3": 0.9069767441860465,
+          "4": 0.8611111111111112,
+          "5": 0.9
+        }
+      },
+      "env_blocked_rate": {
+        "mean": 0.2,
+        "min": 0.0,
+        "max": 1.0,
+        "n_rounds": 5,
+        "pooled": "12/60",
+        "ci95": [
+          0.11828389736858964,
+          0.3178204609181701
+        ],
+        "per_round": {
+          "1": 1.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "per_bug_detection": {
+        "B01": {
+          "verified": "3/4",
+          "completed": "3/3",
+          "agent_failed": "1/4",
+          "llm_rejected": "0/4",
+          "surface": "3/4",
+          "env_blocked": "1/5"
+        },
+        "B05": {
+          "verified": "2/4",
+          "completed": "2/4",
+          "agent_failed": "0/4",
+          "llm_rejected": "0/4",
+          "surface": "3/4",
+          "env_blocked": "1/5"
+        },
+        "B06": {
+          "verified": "4/4",
+          "completed": "4/4",
+          "agent_failed": "0/4",
+          "llm_rejected": "0/4",
+          "surface": "4/4",
+          "env_blocked": "1/5"
+        },
+        "B07": {
+          "verified": "4/4",
+          "completed": "4/4",
+          "agent_failed": "0/4",
+          "llm_rejected": "0/4",
+          "surface": "4/4",
+          "env_blocked": "1/5"
+        },
+        "B08": {
+          "verified": "4/4",
+          "completed": "4/4",
+          "agent_failed": "0/4",
+          "llm_rejected": "0/4",
+          "surface": "4/4",
+          "env_blocked": "1/5"
+        },
+        "B09": {
+          "verified": "4/4",
+          "completed": "4/4",
+          "agent_failed": "0/4",
+          "llm_rejected": "0/4",
+          "surface": "4/4",
+          "env_blocked": "1/5"
+        },
+        "B10": {
+          "verified": "4/4",
+          "completed": "4/4",
+          "agent_failed": "0/4",
+          "llm_rejected": "0/4",
+          "surface": "4/4",
+          "env_blocked": "1/5"
+        }
+      },
+      "unknown_classification_rate": {
+        "mean": null,
+        "min": null,
+        "max": null,
+        "n_rounds": 0,
+        "pooled": "0/63",
+        "ci95": [
+          0.0,
+          0.057473190348525466
+        ],
+        "per_round": {},
+        "runs_with_classification": 60
+      },
+      "inconclusive_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "n_rounds": 4,
+        "pooled": "0/48",
+        "ci95": [
+          0.0,
+          0.0741026511527422
+        ],
+        "per_round": {
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "cost": {
+        "mean_tokens": 4757.020833333333,
+        "mean_duration_s": 133.53833333333333,
+        "n": 60
+      }
+    }
+  },
+  "runs": [
+    {
+      "round": 1,
+      "set": "dev",
+      "run_id": "RUN-20260928-155504-FAB3",
+      "trace_id": "1d997c988f58024923219c38bb48f01b",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "dev",
+      "run_id": "RUN-20260928-155922-7E6E",
+      "trace_id": "5292241ff016405b8564c59cdee1aee4",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "dev",
+      "run_id": "RUN-20260928-160109-7064",
+      "trace_id": "e40bb32d9146adb6b3ad63a44031b3e5",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "dev",
+      "run_id": "RUN-20260928-160246-6A64",
+      "trace_id": "9bd5e7bb5ee9d57502a613110fdbc6aa",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "dev",
+      "run_id": "RUN-20260928-160421-20F0",
+      "trace_id": "5b916c4ba775ae6b128141f812ab8437",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "dev",
+      "run_id": "RUN-20260928-160555-F38A",
+      "trace_id": "b8304369e672bec7a4b73e7e728c2b8a",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-160732-FE5D",
+      "trace_id": "2b91e9c2121571532bd49ed23f058304",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [
+        "B01"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-160908-C60F",
+      "trace_id": "368cfa564adf7418f9c17a3d926b4dee",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B05"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-161044-D783",
+      "trace_id": "7729550c7174c61f39ff3bf750c5f033",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B06"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-161422-9E5B",
+      "trace_id": "314155f54f9b00d9a91a1f887b260563",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [
+        "B07"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-161605-5994",
+      "trace_id": "3247795e23bc4923e4669b4a1d25de5e",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [
+        "B08"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-161743-8500",
+      "trace_id": "4fa7c54a2f6747eff96513aa8293f916",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [
+        "B09"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-161937-0167",
+      "trace_id": "303e5d7465a21385b96c78a360594a6a",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B10"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-162123-E13C",
+      "trace_id": "9c9aa6ca236023cf358223d7cb61ab6a",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-162309-3DAB",
+      "trace_id": "fde2fe76e5d196d941c06ca840959c9b",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-162510-6EF7",
+      "trace_id": "a2f975d284d3f4fb9ecf5b6f30ed6e20",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-163051-8228",
+      "trace_id": "2e2c73044b365c111000702660ec3995",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 1,
+      "set": "test",
+      "run_id": "RUN-20260928-163233-85EC",
+      "trace_id": "36ce2e70fdab30edfca977bcdb39bc95",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "dev",
+      "run_id": "RUN-20260928-163539-3FF2",
+      "trace_id": "5c276944b336a0dff8d0a1fb7cc187a1",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "dev",
+      "run_id": "RUN-20260928-163732-D1BD",
+      "trace_id": "966034cd9018f7ac11d51bd0fdae15d6",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "dev",
+      "run_id": "RUN-20260928-163927-E9F3",
+      "trace_id": "1459912730e8f1171011f3b7c9af9283",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "dev",
+      "run_id": "RUN-20260928-165410-ADFB",
+      "trace_id": "7eb2d616b7ec5fe72b9889b2cd80bae6",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "dev",
+      "run_id": "RUN-20260928-165559-6431",
+      "trace_id": "38b04c20d9b6669fc0906f76b41d5789",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "dev",
+      "run_id": "RUN-20260928-170140-B71D",
+      "trace_id": "fc0da61f59b4b04c097e50d9f328eb18",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "surface_verdict": "ENV_BLOCKED",
+      "verdict": "ENV_BLOCKED",
+      "differential": null,
+      "error": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-170329-47C4",
+      "trace_id": "a58822a7544f2fdbacbc3119b8191512",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [
+        "B01"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 2,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-170912-4D7C",
+      "trace_id": "00da3832c18e80ac0cc8eb34ecca7c95",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B05"
+      ],
+      "surface_verdict": "TEST_BROKEN",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 4,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 0,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-171056-7231",
+      "trace_id": "a61f2ba1601515f4ec2db9de7c399b09",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B06"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-171736-F27F",
+      "trace_id": "4f52d1f27a48e0b97b114d556145b582",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [
+        "B07"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-172359-37F0",
+      "trace_id": "e43e6af977c47597db5f3fd976ccd44e",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [
+        "B08"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 0,
+          "passed": 0,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-173103-415B",
+      "trace_id": "8b228df938e5c53e826540ee246166f9",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [
+        "B09"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 1,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-173745-F4EA",
+      "trace_id": "95a4440c0906d980394b90794e9bc53a",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B10"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 1,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-174148-65D7",
+      "trace_id": "631f346053d3e87fd01b1427c564ea3c",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [],
+      "surface_verdict": "FLAKY",
+      "verdict": "FLAKY",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 5,
+          "tests": 5
+        },
+        "test_health": {
+          "healthy": 5,
+          "total": 5
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-174355-26C5",
+      "trace_id": "bc550144626c02de6206eb7e78af670e",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [],
+      "surface_verdict": "TEST_BROKEN",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 3,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 0,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-174631-3A58",
+      "trace_id": "38451857b0a07692aa7056a87e592250",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [],
+      "surface_verdict": "FLAKY",
+      "verdict": "FLAKY",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-175444-B6BC",
+      "trace_id": "d59c6d0a170a60848eeeacb32e24d259",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 2,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 2,
+      "set": "test",
+      "run_id": "RUN-20260928-175749-606D",
+      "trace_id": "c4e4df9b228f589ad67a322618798fe1",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 3,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "dev",
+      "run_id": "RUN-20260928-175913-2D76",
+      "trace_id": "74ebc4aea1cd779b4ced07b45556dd05",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "dev",
+      "run_id": "RUN-20260928-180028-3F50",
+      "trace_id": "e03dc486c0c732443ed265ca1862e924",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "dev",
+      "run_id": "RUN-20260928-180556-9DB8",
+      "trace_id": "1c663058be11657cb4074d291848b416",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "dev",
+      "run_id": "RUN-20260928-180805-7490",
+      "trace_id": "7c927db679e80717365d421e18d748c1",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 5,
+          "tests": 5
+        },
+        "test_health": {
+          "healthy": 5,
+          "total": 5
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "dev",
+      "run_id": "RUN-20260928-181021-B9B1",
+      "trace_id": "9aa06d25ed6de2395580a3a676bb9bed",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 3,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "dev",
+      "run_id": "RUN-20260928-181257-1270",
+      "trace_id": "1eb0af51fbcef3113e63cabb7e2758ce",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 5,
+          "tests": 5
+        },
+        "test_health": {
+          "healthy": 5,
+          "total": 5
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-181458-5BFA",
+      "trace_id": "648ed376c5323bcd501e5b181a583b42",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [
+        "B01"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 4,
+          "broken": 0,
+          "passed": 0,
+          "tests": 5
+        },
+        "test_health": {
+          "healthy": 5,
+          "total": 5
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-181752-C9AE",
+      "trace_id": "65ef01e6cc630bd4f3fd63ca22c87b01",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B05"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 2,
+          "missed": 1,
+          "broken": 1,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-182434-256B",
+      "trace_id": "8f68089bb5200a0693be6412d529c886",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B06"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-182648-B528",
+      "trace_id": "d112d99e8c364e07f5c730a471b16e92",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [
+        "B07"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-182814-1703",
+      "trace_id": "1321d45901b34507e495b7df7c4ebb50",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [
+        "B08"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183010-313C",
+      "trace_id": "31e3a70b13d7498faaea2b9ec5ff8d54",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [
+        "B09"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183145-5B06",
+      "trace_id": "f2f035f887138bb92ca09554db40f3e6",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B10"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 1,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183333-8046",
+      "trace_id": "3a9b236dff92e231821a74714e0dd6ba",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183440-2857",
+      "trace_id": "108c1c41c3d5c78e3011f90e3071ae68",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 2,
+          "passed": 1,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 1,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183609-CE36",
+      "trace_id": "1fcb74179511f08a9ced95d9133d1184",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183719-AAC8",
+      "trace_id": "db29da55a5a21c0c14b527cfacbe062c",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 2,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 3,
+      "set": "test",
+      "run_id": "RUN-20260928-183816-5CEB",
+      "trace_id": "5cd7bc405786261d14edf71f6b1823f3",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "dev",
+      "run_id": "RUN-20260928-183913-5DD9",
+      "trace_id": "c09c96930c59126cf3a1be8e48bf856e",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "dev",
+      "run_id": "RUN-20260928-184018-C99A",
+      "trace_id": "1b0f0d8c18c5ab2b100e0c3425df3214",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "dev",
+      "run_id": "RUN-20260928-184114-087E",
+      "trace_id": "5bebf5f4f19e66d395d1fb468db49213",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "dev",
+      "run_id": "RUN-20260928-184208-C902",
+      "trace_id": "9f6380601b96e0a54eb4ee3d5861cb42",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "dev",
+      "run_id": "RUN-20260928-184255-18A2",
+      "trace_id": "6045615160c6d80edaa4fc71865caab7",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 3,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "dev",
+      "run_id": "RUN-20260928-184343-04B4",
+      "trace_id": "b77695a6a9ab84cf0c22273318fe33d9",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184430-E57F",
+      "trace_id": "769776a7b3d36603edcd75ea803cec37",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [
+        "B01"
+      ],
+      "surface_verdict": "AGENT_FAILED",
+      "verdict": "AGENT_FAILED",
+      "differential": null,
+      "error": "AgentOutputError: test plan has 10 cases; at most 8 allowed",
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184456-8DF1",
+      "trace_id": "b347e062ee8b716fe0868521fe8a1ead",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B05"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 3,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 0,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184615-6E56",
+      "trace_id": "01b6bc9252165ad3c8e3247f4ab10f4f",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B06"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184702-7657",
+      "trace_id": "e2bfe619d80c1c37930c8522e79ab4df",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [
+        "B07"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184751-2FE3",
+      "trace_id": "b47b2881622e8466a2ac323550de7096",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [
+        "B08"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 0,
+          "passed": 0,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184840-6B23",
+      "trace_id": "5cece0a7028a98f152c6c333e6e74efa",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [
+        "B09"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-184921-AB17",
+      "trace_id": "7c576ff65a306216b5868f1ecc5c0c7c",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B10"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 1,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-185041-C48F",
+      "trace_id": "b1e6c9e812187d75787c2b69df091b1e",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-185129-7150",
+      "trace_id": "f63cc66f7cadd3bc3a15c39ee720fe1a",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 1,
+          "passed": 3,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-185243-CDC6",
+      "trace_id": "c8e4c02d0595f6cf81cd6103b847fa40",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-185330-1B75",
+      "trace_id": "837db074dabeff79f67ba986c16670ea",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 2,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 4,
+      "set": "test",
+      "run_id": "RUN-20260928-185409-630B",
+      "trace_id": "09b70500d4de0f42b97d366e9139db50",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 3,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "dev",
+      "run_id": "RUN-20260928-185449-9A01",
+      "trace_id": "b39d348f3ffcfe873beece9aee5939a6",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [
+        "B02"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "dev",
+      "run_id": "RUN-20260928-185529-D62B",
+      "trace_id": "5bf0a94cf12de75247f64e51764ce4c8",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [
+        "B03"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "dev",
+      "run_id": "RUN-20260928-185618-982E",
+      "trace_id": "ac19db011816285da37f5831daf0ca35",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B04"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 0,
+          "passed": 0,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "dev",
+      "run_id": "RUN-20260928-185712-27DC",
+      "trace_id": "962b11dc9598a81a020e305593d9f45c",
+      "requirement_id": "REQ-005",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "dev",
+      "run_id": "RUN-20260928-185806-D690",
+      "trace_id": "dfcd27978762be286987006c21a1d738",
+      "requirement_id": "REQ-007",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 3,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "dev",
+      "run_id": "RUN-20260928-185937-4032",
+      "trace_id": "6b083531ea826c02483b2234e1eeffd4",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [],
+      "surface_verdict": "FLAKY",
+      "verdict": "FLAKY",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-190326-2D86",
+      "trace_id": "741a42aabc0690f41d620f39484a81c7",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [
+        "B01"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-190713-1408",
+      "trace_id": "a34d90bb1b2ee9b779458e7e4f0ed02b",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B05"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 2,
+          "missed": 0,
+          "broken": 1,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-190935-079D",
+      "trace_id": "f54d38cabf0e9a8a9abcbb262e246c3f",
+      "requirement_id": "REQ-002",
+      "sut_bugs": [
+        "B06"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-191150-63FB",
+      "trace_id": "99073ad2efb049ae08d0d2c8b1c2882d",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [
+        "B07"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 3,
+          "broken": 0,
+          "passed": 0,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-191437-3540",
+      "trace_id": "36ee5b1709e395bc51bccbbc5bc25c38",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [
+        "B08"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 0,
+          "passed": 0,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-191622-2198",
+      "trace_id": "08a4c2101c5a9cd78be15abdfcf873cf",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [
+        "B09"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 2,
+          "broken": 0,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-191850-A65E",
+      "trace_id": "a380b35d5dd4397cd8a362f09934ffa6",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [
+        "B10"
+      ],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "DEFECT_FOUND",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "DEFECT_FOUND",
+        "reason": null,
+        "counts": {
+          "detected": 1,
+          "missed": 1,
+          "broken": 1,
+          "passed": 0,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-192210-F2F1",
+      "trace_id": "997e9872c66b8d916828c6b9776b6903",
+      "requirement_id": "REQ-003",
+      "sut_bugs": [],
+      "surface_verdict": "PASS",
+      "verdict": "PASS",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-192351-7FF9",
+      "trace_id": "8e600fdd2421ea31b72ca8637ec969ab",
+      "requirement_id": "REQ-004",
+      "sut_bugs": [],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 1,
+          "passed": 3,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 3,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-192539-518D",
+      "trace_id": "50d7f27b4834e7c15351f6d123e0c367",
+      "requirement_id": "REQ-008",
+      "sut_bugs": [],
+      "surface_verdict": "FLAKY",
+      "verdict": "FLAKY",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 4,
+          "tests": 4
+        },
+        "test_health": {
+          "healthy": 4,
+          "total": 4
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-192709-CFAB",
+      "trace_id": "966cd8c1e3de51b0b93d2c55fcfb1c49",
+      "requirement_id": "REQ-006",
+      "sut_bugs": [],
+      "surface_verdict": "FLAKY",
+      "verdict": "FLAKY",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "PASS",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 0,
+          "passed": 2,
+          "tests": 2
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 2
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    },
+    {
+      "round": 5,
+      "set": "test",
+      "run_id": "RUN-20260928-192930-EFF1",
+      "trace_id": "227e41bdf9e3ee6cbee4ecf128e02f90",
+      "requirement_id": "REQ-009",
+      "sut_bugs": [],
+      "surface_verdict": "DEFECT_FOUND",
+      "verdict": "TEST_BROKEN",
+      "differential": {
+        "status": "COMPLETE",
+        "verdict": "TEST_BROKEN",
+        "reason": null,
+        "counts": {
+          "detected": 0,
+          "missed": 0,
+          "broken": 1,
+          "passed": 2,
+          "tests": 3
+        },
+        "test_health": {
+          "healthy": 2,
+          "total": 3
+        }
+      },
+      "error": null,
+      "copied_to_results": true
+    }
+  ]
+}

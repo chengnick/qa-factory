@@ -1,0 +1,42 @@
+{
+  "surface": {
+    "verdict": "FLAKY",
+    "underlying_verdict": "PASS",
+    "decided_by": null,
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 3 failed, a later attempt passed",
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 0,
+      "unknown": 0,
+      "layers": {},
+      "rules": {}
+    },
+    "classifications": []
+  },
+  "final": {
+    "verdict": "FLAKY",
+    "underlying_verdict": "PASS",
+    "decided_by": null,
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed",
+      "llm.chat attempt 3 failed, a later attempt passed",
+      "llm.chat attempt 1 failed, a later attempt passed",
+      "llm.chat attempt 2 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 0,
+      "unknown": 0,
+      "layers": {},
+      "rules": {}
+    },
+    "classifications": []
+  }
+}

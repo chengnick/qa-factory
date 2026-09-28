@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-002",
+  "summary": "驗證 POST /api/projects/{pid}/tasks 與 PATCH /api/tasks/{tid} 的 title 與 priority 欄位格式與範圍，確保違規輸入回傳 422 且不發生 5xx 錯誤。",
+  "acceptance_criteria": [
+    "title 必填，長度介於 1 至 100 字元之間（含邊界），100 字元時接受請求。",
+    "title 超過 100 字元或為空白時應回傳 422 狀態碼，且不得回傳 5xx。",
+    "priority 為整數，範圍 1 至 5（含邊界），預設值為 3。",
+    "priority 設為 1 或 5 時接受請求，設為 0 或 6 時應回傳 422 狀態碼。"
+  ]
+}

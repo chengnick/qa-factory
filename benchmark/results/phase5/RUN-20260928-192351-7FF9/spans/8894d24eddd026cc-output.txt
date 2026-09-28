@@ -1,0 +1,64 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 3 passed in 6.94s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-30f239.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc1_preselect_user_and_project",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc2_create_task_updates_list_immediately",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+            "outcome": "FAIL",
+            "message": "assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='http://127.0.0.1:53604/?user=alice&project=999999'> selector='internal:testid=[data-testid=\"error\"s]'>.inner_text"
+          }
+        ],
+        "isolation": "L1",
+        "evidence": [
+          "playwright/test_req004_ui-30f239/test_req004_tc4_api_error_displayed"
+        ]
+      }
+    }
+  ]
+}

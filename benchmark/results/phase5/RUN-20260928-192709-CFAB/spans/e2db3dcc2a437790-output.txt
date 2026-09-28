@@ -1,0 +1,8 @@
+{
+  "requirement_id": "REQ-006",
+  "summary": "支援 PATCH /api/tasks/{tid} 進行任務指派與取消指派，並驗證成員身分及使用者存在性。",
+  "acceptance_criteria": [
+    "指派對象必須是該專案成員；否則回傳 422 錯誤，且任務 assignee 維持不變。",
+    "指派不存在的使用者時，必須回傳 422 錯誤。"
+  ]
+}

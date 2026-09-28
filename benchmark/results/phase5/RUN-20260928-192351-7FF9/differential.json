@@ -1,0 +1,141 @@
+{
+  "status": "COMPLETE",
+  "verdict": "TEST_BROKEN",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 1,
+    "passed": 3,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 3,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req004_ui.py": "16c2e28bf97ac08c95dc9c1a5c04938bab861153d9a6ffc62f244e8447274fe2"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc1_preselect_user_and_project",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc2_create_task_updates_list_immediately",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+          "outcome": "FAIL",
+          "message": "assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='http://127.0.0.1:56532/?user=alice&project=999999'> selector='internal:testid=[data-testid=\"error\"s]'>.inner_text"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-79844a.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc1_preselect_user_and_project",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc2_create_task_updates_list_immediately",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+          "outcome": "FAIL",
+          "message": "assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='http://127.0.0.1:61953/?user=alice&project=999999'> selector='internal:testid=[data-testid=\"error\"s]'>.inner_text"
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-b118f6.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req004_ui.py::test_req004_tc1_preselect_user_and_project",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_req004_tc2_create_task_updates_list_immediately",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displayed",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "FAIL",
+      "decision": "BROKEN",
+      "rule": "R12",
+      "symptom": "ASSERTION",
+      "evidence": "fails on a clean SUT: assert 0 > 0\n +  where 0 = len('')\n +    where '' = <built-in method strip of str object at 0x00007FFE53A3C6E0>()\n +      where <built-in method strip of str object at 0x00007FFE53A3C6E0> = ''.strip\n +        where '' = inner_text()\n +          where inner_text = <Locator frame=<Frame name= url='http://127.0.0.1:56532/?user=alice&project=999999'> selector='internal:testid=[data-testid=\"error\"s]'>.inner_text"
+    }
+  ]
+}

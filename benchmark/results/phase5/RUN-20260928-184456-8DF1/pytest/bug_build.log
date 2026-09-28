@@ -1,0 +1,74 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+______________ test_tc1_create_task_updates_list_without_reload _______________
+
+page = <Page url='http://127.0.0.1:49888/?user=alice&project=1'>
+base_url = 'http://127.0.0.1:49888'
+new_project = <function new_project.<locals>.create at 0x000001DA014DF2E0>
+
+    def test_tc1_create_task_updates_list_without_reload(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("New UI Task")
+        page.get_by_test_id("create-btn").click()
+    
+        task_item = page.get_by_test_id("task-item").filter(has_text="New UI Task")
+>       expect(task_item).toBeVisible()
+E       AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'
+
+generated\test_req004_ui.py:12: AttributeError
+____________ test_tc2_task_title_with_html_displayed_as_plain_text ____________
+
+page = <Page url='http://127.0.0.1:49888/?user=alice&project=2'>
+base_url = 'http://127.0.0.1:49888'
+new_project = <function new_project.<locals>.create at 0x000001DA016359E0>
+
+    def test_tc2_task_title_with_html_displayed_as_plain_text(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("<b>x</b>")
+        page.get_by_test_id("create-btn").click()
+    
+        task_title = page.get_by_test_id("task-title").filter(has_text="<b>x</b>")
+>       expect(task_title).toBeVisible()
+E       AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'
+
+generated\test_req004_ui.py:23: AttributeError
+______________ test_tc3_api_error_displays_message_in_error_area ______________
+
+page = <Page url='http://127.0.0.1:49888/?user=alice&project=3'>
+base_url = 'http://127.0.0.1:49888'
+new_project = <function new_project.<locals>.create at 0x000001DA01678860>
+
+    def test_tc3_api_error_displays_message_in_error_area(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        # Submitting empty title should trigger an API error or validation error
+        page.get_by_test_id("new-title").fill("")
+        page.get_by_test_id("create-btn").click()
+    
+        error_area = page.get_by_test_id("error")
+>       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:37: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-184456-8DF1\reports\junit-test_req004_ui-18fcb0.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload
+FAILED generated/test_req004_ui.py::test_tc2_task_title_with_html_displayed_as_plain_text
+FAILED generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area
+3 failed in 12.16s
+

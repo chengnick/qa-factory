@@ -1,0 +1,634 @@
+{
+  "trace_id": "1459912730e8f1171011f3b7c9af9283",
+  "run": {
+    "requirement_id": "REQ-002",
+    "sut_bugs": [
+      "B04"
+    ],
+    "started_at": "2026-09-28T16:39:30.487Z",
+    "duration_ms": 865790.322,
+    "verdict": "ENV_BLOCKED"
+  },
+  "spans": [
+    {
+      "span_id": "4fd528fb3d40b637",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T16:39:30.487Z",
+      "end_time": "2026-09-28T16:53:56.278Z",
+      "duration_ms": 865790.322,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-002",
+        "qa.run.sut_bugs": [
+          "B04"
+        ],
+        "qa.run.id": "RUN-20260928-163927-E9F3",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "dev",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "ENV_BLOCKED",
+        "qa.verdict.surface": "ENV_BLOCKED",
+        "qa.classification.total": 1,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.rule": "R3",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:53:56.275Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2f178410053f4c6d",
+      "parent_span_id": "4fd528fb3d40b637",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T16:39:30.487Z",
+      "end_time": "2026-09-28T16:43:49.421Z",
+      "duration_ms": 258934.002,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T16:43:49.421Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"驗證專案任務的建立 (POST) 與更新 (PATCH) 介面中，title 與 priority 欄位的輸入驗證規則。\",\n  \"acceptance_criteria\": [\n    \"title 欄位為必填，長度限制為 1 至 100 字元（包含邊界）。\",\n    \"title 長度為 100 字元時應被接受，回傳 201 或 200 狀態碼。\",\n    \"title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx 錯誤。\",\n    \"priority 欄位必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n  ]\n}",
+            "length": 389,
+            "truncated": false,
+            "artifact": "spans/2f178410053f4c6d-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "3df328bd38059a98",
+      "parent_span_id": "2f178410053f4c6d",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T16:39:30.487Z",
+      "end_time": "2026-09-28T16:43:49.415Z",
+      "duration_ms": 258927.439,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 214,
+        "gen_ai.usage.output_tokens": 218
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T16:39:30.524Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-002:\n\n# REQ-002 任務欄位驗證\n\n`POST /api/projects/{pid}/tasks` 與 `PATCH /api/tasks/{tid}` 須驗證欄位。\n\n## 驗收準則\n- `title` 必填，長度 1–100 字元（含邊界）。\n  - 100 字元 → 接受（`201` / `200`）。\n  - 101 字元以上或空白 → `422`，**不得回 5xx**。\n- `priority` 為整數，範圍 1–5（含邊界），預設 3。\n  - 1 與 5 → 接受；0 與 6 → `422`。\n",
+            "length": 420,
+            "truncated": false,
+            "artifact": "prompts/3df328bd38059a98-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T16:43:49.415Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"驗證專案任務的建立 (POST) 與更新 (PATCH) 介面中，title 與 priority 欄位的輸入驗證規則。\",\n  \"acceptance_criteria\": [\n    \"title 欄位為必填，長度限制為 1 至 100 字元（包含邊界）。\",\n    \"title 長度為 100 字元時應被接受，回傳 201 或 200 狀態碼。\",\n    \"title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx 錯誤。\",\n    \"priority 欄位必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n  ]\n}",
+            "length": 358,
+            "truncated": false,
+            "artifact": "prompts/3df328bd38059a98-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "cf28f12521e08cf3",
+      "parent_span_id": "3df328bd38059a98",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:39:30.524Z",
+      "end_time": "2026-09-28T16:39:32.021Z",
+      "duration_ms": 1497.174,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:39:32.021Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "e5ef53298d931eaa",
+      "parent_span_id": "3df328bd38059a98",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:39:37.023Z",
+      "end_time": "2026-09-28T16:39:40.910Z",
+      "duration_ms": 3886.942,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:39:40.910Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "056e7995ead80135",
+      "parent_span_id": "3df328bd38059a98",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:39:50.911Z",
+      "end_time": "2026-09-28T16:41:50.440Z",
+      "duration_ms": 119529.018,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 3,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:41:50.440Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ba0dd6610c7a8279",
+      "parent_span_id": "3df328bd38059a98",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:42:10.441Z",
+      "end_time": "2026-09-28T16:43:49.408Z",
+      "duration_ms": 98967.407,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 4
+      },
+      "events": []
+    },
+    {
+      "span_id": "bcd448994d6a642a",
+      "parent_span_id": "4fd528fb3d40b637",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T16:43:49.421Z",
+      "end_time": "2026-09-28T16:47:57.522Z",
+      "duration_ms": 248100.793,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T16:47:57.522Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Create task with boundary and valid title lengths (1 and 100 characters)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"a\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": string of 100 'a's} as alice\"\n      ],\n      \"expected\": \"title 欄位為必填，長度限制為 1 至 100 字元（包含邊界）。title 長度為 100 字元時應被接受，回傳 201 或 200 狀態碼。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Create task with invalid title lengths (empty string and 101 characters)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": string of 101 'a's} as alice\"\n      ],\n      \"expected\": \"title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx 錯誤。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Create task with priority boundary values (1 and 5)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P1\\\", \\\"priority\\\": 1} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P5\\\", \\\"priority\\\": 5} as alice\"\n      ],\n      \"expected\": \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Create task with invalid priority boundary values (0 and 6)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P0\\\", \\\"priority\\\": 0} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P6\\\", \\\"priority\\\": 6} as alice\"\n      ],\n      \"expected\": \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n",
+            "length": 2402,
+            "truncated": true,
+            "artifact": "spans/bcd448994d6a642a-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "72d64e7c6a2cc6e6",
+      "parent_span_id": "bcd448994d6a642a",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T16:43:49.421Z",
+      "end_time": "2026-09-28T16:47:57.518Z",
+      "duration_ms": 248096.741,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1261,
+        "gen_ai.usage.output_tokens": 846
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T16:43:49.703Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"驗證專案任務的建立 (POST) 與更新 (PATCH) 介面中，title 與 priority 欄位的輸入驗證規則。\",\n  \"acceptance_criteria\": [\n    \"title 欄位為必填，長度限制為 1 至 100 字元（包含邊界）。\",\n    \"title 長度為 100 字元時應被接受，回傳 201 或 200 狀態碼。\",\n    \"title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx 錯誤。\",\n    \"priority 欄位必須為整數，有效範圍為 1 至 5（包含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User: <username>`.\nSeeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.\n\n## Resources\n\n**Project**: `{id, name, owner_id}`. The creator becomes owner and member.\n**Task**: ",
+            "length": 3876,
+            "truncated": true,
+            "artifact": "prompts/72d64e7c6a2cc6e6-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T16:47:57.518Z",
+          "attributes": {
+            "text": "{\"cases\": [\n  {\n    \"id\": \"TC-1\",\n    \"title\": \"Create task with boundary and valid title lengths (1 and 100 characters)\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"a\\\"} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": string of 100 'a's} as alice\"\n    ],\n    \"expected\": \"title 欄位為必填，長度限制為 1 至 100 字元（包含邊界）。title 長度為 100 字元時應被接受，回傳 201 或 200 狀態碼。\"\n  },\n  {\n    \"id\": \"TC-2\",\n    \"title\": \"Create task with invalid title lengths (empty string and 101 characters)\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"\\\"} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": string of 101 'a's} as alice\"\n    ],\n    \"expected\": \"title 長度超過 101 字元或為空白時，應回傳 422 狀態碼，且不得回傳 5xx 錯誤。\"\n  },\n  {\n    \"id\": \"TC-3\",\n    \"title\": \"Create task with priority boundary values (1 and 5)\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P1\\\", \\\"priority\\\": 1} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P5\\\", \\\"priority\\\": 5} as alice\"\n    ],\n    \"expected\": \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n  },\n  {\n    \"id\": \"TC-4\",\n    \"title\": \"Create task with invalid priority boundary values (0 and 6)\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"POST /api/projects with {\\\"name\\\": \\\"Test Project\\\"} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P0\\\", \\\"priority\\\": 0} as alice\",\n      \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task P6\\\", \\\"priority\\\": 6} as alice\"\n    ],\n    \"expected\": \"priority 為 1 或 5 時應被接受，而 0 或 6 時應回傳 422 狀態碼。\"\n  },\n  {\n    \"id\": \"TC-5\",\n    \"title\": \"Verify default priority value is 3 when priority is omitted\",\n    \"surface\": \"a",
+            "length": 2257,
+            "truncated": true,
+            "artifact": "prompts/72d64e7c6a2cc6e6-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b63b44916eaa0daa",
+      "parent_span_id": "72d64e7c6a2cc6e6",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:43:49.703Z",
+      "end_time": "2026-09-28T16:43:50.741Z",
+      "duration_ms": 1038.051,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:43:50.741Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "5f71ff1d74855084",
+      "parent_span_id": "72d64e7c6a2cc6e6",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:43:55.742Z",
+      "end_time": "2026-09-28T16:43:58.107Z",
+      "duration_ms": 2365.111,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:43:58.107Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "7aeb55d4de1bdb67",
+      "parent_span_id": "72d64e7c6a2cc6e6",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:44:08.108Z",
+      "end_time": "2026-09-28T16:44:16.730Z",
+      "duration_ms": 8622.545,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 3,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:44:16.730Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ebfa78f7ac9faee1",
+      "parent_span_id": "72d64e7c6a2cc6e6",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:44:36.732Z",
+      "end_time": "2026-09-28T16:46:36.455Z",
+      "duration_ms": 119722.986,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 4,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:46:36.455Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "7e768c2a096e383a",
+      "parent_span_id": "72d64e7c6a2cc6e6",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:47:16.456Z",
+      "end_time": "2026-09-28T16:47:57.511Z",
+      "duration_ms": 41055.338,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 5
+      },
+      "events": []
+    },
+    {
+      "span_id": "7cee622f537ab489",
+      "parent_span_id": "4fd528fb3d40b637",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T16:47:57.522Z",
+      "end_time": "2026-09-28T16:53:56.275Z",
+      "duration_ms": 358752.531,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:53:56.275Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "8bde3dca2e97e650",
+      "parent_span_id": "7cee622f537ab489",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T16:47:57.522Z",
+      "end_time": "2026-09-28T16:53:56.275Z",
+      "duration_ms": 358752.531,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T16:47:57.532Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-002:\n{\n  \"requirement_id\": \"REQ-002\",\n  \"cases\": [\n    {\n  ",
+            "length": 6735,
+            "truncated": true,
+            "artifact": "prompts/8bde3dca2e97e650-prompt.txt"
+          }
+        },
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:53:56.275Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "44f29ade08bc0a3b",
+      "parent_span_id": "8bde3dca2e97e650",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:47:57.532Z",
+      "end_time": "2026-09-28T16:48:00.860Z",
+      "duration_ms": 3328.2,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:48:00.860Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "bc4d70725a182977",
+      "parent_span_id": "8bde3dca2e97e650",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:48:05.860Z",
+      "end_time": "2026-09-28T16:50:05.646Z",
+      "duration_ms": 119786.153,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:50:05.646Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "565dc14a3c9d0a32",
+      "parent_span_id": "8bde3dca2e97e650",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:50:15.647Z",
+      "end_time": "2026-09-28T16:52:15.343Z",
+      "duration_ms": 119695.663,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 3,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:52:15.343Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "fad1833699cf0fba",
+      "parent_span_id": "8bde3dca2e97e650",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:52:35.344Z",
+      "end_time": "2026-09-28T16:53:14.129Z",
+      "duration_ms": 38785.145,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 4,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:53:14.129Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "58d520971b4d5899",
+      "parent_span_id": "8bde3dca2e97e650",
+      "name": "attempt",
+      "start_time": "2026-09-28T16:53:54.129Z",
+      "end_time": "2026-09-28T16:53:56.275Z",
+      "duration_ms": 2145.313,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 5,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T16:53:56.275Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    }
+  ]
+}

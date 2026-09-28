@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="4" time="17.447" timestamp="2026-09-29T01:41:00.522002+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_req004_tc1_query_string_preselects_user_and_project" time="4.265" /><testcase classname="generated.test_req004_ui" name="test_req004_tc2_task_title_html_escaped" time="5.959"><failure message="AssertionError: Locator expected to contain text '&lt;b&gt;x&lt;/b&gt;'&#10;Actual value: xtodo→ in_progress &#10;Call log:&#10;  - Expect &quot;to_contain_text&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;task-list&quot;)&#10;    - locator resolved to &lt;ul id=&quot;tasks&quot; data-testid=&quot;task-list&quot;&gt;&lt;/ul&gt;&#10;    - unexpected value &quot;&quot;&#10;    13 × locator resolved to &lt;ul id=&quot;tasks&quot; data-testid=&quot;task-list&quot;&gt;…&lt;/ul&gt;&#10;       - unexpected value &quot;xtodo→ in_progress&quot;&#10;&#10;Aria snapshot:&#10;- list:&#10;  - listitem:&#10;    - text: x todo&#10;    - button &quot;→ in_progress&quot;">page = &lt;Page url='http://127.0.0.1:62501/?user=alice&amp;project=2'&gt;
+base_url = 'http://127.0.0.1:62501'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000002427CC10AE0&gt;
+
+    def test_req004_tc2_task_title_html_escaped(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("&lt;b&gt;x&lt;/b&gt;")
+        page.get_by_test_id("create-btn").click()
+    
+        task_list = page.get_by_test_id("task-list")
+&gt;       expect(task_list).to_contain_text("&lt;b&gt;x&lt;/b&gt;")
+E       AssertionError: Locator expected to contain text '&lt;b&gt;x&lt;/b&gt;'
+E       Actual value: xtodo→ in_progress 
+E       Call log:
+E         - Expect "to_contain_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-list")
+E           - locator resolved to &lt;ul id="tasks" data-testid="task-list"&gt;&lt;/ul&gt;
+E           - unexpected value ""
+E           13 × locator resolved to &lt;ul id="tasks" data-testid="task-list"&gt;…&lt;/ul&gt;
+E              - unexpected value "xtodo→ in_progress"
+E       
+E       Aria snapshot:
+E       - list:
+E         - listitem:
+E           - text: x todo
+E           - button "→ in_progress"
+
+generated\test_req004_ui.py:24: AssertionError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_req004_tc3_task_creation_updates_list_instantly" time="0.557" /><testcase classname="generated.test_req004_ui" name="test_req004_tc4_api_error_displays_message" time="6.612"><failure message="AssertionError: Locator expected not to be empty&#10;Actual value: empty &#10;Call log:&#10;  - Expect &quot;to_be_empty&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;error&quot;)&#10;    14 × locator resolved to &lt;div id=&quot;error&quot; data-testid=&quot;error&quot;&gt;&lt;/div&gt;&#10;       - unexpected value &quot;empty&quot;">page = &lt;Page url='http://127.0.0.1:62501/?user=alice&amp;project=999999'&gt;
+base_url = 'http://127.0.0.1:62501'
+
+    def test_req004_tc4_api_error_displays_message(page, base_url):
+        page.goto(f"{base_url}/?user=alice&amp;project=999999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_area = page.get_by_test_id("error")
+&gt;       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to &lt;div id="error" data-testid="error"&gt;&lt;/div&gt;
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:44: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,116 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: Locator expected to contain text '<b>x</b>'\nActual value: xtodo→ in_progress \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    - locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n    - unexpected value \"\"\n    13",
+      "span_id": "f2a7ef49d093266a",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped",
+      "unverified": true
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 2,
+      "unknown": 0,
+      "layers": {
+        "SUT": 2
+      },
+      "rules": {
+        "R11U": 2
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected to contain text '<b>x</b>'\nActual value: xtodo→ in_progress \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    - locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n    - unexpected value \"\"\n    13",
+        "span_id": "f2a7ef49d093266a",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped",
+        "unverified": true
+      },
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | test generated/test_req004_",
+        "span_id": "f2a7ef49d093266a",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displays_message",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: Locator expected to contain text '<b>x</b>'\nActual value: xtodo→ in_progress \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    - locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n    - unexpected valu",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped",
+      "unverified": false
+    },
+    "flaky": true,
+    "flaky_evidence": [
+      "llm.chat attempt 1 failed, a later attempt passed"
+    ],
+    "counts": {
+      "total": 2,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1,
+        "TEST": 1
+      },
+      "rules": {
+        "R11": 1,
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: Locator expected to contain text '<b>x</b>'\nActual value: xtodo→ in_progress \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    - locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n    - unexpected valu",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "bug build: AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | clean build: Ass",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displays_message",
+        "unverified": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B01"
+  ],
+  "counts": {
+    "detected": 2,
+    "missed": 2,
+    "broken": 0,
+    "passed": 0,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 4,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req003_api.py": "ef9012a25cd32c7caaa55ecce042222a7e46bf9fb186bb14339b03c1d9d80c3a"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B01"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc1_default_pagination_and_boundaries",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc2_total_count_unaffected_by_pagination",
+          "outcome": "FAIL",
+          "message": "AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T17:08:51.448+00:00', 'created_by': 1, 'description': '', ...}])"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc3_sequential_fetching",
+          "outcome": "FAIL",
+          "message": "AssertionError: assert 4 == 5\n +  where 4 = len([{'assignee_id': None, 'created_at': '2026-09-28T17:08:51.945+00:00', 'created_by': 1, 'description': '', ...}, {'assi...', ...}, {'assignee_id': None, 'created_at': '2026-09-28T17:08:51.951+00:00', 'created_by': 1, 'description': '', ...}])"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc4_offset_greater_than_or_equal_to_total",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req003_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req003_api-f3b223.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc1_default_pagination_and_boundaries",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc2_total_count_unaffected_by_pagination",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc3_sequential_fetching",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc4_offset_greater_than_or_equal_to_total",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req003_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req003_api-717a29.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc1_default_pagination_and_boundaries",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc2_total_count_unaffected_by_pagination",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T17:08:51.448+00:00', 'created_by': 1, 'description': '', ...}])"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc3_sequential_fetching",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: assert 4 == 5\n +  where 4 = len([{'assignee_id': None, 'created_at': '2026-09-28T17:08:51.945+00:00', 'created_by': 1, 'description': '', ...}, {'assi...', ...}, {'assignee_id': None, 'created_at': '2026-09-28T17:08:51.951+00:00', 'created_by': 1, 'description': '', ...}])"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc4_offset_greater_than_or_equal_to_total",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

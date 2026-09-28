@@ -1,0 +1,15 @@
+[system]
+You are a QA analyst. Read the requirement and answer with JSON only: {"summary": str, "acceptance_criteria": [str, ...]}
+
+[user]
+Requirement REQ-004:
+
+# REQ-004 看板前端
+
+`GET /` 提供單頁看板，可切換使用者與專案、建立任務、推進任務狀態。
+支援 `?user=<username>&project=<pid>` 預先選取。
+
+## 驗收準則
+- 透過表單建立任務成功後，列表須**立即**顯示新任務，不需重新整理頁面。
+- 任務標題須以純文字顯示：標題若含 HTML 標記（例如 `<b>x</b>`），畫面上應顯示字面文字，不得被解析成元素。
+- API 錯誤時於錯誤區顯示訊息。

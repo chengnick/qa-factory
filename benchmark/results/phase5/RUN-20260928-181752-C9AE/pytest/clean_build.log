@@ -1,0 +1,39 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+...F                                                                     [100%]
+================================== FAILURES ===================================
+____________________ test_req004_tc4_api_errors_displayed _____________________
+
+page = <Page url='http://127.0.0.1:63467/?user=unknown_user&project=1'>
+base_url = 'http://127.0.0.1:63467'
+
+    def test_req004_tc4_api_errors_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=unknown_user&project=1")
+>       expect(page.locator("body")).to_have_attribute("data-ready", "true")
+E       AssertionError: Locator expected to have attribute 'true'
+E       Actual value: None 
+E       Call log:
+E         - Expect "to_have_attribute" with timeout 5000ms
+E         - waiting for locator("body")
+E           14 × locator resolved to <body>…</body>
+E              - unexpected value "null"
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User"
+E         - text: Project
+E         - combobox "Project"
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - text: "401 {\"detail\":\"missing X-User header\"}"
+E       - list
+
+generated\test_req004_ui.py:40: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-181752-C9AE\reports\junit-test_req004_ui-83f859.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_req004_tc4_api_errors_displayed - As...
+1 failed, 3 passed in 12.23s
+

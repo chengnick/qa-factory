@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="4" time="22.547" timestamp="2026-09-29T02:23:15.136826+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_req004_tc1_url_params_preselect" time="4.440" /><testcase classname="generated.test_req004_ui" name="test_req004_tc2_task_creation_updates_list" time="5.924"><failure message="AssertionError: Locator expected to contain text 'New UI Test Task'&#10;Actual value:  &#10;Call log:&#10;  - Expect &quot;to_contain_text&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;task-list&quot;)&#10;    14 × locator resolved to &lt;ul id=&quot;tasks&quot; data-testid=&quot;task-list&quot;&gt;&lt;/ul&gt;&#10;       - unexpected value &quot;&quot;&#10;&#10;Aria snapshot:&#10;- heading &quot;TaskBoard&quot; [level=1]&#10;- banner:&#10;  - text: User&#10;  - combobox &quot;User&quot;:&#10;    - option &quot;alice&quot; [selected]&#10;    - option &quot;bob&quot;&#10;    - option &quot;carol&quot;&#10;    - option &quot;dave&quot;&#10;  - text: Project&#10;  - combobox &quot;Project&quot;:&#10;    - option &quot;gen-217bed57&quot;&#10;    - option &quot;gen-61d121ce&quot; [selected]&#10;  - textbox &quot;New project&quot;&#10;  - button &quot;Add project&quot;&#10;- textbox &quot;New task title&quot;&#10;- button &quot;Create&quot;&#10;- list">page = &lt;Page url='http://127.0.0.1:52048/?user=alice&amp;project=2'&gt;
+base_url = 'http://127.0.0.1:52048'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000016A02A987C0&gt;
+
+    def test_req004_tc2_task_creation_updates_list(page, base_url, new_project):
+        pid = new_project(owner="alice", members=())
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("New UI Test Task")
+        page.get_by_test_id("create-btn").click()
+    
+        task_list = page.get_by_test_id("task-list")
+&gt;       expect(task_list).to_contain_text("New UI Test Task")
+E       AssertionError: Locator expected to contain text 'New UI Test Task'
+E       Actual value:  
+E       Call log:
+E         - Expect "to_contain_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-list")
+E           14 × locator resolved to &lt;ul id="tasks" data-testid="task-list"&gt;&lt;/ul&gt;
+E              - unexpected value ""
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User":
+E           - option "alice" [selected]
+E           - option "bob"
+E           - option "carol"
+E           - option "dave"
+E         - text: Project
+E         - combobox "Project":
+E           - option "gen-217bed57"
+E           - option "gen-61d121ce" [selected]
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - list
+
+generated\test_req004_ui.py:24: AssertionError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_req004_tc3_task_title_html_escaped" time="5.599"><failure message="AssertionError: Locator expected to have text '&lt;b&gt;x&lt;/b&gt;'&#10;Actual value: None&#10;Error: element(s) not found &#10;Call log:&#10;  - Expect &quot;to_have_text&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;task-title&quot;).first&#10;&#10;Aria snapshot:&#10;- heading &quot;TaskBoard&quot; [level=1]&#10;- banner:&#10;  - text: User&#10;  - combobox &quot;User&quot;:&#10;    - option &quot;alice&quot; [selected]&#10;    - option &quot;bob&quot;&#10;    - option &quot;carol&quot;&#10;    - option &quot;dave&quot;&#10;  - text: Project&#10;  - combobox &quot;Project&quot;:&#10;    - option &quot;gen-217bed57&quot;&#10;    - option &quot;gen-61d121ce&quot;&#10;    - option &quot;gen-30c25466&quot; [selected]&#10;  - textbox &quot;New project&quot;&#10;  - button &quot;Add project&quot;&#10;- textbox &quot;New task title&quot;&#10;- button &quot;Create&quot;&#10;- list">page = &lt;Page url='http://127.0.0.1:52048/?user=alice&amp;project=3'&gt;
+base_url = 'http://127.0.0.1:52048'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000016A02B0E840&gt;
+
+    def test_req004_tc3_task_title_html_escaped(page, base_url, new_project):
+        pid = new_project(owner="alice", members=())
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("&lt;b&gt;x&lt;/b&gt;")
+        page.get_by_test_id("create-btn").click()
+    
+        task_title_el = page.get_by_test_id("task-title").first
+&gt;       expect(task_title_el).to_have_text("&lt;b&gt;x&lt;/b&gt;")
+E       AssertionError: Locator expected to have text '&lt;b&gt;x&lt;/b&gt;'
+E       Actual value: None
+E       Error: element(s) not found 
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-title").first
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User":
+E           - option "alice" [selected]
+E           - option "bob"
+E           - option "carol"
+E           - option "dave"
+E         - text: Project
+E         - combobox "Project":
+E           - option "gen-217bed57"
+E           - option "gen-61d121ce"
+E           - option "gen-30c25466" [selected]
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - list
+
+generated\test_req004_ui.py:35: AssertionError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_req004_tc4_api_errors_displayed" time="6.520"><failure message="AssertionError: Locator expected to have attribute 'true'&#10;Actual value: None &#10;Call log:&#10;  - Expect &quot;to_have_attribute&quot; with timeout 5000ms&#10;  - waiting for locator(&quot;body&quot;)&#10;    14 × locator resolved to &lt;body&gt;…&lt;/body&gt;&#10;       - unexpected value &quot;null&quot;&#10;&#10;Aria snapshot:&#10;- heading &quot;TaskBoard&quot; [level=1]&#10;- banner:&#10;  - text: User&#10;  - combobox &quot;User&quot;&#10;  - text: Project&#10;  - combobox &quot;Project&quot;&#10;  - textbox &quot;New project&quot;&#10;  - button &quot;Add project&quot;&#10;- textbox &quot;New task title&quot;&#10;- button &quot;Create&quot;&#10;- text: &quot;401 {\&quot;detail\&quot;:\&quot;missing X-User header\&quot;}&quot;&#10;- list">page = &lt;Page url='http://127.0.0.1:52048/?user=unknown_user&amp;project=1'&gt;
+base_url = 'http://127.0.0.1:52048'
+
+    def test_req004_tc4_api_errors_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=unknown_user&amp;project=1")
+&gt;       expect(page.locator("body")).to_have_attribute("data-ready", "true")
+E       AssertionError: Locator expected to have attribute 'true'
+E       Actual value: None 
+E       Call log:
+E         - Expect "to_have_attribute" with timeout 5000ms
+E         - waiting for locator("body")
+E           14 × locator resolved to &lt;body&gt;…&lt;/body&gt;
+E              - unexpected value "null"
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User"
+E         - text: Project
+E         - combobox "Project"
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - text: "401 {\"detail\":\"missing X-User header\"}"
+E       - list
+
+generated\test_req004_ui.py:40: AssertionError</failure></testcase></testsuite></testsuites>

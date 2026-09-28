@@ -1,0 +1,117 @@
+{
+  "run_id": "RUN-20260928-174355-26C5",
+  "trace_id": "bc550144626c02de6206eb7e78af670e",
+  "trace_file": "trace.json",
+  "requirement_id": "REQ-004",
+  "llm": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.0,
+  "prompt_version": "v3",
+  "dataset": "clean",
+  "sut_bugs": [],
+  "git_commit": {
+    "sha": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "dirty": false
+  },
+  "lockfile_sha256": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6",
+  "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac",
+  "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+  "policy_path": "config/agent_policy.yaml",
+  "started_at": "2026-09-28T17:43:55+00:00",
+  "round": 2,
+  "sut_url": null,
+  "evaluation_mode": true,
+  "set": "test",
+  "frozen_sha256": "e919ca706db4e80b32fc9b50495dbe28dda966af9a6a89718dc1e542b9e9f703",
+  "verdict": "TEST_BROKEN",
+  "surface_verdict": "TEST_BROKEN",
+  "error": null,
+  "differential": {
+    "status": "COMPLETE",
+    "verdict": "TEST_BROKEN",
+    "reason": null,
+    "counts": {
+      "detected": 0,
+      "missed": 0,
+      "broken": 3,
+      "passed": 0,
+      "tests": 3
+    },
+    "test_health": {
+      "healthy": 0,
+      "total": 3
+    }
+  },
+  "generated_files": [
+    "generated/test_req004_ui.py"
+  ],
+  "finished_at": "2026-09-28T17:46:18+00:00",
+  "duration_s": 143.1,
+  "models_seen": [
+    "gemini-3.5-flash-lite"
+  ],
+  "tokens": {
+    "input": 3110,
+    "output": 1172,
+    "total": 4282
+  },
+  "underlying_verdict": null,
+  "classification": {
+    "counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "TEST": 3
+      },
+      "rules": {
+        "R10": 3
+      }
+    },
+    "surface_counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "TEST": 3
+      },
+      "rules": {
+        "R10": 3
+      }
+    },
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form (ERROR) | cross-validation R10",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+      "unverified": false
+    },
+    "flaky": false
+  },
+  "security": {
+    "events": 3,
+    "breach": false,
+    "types": [
+      "WORKFLOW_VIOLATION"
+    ]
+  },
+  "permission_checks": {
+    "permission_checks": 3,
+    "allowed": 3,
+    "denied": 0
+  },
+  "revision_rounds": 1,
+  "workflow": {
+    "status": "FAIL",
+    "goal_drift": false,
+    "violations": [
+      "W05",
+      "W05",
+      "W05"
+    ],
+    "missing_evidence": 3
+  }
+}

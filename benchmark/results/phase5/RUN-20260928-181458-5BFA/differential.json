@@ -1,0 +1,164 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B01"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 4,
+    "broken": 0,
+    "passed": 0,
+    "tests": 5
+  },
+  "test_health": {
+    "healthy": 5,
+    "total": 5
+  },
+  "file_hashes": {
+    "generated/test_req003_api.py": "a2fd5dd2aab42749da83774dae6a81516c9b233ee3e362379d0fe94c64347929"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B01"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc1_limit_offset_validation",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc2_default_limit_offset",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc3_total_unaffected_by_pagination",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+          "outcome": "FAIL",
+          "message": "assert 0 == 1\n +  where 0 = len([])"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc5_offset_gte_total_empty_items",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req003_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req003_api-f15e23.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc1_limit_offset_validation",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc2_default_limit_offset",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc3_total_unaffected_by_pagination",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc5_offset_gte_total_empty_items",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req003_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req003_api-d7267f.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc1_limit_offset_validation",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc2_default_limit_offset",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc3_total_unaffected_by_pagination",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: assert 0 == 1\n +  where 0 = len([])"
+    },
+    {
+      "node_id": "generated/test_req003_api.py::test_req003_tc5_offset_gte_total_empty_items",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

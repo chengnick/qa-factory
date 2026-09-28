@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="16.905" timestamp="2026-09-29T03:21:23.238886+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_tc1_create_task_updates_list" time="4.400" /><testcase classname="generated.test_req004_ui" name="test_tc2_task_title_html_escaped" time="5.911"><failure message="AssertionError: Locator expected to have text '&lt;b&gt;x&lt;/b&gt;'&#10;Actual value: x &#10;Call log:&#10;  - Expect &quot;to_have_text&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;task-title&quot;).first&#10;    13 × locator resolved to &lt;span class=&quot;title&quot; data-testid=&quot;task-title&quot;&gt;…&lt;/span&gt;&#10;       - unexpected value &quot;x&quot;&#10;&#10;Aria snapshot:&#10;- text: x">page = &lt;Page url='http://127.0.0.1:60389/?user=alice&amp;project=2'&gt;
+base_url = 'http://127.0.0.1:60389'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000014C9FCD5120&gt;
+
+    def test_tc2_task_title_html_escaped(page, base_url, new_project):
+        pid = new_project(owner="alice", members=())
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("&lt;b&gt;x&lt;/b&gt;")
+        page.get_by_test_id("create-btn").click()
+    
+        task_title = page.get_by_test_id("task-title").first
+&gt;       expect(task_title).to_have_text("&lt;b&gt;x&lt;/b&gt;")
+E       AssertionError: Locator expected to have text '&lt;b&gt;x&lt;/b&gt;'
+E       Actual value: x 
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-title").first
+E           13 × locator resolved to &lt;span class="title" data-testid="task-title"&gt;…&lt;/span&gt;
+E              - unexpected value "x"
+E       
+E       Aria snapshot:
+E       - text: x
+
+generated\test_req004_ui.py:23: AssertionError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_tc3_api_error_shows_message" time="6.544"><failure message="AssertionError: Locator expected not to be empty&#10;Actual value: empty &#10;Call log:&#10;  - Expect &quot;to_be_empty&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;error&quot;)&#10;    14 × locator resolved to &lt;div id=&quot;error&quot; data-testid=&quot;error&quot;&gt;&lt;/div&gt;&#10;       - unexpected value &quot;empty&quot;">page = &lt;Page url='http://127.0.0.1:60389/?user=alice&amp;project=99999'&gt;
+base_url = 'http://127.0.0.1:60389'
+
+    def test_tc3_api_error_shows_message(page, base_url):
+        page.goto(f"{base_url}/?user=alice&amp;project=99999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_area = page.get_by_test_id("error")
+&gt;       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to &lt;div id="error" data-testid="error"&gt;&lt;/div&gt;
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:32: AssertionError</failure></testcase></testsuite></testsuites>

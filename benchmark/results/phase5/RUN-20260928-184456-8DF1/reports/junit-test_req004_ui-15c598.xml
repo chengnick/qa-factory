@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="12.501" timestamp="2026-09-29T02:45:48.598448+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_tc1_create_task_updates_list_without_reload" time="4.937"><failure message="AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'">page = &lt;Page url='http://127.0.0.1:50860/?user=alice&amp;project=1'&gt;
+base_url = 'http://127.0.0.1:50860'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000020D23C1F2E0&gt;
+
+    def test_tc1_create_task_updates_list_without_reload(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("New UI Task")
+        page.get_by_test_id("create-btn").click()
+    
+        task_item = page.get_by_test_id("task-item").filter(has_text="New UI Task")
+&gt;       expect(task_item).toBeVisible()
+E       AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'
+
+generated\test_req004_ui.py:12: AttributeError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_tc2_task_title_with_html_displayed_as_plain_text" time="0.613"><failure message="AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'">page = &lt;Page url='http://127.0.0.1:50860/?user=alice&amp;project=2'&gt;
+base_url = 'http://127.0.0.1:50860'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000020D23D79D00&gt;
+
+    def test_tc2_task_title_with_html_displayed_as_plain_text(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("&lt;b&gt;x&lt;/b&gt;")
+        page.get_by_test_id("create-btn").click()
+    
+        task_title = page.get_by_test_id("task-title").filter(has_text="&lt;b&gt;x&lt;/b&gt;")
+&gt;       expect(task_title).toBeVisible()
+E       AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible'
+
+generated\test_req004_ui.py:23: AttributeError</failure></testcase><testcase classname="generated.test_req004_ui" name="test_tc3_api_error_displays_message_in_error_area" time="6.873"><failure message="AssertionError: Locator expected not to be empty&#10;Actual value: empty &#10;Call log:&#10;  - Expect &quot;to_be_empty&quot; with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;error&quot;)&#10;    14 × locator resolved to &lt;div id=&quot;error&quot; data-testid=&quot;error&quot;&gt;&lt;/div&gt;&#10;       - unexpected value &quot;empty&quot;">page = &lt;Page url='http://127.0.0.1:50860/?user=alice&amp;project=3'&gt;
+base_url = 'http://127.0.0.1:50860'
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x0000020D23DAE980&gt;
+
+    def test_tc3_api_error_displays_message_in_error_area(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&amp;project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        # Submitting empty title should trigger an API error or validation error
+        page.get_by_test_id("new-title").fill("")
+        page.get_by_test_id("create-btn").click()
+    
+        error_area = page.get_by_test_id("error")
+&gt;       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to &lt;div id="error" data-testid="error"&gt;&lt;/div&gt;
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:37: AssertionError</failure></testcase></testsuite></testsuites>

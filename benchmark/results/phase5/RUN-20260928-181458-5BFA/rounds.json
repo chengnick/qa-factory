@@ -1,0 +1,46 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req003_api.py",
+          "snapshot": "generated/round1/test_req003_api.py",
+          "sha256": "6c7e43b8e4bce87a5b861d334611bfe212ca2959df9d18b9d8de6d7d7cd6538a"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc1_limit_offset_validation",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc2_default_limit_offset",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc3_total_unaffected_by_pagination",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+          "outcome": "FAIL",
+          "message": "assert 0 == 1\n +  where 0 = len([])",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req003_api.py::test_req003_tc5_offset_gte_total_empty_items",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

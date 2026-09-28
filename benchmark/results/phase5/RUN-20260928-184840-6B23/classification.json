@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity (FAIL)",
+      "span_id": "5691842b17bf8c4e",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity (FAIL)",
+        "span_id": "5691842b17bf8c4e",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: {'items': [], 'limit': 20, 'offset': 0, 'total': 0}\nassert 0 == 1\n +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req009_api.py::test_req009_tc1_search_case_insensitivity",
+        "unverified": false
+      }
+    ]
+  }
+}

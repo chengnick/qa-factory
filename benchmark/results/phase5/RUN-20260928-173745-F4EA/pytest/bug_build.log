@@ -1,0 +1,62 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+.F.F                                                                     [100%]
+================================== FAILURES ===================================
+___________________ test_req004_tc2_task_title_html_escaped ___________________
+
+page = <Page url='http://127.0.0.1:62501/?user=alice&project=2'>
+base_url = 'http://127.0.0.1:62501'
+new_project = <function new_project.<locals>.create at 0x000002427CC10AE0>
+
+    def test_req004_tc2_task_title_html_escaped(page, base_url, new_project):
+        pid = new_project(owner="alice")
+        page.goto(f"{base_url}/?user=alice&project={pid}")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        page.get_by_test_id("new-title").fill("<b>x</b>")
+        page.get_by_test_id("create-btn").click()
+    
+        task_list = page.get_by_test_id("task-list")
+>       expect(task_list).to_contain_text("<b>x</b>")
+E       AssertionError: Locator expected to contain text '<b>x</b>'
+E       Actual value: xtodo→ in_progress 
+E       Call log:
+E         - Expect "to_contain_text" with timeout 5000ms
+E         - waiting for get_by_test_id("task-list")
+E           - locator resolved to <ul id="tasks" data-testid="task-list"></ul>
+E           - unexpected value ""
+E           13 × locator resolved to <ul id="tasks" data-testid="task-list">…</ul>
+E              - unexpected value "xtodo→ in_progress"
+E       
+E       Aria snapshot:
+E       - list:
+E         - listitem:
+E           - text: x todo
+E           - button "→ in_progress"
+
+generated\test_req004_ui.py:24: AssertionError
+_________________ test_req004_tc4_api_error_displays_message __________________
+
+page = <Page url='http://127.0.0.1:62501/?user=alice&project=999999'>
+base_url = 'http://127.0.0.1:62501'
+
+    def test_req004_tc4_api_error_displays_message(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=999999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_area = page.get_by_test_id("error")
+>       expect(error_area).not_to_be_empty()
+E       AssertionError: Locator expected not to be empty
+E       Actual value: empty 
+E       Call log:
+E         - Expect "to_be_empty" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value "empty"
+
+generated\test_req004_ui.py:44: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-173745-F4EA\reports\junit-test_req004_ui-3c321a.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped
+FAILED generated/test_req004_ui.py::test_req004_tc4_api_error_displays_message
+2 failed, 2 passed in 17.45s
+

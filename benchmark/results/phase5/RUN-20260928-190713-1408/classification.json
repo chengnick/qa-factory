@@ -1,0 +1,136 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot",
+      "span_id": "b0fe606d5c770def",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "SUT": 3
+      },
+      "rules": {
+        "R11U": 3
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot",
+        "span_id": "b0fe606d5c770def",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+        "unverified": true
+      },
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n",
+        "span_id": "b0fe606d5c770def",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+        "unverified": true
+      },
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | test generated/test_req004_ui.py",
+        "span_id": "b0fe606d5c770def",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAr",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "SUT": 2,
+        "TEST": 1
+      },
+      "rules": {
+        "R11": 2,
+        "R12": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAr",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combob",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "ASSERTION",
+        "matched_rule": "R12",
+        "evidence": "bug build: AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | clean build: Assertio",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+        "unverified": false
+      }
+    ]
+  }
+}

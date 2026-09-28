@@ -1,0 +1,10 @@
+{
+  "requirement_id": "REQ-006",
+  "files": [
+    {
+      "path": "generated/test_req006_api.py",
+      "content": "import pytest\nimport httpx\n\ndef test_tc1_assign_task_to_non_member(as_user, new_project, user_ids):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\", members=())\n    \n    # Create a task in the project\n    r_task = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Test Task\"})\n    assert r_task.status_code == 201, r_task.text\n    task_id = r_task.json()[\"id\"]\n    \n    # Bob is not a project member\n    bob_id = user_ids[\"bob\"]\n    \n    # Try to assign task to bob\n    r_patch = alice.patch(f\"/api/tasks/{task_id}\", json={\"assignee_id\": bob_id})\n    assert r_patch.status_code == 422, r_patch.text\n    \n    # Verify assignee remains unchanged (None)\n    r_get = alice.get(f\"/api/tasks/{task_id}\")\n    assert r_get.status_code == 200, r_get.text\n    assert r_get.json()[\"assignee_id\"] is None, r_get.text\n\ndef test_tc2_assign_task_to_non_existent_user(as_user, new_project):\n    alice = as_user(\"alice\")\n    pid = new_project(owner=\"alice\", members=())\n    \n    # Create a task in the project\n    r_task = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Test Task\"})\n    assert r_task.status_code == 201, r_task.text\n    task_id = r_task.json()[\"id\"]\n    \n    # Non-existent user ID\n    non_existent_id = 99999\n    \n    # Try to assign task to non-existent user\n    r_patch = alice.patch(f\"/api/tasks/{task_id}\", json={\"assignee_id\": non_existent_id})\n    assert r_patch.status_code == 422, r_patch.text\n",
+      "surface": "api"
+    }
+  ]
+}

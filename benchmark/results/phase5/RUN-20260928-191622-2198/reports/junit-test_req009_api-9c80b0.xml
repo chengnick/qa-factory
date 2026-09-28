@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="1.847" timestamp="2026-09-29T03:18:28.976939+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req009_api" name="test_tc1_search_case_insensitive" time="1.289"><failure message="assert 0 == 1&#10; +  where 0 = len([])">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x00000275732F2020&gt;
+
+    def test_tc1_search_case_insensitive(as_user):
+        alice = as_user(
+            "alice"
+        )
+        proj_res = alice.post("/api/projects", json={"name": "Project Alpha"})
+        assert proj_res.status_code == 201, proj_res.text
+        pid = proj_res.json()["id"]
+    
+        task_res = alice.post(
+            f"/api/projects/{pid}/tasks", json={"title": "Fix Login Bug"}
+        )
+        assert task_res.status_code == 201, task_res.text
+    
+        search_res = alice.get(f"/api/projects/{pid}/tasks?q=login")
+        assert search_res.status_code == 200, search_res.text
+        data = search_res.json()
+        assert "items" in data
+&gt;       assert len(data["items"]) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+generated\test_req009_api.py:21: AssertionError</failure></testcase><testcase classname="generated.test_req009_api" name="test_tc2_sql_wildcards_literal" time="0.012" /><testcase classname="generated.test_req009_api" name="test_tc3_search_status_pagination" time="0.015" /></testsuite></testsuites>

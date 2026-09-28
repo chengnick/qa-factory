@@ -1,0 +1,52 @@
+{
+  "requirement_id": "REQ-008",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project owner deletes task successfully",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: alice"
+      ],
+      "expected": "僅專案 owner 或任務建立者可刪除任務，成功回傳 204。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Task creator who is not project owner deletes task successfully",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/members with X-User: alice to add bob as member",
+        "POST /api/projects/{pid}/tasks with X-User: bob to create a task",
+        "DELETE /api/tasks/{tid} with X-User: bob"
+      ],
+      "expected": "僅專案 owner 或任務建立者可刪除任務，成功回傳 204。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Other project member attempts to delete task",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/members with X-User: alice to add bob as member",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: bob",
+        "GET /api/tasks/{tid} with X-User: alice"
+      ],
+      "expected": "其他專案成員嘗試刪除任務時回傳 403，且任務仍存在。"
+    },
+    {
+      "id": "TC-4",
+      "title": "Non-project member attempts to delete task",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with X-User: alice to create a project",
+        "POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "DELETE /api/tasks/{tid} with X-User: carol"
+      ],
+      "expected": "非專案成員嘗試刪除任務時回傳 403。"
+    }
+  ]
+}

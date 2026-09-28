@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="2.887" timestamp="2026-09-29T03:15:59.593037+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req006_api" name="test_assign_task_to_non_project_member_returns_422" time="2.335"><failure message="AssertionError: {&quot;id&quot;:1,&quot;project_id&quot;:1,&quot;title&quot;:&quot;Task 1&quot;,&quot;description&quot;:&quot;&quot;,&quot;status&quot;:&quot;todo&quot;,&quot;priority&quot;:3,&quot;assignee_id&quot;:2,&quot;created_by&quot;:1,&quot;created_at&quot;:&quot;2026-09-28T19:16:01.950+00:00&quot;,&quot;updated_at&quot;:&quot;2026-09-28T19:16:01.954+00:00&quot;}&#10;assert 200 == 422&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x000001D4C1C420C0&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x000001D4C1C42160&gt;
+user_ids = {'alice': 1, 'bob': 2, 'carol': 3, 'dave': 4}
+
+    def test_assign_task_to_non_project_member_returns_422(as_user, new_project, user_ids):
+        alice = as_user("alice")
+        pid = new_project(owner="alice", members=())
+    
+        # Create a task as alice
+        task_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task 1"})
+        assert task_res.status_code == 201, task_res.text
+        task_id = task_res.json()["id"]
+        original_assignee = task_res.json().get("assignee_id")
+    
+        # Try to assign task to bob who is not a project member
+        bob_id = user_ids["bob"]
+        patch_res = alice.patch(f"/api/tasks/{task_id}", json={"assignee_id": bob_id})
+&gt;       assert patch_res.status_code == 422, patch_res.text
+E       AssertionError: {"id":1,"project_id":1,"title":"Task 1","description":"","status":"todo","priority":3,"assignee_id":2,"created_by":1,"created_at":"2026-09-28T19:16:01.950+00:00","updated_at":"2026-09-28T19:16:01.954+00:00"}
+E       assert 200 == 422
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+generated\test_req006_api.py:16: AssertionError</failure></testcase><testcase classname="generated.test_req006_api" name="test_assign_task_to_non_existent_user_returns_422" time="0.008" /></testsuite></testsuites>

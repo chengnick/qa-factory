@@ -1,0 +1,983 @@
+{
+  "trace_id": "a61f2ba1601515f4ec2db9de7c399b09",
+  "run": {
+    "requirement_id": "REQ-002",
+    "sut_bugs": [
+      "B06"
+    ],
+    "started_at": "2026-09-28T17:10:59.218Z",
+    "duration_ms": 384053.63,
+    "verdict": "DEFECT_FOUND"
+  },
+  "spans": [
+    {
+      "span_id": "53ab4369f26abf62",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T17:10:59.218Z",
+      "end_time": "2026-09-28T17:17:23.271Z",
+      "duration_ms": 384053.63,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-002",
+        "qa.run.sut_bugs": [
+          "B06"
+        ],
+        "qa.run.id": "RUN-20260928-171056-7231",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "test",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "DEFECT_FOUND",
+        "qa.verdict.surface": "DEFECT_FOUND",
+        "qa.classification.total": 1,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "SUT",
+        "qa.failure.symptom": "ASSERTION",
+        "qa.failure.rule": "R11",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "dd9ba943746a40ce",
+      "parent_span_id": "53ab4369f26abf62",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T17:10:59.218Z",
+      "end_time": "2026-09-28T17:11:57.047Z",
+      "duration_ms": 57828.931,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:11:57.047Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"驗證 POST /api/projects/{pid}/tasks 與 PATCH /api/tasks/{tid} 的 title 與 priority 欄位驗證邏輯。\",\n  \"acceptance_criteria\": [\n    \"title 必填，長度須在 1 至 100 字元之間（包含邊界）。\",\n    \"title 長度為 100 字元時應被接受並回傳 201 或 200。\",\n    \"title 長度超過 100 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\",\n    \"priority 須為整數，範圍介於 1 至 5 之間（包含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。\"\n  ]\n}",
+            "length": 401,
+            "truncated": false,
+            "artifact": "spans/dd9ba943746a40ce-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2b853a56a10c9378",
+      "parent_span_id": "dd9ba943746a40ce",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:10:59.218Z",
+      "end_time": "2026-09-28T17:11:56.765Z",
+      "duration_ms": 57547.149,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 214,
+        "gen_ai.usage.output_tokens": 209
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:10:59.220Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-002:\n\n# REQ-002 任務欄位驗證\n\n`POST /api/projects/{pid}/tasks` 與 `PATCH /api/tasks/{tid}` 須驗證欄位。\n\n## 驗收準則\n- `title` 必填，長度 1–100 字元（含邊界）。\n  - 100 字元 → 接受（`201` / `200`）。\n  - 101 字元以上或空白 → `422`，**不得回 5xx**。\n- `priority` 為整數，範圍 1–5（含邊界），預設 3。\n  - 1 與 5 → 接受；0 與 6 → `422`。\n",
+            "length": 420,
+            "truncated": false,
+            "artifact": "prompts/2b853a56a10c9378-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:11:56.765Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"驗證 POST /api/projects/{pid}/tasks 與 PATCH /api/tasks/{tid} 的 title 與 priority 欄位驗證邏輯。\",\n  \"acceptance_criteria\": [\n    \"title 必填，長度須在 1 至 100 字元之間（包含邊界）。\",\n    \"title 長度為 100 字元時應被接受並回傳 201 或 200。\",\n    \"title 長度超過 100 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\",\n    \"priority 須為整數，範圍介於 1 至 5 之間（包含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。\"\n  ]\n}",
+            "length": 370,
+            "truncated": false,
+            "artifact": "prompts/2b853a56a10c9378-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "53ea62a23b996b7d",
+      "parent_span_id": "2b853a56a10c9378",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:10:59.220Z",
+      "end_time": "2026-09-28T17:11:00.660Z",
+      "duration_ms": 1440.636,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:11:00.660Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "7b9b7571473e9943",
+      "parent_span_id": "2b853a56a10c9378",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:11:05.661Z",
+      "end_time": "2026-09-28T17:11:07.202Z",
+      "duration_ms": 1541.245,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:11:07.202Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "389b3a6f9c739842",
+      "parent_span_id": "2b853a56a10c9378",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:11:17.203Z",
+      "end_time": "2026-09-28T17:11:56.759Z",
+      "duration_ms": 39555.636,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 3
+      },
+      "events": []
+    },
+    {
+      "span_id": "633e2b3588064972",
+      "parent_span_id": "53ab4369f26abf62",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T17:11:57.047Z",
+      "end_time": "2026-09-28T17:14:28.691Z",
+      "duration_ms": 151644.813,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:14:28.691Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Create task with boundary title lengths (1 and 100 characters)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with title of 1 character and no priority\",\n        \"POST /api/projects/{pid}/tasks with title of 100 characters (max boundary)\"\n      ],\n      \"expected\": \"title 必填，長度須在 1 至 100 字元之間（包含邊界）。title 長度為 100 字元時應被接受並回傳 201 或 200。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Create and update task with invalid title lengths or empty title\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with title of \\\"\\\" (empty)\",\n        \"POST /api/projects/{pid}/tasks with title exceeding 100 characters\",\n        \"POST /api/projects/{pid}/tasks with valid title to create task\",\n        \"PATCH /api/tasks/{tid} with title of \\\"\\\" (empty)\"\n      ],\n      \"expected\": \"title 長度超過 100 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Create task with priority boundary values and default value\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with title 'Task default' without priority\",\n        \"POST /api/projects/{pid}/tasks with title 'Task min' and priority 1\",\n        \"POST /api/projects/{pid}/tasks with title 'Task max' and priority 5\"\n      ],\n      \"expected\": \"priority 須為整數，範圍介於 1 至 5 之間（包含邊界），預設值為 3。priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Create and patch task with invalid priority values (0 and 6)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with valid title and priority 0\",\n        \"POST",
+            "length": 2326,
+            "truncated": true,
+            "artifact": "spans/633e2b3588064972-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b7ec5e040e51ea9c",
+      "parent_span_id": "633e2b3588064972",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:11:57.048Z",
+      "end_time": "2026-09-28T17:14:28.410Z",
+      "duration_ms": 151362.633,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1252,
+        "gen_ai.usage.output_tokens": 786
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:11:57.051Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"驗證 POST /api/projects/{pid}/tasks 與 PATCH /api/tasks/{tid} 的 title 與 priority 欄位驗證邏輯。\",\n  \"acceptance_criteria\": [\n    \"title 必填，長度須在 1 至 100 字元之間（包含邊界）。\",\n    \"title 長度為 100 字元時應被接受並回傳 201 或 200。\",\n    \"title 長度超過 100 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\",\n    \"priority 須為整數，範圍介於 1 至 5 之間（包含邊界），預設值為 3。\",\n    \"priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User: <username>`.\nSeeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.\n\n## Resources\n\n**Project**: `{id, name, owner_id}`. The creator becomes owner and member",
+            "length": 3888,
+            "truncated": true,
+            "artifact": "prompts/b7ec5e040e51ea9c-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:14:28.410Z",
+          "attributes": {
+            "text": "{\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Create task with boundary title lengths (1 and 100 characters)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with title of 1 character and no priority\",\n        \"POST /api/projects/{pid}/tasks with title of 100 characters (max boundary)\"\n      ],\n      \"expected\": \"title 必填，長度須在 1 至 100 字元之間（包含邊界）。title 長度為 100 字元時應被接受並回傳 201 或 200。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Create and update task with invalid title lengths or empty title\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with title of \\\"\\\" (empty)\",\n        \"POST /api/projects/{pid}/tasks with title exceeding 100 characters\",\n        \"POST /api/projects/{pid}/tasks with valid title to create task\",\n        \"PATCH /api/tasks/{tid} with title of \\\"\\\" (empty)\"\n      ],\n      \"expected\": \"title 長度超過 100 字元或為空白時應回傳 422 錯誤，且不得回傳 5xx。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Create task with priority boundary values and default value\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with title 'Task default' without priority\",\n        \"POST /api/projects/{pid}/tasks with title 'Task min' and priority 1\",\n        \"POST /api/projects/{pid}/tasks with title 'Task max' and priority 5\"\n      ],\n      \"expected\": \"priority 須為整數，範圍介於 1 至 5 之間（包含邊界），預設值為 3。priority 為 1 或 5 時應被接受，為 0 或 6 時應回傳 422 錯誤。\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Create and patch task with invalid priority values (0 and 6)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Project 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with valid title and priority 0\",\n        \"POST /api/projects/{pid}/tasks with",
+            "length": 2295,
+            "truncated": true,
+            "artifact": "prompts/b7ec5e040e51ea9c-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b7d6f368941625d7",
+      "parent_span_id": "b7ec5e040e51ea9c",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:11:57.051Z",
+      "end_time": "2026-09-28T17:13:55.409Z",
+      "duration_ms": 118358.642,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:13:55.409Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "42ef7f69681374a3",
+      "parent_span_id": "b7ec5e040e51ea9c",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:14:00.410Z",
+      "end_time": "2026-09-28T17:14:28.403Z",
+      "duration_ms": 27993.239,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 2
+      },
+      "events": []
+    },
+    {
+      "span_id": "24f74a66ccffa228",
+      "parent_span_id": "53ab4369f26abf62",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T17:14:28.691Z",
+      "end_time": "2026-09-28T17:17:04.688Z",
+      "duration_ms": 155997.045,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:17:04.688Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req002_api.py\",\n      \"content\": \"import pytest\\nimport httpx\\n\\ndef test_tc1_create_task_boundary_titles(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # 1 character title, no priority\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"A\\\"})\\n    assert r1.status_code in (200, 201), r1.text\\n    \\n    # 100 characters title (max boundary)\\n    long_title = \\\"a\\\" * 100\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": long_title})\\n    assert r2.status_code in (200, 201), r2.text\\n    data = r2.json()\\n    assert data[\\\"title\\\"] == long_title\\n\\ndef test_tc2_create_update_invalid_titles(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Empty title create\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"\\\"})\\n    assert r1.status_code == 422, r1.text\\n    \\n    # Exceeding 100 characters title create\\n    too_long_title = \\\"a\\\" * 101\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": too_long_title})\\n    assert r2.status_code == 422, r2.text\\n    \\n    # Create a valid task first\\n    r3 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Valid Title\\\"})\\n    assert r3.status_code in (200, 201), r3.text\\n    tid = r3.json()[\\\"id\\\"]\\n    \\n    # Patch with empty title\\n    r4 = alice.patch(f\\\"/api/tasks/{tid}\\\", json={\\\"title\\\": \\\"\\\"})\\n    assert r4.status_code == 422, r4.text\\n\\ndef test_tc3_create_task_priority_boundaries_and_default(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Default priority\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task default\\\"})\\n    assert r1.status_code in (200, 201), r1.text\\n    assert r1.json()[\\\"priority\\\"] == 3\\n    \\n    # Min priority 1\\n    r2 = alice",
+            "length": 3421,
+            "truncated": true,
+            "artifact": "spans/24f74a66ccffa228-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f56c28cf6694719f",
+      "parent_span_id": "24f74a66ccffa228",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:14:28.691Z",
+      "end_time": "2026-09-28T17:17:04.392Z",
+      "duration_ms": 155700.276,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 2126,
+        "gen_ai.usage.output_tokens": 1300
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:14:28.699Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-002:\n{\n  \"requirement_id\": \"REQ-002\",\n  \"cases\": [\n    {\n  ",
+            "length": 6659,
+            "truncated": true,
+            "artifact": "prompts/f56c28cf6694719f-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:17:04.392Z",
+          "attributes": {
+            "text": "{\n  \"files\": [\n    {\n      \"path\": \"generated/test_req002_api.py\",\n      \"surface\": \"api\",\n      \"content\": \"import pytest\\nimport httpx\\n\\ndef test_tc1_create_task_boundary_titles(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # 1 character title, no priority\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"A\\\"})\\n    assert r1.status_code in (200, 201), r1.text\\n    \\n    # 100 characters title (max boundary)\\n    long_title = \\\"a\\\" * 100\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": long_title})\\n    assert r2.status_code in (200, 201), r2.text\\n    data = r2.json()\\n    assert data[\\\"title\\\"] == long_title\\n\\ndef test_tc2_create_update_invalid_titles(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Empty title create\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"\\\"})\\n    assert r1.status_code == 422, r1.text\\n    \\n    # Exceeding 100 characters title create\\n    too_long_title = \\\"a\\\" * 101\\n    r2 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": too_long_title})\\n    assert r2.status_code == 422, r2.text\\n    \\n    # Create a valid task first\\n    r3 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Valid Title\\\"})\\n    assert r3.status_code in (200, 201), r3.text\\n    tid = r3.json()[\\\"id\\\"]\\n    \\n    # Patch with empty title\\n    r4 = alice.patch(f\\\"/api/tasks/{tid}\\\", json={\\\"title\\\": \\\"\\\"})\\n    assert r4.status_code == 422, r4.text\\n\\ndef test_tc3_create_task_priority_boundaries_and_default(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n    \\n    # Default priority\\n    r1 = alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task default\\\"})\\n    assert r1.status_code in (200, 201), r1.text\\n    assert r1.json()[\\\"priority\\\"] == 3\\n    \\n    # Min priority 1\\n    r2 = alice.post(f",
+            "length": 3390,
+            "truncated": true,
+            "artifact": "prompts/f56c28cf6694719f-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "1425cfa13ee517ba",
+      "parent_span_id": "f56c28cf6694719f",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:14:28.699Z",
+      "end_time": "2026-09-28T17:14:30.346Z",
+      "duration_ms": 1646.462,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:14:30.346Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "3594e69092bac3ff",
+      "parent_span_id": "f56c28cf6694719f",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:14:35.347Z",
+      "end_time": "2026-09-28T17:14:36.450Z",
+      "duration_ms": 1103.435,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 2,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:14:36.450Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "3159142b769dfcea",
+      "parent_span_id": "f56c28cf6694719f",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:14:46.451Z",
+      "end_time": "2026-09-28T17:14:47.887Z",
+      "duration_ms": 1436.026,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+      },
+      "attributes": {
+        "qa.retry.attempt": 3,
+        "qa.failure.symptom": "HTTP_5XX",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R3"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T17:14:47.887Z",
+          "attributes": {
+            "exception.type": "LLMUnavailableError",
+            "exception.message": "Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "eaf75ae566d67648",
+      "parent_span_id": "f56c28cf6694719f",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:15:07.889Z",
+      "end_time": "2026-09-28T17:17:04.384Z",
+      "duration_ms": 116495.058,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 4
+      },
+      "events": []
+    },
+    {
+      "span_id": "09e3d1df6c53f9c9",
+      "parent_span_id": "24f74a66ccffa228",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T17:17:04.392Z",
+      "end_time": "2026-09-28T17:17:04.680Z",
+      "duration_ms": 288.774,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req002_api.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:17:04.394Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req002_api.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:04.680Z",
+          "attributes": {
+            "text": "wrote 3069 chars to generated/test_req002_api.py",
+            "length": 48,
+            "truncated": false,
+            "artifact": "spans/09e3d1df6c53f9c9-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2c386a479dec8974",
+      "parent_span_id": "53ab4369f26abf62",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T17:17:04.691Z",
+      "end_time": "2026-09-28T17:17:09.236Z",
+      "duration_ms": 4545.019,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:17:09.236Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"executions\": [\n    {\n      \"tool\": \"pytest\",\n      \"ok\": false,\n      \"attempts\": 1,\n      \"exit_code\": 1,\n      \"summary\": \"1 failed, 3 passed in 3.01s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 4,\n        \"failures\": 1,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 1,\n        \"exception_failures\": 0,\n        \"files\": [\n          \"generated/test_req002_api.py\"\n        ],\n        \"junit\": \"reports/junit-test_req002_api-6c7ec9.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc1_create_task_boundary_titles\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc2_create_update_invalid_titles\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default\",\n            \"outcome\": \"FAIL\",\n            \"message\": \"AssertionError: {\\\"detail\\\":[{\\\"loc\\\":[\\\"body\\\",\\\"priority\\\"],\\\"msg\\\":\\\"priority must be between 1 and 5\\\"}]}\\nassert 422 in (200, 201)\\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code\"\n          },\n          {\n            \"node_id\": \"generated/test_req002_api.py::test_tc4_create_patch_invalid_priorities\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          }\n        ],\n        \"isolation\": \"L1\"\n      }\n    },\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    }\n  ]\n}",
+            "length": 1783,
+            "truncated": false,
+            "artifact": "spans/2c386a479dec8974-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b7f35f254e73ad17",
+      "parent_span_id": "2c386a479dec8974",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T17:17:04.691Z",
+      "end_time": "2026-09-28T17:17:09.219Z",
+      "duration_ms": 4527.514,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 3.01s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req002_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req002_api-6c7ec9.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:17:04.693Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "pytest",
+            "target": "generated/test_req002_api.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.pytest"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:17:09.214Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:09.219Z",
+          "attributes": {
+            "text": "..F.                                                                     [100%]\n================================== FAILURES ===================================\n____________ test_tc3_create_task_priority_boundaries_and_default _____________\n\nas_user = <function as_user.<locals>.get at 0x00000239785C2480>\nnew_project = <function new_project.<locals>.create at 0x00000239787D16C0>\n\n    def test_tc3_create_task_priority_boundaries_and_default(as_user, new_project):\n        alice = as_user(\"alice\")\n        pid = new_project(owner=\"alice\")\n    \n        # Default priority\n        r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task default\"})\n        assert r1.status_code in (200, 201), r1.text\n        assert r1.json()[\"priority\"] == 3\n    \n        # Min priority 1\n        r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task min\", \"priority\": 1})\n        assert r2.status_code in (200, 201), r2.text\n        assert r2.json()[\"priority\"] == 1\n    \n        # Max priority 5\n        r3 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task max\", \"priority\": 5})\n>       assert r3.status_code in (200, 201), r3.text\nE       AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nE       assert 422 in (200, 201)\nE        +  where 422 = <Response [422 Unprocessable Entity]>.status_code\n\ngenerated\\test_req002_api.py:57: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-171056-7231\\reports\\junit-test_req002_api-6c7ec9.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default\n1 failed, 3 passed in 3.01s\n",
+            "length": 1739,
+            "truncated": false,
+            "artifact": "spans/b7f35f254e73ad17-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "71f666897eb51e41",
+      "parent_span_id": "b7f35f254e73ad17",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:17:04.693Z",
+      "end_time": "2026-09-28T17:17:09.214Z",
+      "duration_ms": 4520.99,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 3.01s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "e1115adeeeca92df",
+      "parent_span_id": "2c386a479dec8974",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:17:09.219Z",
+      "end_time": "2026-09-28T17:17:09.231Z",
+      "duration_ms": 12.509,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:17:09.219Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:09.231Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/e1115adeeeca92df-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ee8fd86b8100ff20",
+      "parent_span_id": "53ab4369f26abf62",
+      "name": "agent.report",
+      "start_time": "2026-09-28T17:17:09.236Z",
+      "end_time": "2026-09-28T17:17:09.239Z",
+      "duration_ms": 3.001,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:17:09.239Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-002\",\n  \"summary\": \"REQ-002: 2 tool execution(s)\\n- pytest: FAILED (attempts=1, exit=1) - 1 failed, 3 passed in 3.01s\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\"\n}",
+            "length": 213,
+            "truncated": false,
+            "artifact": "spans/ee8fd86b8100ff20-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "6d5784d5128c15e4",
+      "parent_span_id": "53ab4369f26abf62",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T17:17:09.239Z",
+      "end_time": "2026-09-28T17:17:23.266Z",
+      "duration_ms": 14026.177,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [
+          "B06"
+        ],
+        "qa.eval.files": [
+          "generated/test_req002_api.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "DEFECT_FOUND",
+        "qa.eval.detected": 1,
+        "qa.eval.missed": 3,
+        "qa.eval.broken": 0,
+        "qa.eval.passed": 0,
+        "qa.eval.tests": 4
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:17:23.266Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc1_create_task_boundary_titles",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:17:23.266Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc2_create_update_invalid_titles",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:17:23.266Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+            "qa.test.bug_outcome": "FAIL",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "DETECTED",
+            "qa.test.rule": "R11"
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:17:23.266Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc4_create_patch_invalid_priorities",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "cca0fee7da0d9e91",
+      "parent_span_id": "6d5784d5128c15e4",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T17:17:09.239Z",
+      "end_time": "2026-09-28T17:17:16.619Z",
+      "duration_ms": 7380.008,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": [
+          "B06"
+        ]
+      },
+      "events": []
+    },
+    {
+      "span_id": "d726d80a1a641349",
+      "parent_span_id": "cca0fee7da0d9e91",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:17:12.012Z",
+      "end_time": "2026-09-28T17:17:12.025Z",
+      "duration_ms": 12.946,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:12.025Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/d726d80a1a641349-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "3be4b7a8bd5ed93f",
+      "parent_span_id": "cca0fee7da0d9e91",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T17:17:12.025Z",
+      "end_time": "2026-09-28T17:17:16.396Z",
+      "duration_ms": 4370.65,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 3.00s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req002_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req002_api-8fa5b4.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:17:16.393Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nassert 422 in (200, 201)\n +  where 422 = <Response [422 Unprocessable Entity]>.status_code"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:16.396Z",
+          "attributes": {
+            "text": "..F.                                                                     [100%]\n================================== FAILURES ===================================\n____________ test_tc3_create_task_priority_boundaries_and_default _____________\n\nas_user = <function as_user.<locals>.get at 0x0000024EF98D2480>\nnew_project = <function new_project.<locals>.create at 0x0000024EF9AD16C0>\n\n    def test_tc3_create_task_priority_boundaries_and_default(as_user, new_project):\n        alice = as_user(\"alice\")\n        pid = new_project(owner=\"alice\")\n    \n        # Default priority\n        r1 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task default\"})\n        assert r1.status_code in (200, 201), r1.text\n        assert r1.json()[\"priority\"] == 3\n    \n        # Min priority 1\n        r2 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task min\", \"priority\": 1})\n        assert r2.status_code in (200, 201), r2.text\n        assert r2.json()[\"priority\"] == 1\n    \n        # Max priority 5\n        r3 = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task max\", \"priority\": 5})\n>       assert r3.status_code in (200, 201), r3.text\nE       AssertionError: {\"detail\":[{\"loc\":[\"body\",\"priority\"],\"msg\":\"priority must be between 1 and 5\"}]}\nE       assert 422 in (200, 201)\nE        +  where 422 = <Response [422 Unprocessable Entity]>.status_code\n\ngenerated\\test_req002_api.py:57: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-171056-7231\\reports\\junit-test_req002_api-8fa5b4.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default\n1 failed, 3 passed in 3.00s\n",
+            "length": 1739,
+            "truncated": false,
+            "artifact": "spans/3be4b7a8bd5ed93f-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ba4aa927338682af",
+      "parent_span_id": "3be4b7a8bd5ed93f",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:17:12.025Z",
+      "end_time": "2026-09-28T17:17:16.393Z",
+      "duration_ms": 4367.675,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 3.00s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "f30e381005e4c777",
+      "parent_span_id": "6d5784d5128c15e4",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T17:17:16.624Z",
+      "end_time": "2026-09-28T17:17:23.262Z",
+      "duration_ms": 6637.207,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "693fb15d55b41c42",
+      "parent_span_id": "f30e381005e4c777",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:17:19.325Z",
+      "end_time": "2026-09-28T17:17:19.334Z",
+      "duration_ms": 9.155,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:19.334Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/693fb15d55b41c42-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ec70a485c15fb688",
+      "parent_span_id": "f30e381005e4c777",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T17:17:19.334Z",
+      "end_time": "2026-09-28T17:17:23.060Z",
+      "duration_ms": 3726.38,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req002_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req002_api-9910a5.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:17:23.060Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-171056-7231\\reports\\junit-test_req002_api-9910a5.xml -\n4 passed in 2.39s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/ec70a485c15fb688-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "c9c791d16fa8e0ec",
+      "parent_span_id": "ec70a485c15fb688",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:17:19.334Z",
+      "end_time": "2026-09-28T17:17:23.057Z",
+      "duration_ms": 3723.377,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

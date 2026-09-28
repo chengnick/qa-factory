@@ -1,0 +1,9 @@
+{
+  "summary": "Implement pagination for the project tasks list API endpoint `GET /api/projects/{pid}/tasks` with parameters `limit` and `offset`, returning items sorted by task ID in ascending order along with total count.",
+  "acceptance_criteria": [
+    "limit defaults to 20 with a valid range of 1 to 100; offset defaults to 0 and must be greater than or equal to 0; out-of-range values result in a 422 Unprocessable Entity error.",
+    "total represents the total number of matching tasks and is not affected by pagination parameters.",
+    "Fetching sequentially from offset=0 using a fixed limit until the end must yield exactly all tasks without duplicates or omissions.",
+    "When offset is greater than or equal to total, the items array must be empty."
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-009",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "4 passed in 2.39s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req009_api.py"
+        ],
+        "junit": "reports/junit-test_req009_api-af805b.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req009_api.py::test_tc1_case_insensitive_search",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req009_api.py::test_tc2_literal_percent_search",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req009_api.py::test_tc3_literal_underscore_search",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req009_api.py::test_tc4_search_status_pagination",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

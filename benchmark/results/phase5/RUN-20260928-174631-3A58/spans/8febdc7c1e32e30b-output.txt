@@ -1,0 +1,9 @@
+{
+  "requirement_id": "REQ-008",
+  "summary": "Implement authorization check for task deletion endpoint DELETE /api/tasks/{tid} allowing only the project owner or task creator to delete the task, while returning 403 for other members and non-members.",
+  "acceptance_criteria": [
+    "Only project owners or task creators are allowed to delete a task successfully with a 204 status code.",
+    "Other project members attempting to delete the task receive a 403 status code and the task remains intact.",
+    "Non-members attempting to delete the task receive a 403 status code."
+  ]
+}

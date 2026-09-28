@@ -1,0 +1,115 @@
+{
+  "run_id": "RUN-20260928-181752-C9AE",
+  "trace_id": "65ef01e6cc630bd4f3fd63ca22c87b01",
+  "trace_file": "trace.json",
+  "requirement_id": "REQ-004",
+  "llm": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "temperature": 0.0,
+  "prompt_version": "v3",
+  "dataset": "test",
+  "sut_bugs": [
+    "B05"
+  ],
+  "git_commit": {
+    "sha": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "dirty": false
+  },
+  "lockfile_sha256": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6",
+  "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac",
+  "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+  "policy_path": "config/agent_policy.yaml",
+  "started_at": "2026-09-28T18:17:52+00:00",
+  "round": 3,
+  "sut_url": null,
+  "evaluation_mode": true,
+  "set": "test",
+  "frozen_sha256": "e919ca706db4e80b32fc9b50495dbe28dda966af9a6a89718dc1e542b9e9f703",
+  "verdict": "DEFECT_FOUND",
+  "surface_verdict": "DEFECT_FOUND",
+  "error": null,
+  "differential": {
+    "status": "COMPLETE",
+    "verdict": "DEFECT_FOUND",
+    "reason": null,
+    "counts": {
+      "detected": 2,
+      "missed": 1,
+      "broken": 1,
+      "passed": 0,
+      "tests": 4
+    },
+    "test_health": {
+      "healthy": 3,
+      "total": 4
+    }
+  },
+  "generated_files": [
+    "generated/test_req004_ui.py"
+  ],
+  "finished_at": "2026-09-28T18:24:21+00:00",
+  "duration_s": 388.8,
+  "models_seen": [
+    "gemini-3.5-flash-lite"
+  ],
+  "tokens": {
+    "input": 3352,
+    "output": 1567,
+    "total": 4919
+  },
+  "underlying_verdict": null,
+  "classification": {
+    "counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "SUT": 2,
+        "TEST": 1
+      },
+      "rules": {
+        "R11": 2,
+        "R12": 1
+      }
+    },
+    "surface_counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "SUT": 3
+      },
+      "rules": {
+        "R11U": 3
+      }
+    },
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: Locator expected to contain text 'New UI Test Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_updates_list",
+      "unverified": false
+    },
+    "flaky": true
+  },
+  "security": {
+    "events": 0,
+    "breach": false,
+    "types": []
+  },
+  "permission_checks": {
+    "permission_checks": 3,
+    "allowed": 3,
+    "denied": 0
+  },
+  "revision_rounds": 1,
+  "workflow": {
+    "status": "PASS",
+    "goal_drift": false,
+    "violations": [],
+    "missing_evidence": 0
+  }
+}

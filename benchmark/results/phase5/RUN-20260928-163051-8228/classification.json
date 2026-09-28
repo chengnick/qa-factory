@@ -1,0 +1,45 @@
+{
+  "surface": {
+    "verdict": "ENV_BLOCKED",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "llm",
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3",
+      "evidence": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "span_id": "8f132ddb9bb04c16",
+      "span": "llm.chat",
+      "agent": "requirement",
+      "test_id": null,
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "PROVIDER": 1
+      },
+      "rules": {
+        "R3": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "llm",
+        "layer": "PROVIDER",
+        "symptom": "HTTP_5XX",
+        "matched_rule": "R3",
+        "evidence": "LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+        "span_id": "8f132ddb9bb04c16",
+        "span": "llm.chat",
+        "agent": "requirement",
+        "test_id": null,
+        "unverified": false
+      }
+    ]
+  },
+  "final": null
+}

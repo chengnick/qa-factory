@@ -1,0 +1,1 @@
+wrote 1379 chars to generated/test_req006_api.py

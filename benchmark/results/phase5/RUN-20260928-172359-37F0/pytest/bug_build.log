@@ -1,0 +1,49 @@
+===== pytest generated/test_req006_api.py (exit 1, attempts 1)
+F.                                                                       [100%]
+================================== FAILURES ===================================
+_______________________ test_assign_task_to_non_member ________________________
+
+as_user = <function as_user.<locals>.get at 0x00000235D65F20C0>
+user_ids = {'alice': 1, 'bob': 2, 'carol': 3, 'dave': 4}
+
+    def test_assign_task_to_non_member(as_user, user_ids):
+        alice = as_user("alice")
+    
+        # Create project by alice
+        proj_res = alice.post("/api/projects", json={"name": "Project A"})
+        assert proj_res.status_code == 201, proj_res.text
+        pid = proj_res.json()["id"]
+    
+        # Create task
+        task_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task 1"})
+        assert task_res.status_code == 201, task_res.text
+        tid = task_res.json()["id"]
+        initial_assignee = task_res.json().get("assignee_id")
+    
+        # Pick a user who is not a project member (e.g., bob if bob is not added, or find one not in members)
+        # Get all users to find one not in the project
+        users_res = alice.get("/api/users")
+        assert users_res.status_code == 200, users_res.text
+        all_users = users_res.json()
+    
+        non_member_id = None
+        for u in all_users:
+            if u["username"] != "alice":
+                non_member_id = u["id"]
+                break
+    
+        assert non_member_id is not None
+    
+        # Try to patch task with non-member assignee
+        patch_res = alice.patch(f"/api/tasks/{tid}", json={"assignee_id": non_member_id})
+>       assert patch_res.status_code == 422, patch_res.text
+E       AssertionError: {"id":1,"project_id":1,"title":"Task 1","description":"","status":"todo","priority":3,"assignee_id":2,"created_by":1,"created_at":"2026-09-28T17:30:42.335+00:00","updated_at":"2026-09-28T17:30:42.340+00:00"}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+generated\test_req006_api.py:33: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-172359-37F0\reports\junit-test_req006_api-cc7375.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req006_api.py::test_assign_task_to_non_member - Asserti...
+1 failed, 1 passed in 2.92s
+

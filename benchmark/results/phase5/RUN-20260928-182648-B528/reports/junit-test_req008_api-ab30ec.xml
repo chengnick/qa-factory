@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="4.996" timestamp="2026-09-29T02:27:46.850075+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req008_api" name="test_owner_deletes_task" time="2.327" /><testcase classname="generated.test_req008_api" name="test_task_creator_deletes_task" time="1.044" /><testcase classname="generated.test_req008_api" name="test_member_not_owner_nor_creator_deletes_task" time="0.009"><failure message="AssertionError: &#10;assert 204 == 403&#10; +  where 204 = &lt;Response [204 No Content]&gt;.status_code">as_user = &lt;function as_user.&lt;locals&gt;.get at 0x00000294DFB32340&gt;
+new_project = &lt;function new_project.&lt;locals&gt;.create at 0x00000294DFD41800&gt;
+user_ids = {'alice': 1, 'bob': 2, 'carol': 3, 'dave': 4}
+
+    def test_member_not_owner_nor_creator_deletes_task(as_user, new_project, user_ids):
+        alice = as_user("alice")
+        bob = as_user("bob")
+    
+        pid = new_project(owner="alice")
+    
+        member_res = alice.post(f"/api/projects/{pid}/members", json={"user_id": user_ids["bob"]})
+        assert member_res.status_code == 201, member_res.text
+    
+        task_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task by alice"})
+        assert task_res.status_code == 201, task_res.text
+        tid = task_res.json()["id"]
+    
+        del_res = bob.delete(f"/api/tasks/{tid}")
+&gt;       assert del_res.status_code == 403, del_res.text
+E       AssertionError: 
+E       assert 204 == 403
+E        +  where 204 = &lt;Response [204 No Content]&gt;.status_code
+
+generated\test_req008_api.py:47: AssertionError</failure></testcase><testcase classname="generated.test_req008_api" name="test_non_member_deletes_task" time="1.046" /></testsuite></testsuites>

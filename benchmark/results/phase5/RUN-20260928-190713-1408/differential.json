@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B05"
+  ],
+  "counts": {
+    "detected": 2,
+    "missed": 0,
+    "broken": 1,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 2,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req004_ui.py": "9209fb2505dd35adbda06f131e11ef73c4841e7b6739b9e0f6e196d9d7646aa5"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B05"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combob"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combobox \"Project\":\n    - option \"gen-a303aadc\"\n    - option \"gen-fb1af012\" [selected]"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-c63859.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-e07d78.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combob"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combobox \"Project\":\n    - option \"gen-a303aadc\"\n    - option \"gen-fb1af012\" [selected]"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "FAIL",
+      "decision": "BROKEN",
+      "rule": "R12",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\" | clean build: AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+    }
+  ]
+}

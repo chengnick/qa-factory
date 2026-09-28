@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "43b6f72ac66ac15f116db0db1efc42de7cbb595cf7c5b2ee55e6d602633bc50b"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_instantly",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to contain text 'Instant Task'\nActual value:  \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    14 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n       - unexpected value \"\"\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combob",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: None\nError: element(s) not found \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\")\n\nAria snapshot:\n- heading \"TaskBoard\" [level=1]\n- banner:\n  - text: User\n  - combobox \"User\":\n    - option \"alice\" [selected]\n    - option \"bob\"\n    - option \"carol\"\n    - option \"dave\"\n  - text: Project\n  - combobox \"Project\":\n    - option \"gen-3c69351d\"\n    - option \"gen-915df31b\" [selected]",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_errors_displayed",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\"",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

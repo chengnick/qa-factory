@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Allowed status transitions",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo"
+    },
+    {
+      "id": "TC-2",
+      "title": "Transition from done state returns 409 and keeps status unchanged",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 2\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 2\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice"
+      ],
+      "expected": "done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變"
+    },
+    {
+      "id": "TC-3",
+      "title": "Forbidden transitions (todo to done and same status transitions)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 3\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 3\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409"
+    },
+    {
+      "id": "TC-4",
+      "title": "Invalid to field value returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 4\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 4\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"} as alice"
+      ],
+      "expected": "當請求中的 to 欄位不是合法狀態時，必須回傳 422"
+    }
+  ]
+}

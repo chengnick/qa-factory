@@ -1,0 +1,41 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+_________________ test_tc1_create_task_successfully_via_form __________________
+
+base_url = 'http://127.0.0.1:62718'
+new_project = <function new_project.<locals>.create at 0x000001B8E2F8FB00>
+
+    def test_tc1_create_task_successfully_via_form(base_url, new_project):
+        pid = new_project(owner="alice")
+>       page.goto(f"{base_url}/?user=alice&project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:5: NameError
+__________________ test_tc2_task_title_html_tags_as_literal ___________________
+
+base_url = 'http://127.0.0.1:62718'
+new_project = <function new_project.<locals>.create at 0x000001B8E2F8FCE0>
+
+    def test_tc2_task_title_html_tags_as_literal(base_url, new_project):
+        pid = new_project(owner="alice")
+>       page.goto(f"{base_url}/?user=alice&project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:16: NameError
+_________________ test_tc3_display_error_message_on_api_error _________________
+
+base_url = 'http://127.0.0.1:62718'
+
+    def test_tc3_display_error_message_on_api_error(base_url):
+>       page.goto(f"{base_url}/?user=alice&project=99999")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:31: NameError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-174355-26C5\reports\junit-test_req004_ui-a822b8.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form
+FAILED generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal
+FAILED generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error
+3 failed in 2.91s
+

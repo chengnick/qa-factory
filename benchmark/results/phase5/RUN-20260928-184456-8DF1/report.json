@@ -1,0 +1,70 @@
+{
+  "run_id": "RUN-20260928-184456-8DF1",
+  "trace_id": "b347e062ee8b716fe0868521fe8a1ead",
+  "meta": {
+    "requirement_id": "REQ-004",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_version": "v3",
+    "dataset": "test",
+    "sut_bugs": [
+      "B05"
+    ],
+    "git_commit": "60ad3be985a06cee57bf85c25ebcf1bf86e64705",
+    "git_dirty": false,
+    "policy_hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+    "conftest_sha256": "1870b9aa4d9bebc8c1cd3a83ac4f51271e8b88c43dccd0831c1e954bf8cbcdac"
+  },
+  "verdict": "TEST_BROKEN",
+  "surface_verdict": "DEFECT_FOUND",
+  "underlying_verdict": null,
+  "differential": {
+    "status": "COMPLETE",
+    "detected": 0,
+    "broken": 3,
+    "missed": 0
+  },
+  "attribution": [
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible' | test generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload (ERROR) | cross-validation R10",
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload"
+    },
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: AttributeError: 'LocatorAssertions' object has no attribute 'toBeVisible' | test generated/test_req004_ui.py::test_tc2_task_title_with_html_displayed_as_plain_text (ERROR) | cross-validation R10",
+      "test_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_displayed_as_plain_text"
+    },
+    {
+      "span": "",
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12",
+      "evidence": "bug build: AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | clean build: Ass",
+      "test_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area"
+    }
+  ],
+  "reliability": {
+    "retries": 0,
+    "flaky": false
+  },
+  "security": {
+    "events": 0,
+    "breach": false
+  },
+  "workflow": {
+    "workflow_status": "PASS",
+    "violations": [],
+    "goal_drift": false,
+    "rounds": 1
+  },
+  "isolation_level": "L1",
+  "isolation_note": "in-process audit hook (tools/l1_guard.py): writes, network and processes limited; not an OS sandbox",
+  "artifacts_complete": true,
+  "missing_evidence": []
+}

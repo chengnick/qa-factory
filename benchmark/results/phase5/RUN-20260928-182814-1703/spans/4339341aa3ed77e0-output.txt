@@ -1,0 +1,40 @@
+{
+  "requirement_id": "REQ-006",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Assign task to a non-project member",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with body {\"name\": \"Project A\"} as alice",
+        "POST /api/projects/{pid}/tasks with body {\"title\": \"Task 1\"} as alice",
+        "PATCH /api/tasks/{tid} with body {\"assignee_id\": \"dave-id\"} as alice"
+      ],
+      "expected": "指派對象必須是該專案成員；否則回傳 422 狀態碼，且任務的 assignee 維持不變。"
+    },
+    {
+      "id": "TC-2",
+      "title": "Assign task to a non-existent user",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with body {\"name\": \"Project B\"} as alice",
+        "POST /api/projects/{pid}/tasks with body {\"title\": \"Task 2\"} as alice",
+        "PATCH /api/tasks/{tid} with body {\"assignee_id\": \"non-existent-id\"} as alice"
+      ],
+      "expected": "指派不存在的使用者時，回傳 422 狀態碼。"
+    },
+    {
+      "id": "TC-3",
+      "title": "Unassign task by passing null as assignee_id",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with body {\"name\": \"Project C\"} as alice",
+        "POST /api/projects/{pid}/members with body {\"user_id\": \"bob-id\"} as alice",
+        "POST /api/projects/{pid}/tasks with body {\"title\": \"Task 3\"} as alice",
+        "PATCH /api/tasks/{tid} with body {\"assignee_id\": \"bob-id\"} as alice",
+        "PATCH /api/tasks/{tid} with body {\"assignee_id\": null} as alice"
+      ],
+      "expected": "可傳入 null 來取消任務的指派。"
+    }
+  ]
+}

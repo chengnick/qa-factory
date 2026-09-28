@@ -1,0 +1,62 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "4 failed in 3.05s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 4,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-3fd2b6.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+            "outcome": "ERROR",
+            "message": "NameError: name 'page' is not defined"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display",
+            "outcome": "ERROR",
+            "message": "NameError: name 'page' is not defined"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+            "outcome": "ERROR",
+            "message": "NameError: name 'page' is not defined"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed",
+            "outcome": "ERROR",
+            "message": "NameError: name 'page' is not defined"
+          }
+        ],
+        "isolation": "L1",
+        "evidence": []
+      }
+    }
+  ]
+}

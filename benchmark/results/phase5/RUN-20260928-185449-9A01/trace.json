@@ -1,0 +1,815 @@
+{
+  "trace_id": "b39d348f3ffcfe873beece9aee5939a6",
+  "run": {
+    "requirement_id": "REQ-005",
+    "sut_bugs": [
+      "B02"
+    ],
+    "started_at": "2026-09-28T18:54:52.503Z",
+    "duration_ms": 23673.404,
+    "verdict": "DEFECT_FOUND"
+  },
+  "spans": [
+    {
+      "span_id": "ea860db03520e758",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T18:54:52.503Z",
+      "end_time": "2026-09-28T18:55:16.177Z",
+      "duration_ms": 23673.404,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-005",
+        "qa.run.sut_bugs": [
+          "B02"
+        ],
+        "qa.run.id": "RUN-20260928-185449-9A01",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "dev",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "DEFECT_FOUND",
+        "qa.verdict.surface": "DEFECT_FOUND",
+        "qa.classification.total": 1,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "SUT",
+        "qa.failure.symptom": "ASSERTION",
+        "qa.failure.rule": "R11",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "522343dd0b9fb5fb",
+      "parent_span_id": "ea860db03520e758",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T18:54:52.503Z",
+      "end_time": "2026-09-28T18:54:53.830Z",
+      "duration_ms": 1326.275,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:53.830Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-005\",\n  \"summary\": \"實作任務狀態流轉 API (POST /api/tasks/{tid}/transition)，根據規則驗證狀態變更並回傳對應的 HTTP 狀態碼。\",\n  \"acceptance_criteria\": [\n    \"允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo\",\n    \"done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變\",\n    \"其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409\",\n    \"當請求中的 to 欄位不是合法狀態時，必須回傳 422\"\n  ]\n}",
+            "length": 360,
+            "truncated": false,
+            "artifact": "spans/522343dd0b9fb5fb-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "14aec4dcb7c0a2f2",
+      "parent_span_id": "522343dd0b9fb5fb",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:54:52.503Z",
+      "end_time": "2026-09-28T18:54:53.827Z",
+      "duration_ms": 1323.232,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 203,
+        "gen_ai.usage.output_tokens": 165
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:54:52.506Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-005:\n\n# REQ-005 任務狀態流轉\n\n`POST /api/tasks/{tid}/transition` body `{\"to\": \"<status>\"}`。狀態：`todo`、`in_progress`、`done`。\n\n## 驗收準則\n- 允許的流轉：`todo → in_progress`、`in_progress → done`、`in_progress → todo`。\n- `done` 為終態：從 `done` 出發的任何流轉 → `409`，任務狀態不變。\n- 其他未列出的流轉（含 `todo → done`、同狀態）→ `409`。\n- `to` 不是合法狀態 → `422`。\n",
+            "length": 462,
+            "truncated": false,
+            "artifact": "prompts/14aec4dcb7c0a2f2-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:54:53.827Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"實作任務狀態流轉 API (POST /api/tasks/{tid}/transition)，根據規則驗證狀態變更並回傳對應的 HTTP 狀態碼。\",\n  \"acceptance_criteria\": [\n    \"允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo\",\n    \"done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變\",\n    \"其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409\",\n    \"當請求中的 to 欄位不是合法狀態時，必須回傳 422\"\n  ]\n}",
+            "length": 329,
+            "truncated": false,
+            "artifact": "prompts/14aec4dcb7c0a2f2-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ce9f4b20f25f714d",
+      "parent_span_id": "14aec4dcb7c0a2f2",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:52.506Z",
+      "end_time": "2026-09-28T18:54:53.824Z",
+      "duration_ms": 1318.189,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "b8b35a0099cd4864",
+      "parent_span_id": "ea860db03520e758",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T18:54:53.830Z",
+      "end_time": "2026-09-28T18:54:56.517Z",
+      "duration_ms": 2687.076,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:54:56.517Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-005\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Allowed status transitions\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task 1\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"in_progress\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"done\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"todo\\\"} as alice\"\n      ],\n      \"expected\": \"允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Transition from done state returns 409 and keeps status unchanged\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 2\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task 2\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"in_progress\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"done\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"in_progress\\\"} as alice\"\n      ],\n      \"expected\": \"done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Forbidden transitions (todo to done and same status transitions)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 3\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task 3\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"done\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"todo\\\"} as alice\"\n      ],\n      \"expected\": \"其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Invalid to field value returns 422\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 4\\\"} as alice\",\n        \"POST /api/pro",
+            "length": 2212,
+            "truncated": true,
+            "artifact": "spans/b8b35a0099cd4864-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "5b93ff7c4f32c864",
+      "parent_span_id": "b8b35a0099cd4864",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:54:53.830Z",
+      "end_time": "2026-09-28T18:54:56.514Z",
+      "duration_ms": 2684.03,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1208,
+        "gen_ai.usage.output_tokens": 744
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:54:53.834Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-005\",\n  \"summary\": \"實作任務狀態流轉 API (POST /api/tasks/{tid}/transition)，根據規則驗證狀態變更並回傳對應的 HTTP 狀態碼。\",\n  \"acceptance_criteria\": [\n    \"允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo\",\n    \"done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變\",\n    \"其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409\",\n    \"當請求中的 to 欄位不是合法狀態時，必須回傳 422\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User: <username>`.\nSeeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.\n\n## Resources\n\n**Project**: `{id, name, owner_id}`. The creator becomes owner and member.\n**Task**: `{id, project_id, title, desc",
+            "length": 3847,
+            "truncated": true,
+            "artifact": "prompts/5b93ff7c4f32c864-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:54:56.514Z",
+          "attributes": {
+            "text": "{\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Allowed status transitions\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 1\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task 1\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"in_progress\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"done\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"todo\\\"} as alice\"\n      ],\n      \"expected\": \"允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Transition from done state returns 409 and keeps status unchanged\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 2\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task 2\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"in_progress\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"done\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"in_progress\\\"} as alice\"\n      ],\n      \"expected\": \"done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Forbidden transitions (todo to done and same status transitions)\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 3\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title\\\": \\\"Task 3\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"done\\\"} as alice\",\n        \"POST /api/tasks/{tid}/transition with {\\\"to\\\": \\\"todo\\\"} as alice\"\n      ],\n      \"expected\": \"其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Invalid to field value returns 422\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"POST /api/projects with {\\\"name\\\": \\\"Proj 4\\\"} as alice\",\n        \"POST /api/projects/{pid}/tasks with {\\\"title",
+            "length": 2181,
+            "truncated": true,
+            "artifact": "prompts/5b93ff7c4f32c864-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "e473e725550bcc48",
+      "parent_span_id": "5b93ff7c4f32c864",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:53.834Z",
+      "end_time": "2026-09-28T18:54:56.510Z",
+      "duration_ms": 2676.026,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "4290a261d71377c5",
+      "parent_span_id": "ea860db03520e758",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T18:54:56.517Z",
+      "end_time": "2026-09-28T18:55:01.129Z",
+      "duration_ms": 4612.599,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:55:01.129Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-005\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req005_api.py\",\n      \"content\": \"import pytest\\nimport httpx\\n\\ndef test_req005_tc1_allowed_status_transitions(as_user):\\n    client = as_user(\\\"alice\\\")\\n    \\n    # Create project\\n    res = client.post(\\\"/api/projects\\\", json={\\\"name\\\": \\\"Proj 1\\\"})\\n    assert res.status_code == 201, res.text\\n    pid = res.json()[\\\"id\\\"]\\n    \\n    # Create task\\n    res = client.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task 1\\\"})\\n    assert res.status_code == 201, res.text\\n    tid = res.json()[\\\"id\\\"]\\n    assert res.json()[\\\"status\\\"] == \\\"todo\\\"\\n    \\n    # todo -> in_progress\\n    res = client.post(f\\\"/api/tasks/{tid}/transition\\\", json={\\\"to\\\": \\\"in_progress\\\"})\\n    assert res.status_code == 200, res.text\\n    assert res.json()[\\\"status\\\"] == \\\"in_progress\\\"\\n    \\n    # in_progress -> done\\n    res = client.post(f\\\"/api/tasks/{tid}/transition\\\", json={\\\"to\\\": \\\"done\\\"})\\n    assert res.status_code == 200, res.text\\n    assert res.json()[\\\"status\\\"] == \\\"done\\\"\\n    \\n    # To allow testing done -> in_progress -> todo for the next transition test or direct check:\\n    # Wait, TC-1 specifies allowed: todo -> in_progress, in_progress -> done, in_progress -> todo.\\n    # Let's create another task to test in_progress -> todo transition specifically.\\n    res = client.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task 1b\\\"})\\n    assert res.status_code == 201, res.text\\n    tid_b = res.json()[\\\"id\\\"]\\n    \\n    res = client.post(f\\\"/api/tasks/{tid_b}/transition\\\", json={\\\"to\\\": \\\"in_progress\\\"})\\n    assert res.status_code == 200, res.text\\n    \\n    res = client.post(f\\\"/api/tasks/{tid_b}/transition\\\", json={\\\"to\\\": \\\"todo\\\"})\\n    assert res.status_code == 200, res.text\\n    assert res.json()[\\\"status\\\"] == \\\"todo\\\"\\n\\n\\ndef test_req005_tc2_transition_from_done_returns_409(as_user):\\n    client = as_user(\\\"alice\\\")\\n    \\n    res = client.post(\\\"/api/projects\\\", jso",
+            "length": 4472,
+            "truncated": true,
+            "artifact": "spans/4290a261d71377c5-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "775c76821acba40e",
+      "parent_span_id": "4290a261d71377c5",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T18:54:56.517Z",
+      "end_time": "2026-09-28T18:55:01.115Z",
+      "duration_ms": 4598.544,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 2084,
+        "gen_ai.usage.output_tokens": 1603
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T18:54:56.526Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-005:\n{\n  \"requirement_id\": \"REQ-005\",\n  \"cases\": [\n    {\n  ",
+            "length": 6545,
+            "truncated": true,
+            "artifact": "prompts/775c76821acba40e-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T18:55:01.115Z",
+          "attributes": {
+            "text": "{\n  \"files\": [\n    {\n      \"path\": \"generated/test_req005_api.py\",\n      \"surface\": \"api\",\n      \"content\": \"import pytest\\nimport httpx\\n\\ndef test_req005_tc1_allowed_status_transitions(as_user):\\n    client = as_user(\\\"alice\\\")\\n    \\n    # Create project\\n    res = client.post(\\\"/api/projects\\\", json={\\\"name\\\": \\\"Proj 1\\\"})\\n    assert res.status_code == 201, res.text\\n    pid = res.json()[\\\"id\\\"]\\n    \\n    # Create task\\n    res = client.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task 1\\\"})\\n    assert res.status_code == 201, res.text\\n    tid = res.json()[\\\"id\\\"]\\n    assert res.json()[\\\"status\\\"] == \\\"todo\\\"\\n    \\n    # todo -> in_progress\\n    res = client.post(f\\\"/api/tasks/{tid}/transition\\\", json={\\\"to\\\": \\\"in_progress\\\"})\\n    assert res.status_code == 200, res.text\\n    assert res.json()[\\\"status\\\"] == \\\"in_progress\\\"\\n    \\n    # in_progress -> done\\n    res = client.post(f\\\"/api/tasks/{tid}/transition\\\", json={\\\"to\\\": \\\"done\\\"})\\n    assert res.status_code == 200, res.text\\n    assert res.json()[\\\"status\\\"] == \\\"done\\\"\\n    \\n    # To allow testing done -> in_progress -> todo for the next transition test or direct check:\\n    # Wait, TC-1 specifies allowed: todo -> in_progress, in_progress -> done, in_progress -> todo.\\n    # Let's create another task to test in_progress -> todo transition specifically.\\n    res = client.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": \\\"Task 1b\\\"})\\n    assert res.status_code == 201, res.text\\n    tid_b = res.json()[\\\"id\\\"]\\n    \\n    res = client.post(f\\\"/api/tasks/{tid_b}/transition\\\", json={\\\"to\\\": \\\"in_progress\\\"})\\n    assert res.status_code == 200, res.text\\n    \\n    res = client.post(f\\\"/api/tasks/{tid_b}/transition\\\", json={\\\"to\\\": \\\"todo\\\"})\\n    assert res.status_code == 200, res.text\\n    assert res.json()[\\\"status\\\"] == \\\"todo\\\"\\n\\n\\ndef test_req005_tc2_transition_from_done_returns_409(as_user):\\n    client = as_user(\\\"alice\\\")\\n    \\n    res = client.post(\\\"/api/projects\\\", json={\\\"na",
+            "length": 4441,
+            "truncated": true,
+            "artifact": "prompts/775c76821acba40e-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "27be8614ebffedfe",
+      "parent_span_id": "775c76821acba40e",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:54:56.526Z",
+      "end_time": "2026-09-28T18:55:01.110Z",
+      "duration_ms": 4584.546,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "a5ec7674b416f651",
+      "parent_span_id": "4290a261d71377c5",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T18:55:01.115Z",
+      "end_time": "2026-09-28T18:55:01.125Z",
+      "duration_ms": 10.055,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req005_api.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:55:01.117Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req005_api.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:01.124Z",
+          "attributes": {
+            "text": "wrote 4042 chars to generated/test_req005_api.py",
+            "length": 48,
+            "truncated": false,
+            "artifact": "spans/a5ec7674b416f651-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "a4507c070d05f87a",
+      "parent_span_id": "ea860db03520e758",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T18:55:01.132Z",
+      "end_time": "2026-09-28T18:55:04.370Z",
+      "duration_ms": 3238.209,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:55:04.370Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-005\",\n  \"executions\": [\n    {\n      \"tool\": \"pytest\",\n      \"ok\": false,\n      \"attempts\": 1,\n      \"exit_code\": 1,\n      \"summary\": \"1 failed, 3 passed in 1.85s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 4,\n        \"failures\": 1,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 1,\n        \"exception_failures\": 0,\n        \"files\": [\n          \"generated/test_req005_api.py\"\n        ],\n        \"junit\": \"reports/junit-test_req005_api-318bc8.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req005_api.py::test_req005_tc1_allowed_status_transitions\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409\",\n            \"outcome\": \"FAIL\",\n            \"message\": \"AssertionError: {\\\"id\\\":3,\\\"project_id\\\":2,\\\"title\\\":\\\"Task 2\\\",\\\"description\\\":\\\"\\\",\\\"status\\\":\\\"in_progress\\\",\\\"priority\\\":3,\\\"assignee_id\\\":null,\\\"created_by\\\":1,\\\"created_at\\\":\\\"2026-09-28T18:55:03.771+00:00\\\",\\\"updated_at\\\":\\\"2026-09-28T18:55:03.778+00:00\\\"}\\nassert 200 == 409\\n +  where 200 = <Response [200 OK]>.status_code\"\n          },\n          {\n            \"node_id\": \"generated/test_req005_api.py::test_req005_tc3_forbidden_transitions\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req005_api.py::test_req005_tc4_invalid_to_field_value_returns_422\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          }\n        ],\n        \"isolation\": \"L1\"\n      }\n    },\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    }\n  ]\n}",
+            "length": 1924,
+            "truncated": false,
+            "artifact": "spans/a4507c070d05f87a-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "285fd46cb955d836",
+      "parent_span_id": "a4507c070d05f87a",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:55:01.132Z",
+      "end_time": "2026-09-28T18:55:04.359Z",
+      "duration_ms": 3226.619,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 1.85s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req005_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req005_api-318bc8.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:55:01.136Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "pytest",
+            "target": "generated/test_req005_api.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.pytest"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T18:55:04.355Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-28T18:55:03.771+00:00\",\"updated_at\":\"2026-09-28T18:55:03.778+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:04.358Z",
+          "attributes": {
+            "text": "                                                               [100%]\n================================== FAILURES ===================================\n______________ test_req005_tc2_transition_from_done_returns_409 _______________\n\nas_user = <function as_user.<locals>.get at 0x0000020C12942340>\n\n    def test_req005_tc2_transition_from_done_returns_409(as_user):\n        client = as_user(\"alice\")\n    \n        res = client.post(\"/api/projects\", json={\"name\": \"Proj 2\"})\n        assert res.status_code == 201, res.text\n        pid = res.json()[\"id\"]\n    \n        res = client.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task 2\"})\n        assert res.status_code == 201, res.text\n        tid = res.json()[\"id\"]\n    \n        # todo -> in_progress\n        res = client.post(f\"/api/tasks/{tid}/transition\", json={\"to\": \"in_progress\"})\n        assert res.status_code == 200, res.text\n    \n        # in_progress -> done\n        res = client.post(f\"/api/tasks/{tid}/transition\", json={\"to\": \"done\"})\n        assert res.status_code == 200, res.text\n        assert res.json()[\"status\"] == \"done\"\n    \n        # done -> in_progress (should fail with 409 and status remains done)\n        res = client.post(f\"/api/tasks/{tid}/transition\", json={\"to\": \"in_progress\"})\n>       assert res.status_code == 409, res.text\nE       AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-28T18:55:03.771+00:00\",\"updated_at\":\"2026-09-28T18:55:03.778+00:00\"}\nE       assert 200 == 409\nE        +  where 200 = <Response [200 OK]>.status_code\n\ngenerated\\test_req005_api.py:65: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-185449-9A01\\reports\\junit-test_req005_api-318bc8.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409\n1 failed, 3 passed in 1.85s\n",
+            "length": 2010,
+            "truncated": true,
+            "artifact": "spans/285fd46cb955d836-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "fafdf5086d3d3d75",
+      "parent_span_id": "285fd46cb955d836",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:55:01.136Z",
+      "end_time": "2026-09-28T18:55:04.355Z",
+      "duration_ms": 3219.153,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 1.85s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "7db9641f484ba693",
+      "parent_span_id": "a4507c070d05f87a",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:55:04.359Z",
+      "end_time": "2026-09-28T18:55:04.367Z",
+      "duration_ms": 8.584,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T18:55:04.359Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:04.367Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/7db9641f484ba693-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "6fd400ea41650104",
+      "parent_span_id": "ea860db03520e758",
+      "name": "agent.report",
+      "start_time": "2026-09-28T18:55:04.370Z",
+      "end_time": "2026-09-28T18:55:04.444Z",
+      "duration_ms": 73.582,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T18:55:04.444Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-005\",\n  \"summary\": \"REQ-005: 2 tool execution(s)\\n- pytest: FAILED (attempts=1, exit=1) - 1 failed, 3 passed in 1.85s\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\"\n}",
+            "length": 213,
+            "truncated": false,
+            "artifact": "spans/6fd400ea41650104-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "5da55cdd36843c88",
+      "parent_span_id": "ea860db03520e758",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T18:55:04.444Z",
+      "end_time": "2026-09-28T18:55:16.170Z",
+      "duration_ms": 11725.953,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [
+          "B02"
+        ],
+        "qa.eval.files": [
+          "generated/test_req005_api.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "DEFECT_FOUND",
+        "qa.eval.detected": 1,
+        "qa.eval.missed": 3,
+        "qa.eval.broken": 0,
+        "qa.eval.passed": 0,
+        "qa.eval.tests": 4
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:55:16.170Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req005_api.py::test_req005_tc1_allowed_status_transitions",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:55:16.170Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409",
+            "qa.test.bug_outcome": "FAIL",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "DETECTED",
+            "qa.test.rule": "R11"
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:55:16.170Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req005_api.py::test_req005_tc3_forbidden_transitions",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T18:55:16.170Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req005_api.py::test_req005_tc4_invalid_to_field_value_returns_422",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "3160d895c7a36e51",
+      "parent_span_id": "5da55cdd36843c88",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T18:55:04.444Z",
+      "end_time": "2026-09-28T18:55:10.543Z",
+      "duration_ms": 6099.182,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": [
+          "B02"
+        ]
+      },
+      "events": []
+    },
+    {
+      "span_id": "4063e27be9c7e030",
+      "parent_span_id": "3160d895c7a36e51",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:55:07.139Z",
+      "end_time": "2026-09-28T18:55:07.147Z",
+      "duration_ms": 8.661,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:07.147Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/4063e27be9c7e030-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "c7ebec64a6139169",
+      "parent_span_id": "3160d895c7a36e51",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:55:07.147Z",
+      "end_time": "2026-09-28T18:55:10.348Z",
+      "duration_ms": 3200.573,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 1.86s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req005_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req005_api-1d4ecd.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T18:55:10.345Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-28T18:55:09.761+00:00\",\"updated_at\":\"2026-09-28T18:55:09.766+00:00\"}\nassert 200 == 409\n +  where 200 = <Response [200 OK]>.status_code"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:10.348Z",
+          "attributes": {
+            "text": "                                                               [100%]\n================================== FAILURES ===================================\n______________ test_req005_tc2_transition_from_done_returns_409 _______________\n\nas_user = <function as_user.<locals>.get at 0x000001BFE4692340>\n\n    def test_req005_tc2_transition_from_done_returns_409(as_user):\n        client = as_user(\"alice\")\n    \n        res = client.post(\"/api/projects\", json={\"name\": \"Proj 2\"})\n        assert res.status_code == 201, res.text\n        pid = res.json()[\"id\"]\n    \n        res = client.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"Task 2\"})\n        assert res.status_code == 201, res.text\n        tid = res.json()[\"id\"]\n    \n        # todo -> in_progress\n        res = client.post(f\"/api/tasks/{tid}/transition\", json={\"to\": \"in_progress\"})\n        assert res.status_code == 200, res.text\n    \n        # in_progress -> done\n        res = client.post(f\"/api/tasks/{tid}/transition\", json={\"to\": \"done\"})\n        assert res.status_code == 200, res.text\n        assert res.json()[\"status\"] == \"done\"\n    \n        # done -> in_progress (should fail with 409 and status remains done)\n        res = client.post(f\"/api/tasks/{tid}/transition\", json={\"to\": \"in_progress\"})\n>       assert res.status_code == 409, res.text\nE       AssertionError: {\"id\":3,\"project_id\":2,\"title\":\"Task 2\",\"description\":\"\",\"status\":\"in_progress\",\"priority\":3,\"assignee_id\":null,\"created_by\":1,\"created_at\":\"2026-09-28T18:55:09.761+00:00\",\"updated_at\":\"2026-09-28T18:55:09.766+00:00\"}\nE       assert 200 == 409\nE        +  where 200 = <Response [200 OK]>.status_code\n\ngenerated\\test_req005_api.py:65: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-185449-9A01\\reports\\junit-test_req005_api-1d4ecd.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409\n1 failed, 3 passed in 1.86s\n",
+            "length": 2010,
+            "truncated": true,
+            "artifact": "spans/c7ebec64a6139169-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f6ba77c2fcf0da09",
+      "parent_span_id": "c7ebec64a6139169",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:55:07.147Z",
+      "end_time": "2026-09-28T18:55:10.345Z",
+      "duration_ms": 3197.533,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 1.86s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "f5ede86deeca4d98",
+      "parent_span_id": "5da55cdd36843c88",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T18:55:10.549Z",
+      "end_time": "2026-09-28T18:55:16.166Z",
+      "duration_ms": 5616.692,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "a6115d96049c3cb7",
+      "parent_span_id": "f5ede86deeca4d98",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T18:55:13.257Z",
+      "end_time": "2026-09-28T18:55:13.265Z",
+      "duration_ms": 8.008,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:13.265Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/a6115d96049c3cb7-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "3d61682cb73de87a",
+      "parent_span_id": "f5ede86deeca4d98",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T18:55:13.265Z",
+      "end_time": "2026-09-28T18:55:15.967Z",
+      "duration_ms": 2702.36,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req005_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req005_api-fb9b82.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T18:55:15.967Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-185449-9A01\\reports\\junit-test_req005_api-fb9b82.xml -\n4 passed in 1.37s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/3d61682cb73de87a-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "e19b363aa7b23932",
+      "parent_span_id": "3d61682cb73de87a",
+      "name": "attempt",
+      "start_time": "2026-09-28T18:55:13.265Z",
+      "end_time": "2026-09-28T18:55:15.965Z",
+      "duration_ms": 2700.321,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

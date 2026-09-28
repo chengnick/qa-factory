@@ -1,0 +1,53 @@
+===== pytest generated/test_req009_api.py (exit 1, attempts 1)
+F.F                                                                      [100%]
+================================== FAILURES ===================================
+___________________ test_req009_tc1_case_insensitive_search ___________________
+
+as_user = <function as_user.<locals>.get at 0x00000177FD062160>
+new_project = <function new_project.<locals>.create at 0x00000177FD062200>
+
+    def test_req009_tc1_case_insensitive_search(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Fix Login Bug"})
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Other task"})
+    
+        r = alice.get(f"/api/projects/{pid}/tasks", params={"q": "login"})
+        assert r.status_code == 200, r.text
+        data = r.json()
+>       assert len(data["items"]) == 1, data["items"]
+E       AssertionError: []
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+generated\test_req009_api.py:13: AssertionError
+__________________ test_req009_tc3_search_status_pagination ___________________
+
+as_user = <function as_user.<locals>.get at 0x00000177FD062160>
+new_project = <function new_project.<locals>.create at 0x00000177FD2C8180>
+
+    def test_req009_tc3_search_status_pagination(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Bug one"})
+        t2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Bug two"}).json()
+        alice.post(f"/api/projects/{pid}/tasks", json={"title": "Feature bug"})
+    
+        alice.post(f"/api/projects/{pid}/tasks/{t2['id']}/transition", json={"to": "in_progress"})
+    
+        r = alice.get(f"/api/projects/{pid}/tasks", params={"q": "Bug", "status": "todo", "limit": 10, "offset": 0})
+        assert r.status_code == 200, r.text
+        data = r.json()
+        titles = [item["title"] for item in data["items"]]
+>       assert "Bug two" not in titles
+E       AssertionError: assert 'Bug two' not in ['Bug one', 'Bug two']
+
+generated\test_req009_api.py:44: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-173103-415B\reports\junit-test_req009_api-fdf46e.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req009_api.py::test_req009_tc1_case_insensitive_search
+FAILED generated/test_req009_api.py::test_req009_tc3_search_status_pagination
+2 failed, 1 passed in 2.91s
+

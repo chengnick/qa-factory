@@ -1,0 +1,9 @@
+{
+  "requirement_id": "REQ-009",
+  "summary": "Implement task search API GET /api/projects/{pid}/tasks?q=<text> to perform substring matching on task titles.",
+  "acceptance_criteria": [
+    "Search is case-insensitive for ASCII characters, e.g., q=login must match the title Fix Login Bug.",
+    "Special characters '%' and '_' are treated as literal characters and not as wildcards.",
+    "Search can be used simultaneously with status filtering and pagination."
+  ]
+}

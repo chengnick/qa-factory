@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R11U",
+      "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_task_title_invalid (FAIL)",
+      "span_id": "aca400bbc801affc",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req002_api.py::test_tc2_task_title_invalid",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "HTTP_5XX",
+        "matched_rule": "R11U",
+        "evidence": "AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_task_title_invalid (FAIL)",
+        "span_id": "aca400bbc801affc",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req002_api.py::test_tc2_task_title_invalid",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R11",
+      "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_task_title_invalid (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req002_api.py::test_tc2_task_title_invalid",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "HTTP_5XX",
+        "matched_rule": "R11",
+        "evidence": "bug build: AssertionError: Internal Server Error\nassert 500 == 422\n +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_task_title_invalid (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req002_api.py::test_tc2_task_title_invalid",
+        "unverified": false
+      }
+    ]
+  }
+}

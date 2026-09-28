@@ -1,0 +1,14 @@
+[system]
+You are a QA analyst. Read the requirement and answer with JSON only: {"summary": str, "acceptance_criteria": [str, ...]}
+
+[user]
+Requirement REQ-009:
+
+# REQ-009 任務搜尋
+
+`GET /api/projects/{pid}/tasks?q=<text>` 以標題做子字串搜尋。
+
+## 驗收準則
+- 搜尋**不區分大小寫**（ASCII）：`q=login` 須找到標題 `Fix Login Bug`。
+- `%`、`_` 視為一般字元，不作萬用字元。
+- 可與 `status` 篩選及分頁同時使用。

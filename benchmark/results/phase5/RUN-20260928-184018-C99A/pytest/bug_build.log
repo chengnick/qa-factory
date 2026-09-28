@@ -1,0 +1,29 @@
+===== pytest generated/test_req007_api.py (exit 1, attempts 1)
+.F.                                                                      [100%]
+================================== FAILURES ===================================
+_____________ test_tc2_non_project_member_cannot_read_task_detail _____________
+
+as_user = <function as_user.<locals>.get at 0x000001A3AF362020>
+new_project = <function new_project.<locals>.create at 0x000001A3AF3622A0>
+
+    def test_tc2_non_project_member_cannot_read_task_detail(as_user, new_project):
+        alice = as_user("alice")
+        bob = as_user("bob")
+        pid = new_project(owner="alice")
+    
+        task_res = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Alice's Task"})
+        assert task_res.status_code == 201, task_res.text
+        tid = task_res.json()["id"]
+    
+        res = bob.get(f"/api/tasks/{tid}")
+>       assert res.status_code == 403, res.text
+E       AssertionError: {"id":2,"project_id":2,"title":"Alice's Task","description":"","status":"todo","priority":3,"assignee_id":null,"created_by":1,"created_at":"2026-09-28T18:40:51.997+00:00","updated_at":"2026-09-28T18:40:51.997+00:00"}
+E       assert 200 == 403
+E        +  where 200 = <Response [200 OK]>.status_code
+
+generated\test_req007_api.py:27: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-184018-C99A\reports\junit-test_req007_api-e495ce.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req007_api.py::test_tc2_non_project_member_cannot_read_task_detail
+1 failed, 2 passed in 3.98s
+

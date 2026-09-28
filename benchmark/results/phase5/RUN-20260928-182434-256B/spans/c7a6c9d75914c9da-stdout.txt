@@ -1,0 +1,33 @@
+..F.                                                                     [100%]
+================================== FAILURES ===================================
+_______________________ test_tc3_create_task_priorities _______________________
+
+as_user = <function as_user.<locals>.get at 0x000002CCB9072200>
+new_project = <function new_project.<locals>.create at 0x000002CCB92714E0>
+
+    def test_tc3_create_task_priorities(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Default priority
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task Default"})
+        assert r1.status_code == 201, r1.text
+        assert r1.json()["priority"] == 3
+    
+        # Min priority (1)
+        r2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task P1", "priority": 1})
+        assert r2.status_code == 201, r2.text
+        assert r2.json()["priority"] == 1
+    
+        # Max priority (5)
+        r3 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Task P5", "priority": 5})
+>       assert r3.status_code == 201, r3.text
+E       AssertionError: {"detail":[{"loc":["body","priority"],"msg":"priority must be between 1 and 5"}]}
+E       assert 422 == 201
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+generated\test_req002_api.py:47: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-182434-256B\reports\junit-test_req002_api-79f8c0.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req002_api.py::test_tc3_create_task_priorities - Assert...
+1 failed, 3 passed in 2.88s

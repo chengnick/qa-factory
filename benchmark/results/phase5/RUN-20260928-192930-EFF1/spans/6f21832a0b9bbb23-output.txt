@@ -1,0 +1,41 @@
+{
+  "requirement_id": "REQ-009",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Search tasks case-insensitively using query parameter q",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with header X-User: alice and body {\"name\": \"Project One\"} to create a project",
+        "POST /api/projects/{pid}/tasks with header X-User: alice and body {\"title\": \"Fix Login Bug\"} to create a task",
+        "GET /api/projects/{pid}/tasks?q=login with header X-User: alice"
+      ],
+      "expected": "Search must be case-insensitive (ASCII): q=login must match the title 'Fix Login Bug'."
+    },
+    {
+      "id": "TC-2",
+      "title": "Treat special SQL LIKE characters percent and underscore as literal characters",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with header X-User: alice and body {\"name\": \"Project Two\"} to create a project",
+        "POST /api/projects/{pid}/tasks with header X-User: alice and body {\"title\": \"100% complete_task\"} to create a task",
+        "POST /api/projects/{pid}/tasks with header X-User: alice and body {\"title\": \"100A complete_taskX\"} to create another task",
+        "GET /api/projects/{pid}/tasks?q=100% with header X-User: alice",
+        "GET /api/projects/{pid}/tasks?q=_complete with header X-User: alice"
+      ],
+      "expected": "Special SQL LIKE characters '%' and '_' must be treated as literal characters and not as wildcards."
+    },
+    {
+      "id": "TC-3",
+      "title": "Use search query parameter q simultaneously with status filtering and pagination",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with header X-User: alice and body {\"name\": \"Project Three\"} to create a project",
+        "POST /api/projects/{pid}/tasks with header X-User: alice and body {\"title\": \"Login feature A\"} to create a task",
+        "POST /api/projects/{pid}/tasks with header X-User: alice and body {\"title\": \"Login feature B\"} to create another task",
+        "GET /api/projects/{pid}/tasks?q=Login&status=todo&limit=1&offset=0 with header X-User: alice"
+      ],
+      "expected": "The search query parameter 'q' can be used simultaneously with 'status' filtering and pagination."
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "surface": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc1_url_params_preselect (ERROR)",
+      "span_id": "f264cdd8c9be46d2",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 4,
+      "unknown": 0,
+      "layers": {
+        "TEST": 4
+      },
+      "rules": {
+        "R10": 4
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc1_url_params_preselect (ERROR)",
+        "span_id": "f264cdd8c9be46d2",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+        "unverified": false
+      },
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display (ERROR)",
+        "span_id": "f264cdd8c9be46d2",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display",
+        "unverified": false
+      },
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped (ERROR)",
+        "span_id": "f264cdd8c9be46d2",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+        "unverified": false
+      },
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed (ERROR)",
+        "span_id": "f264cdd8c9be46d2",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed",
+        "unverified": false
+      }
+    ]
+  },
+  "final": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc1_url_params_preselect (ERROR) | cross-validation R10",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 4,
+      "unknown": 0,
+      "layers": {
+        "TEST": 4
+      },
+      "rules": {
+        "R10": 4
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc1_url_params_preselect (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc1_url_params_preselect",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed",
+        "unverified": false
+      }
+    ]
+  }
+}

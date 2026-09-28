@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req009_api.py",
+          "snapshot": "generated/round1/test_req009_api.py",
+          "sha256": "e4cac070c8ef111edd689d0eb5b9823283eed13306b75e65192cbeb429588b1a"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc1_case_insensitive_search",
+          "outcome": "FAIL",
+          "message": "AssertionError: Expected 1 task, got []\nassert 0 == 1\n +  where 0 = len([])",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc2_literal_percent_and_underscore",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req009_api.py::test_req009_tc3_simultaneous_search_status_pagination",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

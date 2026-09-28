@@ -1,0 +1,843 @@
+{
+  "trace_id": "741a42aabc0690f41d620f39484a81c7",
+  "run": {
+    "requirement_id": "REQ-003",
+    "sut_bugs": [
+      "B01"
+    ],
+    "started_at": "2026-09-28T19:03:29.163Z",
+    "duration_ms": 210706.043,
+    "verdict": "DEFECT_FOUND"
+  },
+  "spans": [
+    {
+      "span_id": "87f4733f847434ad",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T19:03:29.163Z",
+      "end_time": "2026-09-28T19:06:59.869Z",
+      "duration_ms": 210706.043,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-003",
+        "qa.run.sut_bugs": [
+          "B01"
+        ],
+        "qa.run.id": "RUN-20260928-190326-2D86",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "test",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "DEFECT_FOUND",
+        "qa.verdict.surface": "DEFECT_FOUND",
+        "qa.classification.total": 1,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "SUT",
+        "qa.failure.symptom": "ASSERTION",
+        "qa.failure.rule": "R11",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "5fcb67d2179f1750",
+      "parent_span_id": "87f4733f847434ad",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T19:03:29.163Z",
+      "end_time": "2026-09-28T19:03:52.306Z",
+      "duration_ms": 23142.792,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T19:03:52.306Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-003\",\n  \"summary\": \"Implement pagination for the project task list API (GET /api/projects/{pid}/tasks) with limit, offset, and sorting by task id ascending.\",\n  \"acceptance_criteria\": [\n    \"limit defaults to 20 and must be between 1 and 100; offset defaults to 0 and must be greater than or equal to 0; out of range values return 422.\",\n    \"total represents the total number of matching tasks, unaffected by pagination.\",\n    \"Sequential paging from offset=0 with a fixed limit until the end must collect all tasks without duplication or omission.\",\n    \"items must be an empty array when offset is greater than or equal to total.\"\n  ]\n}",
+            "length": 666,
+            "truncated": false,
+            "artifact": "spans/5fcb67d2179f1750-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "59d467d7159ad034",
+      "parent_span_id": "5fcb67d2179f1750",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T19:03:29.163Z",
+      "end_time": "2026-09-28T19:03:52.299Z",
+      "duration_ms": 23135.793,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 215,
+        "gen_ai.usage.output_tokens": 158
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T19:03:29.166Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-003:\n\n# REQ-003 任務列表分頁\n\n`GET /api/projects/{pid}/tasks?limit=&offset=` 回傳 `{items, total, limit, offset}`，依任務 id 遞增排序。\n\n## 驗收準則\n- `limit` 預設 20，範圍 1–100；`offset` 預設 0，須 ≥ 0；超出範圍 → `422`。\n- `total` 為符合條件的總筆數，不受分頁影響。\n- 以固定 `limit` 從 `offset=0` 依序翻頁到結尾，收集到的任務須**恰好**等於全部任務：不重複、不遺漏。\n- `offset ≥ total` 時 `items` 為空陣列。\n",
+            "length": 469,
+            "truncated": false,
+            "artifact": "prompts/59d467d7159ad034-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T19:03:52.299Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"Implement pagination for the project task list API (GET /api/projects/{pid}/tasks) with limit, offset, and sorting by task id ascending.\",\n  \"acceptance_criteria\": [\n    \"limit defaults to 20 and must be between 1 and 100; offset defaults to 0 and must be greater than or equal to 0; out of range values return 422.\",\n    \"total represents the total number of matching tasks, unaffected by pagination.\",\n    \"Sequential paging from offset=0 with a fixed limit until the end must collect all tasks without duplication or omission.\",\n    \"items must be an empty array when offset is greater than or equal to total.\"\n  ]\n}",
+            "length": 635,
+            "truncated": false,
+            "artifact": "prompts/59d467d7159ad034-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2f7ba3de63c3543a",
+      "parent_span_id": "59d467d7159ad034",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:03:29.166Z",
+      "end_time": "2026-09-28T19:03:52.016Z",
+      "duration_ms": 22850.119,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "02aec2e0cf90d267",
+      "parent_span_id": "87f4733f847434ad",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T19:03:52.306Z",
+      "end_time": "2026-09-28T19:04:19.390Z",
+      "duration_ms": 27083.974,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T19:04:19.390Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-003\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Verify limit and offset boundary and default validation rules\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"GET /api/projects/{pid}/tasks (no limit/offset query parameters)\",\n        \"GET /api/projects/{pid}/tasks?limit=0&offset=0\",\n        \"GET /api/projects/{pid}/tasks?limit=101&offset=0\",\n        \"GET /api/projects/{pid}/tasks?limit=20&offset=-1\"\n      ],\n      \"expected\": \"limit defaults to 20 and must be between 1 and 100; offset defaults to 0 and must be greater than or equal to 0; out of range values return 422.\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Verify total represents the total number of matching tasks unaffected by pagination\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"GET /api/projects/{pid}/tasks?limit=1&offset=0\"\n      ],\n      \"expected\": \"total represents the total number of matching tasks, unaffected by pagination.\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Verify sequential paging collects all tasks without duplication or omission\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"GET /api/projects/{pid}/tasks?limit=2&offset=0\",\n        \"GET /api/projects/{pid}/tasks?limit=2&offset=2\"\n      ],\n      \"expected\": \"Sequential paging from offset=0 with a fixed limit until the end must collect all tasks without duplication or omission.\"\n    },\n    {\n      \"id\": \"TC-4\",\n      \"title\": \"Verify items is an empty array when offset is greater than or equal to total\",\n      \"surface\": \"api\",\n      \"steps\": [\n        \"GET /api/projects/{pid}/tasks?limit=20&offset=999\"\n      ],\n      \"expected\": \"items must be an empty array when offset is greater than or equal to total.\"\n    }\n  ]\n}",
+            "length": 1739,
+            "truncated": false,
+            "artifact": "spans/02aec2e0cf90d267-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "59d22fb6ecddd964",
+      "parent_span_id": "02aec2e0cf90d267",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T19:03:52.306Z",
+      "end_time": "2026-09-28T19:04:19.382Z",
+      "duration_ms": 27075.967,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1201,
+        "gen_ai.usage.output_tokens": 504
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T19:03:52.309Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-003\",\n  \"summary\": \"Implement pagination for the project task list API (GET /api/projects/{pid}/tasks) with limit, offset, and sorting by task id ascending.\",\n  \"acceptance_criteria\": [\n    \"limit defaults to 20 and must be between 1 and 100; offset defaults to 0 and must be greater than or equal to 0; out of range values return 422.\",\n    \"total represents the total number of matching tasks, unaffected by pagination.\",\n    \"Sequential paging from offset=0 with a fixed limit until the end must collect all tasks without duplication or omission.\",\n    \"items must be an empty array when offset is greater than or equal to total.\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n",
+            "length": 4153,
+            "truncated": true,
+            "artifact": "prompts/59d22fb6ecddd964-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T19:04:19.382Z",
+          "attributes": {
+            "text": "{\"cases\": [\n  {\n    \"id\": \"TC-1\",\n    \"title\": \"Verify limit and offset boundary and default validation rules\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"GET /api/projects/{pid}/tasks (no limit/offset query parameters)\",\n      \"GET /api/projects/{pid}/tasks?limit=0&offset=0\",\n      \"GET /api/projects/{pid}/tasks?limit=101&offset=0\",\n      \"GET /api/projects/{pid}/tasks?limit=20&offset=-1\"\n    ],\n    \"expected\": \"limit defaults to 20 and must be between 1 and 100; offset defaults to 0 and must be greater than or equal to 0; out of range values return 422.\"\n  },\n  {\n    \"id\": \"TC-2\",\n    \"title\": \"Verify total represents the total number of matching tasks unaffected by pagination\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"GET /api/projects/{pid}/tasks?limit=1&offset=0\"\n    ],\n    \"expected\": \"total represents the total number of matching tasks, unaffected by pagination.\"\n  },\n  {\n    \"id\": \"TC-3\",\n    \"title\": \"Verify sequential paging collects all tasks without duplication or omission\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"GET /api/projects/{pid}/tasks?limit=2&offset=0\",\n      \"GET /api/projects/{pid}/tasks?limit=2&offset=2\"\n    ],\n    \"expected\": \"Sequential paging from offset=0 with a fixed limit until the end must collect all tasks without duplication or omission.\"\n  },\n  {\n    \"id\": \"TC-4\",\n    \"title\": \"Verify items is an empty array when offset is greater than or equal to total\",\n    \"surface\": \"api\",\n    \"steps\": [\n      \"GET /api/projects/{pid}/tasks?limit=20&offset=999\"\n    ],\n    \"expected\": \"items must be an empty array when offset is greater than or equal to total.\"\n  }\n]}",
+            "length": 1622,
+            "truncated": false,
+            "artifact": "prompts/59d22fb6ecddd964-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "dc05e62933f66dca",
+      "parent_span_id": "59d22fb6ecddd964",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:03:52.309Z",
+      "end_time": "2026-09-28T19:04:19.100Z",
+      "duration_ms": 26791.119,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "0b5b6a6e33a0043d",
+      "parent_span_id": "87f4733f847434ad",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T19:04:19.390Z",
+      "end_time": "2026-09-28T19:06:41.495Z",
+      "duration_ms": 142105.449,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T19:06:41.494Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-003\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req003_api.py\",\n      \"content\": \"import pytest\\n\\ndef test_tc1_limit_offset_validation(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n\\n    # Default limit/offset\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert data[\\\"limit\\\"] == 20\\n    assert data[\\\"offset\\\"] == 0\\n\\n    # Valid boundary limits\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=1&offset=0\\\")\\n    assert r.status_code == 200, r.text\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=100&offset=0\\\")\\n    assert r.status_code == 200, r.text\\n\\n    # Invalid limit=0 (too low)\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=0&offset=0\\\")\\n    assert r.status_code == 422, r.text\\n\\n    # Invalid limit=101 (too high)\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=101&offset=0\\\")\\n    assert r.status_code == 422, r.text\\n\\n    # Invalid offset=-1 (negative)\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=20&offset=-1\\\")\\n    assert r.status_code == 422, r.text\\n\\n\\ndef test_tc2_total_unaffected_by_pagination(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n\\n    for i in range(3):\\n        alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": f\\\"Task {i}\\\"})\\n\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=1&offset=0\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1\\n    assert data[\\\"total\\\"] == 3\\n\\n\\ndef test_tc3_sequential_paging(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n\\n    created_titles = [\\\"Task A\\\", \\\"Task B\\\", \\\"Task C\\\", \\\"Task D\\\"]\\n    for t in created_titles:\\n        alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": t})\\n\\n    r1 = alice.get(f\\\"/api/projects/{pid}/tasks?limit=2&offset=",
+            "length": 3074,
+            "truncated": true,
+            "artifact": "spans/0b5b6a6e33a0043d-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "4520740459263345",
+      "parent_span_id": "0b5b6a6e33a0043d",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T19:04:19.390Z",
+      "end_time": "2026-09-28T19:06:41.208Z",
+      "duration_ms": 141818.385,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1850,
+        "gen_ai.usage.output_tokens": 1192
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T19:04:19.398Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-003:\n{\n  \"requirement_id\": \"REQ-003\",\n  \"cases\": [\n    {\n  ",
+            "length": 6072,
+            "truncated": true,
+            "artifact": "prompts/4520740459263345-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T19:06:41.208Z",
+          "attributes": {
+            "text": "{\n  \"files\": [\n    {\n      \"path\": \"generated/test_req003_api.py\",\n      \"surface\": \"api\",\n      \"content\": \"import pytest\\n\\ndef test_tc1_limit_offset_validation(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n\\n    # Default limit/offset\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert data[\\\"limit\\\"] == 20\\n    assert data[\\\"offset\\\"] == 0\\n\\n    # Valid boundary limits\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=1&offset=0\\\")\\n    assert r.status_code == 200, r.text\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=100&offset=0\\\")\\n    assert r.status_code == 200, r.text\\n\\n    # Invalid limit=0 (too low)\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=0&offset=0\\\")\\n    assert r.status_code == 422, r.text\\n\\n    # Invalid limit=101 (too high)\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=101&offset=0\\\")\\n    assert r.status_code == 422, r.text\\n\\n    # Invalid offset=-1 (negative)\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=20&offset=-1\\\")\\n    assert r.status_code == 422, r.text\\n\\n\\ndef test_tc2_total_unaffected_by_pagination(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n\\n    for i in range(3):\\n        alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": f\\\"Task {i}\\\"})\\n\\n    r = alice.get(f\\\"/api/projects/{pid}/tasks?limit=1&offset=0\\\")\\n    assert r.status_code == 200, r.text\\n    data = r.json()\\n    assert len(data[\\\"items\\\"]) == 1\\n    assert data[\\\"total\\\"] == 3\\n\\n\\ndef test_tc3_sequential_paging(as_user, new_project):\\n    alice = as_user(\\\"alice\\\")\\n    pid = new_project(owner=\\\"alice\\\")\\n\\n    created_titles = [\\\"Task A\\\", \\\"Task B\\\", \\\"Task C\\\", \\\"Task D\\\"]\\n    for t in created_titles:\\n        alice.post(f\\\"/api/projects/{pid}/tasks\\\", json={\\\"title\\\": t})\\n\\n    r1 = alice.get(f\\\"/api/projects/{pid}/tasks?limit=2&offset=0\\\")\\n ",
+            "length": 3043,
+            "truncated": true,
+            "artifact": "prompts/4520740459263345-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ff6ae038ad0db319",
+      "parent_span_id": "4520740459263345",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:04:19.399Z",
+      "end_time": "2026-09-28T19:06:17.676Z",
+      "duration_ms": 118277.512,
+      "status": {
+        "code": "ERROR",
+        "message": "LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete."
+      },
+      "attributes": {
+        "qa.retry.attempt": 1,
+        "qa.failure.symptom": "TIMEOUT",
+        "qa.failure.layer": "PROVIDER",
+        "qa.failure.rule": "R4"
+      },
+      "events": [
+        {
+          "name": "exception",
+          "timestamp": "2026-09-28T19:06:17.676Z",
+          "attributes": {
+            "exception.type": "LLMTimeoutError",
+            "exception.message": "Gemini API error 504: Deadline expired before operation could complete."
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2daf44619553d119",
+      "parent_span_id": "4520740459263345",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:06:22.677Z",
+      "end_time": "2026-09-28T19:06:41.204Z",
+      "duration_ms": 18527.119,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 2
+      },
+      "events": []
+    },
+    {
+      "span_id": "847509bb9172f8a7",
+      "parent_span_id": "0b5b6a6e33a0043d",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T19:06:41.208Z",
+      "end_time": "2026-09-28T19:06:41.491Z",
+      "duration_ms": 283.095,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req003_api.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T19:06:41.211Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req003_api.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:41.491Z",
+          "attributes": {
+            "text": "wrote 2748 chars to generated/test_req003_api.py",
+            "length": 48,
+            "truncated": false,
+            "artifact": "spans/847509bb9172f8a7-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "91ba43d163c47a47",
+      "parent_span_id": "87f4733f847434ad",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T19:06:41.498Z",
+      "end_time": "2026-09-28T19:06:45.882Z",
+      "duration_ms": 4383.338,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T19:06:45.882Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-003\",\n  \"executions\": [\n    {\n      \"tool\": \"pytest\",\n      \"ok\": false,\n      \"attempts\": 1,\n      \"exit_code\": 1,\n      \"summary\": \"1 failed, 3 passed in 3.02s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 4,\n        \"failures\": 1,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 1,\n        \"exception_failures\": 0,\n        \"files\": [\n          \"generated/test_req003_api.py\"\n        ],\n        \"junit\": \"reports/junit-test_req003_api-54da5c.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req003_api.py::test_tc1_limit_offset_validation\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req003_api.py::test_tc2_total_unaffected_by_pagination\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          },\n          {\n            \"node_id\": \"generated/test_req003_api.py::test_tc3_sequential_paging\",\n            \"outcome\": \"FAIL\",\n            \"message\": \"AssertionError: assert 1 == 2\\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:45.275+00:00', 'created_by': 1, 'description': '', ...}])\"\n          },\n          {\n            \"node_id\": \"generated/test_req003_api.py::test_tc4_offset_greater_than_or_equal_to_total\",\n            \"outcome\": \"PASS\",\n            \"message\": \"\"\n          }\n        ],\n        \"isolation\": \"L1\"\n      }\n    },\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    }\n  ]\n}",
+            "length": 1720,
+            "truncated": false,
+            "artifact": "spans/91ba43d163c47a47-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "d49c9f7182b7671d",
+      "parent_span_id": "91ba43d163c47a47",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T19:06:41.498Z",
+      "end_time": "2026-09-28T19:06:45.870Z",
+      "duration_ms": 4371.337,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 3.02s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req003_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req003_api-54da5c.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T19:06:41.500Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "pytest",
+            "target": "generated/test_req003_api.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.pytest"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T19:06:45.866Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:45.275+00:00', 'created_by': 1, 'description': '', ...}])"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:45.870Z",
+          "attributes": {
+            "text": "..F.                                                                     [100%]\n================================== FAILURES ===================================\n_________________________ test_tc3_sequential_paging __________________________\n\nas_user = <function as_user.<locals>.get at 0x0000026808172200>\nnew_project = <function new_project.<locals>.create at 0x0000026808371EE0>\n\n    def test_tc3_sequential_paging(as_user, new_project):\n        alice = as_user(\"alice\")\n        pid = new_project(owner=\"alice\")\n    \n        created_titles = [\"Task A\", \"Task B\", \"Task C\", \"Task D\"]\n        for t in created_titles:\n            alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": t})\n    \n        r1 = alice.get(f\"/api/projects/{pid}/tasks?limit=2&offset=0\")\n        assert r1.status_code == 200, r1.text\n        page1 = r1.json()\n        assert page1[\"total\"] == 4\n        assert len(page1[\"items\"]) == 2\n    \n        r2 = alice.get(f\"/api/projects/{pid}/tasks?limit=2&offset=2\")\n        assert r2.status_code == 200, r2.text\n        page2 = r2.json()\n        assert page2[\"total\"] == 4\n>       assert len(page2[\"items\"]) == 2\nE       AssertionError: assert 1 == 2\nE        +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:45.275+00:00', 'created_by': 1, 'description': '', ...}])\n\ngenerated\\test_req003_api.py:65: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-190326-2D86\\reports\\junit-test_req003_api-54da5c.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req003_api.py::test_tc3_sequential_paging - AssertionEr...\n1 failed, 3 passed in 3.02s\n",
+            "length": 1673,
+            "truncated": false,
+            "artifact": "spans/d49c9f7182b7671d-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "e6dd383c934ba17a",
+      "parent_span_id": "d49c9f7182b7671d",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:06:41.500Z",
+      "end_time": "2026-09-28T19:06:45.866Z",
+      "duration_ms": 4365.292,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 3.02s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "f570c59083642b56",
+      "parent_span_id": "91ba43d163c47a47",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T19:06:45.870Z",
+      "end_time": "2026-09-28T19:06:45.879Z",
+      "duration_ms": 8.998,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T19:06:45.870Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:45.879Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/f570c59083642b56-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f7a76fecb8331098",
+      "parent_span_id": "87f4733f847434ad",
+      "name": "agent.report",
+      "start_time": "2026-09-28T19:06:45.882Z",
+      "end_time": "2026-09-28T19:06:45.922Z",
+      "duration_ms": 40.022,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T19:06:45.922Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-003\",\n  \"summary\": \"REQ-003: 2 tool execution(s)\\n- pytest: FAILED (attempts=1, exit=1) - 1 failed, 3 passed in 3.02s\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\"\n}",
+            "length": 213,
+            "truncated": false,
+            "artifact": "spans/f7a76fecb8331098-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "bf5536ed4fa5e76f",
+      "parent_span_id": "87f4733f847434ad",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T19:06:45.922Z",
+      "end_time": "2026-09-28T19:06:59.863Z",
+      "duration_ms": 13941.476,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [
+          "B01"
+        ],
+        "qa.eval.files": [
+          "generated/test_req003_api.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "DEFECT_FOUND",
+        "qa.eval.detected": 1,
+        "qa.eval.missed": 3,
+        "qa.eval.broken": 0,
+        "qa.eval.passed": 0,
+        "qa.eval.tests": 4
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T19:06:59.862Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req003_api.py::test_tc1_limit_offset_validation",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T19:06:59.863Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req003_api.py::test_tc2_total_unaffected_by_pagination",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T19:06:59.863Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+            "qa.test.bug_outcome": "FAIL",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "DETECTED",
+            "qa.test.rule": "R11"
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T19:06:59.863Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req003_api.py::test_tc4_offset_greater_than_or_equal_to_total",
+            "qa.test.bug_outcome": "PASS",
+            "qa.test.clean_outcome": "PASS",
+            "qa.test.decision": "NOT_DETECTED",
+            "qa.test.rule": ""
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "f3d2eb2a0c83f9fc",
+      "parent_span_id": "bf5536ed4fa5e76f",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T19:06:45.922Z",
+      "end_time": "2026-09-28T19:06:53.212Z",
+      "duration_ms": 7290.704,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": [
+          "B01"
+        ]
+      },
+      "events": []
+    },
+    {
+      "span_id": "cf7279124ed9f7a7",
+      "parent_span_id": "f3d2eb2a0c83f9fc",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T19:06:48.660Z",
+      "end_time": "2026-09-28T19:06:48.669Z",
+      "duration_ms": 8.581,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:48.669Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/cf7279124ed9f7a7-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "4f4a903ce686b5ea",
+      "parent_span_id": "f3d2eb2a0c83f9fc",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T19:06:48.669Z",
+      "end_time": "2026-09-28T19:06:53.011Z",
+      "duration_ms": 4341.557,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 2.98s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req003_api.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req003_api-e3c60b.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T19:06:53.008Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req003_api.py::test_tc3_sequential_paging",
+            "qa.test.outcome": "FAIL",
+            "qa.test.message": "AssertionError: assert 1 == 2\n +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}])"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:53.011Z",
+          "attributes": {
+            "text": "..F.                                                                     [100%]\n================================== FAILURES ===================================\n_________________________ test_tc3_sequential_paging __________________________\n\nas_user = <function as_user.<locals>.get at 0x000001E6936D2200>\nnew_project = <function new_project.<locals>.create at 0x000001E6938D1EE0>\n\n    def test_tc3_sequential_paging(as_user, new_project):\n        alice = as_user(\"alice\")\n        pid = new_project(owner=\"alice\")\n    \n        created_titles = [\"Task A\", \"Task B\", \"Task C\", \"Task D\"]\n        for t in created_titles:\n            alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": t})\n    \n        r1 = alice.get(f\"/api/projects/{pid}/tasks?limit=2&offset=0\")\n        assert r1.status_code == 200, r1.text\n        page1 = r1.json()\n        assert page1[\"total\"] == 4\n        assert len(page1[\"items\"]) == 2\n    \n        r2 = alice.get(f\"/api/projects/{pid}/tasks?limit=2&offset=2\")\n        assert r2.status_code == 200, r2.text\n        page2 = r2.json()\n        assert page2[\"total\"] == 4\n>       assert len(page2[\"items\"]) == 2\nE       AssertionError: assert 1 == 2\nE        +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}])\n\ngenerated\\test_req003_api.py:65: AssertionError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-190326-2D86\\reports\\junit-test_req003_api-e3c60b.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req003_api.py::test_tc3_sequential_paging - AssertionEr...\n1 failed, 3 passed in 2.98s\n",
+            "length": 1673,
+            "truncated": false,
+            "artifact": "spans/4f4a903ce686b5ea-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "bc29f6eea9156ddf",
+      "parent_span_id": "4f4a903ce686b5ea",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:06:48.669Z",
+      "end_time": "2026-09-28T19:06:53.008Z",
+      "duration_ms": 4338.857,
+      "status": {
+        "code": "ERROR",
+        "message": "1 failed, 3 passed in 2.98s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "f683b4dcb36ab63a",
+      "parent_span_id": "bf5536ed4fa5e76f",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T19:06:53.217Z",
+      "end_time": "2026-09-28T19:06:59.859Z",
+      "duration_ms": 6641.727,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "21155cf9bdf3dc68",
+      "parent_span_id": "f683b4dcb36ab63a",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T19:06:55.909Z",
+      "end_time": "2026-09-28T19:06:55.918Z",
+      "duration_ms": 9.064,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:55.918Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/21155cf9bdf3dc68-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b9d1be68cf38bcd4",
+      "parent_span_id": "f683b4dcb36ab63a",
+      "name": "tool.pytest",
+      "start_time": "2026-09-28T19:06:55.918Z",
+      "end_time": "2026-09-28T19:06:59.661Z",
+      "duration_ms": 3742.348,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "pytest",
+        "qa.tool.name": "pytest",
+        "qa.tool.command": "pytest generated/test_req003_api.py",
+        "qa.tool.exit_code": 0,
+        "qa.artifact.path": [
+          "reports/junit-test_req003_api-c2dcfb.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 4,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T19:06:59.661Z",
+          "attributes": {
+            "text": "....                                                                     [100%]\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-190326-2D86\\reports\\junit-test_req003_api-c2dcfb.xml -\n4 passed in 2.41s\n",
+            "length": 223,
+            "truncated": false,
+            "artifact": "spans/b9d1be68cf38bcd4-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "46fd141c4d0bfd98",
+      "parent_span_id": "b9d1be68cf38bcd4",
+      "name": "attempt",
+      "start_time": "2026-09-28T19:06:55.918Z",
+      "end_time": "2026-09-28T19:06:59.659Z",
+      "duration_ms": 3740.347,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

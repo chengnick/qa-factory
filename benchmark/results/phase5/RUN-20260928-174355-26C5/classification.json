@@ -1,0 +1,134 @@
+{
+  "surface": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form (ERROR)",
+      "span_id": "2c402ba9aecd0e35",
+      "span": "tool.playwright",
+      "agent": "qa",
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "TEST": 3
+      },
+      "rules": {
+        "R10": 3
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form (ERROR)",
+        "span_id": "2c402ba9aecd0e35",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+        "unverified": false
+      },
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal (ERROR)",
+        "span_id": "2c402ba9aecd0e35",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+        "unverified": false
+      },
+      {
+        "unit": "test",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error (ERROR)",
+        "span_id": "2c402ba9aecd0e35",
+        "span": "tool.playwright",
+        "agent": "qa",
+        "test_id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+        "unverified": false
+      }
+    ]
+  },
+  "final": {
+    "verdict": "TEST_BROKEN",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10",
+      "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form (ERROR) | cross-validation R10",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 3,
+      "unknown": 0,
+      "layers": {
+        "TEST": 3
+      },
+      "rules": {
+        "R10": 3
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+        "unverified": false
+      },
+      {
+        "unit": "diff",
+        "layer": "TEST",
+        "symptom": "CRASH",
+        "matched_rule": "R10",
+        "evidence": "bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error (ERROR) | cross-validation R10",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+        "unverified": false
+      }
+    ]
+  }
+}

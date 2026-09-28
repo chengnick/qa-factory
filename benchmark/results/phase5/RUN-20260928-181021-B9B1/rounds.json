@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req007_api.py",
+          "snapshot": "generated/round1/test_req007_api.py",
+          "sha256": "fd6d2ee6b059bf044ec870f0045eef10079b1afe3b8b720189b89da84c43ec46"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req007_api.py::test_project_member_can_read_task_info",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_non_project_member_forbidden",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req007_api.py::test_non_existent_resources_returns_404",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

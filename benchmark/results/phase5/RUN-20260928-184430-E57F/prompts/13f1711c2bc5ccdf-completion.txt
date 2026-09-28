@@ -1,0 +1,97 @@
+{"cases": [
+  {
+    "id": "TC-1",
+    "title": "Default limit and offset values",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks without limit and offset parameters"
+    ],
+    "expected": "limit defaults to 20; offset defaults to 0"
+  },
+  {
+    "id": "TC-2",
+    "title": "Limit lower boundary validation (limit=0)",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks?limit=0"
+    ],
+    "expected": "valid range is 1-100; out of range returns 422."
+  },
+  {
+    "id": "TC-3",
+    "title": "Limit lower boundary validation (limit=1)",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks?limit=1"
+    ],
+    "expected": "valid range is 1-100"
+  },
+  {
+    "id": "TC-4",
+    "title": "Limit upper boundary validation (limit=100)",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks?limit=100"
+    ],
+    "expected": "valid range is 1-100"
+  },
+  {
+    "id": "TC-5",
+    "title": "Limit upper boundary validation (limit=101)",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks?limit=101"
+    ],
+    "expected": "valid range is 1-100; out of range returns 422."
+  },
+  {
+    "id": "TC-6",
+    "title": "Offset boundary validation (offset=-1)",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks?offset=-1"
+    ],
+    "expected": "offset must be >= 0; out of range returns 422."
+  },
+  {
+    "id": "TC-7",
+    "title": "Offset boundary validation (offset=0)",
+    "surface": "api",
+    "steps": [
+      "Send GET /api/projects/{pid}/tasks?offset=0"
+    ],
+    "expected": "offset must be >= 0"
+  },
+  {
+    "id": "TC-8",
+    "title": "Total count represents total matching tasks unaffected by pagination",
+    "surface": "api",
+    "steps": [
+      "Create 5 tasks in a project",
+      "Request tasks with limit=2, offset=0",
+      "Request tasks with limit=2, offset=2"
+    ],
+    "expected": "total represents the total number of matching tasks, unaffected by pagination."
+  },
+  {
+    "id": "TC-9",
+    "title": "Empty items array when offset >= total",
+    "surface": "api",
+    "steps": [
+      "Create 3 tasks in a project",
+      "Request tasks with offset=3",
+      "Request tasks with offset=5"
+    ],
+    "expected": "items must be an empty array when offset >= total."
+  },
+  {
+    "id": "TC-10",
+    "title": "Iterating through pages yields all tasks without duplicates or omissions",
+    "surface": "api",
+    "steps": [
+      "Create 5 tasks in a project",
+      "Iterate through pages with limit=2 starting from offset=0 until all tasks are fetched"
+    ],
+    "expected": "Iterating through pages from offset=0 with a fixed limit to the end must yield the exact set of all tasks without duplicates or omissions."
+  }
+]}

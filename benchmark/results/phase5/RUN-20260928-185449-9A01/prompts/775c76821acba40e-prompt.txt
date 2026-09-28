@@ -1,0 +1,138 @@
+[system]
+You are a test automation engineer. Turn the test plan into runnable pytest files.
+
+Rules:
+- Output JSON only: {"files": [{"path": "generated/test_<name>.py", "surface": "api"|"ui", "content": "<python source>"}]}
+- Produce one file for the "api" cases and, only if the plan has "ui" cases, one file for the "ui" cases.
+  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.
+- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,
+  start servers, import application code, or hard-code URLs/ports:
+    base_url            -> str, root URL of the running application
+    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)
+    user_ids            -> dict username -> numeric user id
+    new_project(owner="alice", members=())  -> int id of a brand-new project; members are added as project members
+    page                -> Playwright sync Page (ui files only)
+- as_user and new_project are factories: call them. Correct usage:
+      def test_example(as_user, new_project, user_ids):
+          alice = as_user("alice")
+          pid = new_project(owner="alice", members=("bob",))
+          r = alice.post(f"/api/projects/{pid}/tasks", json={"title": "t"})
+          assert r.status_code == 201, r.text
+- UI tests: page.goto(f"{base_url}/?user=alice&project={pid}"), then
+  expect(page.locator("body")).to_have_attribute("data-ready", "true") before interacting.
+  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.
+- Every test creates its own data and is independent of the others.
+- Assert the exact status codes and fields the requirement specifies; include the response text in assertion
+  messages, e.g. assert r.status_code == 409, r.text
+- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.
+
+[user]
+Test plan for REQ-005:
+{
+  "requirement_id": "REQ-005",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Allowed status transitions",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 1\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 1\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "允許的狀態流轉包含 todo → in_progress、in_progress → done、in_progress → todo"
+    },
+    {
+      "id": "TC-2",
+      "title": "Transition from done state returns 409 and keeps status unchanged",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 2\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 2\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"in_progress\"} as alice"
+      ],
+      "expected": "done 為終態，任何從 done 出發的流轉必須回傳 409 且任務狀態保持不變"
+    },
+    {
+      "id": "TC-3",
+      "title": "Forbidden transitions (todo to done and same status transitions)",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 3\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 3\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"done\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"todo\"} as alice"
+      ],
+      "expected": "其他未列出的流轉（包含 todo → done 及同狀態流轉）必須回傳 409"
+    },
+    {
+      "id": "TC-4",
+      "title": "Invalid to field value returns 422",
+      "surface": "api",
+      "steps": [
+        "POST /api/projects with {\"name\": \"Proj 4\"} as alice",
+        "POST /api/projects/{pid}/tasks with {\"title\": \"Task 4\"} as alice",
+        "POST /api/tasks/{tid}/transition with {\"to\": \"invalid_status\"} as alice"
+      ],
+      "expected": "當請求中的 to 欄位不是合法狀態時，必須回傳 422"
+    }
+  ]
+}
+
+API reference:
+# TaskBoard API reference
+
+Reference given to the test-design and automation agents, the way a QA engineer would get API docs.
+It describes the interface only; expected behaviour comes from the requirement documents.
+
+## Identity
+
+Every `/api/*` request identifies the caller with the header `X-User: <username>`.
+Seeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.
+
+## Resources
+
+**Project**: `{id, name, owner_id}`. The creator becomes owner and member.
+**Task**: `{id, project_id, title, description, status, priority, assignee_id, created_by, created_at, updated_at}`.
+`status` ∈ `todo | in_progress | done` (new tasks start as `todo`); `priority` defaults to 3.
+
+Errors are JSON `{"detail": ...}`. Validation errors use `422`.
+
+## Endpoints
+
+| Method | Path | Body / query | Success |
+|---|---|---|---|
+| GET | `/health` | | `200 {"status":"ok"}` |
+| GET | `/api/users` | | `200 [{id, username}]` |
+| POST | `/api/projects` | `{name}` | `201` project |
+| GET | `/api/projects` | | `200 [project]`: projects the caller belongs to |
+| GET | `/api/projects/{pid}` | | `200` project + `members: [{id, username, role}]` |
+| POST | `/api/projects/{pid}/members` | `{user_id}` | `201 {project_id, user_id, role}` |
+| GET | `/api/projects/{pid}/tasks` | query: `status`, `q`, `limit`, `offset` | `200 {items: [task], total, limit, offset}`, ordered by id |
+| POST | `/api/projects/{pid}/tasks` | `{title, description?, priority?}` | `201` task |
+| GET | `/api/tasks/{tid}` | | `200` task |
+| PATCH | `/api/tasks/{tid}` | any of `{title, description, priority, assignee_id}` | `200` task |
+| POST | `/api/tasks/{tid}/transition` | `{to: "<status>"}` | `200` task |
+| DELETE | `/api/tasks/{tid}` | | `204` |
+
+## Web UI
+
+`GET /` serves a single-page board. Query `?user=<username>&project=<pid>` preselects user and project.
+The page sets `data-ready="true"` on `<body>` once its initial load has finished.
+
+| Element | `data-testid` |
+|---|---|
+| user select | `user-select` |
+| project select | `project-select` |
+| new-task title input | `new-title` |
+| create-task button | `create-btn` |
+| error message area | `error` |
+| task list (`<ul>`) | `task-list` |
+| one task row (`<li>`) | `task-item` |
+| task title inside a row | `task-title` |
+| task status inside a row | `task-status` |
+| "advance status" button inside a row | `advance-btn` |

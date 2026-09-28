@@ -1,0 +1,54 @@
+{
+  "requirement_id": "REQ-004",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Pre-select user and project via URL parameters",
+      "surface": "ui",
+      "steps": [
+        "Navigate to '/?user=alice&project=1'",
+        "Wait for body element to have attribute data-ready=\"true\"",
+        "Assert the value of element with data-testid=\"user-select\" is 'alice'",
+        "Assert the value of element with data-testid=\"project-select\" is '1'"
+      ],
+      "expected": "支援透過 ?user=<username>&project=<pid> 參數預先選取使用者與專案"
+    },
+    {
+      "id": "TC-2",
+      "title": "Instant task list update after creation without reload",
+      "surface": "ui",
+      "steps": [
+        "Navigate to '/?user=alice&project=1'",
+        "Wait for body element to have attribute data-ready=\"true\"",
+        "Type 'New UI Task' into element with data-testid=\"new-title\"",
+        "Click element with data-testid=\"create-btn\"",
+        "Assert that element with data-testid=\"task-list\" immediately contains a new task item with title 'New UI Task' without page reload"
+      ],
+      "expected": "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面"
+    },
+    {
+      "id": "TC-3",
+      "title": "Render task title as plain text preventing XSS",
+      "surface": "ui",
+      "steps": [
+        "Navigate to '/?user=alice&project=1'",
+        "Wait for body element to have attribute data-ready=\"true\"",
+        "Type '<script>alert(1)</script>' into element with data-testid=\"new-title\"",
+        "Click element with data-testid=\"create-btn\"",
+        "Assert that the task title element inside the new row displays the literal string '<script>alert(1)</script>' and is not parsed as HTML elements"
+      ],
+      "expected": "任務標題須以純文字顯示，若含 HTML 標記應顯示字面文字且不得被解析成元素"
+    },
+    {
+      "id": "TC-4",
+      "title": "Display error message in error area upon API error",
+      "surface": "ui",
+      "steps": [
+        "Navigate to '/?user=alice&project=99999'",
+        "Wait for body element to have attribute data-ready=\"true\"",
+        "Assert that the element with data-testid=\"error\" displays the corresponding API error message"
+      ],
+      "expected": "API 發生錯誤時須於錯誤區顯示對應訊息"
+    }
+  ]
+}

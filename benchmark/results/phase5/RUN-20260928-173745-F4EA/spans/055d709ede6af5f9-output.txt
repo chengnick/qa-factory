@@ -1,0 +1,65 @@
+{
+  "requirement_id": "REQ-004",
+  "executions": [
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    },
+    {
+      "tool": "playwright",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "2 failed, 2 passed in 17.74s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 2,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req004_ui.py"
+        ],
+        "junit": "reports/junit-test_req004_ui-c12668.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc1_query_string_preselects_user_and_project",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc2_task_title_html_escaped",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected to contain text '<b>x</b>'\nActual value: xtodo→ in_progress \nCall log:\n  - Expect \"to_contain_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-list\")\n    - locator resolved to <ul id=\"tasks\" data-testid=\"task-list\"></ul>\n    - unexpected value \"\"\n    13 × locator resolved to <ul id=\"tasks\" data-testid=\"task-list\">…</ul>\n       - unexpected value \"xtodo→ in_progress\"\n\nAria snapshot:\n- list:\n  - listitem:\n    - text: x todo\n    - button \"→ in_progress"
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc3_task_creation_updates_list_instantly",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req004_ui.py::test_req004_tc4_api_error_displays_message",
+            "outcome": "FAIL",
+            "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\""
+          }
+        ],
+        "isolation": "L1",
+        "evidence": [
+          "playwright/test_req004_ui-c12668/test_req004_tc2_task_title_html_escaped",
+          "playwright/test_req004_ui-c12668/test_req004_tc4_api_error_displays_message"
+        ]
+      }
+    }
+  ]
+}

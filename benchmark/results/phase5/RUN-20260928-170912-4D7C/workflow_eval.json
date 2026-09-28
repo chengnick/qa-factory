@@ -1,0 +1,38 @@
+{
+  "run_id": "RUN-20260928-170912-4D7C",
+  "workflow_status": "FAIL",
+  "violations": [
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_req004_tc1_url_params_preselect/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_req004_tc2_task_creation_instant_display/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_req004_tc3_task_title_html_escaped/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_req004_tc4_api_error_message_displayed/ (trace.zip, screenshot.png, console.log)"
+    }
+  ],
+  "goal_drift": false,
+  "rounds": 1,
+  "rules_checked": [
+    "W01",
+    "W02",
+    "W03",
+    "W04",
+    "W05"
+  ],
+  "acceptance_mode": true,
+  "missing_evidence": [
+    "playwright/*/test_req004_tc1_url_params_preselect/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_req004_tc2_task_creation_instant_display/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_req004_tc3_task_title_html_escaped/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_req004_tc4_api_error_message_displayed/ (trace.zip, screenshot.png, console.log)"
+  ]
+}

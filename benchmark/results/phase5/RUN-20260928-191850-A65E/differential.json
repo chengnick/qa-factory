@@ -1,0 +1,126 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B10"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 1,
+    "broken": 1,
+    "passed": 0,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 2,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req004_ui.py": "85250e8337111b4ebc985e5cc59397b6c4342d85614a891f9743bcf8df7e1b5e"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B10"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: x \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\").first\n    13 × locator resolved to <span class=\"title\" data-testid=\"task-title\">…</span>\n       - unexpected value \"x\"\n\nAria snapshot:\n- text: x"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_error_shows_message",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-83bdb5.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_error_shows_message",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-77faf7.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: Locator expected to have text '<b>x</b>'\nActual value: x \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\").first\n    13 × locator resolved to <span class=\"title\" data-testid=\"task-title\">…</span>\n       - unexpected value \"x\"\n\nAria snapshot:\n- text: x"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc3_api_error_shows_message",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "FAIL",
+      "decision": "BROKEN",
+      "rule": "R12",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\" | clean build: AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\""
+    }
+  ]
+}

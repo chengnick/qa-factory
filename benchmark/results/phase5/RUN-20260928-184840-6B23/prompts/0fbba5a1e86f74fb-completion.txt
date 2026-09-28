@@ -1,0 +1,8 @@
+{
+  "summary": "Implement task search API GET /api/projects/{pid}/tasks?q=<text> with case-insensitive substring matching on title, literal handling of wildcard characters, and compatibility with status filtering and pagination.",
+  "acceptance_criteria": [
+    "Search must be case-insensitive (ASCII): q=login must match the title Fix Login Bug.",
+    "Characters '%' and '_' must be treated as regular characters without wildcard functionality.",
+    "The search query can be used simultaneously with the status filter and pagination."
+  ]
+}

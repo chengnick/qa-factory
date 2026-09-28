@@ -1,0 +1,28 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req006_api.py",
+          "snapshot": "generated/round1/test_req006_api.py",
+          "sha256": "305ed2d64b991a1bb5c7977aeb3e53ac6042dc3674e078cf1e140e40e6ee027e"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_project_member_returns_422",
+          "outcome": "FAIL",
+          "message": "AssertionError: {\"id\":1,\"project_id\":1,\"title\":\"Task 1\",\"description\":\"\",\"status\":\"todo\",\"priority\":3,\"assignee_id\":2,\"created_by\":1,\"created_at\":\"2026-09-28T19:15:54.994+00:00\",\"updated_at\":\"2026-09-28T19:15:54.997+00:00\"}\nassert 200 == 422\n +  where 200 = <Response [200 OK]>.status_code",
+          "tool": "pytest"
+        },
+        {
+          "node_id": "generated/test_req006_api.py::test_assign_task_to_non_existent_user_returns_422",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "pytest"
+        }
+      ]
+    }
+  ]
+}

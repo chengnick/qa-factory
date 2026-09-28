@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-002",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": 0,
+      "summary": "4 passed in 2.40s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 0,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req002_api.py"
+        ],
+        "junit": "reports/junit-test_req002_api-ac099d.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req002_api.py::test_tc1_title_boundary_validation",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc2_title_violation_validation",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc3_priority_default_and_boundary",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req002_api.py::test_tc4_priority_violation",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "run_id": "RUN-20260928-174355-26C5",
+  "workflow_status": "FAIL",
+  "violations": [
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_tc1_create_task_successfully_via_form/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_tc2_task_title_html_tags_as_literal/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "rule": "W05",
+      "evidence": "missing: playwright/*/test_tc3_display_error_message_on_api_error/ (trace.zip, screenshot.png, console.log)"
+    }
+  ],
+  "goal_drift": false,
+  "rounds": 1,
+  "rules_checked": [
+    "W01",
+    "W02",
+    "W03",
+    "W04",
+    "W05"
+  ],
+  "acceptance_mode": true,
+  "missing_evidence": [
+    "playwright/*/test_tc1_create_task_successfully_via_form/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_tc2_task_title_html_tags_as_literal/ (trace.zip, screenshot.png, console.log)",
+    "playwright/*/test_tc3_display_error_message_on_api_error/ (trace.zip, screenshot.png, console.log)"
+  ]
+}

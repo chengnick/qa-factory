@@ -1,0 +1,8 @@
+{
+  "requirement_id": "REQ-006",
+  "summary": "支援 PATCH /api/tasks/{tid} 設定任務的 assignee_id，並驗證指派對象須為專案成員且使用者必須存在。",
+  "acceptance_criteria": [
+    "指派對象必須是該專案成員；否則回傳 422 錯誤，且任務 assignee 保持不變。",
+    "指派不存在的使用者時，回傳 422 錯誤。"
+  ]
+}

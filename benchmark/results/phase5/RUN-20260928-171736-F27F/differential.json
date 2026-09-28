@@ -1,0 +1,145 @@
+{
+  "status": "COMPLETE",
+  "verdict": "DEFECT_FOUND",
+  "reason": null,
+  "bugs_enabled": true,
+  "sut_bugs": [
+    "B07"
+  ],
+  "counts": {
+    "detected": 1,
+    "missed": 3,
+    "broken": 0,
+    "passed": 0,
+    "tests": 4
+  },
+  "test_health": {
+    "healthy": 4,
+    "total": 4
+  },
+  "file_hashes": {
+    "generated/test_req008_api.py": "67b9c7ee92b8447b671502180d40387351c02f100a4d75b406ff754b7e81fe3d"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [
+        "B07"
+      ],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req008_api.py::test_tc1_owner_can_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc2_task_creator_can_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task",
+          "outcome": "FAIL",
+          "message": "AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code"
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req008_api.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req008_api-ccf1a8.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req008_api.py::test_tc1_owner_can_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc2_task_creator_can_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task",
+          "outcome": "PASS",
+          "message": ""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "pytest",
+          "paths": [
+            "generated/test_req008_api.py"
+          ],
+          "exit_code": 0,
+          "attempts": 1,
+          "junit": "reports/junit-test_req008_api-a4b94f.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req008_api.py::test_tc1_owner_can_delete_task",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req008_api.py::test_tc2_task_creator_can_delete_task",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    },
+    {
+      "node_id": "generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "PASS",
+      "decision": "DETECTED",
+      "rule": "R11",
+      "symptom": "ASSERTION",
+      "evidence": "bug build: AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code"
+    },
+    {
+      "node_id": "generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "NOT_DETECTED",
+      "rule": null,
+      "symptom": null,
+      "evidence": "passes on both builds"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "summary": "Implement task search API GET /api/projects/{pid}/tasks?q=<text> to perform case-insensitive substring search on task titles, treating '%' and '_' as literal characters, and supporting concurrent use with status filtering and pagination.",
+  "acceptance_criteria": [
+    "Search is case-insensitive (ASCII), e.g., q=login finds titles like 'Fix Login Bug'.",
+    " '%' and '_' characters are treated as literal characters, not as wildcards.",
+    "Can be used simultaneously with 'status' filtering and pagination."
+  ]
+}

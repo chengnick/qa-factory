@@ -1,0 +1,29 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+..F                                                                      [100%]
+================================== FAILURES ===================================
+________________________ test_tc3_api_errors_displayed ________________________
+
+page = <Page url='http://127.0.0.1:51459/?user=alice&project=9999'>
+base_url = 'http://127.0.0.1:51459'
+
+    def test_tc3_api_errors_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=alice&project=9999")
+        expect(page.locator("body")).to_have_attribute("data-ready", "true")
+    
+        error_el = page.get_by_test_id("error")
+        expect(error_el).to_be_visible()
+>       expect(error_el).not_to_have_text("")
+E       AssertionError: Locator expected not to have text ''
+E       Actual value:  
+E       Call log:
+E         - Expect "to_have_text" with timeout 5000ms
+E         - waiting for get_by_test_id("error")
+E           14 × locator resolved to <div id="error" data-testid="error"></div>
+E              - unexpected value ""
+
+generated\test_req004_ui.py:36: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-190713-1408\reports\junit-test_req004_ui-e07d78.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_tc3_api_errors_displayed - Assertion...
+1 failed, 2 passed in 11.91s
+

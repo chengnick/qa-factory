@@ -1,0 +1,122 @@
+{
+  "status": "COMPLETE",
+  "verdict": "TEST_BROKEN",
+  "reason": null,
+  "bugs_enabled": false,
+  "sut_bugs": [],
+  "counts": {
+    "detected": 0,
+    "missed": 0,
+    "broken": 2,
+    "passed": 1,
+    "tests": 3
+  },
+  "test_health": {
+    "healthy": 1,
+    "total": 3
+  },
+  "file_hashes": {
+    "generated/test_req004_ui.py": "f1c1b786c9175bddc2afcdecdc14cb2b4b698cec8616e76c6d464ef5c575a23d"
+  },
+  "builds": [
+    {
+      "build": "bug",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal",
+          "outcome": "ERROR",
+          "message": "AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property'"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-6f0151.xml"
+        }
+      ],
+      "log_file": "pytest/bug_build.log"
+    },
+    {
+      "build": "clean",
+      "sut_bugs": [],
+      "status": "OK",
+      "reason": null,
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload",
+          "outcome": "PASS",
+          "message": ""
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal",
+          "outcome": "ERROR",
+          "message": "AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property'"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+        }
+      ],
+      "runs": [
+        {
+          "tool": "playwright",
+          "paths": [
+            "generated/test_req004_ui.py"
+          ],
+          "exit_code": 1,
+          "attempts": 1,
+          "junit": "reports/junit-test_req004_ui-ce014a.xml"
+        }
+      ],
+      "log_file": "pytest/clean_build.log"
+    }
+  ],
+  "decisions": [
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list_without_reload",
+      "bug_outcome": "PASS",
+      "clean_outcome": "PASS",
+      "decision": "PASS",
+      "rule": null,
+      "symptom": null,
+      "evidence": ""
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc2_task_title_with_html_rendered_as_literal",
+      "bug_outcome": "ERROR",
+      "clean_outcome": "ERROR",
+      "decision": "BROKEN",
+      "rule": "R10",
+      "symptom": "CRASH",
+      "evidence": "bug build: AttributeError: 'LocatorAssertions' object has no attribute 'not_to_have_JS_property'"
+    },
+    {
+      "node_id": "generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area",
+      "bug_outcome": "FAIL",
+      "clean_outcome": "FAIL",
+      "decision": "BROKEN",
+      "rule": "R12",
+      "symptom": "ASSERTION",
+      "evidence": "fails on a clean SUT: AssertionError: Locator expected not to have text ''\nActual value:  \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"\""
+    }
+  ]
+}

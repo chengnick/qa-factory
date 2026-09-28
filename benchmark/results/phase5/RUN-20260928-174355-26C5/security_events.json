@@ -1,0 +1,36 @@
+{
+  "run_id": "RUN-20260928-174355-26C5",
+  "breach": false,
+  "events": [
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-174355-26C5",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_tc1_create_task_successfully_via_form/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_tc1_create_task_successfully_via_form/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-174355-26C5",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_tc2_task_title_html_tags_as_literal/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_tc2_task_title_html_tags_as_literal/ (trace.zip, screenshot.png, console.log)"
+    },
+    {
+      "type": "WORKFLOW_VIOLATION",
+      "run_id": "RUN-20260928-174355-26C5",
+      "span_id": null,
+      "agent": null,
+      "action": "W05",
+      "target": "playwright/*/test_tc3_display_error_message_on_api_error/ (trace.zip, screenshot.png, console.log)",
+      "executed": false,
+      "evidence": "missing: playwright/*/test_tc3_display_error_message_on_api_error/ (trace.zip, screenshot.png, console.log)"
+    }
+  ]
+}

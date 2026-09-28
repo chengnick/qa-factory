@@ -1,0 +1,33 @@
+{
+  "requirement_id": "REQ-009",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Case-insensitive substring search on task titles",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/{pid}/tasks?q=LOGIN with header X-User: alice"
+      ],
+      "expected": "Search is case-insensitive (ASCII), e.g., q=login finds titles like 'Fix Login Bug'."
+    },
+    {
+      "id": "TC-2",
+      "title": "Literal character treatment for '%' and '_'",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/{pid}/tasks?q=100% with header X-User: alice",
+        "GET /api/projects/{pid}/tasks?q=test_task with header X-User: alice"
+      ],
+      "expected": "'%' and '_' characters are treated as literal characters, not as wildcards."
+    },
+    {
+      "id": "TC-3",
+      "title": "Simultaneous use of search, status filtering, and pagination",
+      "surface": "api",
+      "steps": [
+        "GET /api/projects/{pid}/tasks?q=Task&status=todo&limit=10&offset=0 with header X-User: alice"
+      ],
+      "expected": "Can be used simultaneously with 'status' filtering and pagination."
+    }
+  ]
+}

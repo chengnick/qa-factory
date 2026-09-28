@@ -1,0 +1,61 @@
+{
+  "requirement_id": "REQ-008",
+  "executions": [
+    {
+      "tool": "pytest",
+      "ok": false,
+      "attempts": 1,
+      "exit_code": 1,
+      "summary": "1 failed, 3 passed in 4.96s",
+      "error": null,
+      "data": {
+        "tests": 4,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "assertion_failures": 1,
+        "exception_failures": 0,
+        "files": [
+          "generated/test_req008_api.py"
+        ],
+        "junit": "reports/junit-test_req008_api-4652d5.xml",
+        "results": [
+          {
+            "node_id": "generated/test_req008_api.py::test_tc1_owner_can_delete_task",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req008_api.py::test_tc2_task_creator_can_delete_task",
+            "outcome": "PASS",
+            "message": ""
+          },
+          {
+            "node_id": "generated/test_req008_api.py::test_tc3_other_member_cannot_delete_task",
+            "outcome": "FAIL",
+            "message": "AssertionError: \nassert 204 == 403\n +  where 204 = <Response [204 No Content]>.status_code"
+          },
+          {
+            "node_id": "generated/test_req008_api.py::test_tc4_non_member_cannot_delete_task",
+            "outcome": "PASS",
+            "message": ""
+          }
+        ],
+        "isolation": "L1"
+      }
+    },
+    {
+      "tool": "http_request",
+      "ok": true,
+      "attempts": 1,
+      "exit_code": null,
+      "summary": "{\"status\":\"ok\"}",
+      "error": null,
+      "data": {
+        "method": "GET",
+        "route": "/health",
+        "status_code": 200
+      }
+    }
+  ]
+}

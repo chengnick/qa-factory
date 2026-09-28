@@ -1,0 +1,86 @@
+{
+  "surface": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "test",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11U",
+      "evidence": "assert 0 == 1\n +  where 0 = len([]) | test generated/test_req003_api.py::test_req003_tc4_paginated_iteration (FAIL)",
+      "span_id": "198f3de7c9e7ed9c",
+      "span": "tool.pytest",
+      "agent": "qa",
+      "test_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+      "unverified": true
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11U": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "test",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11U",
+        "evidence": "assert 0 == 1\n +  where 0 = len([]) | test generated/test_req003_api.py::test_req003_tc4_paginated_iteration (FAIL)",
+        "span_id": "198f3de7c9e7ed9c",
+        "span": "tool.pytest",
+        "agent": "qa",
+        "test_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+        "unverified": true
+      }
+    ]
+  },
+  "final": {
+    "verdict": "DEFECT_FOUND",
+    "underlying_verdict": null,
+    "decided_by": {
+      "unit": "diff",
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11",
+      "evidence": "bug build: assert 0 == 1\n +  where 0 = len([]) | test generated/test_req003_api.py::test_req003_tc4_paginated_iteration (FAIL) | cross-validation R11",
+      "span_id": null,
+      "span": "",
+      "agent": null,
+      "test_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+      "unverified": false
+    },
+    "flaky": false,
+    "flaky_evidence": [],
+    "counts": {
+      "total": 1,
+      "unknown": 0,
+      "layers": {
+        "SUT": 1
+      },
+      "rules": {
+        "R11": 1
+      }
+    },
+    "classifications": [
+      {
+        "unit": "diff",
+        "layer": "SUT",
+        "symptom": "ASSERTION",
+        "matched_rule": "R11",
+        "evidence": "bug build: assert 0 == 1\n +  where 0 = len([]) | test generated/test_req003_api.py::test_req003_tc4_paginated_iteration (FAIL) | cross-validation R11",
+        "span_id": null,
+        "span": "",
+        "agent": null,
+        "test_id": "generated/test_req003_api.py::test_req003_tc4_paginated_iteration",
+        "unverified": false
+      }
+    ]
+  }
+}

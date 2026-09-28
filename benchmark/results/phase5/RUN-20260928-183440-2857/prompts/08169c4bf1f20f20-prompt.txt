@@ -1,0 +1,83 @@
+[system]
+You are a senior QA engineer designing black-box tests for one requirement of a web application.
+
+Design 2 to 8 test cases that together verify every acceptance criterion, with emphasis on
+boundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.
+Each case is either "api" (HTTP calls only) or "ui" (drives the web page in a browser); prefer "api"
+unless the criterion is about what the page shows.
+
+Rules:
+- Every expected result must follow from a sentence in the requirement; quote that criterion in "expected".
+- When steps act on the same entity in sequence, track its current state after each step and derive each
+  step's expected result from the requirement for that state. Prefer a fresh entity per check.
+- When a rule covers a small enumerable set (e.g. "any transition from a state", every status, every role,
+  both sides of a boundary), check each member explicitly instead of sampling one.
+
+Answer with JSON only:
+{"cases": [{"id": "TC-1", "title": str, "surface": "api"|"ui", "steps": [str], "expected": str}]}
+
+[user]
+Requirement:
+{
+  "requirement_id": "REQ-004",
+  "summary": "提供單頁看板前端介面 (GET /)，支援切換使用者與專案、建立任務、推進任務狀態，並可透過 Query string 預先選取使用者與專案。",
+  "acceptance_criteria": [
+    "透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。",
+    "任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。",
+    "API 錯誤時於錯誤區顯示訊息。"
+  ]
+}
+
+API reference:
+# TaskBoard API reference
+
+Reference given to the test-design and automation agents, the way a QA engineer would get API docs.
+It describes the interface only; expected behaviour comes from the requirement documents.
+
+## Identity
+
+Every `/api/*` request identifies the caller with the header `X-User: <username>`.
+Seeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.
+
+## Resources
+
+**Project**: `{id, name, owner_id}`. The creator becomes owner and member.
+**Task**: `{id, project_id, title, description, status, priority, assignee_id, created_by, created_at, updated_at}`.
+`status` ∈ `todo | in_progress | done` (new tasks start as `todo`); `priority` defaults to 3.
+
+Errors are JSON `{"detail": ...}`. Validation errors use `422`.
+
+## Endpoints
+
+| Method | Path | Body / query | Success |
+|---|---|---|---|
+| GET | `/health` | | `200 {"status":"ok"}` |
+| GET | `/api/users` | | `200 [{id, username}]` |
+| POST | `/api/projects` | `{name}` | `201` project |
+| GET | `/api/projects` | | `200 [project]`: projects the caller belongs to |
+| GET | `/api/projects/{pid}` | | `200` project + `members: [{id, username, role}]` |
+| POST | `/api/projects/{pid}/members` | `{user_id}` | `201 {project_id, user_id, role}` |
+| GET | `/api/projects/{pid}/tasks` | query: `status`, `q`, `limit`, `offset` | `200 {items: [task], total, limit, offset}`, ordered by id |
+| POST | `/api/projects/{pid}/tasks` | `{title, description?, priority?}` | `201` task |
+| GET | `/api/tasks/{tid}` | | `200` task |
+| PATCH | `/api/tasks/{tid}` | any of `{title, description, priority, assignee_id}` | `200` task |
+| POST | `/api/tasks/{tid}/transition` | `{to: "<status>"}` | `200` task |
+| DELETE | `/api/tasks/{tid}` | | `204` |
+
+## Web UI
+
+`GET /` serves a single-page board. Query `?user=<username>&project=<pid>` preselects user and project.
+The page sets `data-ready="true"` on `<body>` once its initial load has finished.
+
+| Element | `data-testid` |
+|---|---|
+| user select | `user-select` |
+| project select | `project-select` |
+| new-task title input | `new-title` |
+| create-task button | `create-btn` |
+| error message area | `error` |
+| task list (`<ul>`) | `task-list` |
+| one task row (`<li>`) | `task-item` |
+| task title inside a row | `task-title` |
+| task status inside a row | `task-status` |
+| "advance status" button inside a row | `advance-btn` |

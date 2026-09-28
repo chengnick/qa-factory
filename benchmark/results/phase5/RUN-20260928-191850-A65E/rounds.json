@@ -1,0 +1,34 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "files": [
+        {
+          "path": "generated/test_req004_ui.py",
+          "snapshot": "generated/round1/test_req004_ui.py",
+          "sha256": "87e004aabe503b1b50c12bea6a85a4a0e113b62503f1c66b17f46d2a0fed8c84"
+        }
+      ],
+      "results": [
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc1_create_task_updates_list",
+          "outcome": "PASS",
+          "message": "",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc2_task_title_html_escaped",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected to have text '<b>x</b>'\nActual value: x \nCall log:\n  - Expect \"to_have_text\" with timeout 5000ms\n  - waiting for get_by_test_id(\"task-title\").first\n    13 × locator resolved to <span class=\"title\" data-testid=\"task-title\">…</span>\n       - unexpected value \"x\"\n\nAria snapshot:\n- text: x",
+          "tool": "playwright"
+        },
+        {
+          "node_id": "generated/test_req004_ui.py::test_tc3_api_error_shows_message",
+          "outcome": "FAIL",
+          "message": "AssertionError: Locator expected not to be empty\nActual value: empty \nCall log:\n  - Expect \"to_be_empty\" with timeout 5000ms\n  - waiting for get_by_test_id(\"error\")\n    14 × locator resolved to <div id=\"error\" data-testid=\"error\"></div>\n       - unexpected value \"empty\"",
+          "tool": "playwright"
+        }
+      ]
+    }
+  ]
+}

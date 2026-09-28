@@ -1,0 +1,37 @@
+...F.                                                                    [100%]
+================================== FAILURES ===================================
+_____________________ test_req003_tc4_paginated_iteration _____________________
+
+as_user = <function as_user.<locals>.get at 0x000001B3882723E0>
+new_project = <function new_project.<locals>.create at 0x000001B388472160>
+
+    def test_req003_tc4_paginated_iteration(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        created_ids = []
+        for i in range(3):
+            r = alice.post(f"/api/projects/{pid}/tasks", json={"title": f"Task {i}"})
+            created_ids.append(r.json()["id"])
+    
+        # Page 1
+        r1 = alice.get(f"/api/projects/{pid}/tasks?limit=2&offset=0")
+        assert r1.status_code == 200, r1.text
+        d1 = r1.json()
+        items1 = d1["items"]
+        assert len(items1) == 2
+    
+        # Page 2
+        r2 = alice.get(f"/api/projects/{pid}/tasks?limit=2&offset=2")
+        assert r2.status_code == 200, r2.text
+        d2 = r2.json()
+        items2 = d2["items"]
+>       assert len(items2) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+generated\test_req003_api.py:71: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-181458-5BFA\reports\junit-test_req003_api-2b11dd.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req003_api.py::test_req003_tc4_paginated_iteration - as...
+1 failed, 4 passed in 2.92s

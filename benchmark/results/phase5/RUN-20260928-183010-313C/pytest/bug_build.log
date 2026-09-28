@@ -1,0 +1,34 @@
+===== pytest generated/test_req009_api.py (exit 1, attempts 1)
+F..                                                                      [100%]
+================================== FAILURES ===================================
+___________________ test_req009_tc1_case_insensitive_search ___________________
+
+as_user = <function as_user.<locals>.get at 0x000002B44D242160>
+new_project = <function new_project.<locals>.create at 0x000002B44D242200>
+
+    def test_req009_tc1_case_insensitive_search(as_user, new_project):
+        alice = as_user("alice")
+        pid = new_project(owner="alice")
+    
+        # Create tasks
+        r1 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Fix Login Bug"})
+        assert r1.status_code == 201, r1.text
+        r2 = alice.post(f"/api/projects/{pid}/tasks", json={"title": "Other Task"})
+        assert r2.status_code == 201, r2.text
+    
+        # Search case-insensitively
+        r = alice.get(f"/api/projects/{pid}/tasks?q=login")
+        assert r.status_code == 200, r.text
+        data = r.json()
+        items = data["items"]
+>       assert len(items) == 1, f"Expected 1 task, got {items}"
+E       AssertionError: Expected 1 task, got []
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+generated\test_req009_api.py:19: AssertionError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-183010-313C\reports\junit-test_req009_api-bd79fd.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req009_api.py::test_req009_tc1_case_insensitive_search
+1 failed, 2 passed in 2.95s
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="12.235" timestamp="2026-09-29T02:24:08.720728+08:00" hostname="DESKTOP-VFCACT9"><testcase classname="generated.test_req004_ui" name="test_req004_tc1_url_params_preselect" time="4.283" /><testcase classname="generated.test_req004_ui" name="test_req004_tc2_task_creation_updates_list" time="0.538" /><testcase classname="generated.test_req004_ui" name="test_req004_tc3_task_title_html_escaped" time="0.541" /><testcase classname="generated.test_req004_ui" name="test_req004_tc4_api_errors_displayed" time="6.830"><failure message="AssertionError: Locator expected to have attribute 'true'&#10;Actual value: None &#10;Call log:&#10;  - Expect &quot;to_have_attribute&quot; with timeout 5000ms&#10;  - waiting for locator(&quot;body&quot;)&#10;    14 × locator resolved to &lt;body&gt;…&lt;/body&gt;&#10;       - unexpected value &quot;null&quot;&#10;&#10;Aria snapshot:&#10;- heading &quot;TaskBoard&quot; [level=1]&#10;- banner:&#10;  - text: User&#10;  - combobox &quot;User&quot;&#10;  - text: Project&#10;  - combobox &quot;Project&quot;&#10;  - textbox &quot;New project&quot;&#10;  - button &quot;Add project&quot;&#10;- textbox &quot;New task title&quot;&#10;- button &quot;Create&quot;&#10;- text: &quot;401 {\&quot;detail\&quot;:\&quot;missing X-User header\&quot;}&quot;&#10;- list">page = &lt;Page url='http://127.0.0.1:63467/?user=unknown_user&amp;project=1'&gt;
+base_url = 'http://127.0.0.1:63467'
+
+    def test_req004_tc4_api_errors_displayed(page, base_url):
+        page.goto(f"{base_url}/?user=unknown_user&amp;project=1")
+&gt;       expect(page.locator("body")).to_have_attribute("data-ready", "true")
+E       AssertionError: Locator expected to have attribute 'true'
+E       Actual value: None 
+E       Call log:
+E         - Expect "to_have_attribute" with timeout 5000ms
+E         - waiting for locator("body")
+E           14 × locator resolved to &lt;body&gt;…&lt;/body&gt;
+E              - unexpected value "null"
+E       
+E       Aria snapshot:
+E       - heading "TaskBoard" [level=1]
+E       - banner:
+E         - text: User
+E         - combobox "User"
+E         - text: Project
+E         - combobox "Project"
+E         - textbox "New project"
+E         - button "Add project"
+E       - textbox "New task title"
+E       - button "Create"
+E       - text: "401 {\"detail\":\"missing X-User header\"}"
+E       - list
+
+generated\test_req004_ui.py:40: AssertionError</failure></testcase></testsuite></testsuites>

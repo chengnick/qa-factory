@@ -1,0 +1,859 @@
+{
+  "trace_id": "bc550144626c02de6206eb7e78af670e",
+  "run": {
+    "requirement_id": "REQ-004",
+    "sut_bugs": [],
+    "started_at": "2026-09-28T17:43:58.366Z",
+    "duration_ms": 140137.408,
+    "verdict": "TEST_BROKEN"
+  },
+  "spans": [
+    {
+      "span_id": "19750a70ddc07f29",
+      "parent_span_id": null,
+      "name": "qa.run",
+      "start_time": "2026-09-28T17:43:58.366Z",
+      "end_time": "2026-09-28T17:46:18.504Z",
+      "duration_ms": 140137.408,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.run.requirement_id": "REQ-004",
+        "qa.run.sut_bugs": [],
+        "qa.run.id": "RUN-20260928-174355-26C5",
+        "qa.run.prompt_version": "v3",
+        "qa.run.dataset": "clean",
+        "qa.policy.hash": "ce8c40b08032af2290366bf320a5b4feecb24d4fc67ea64e687144ec05fc3a55",
+        "qa.policy.path": "config/agent_policy.yaml",
+        "qa.workflow.status": "PASS",
+        "qa.workflow.goal_drift": false,
+        "qa.workflow.violations": [],
+        "qa.verdict": "TEST_BROKEN",
+        "qa.verdict.surface": "TEST_BROKEN",
+        "qa.classification.total": 3,
+        "qa.classification.unknown": 0,
+        "qa.failure.layer": "TEST",
+        "qa.failure.symptom": "CRASH",
+        "qa.failure.rule": "R10",
+        "qa.security.events": 0,
+        "qa.security.breach": false
+      },
+      "events": []
+    },
+    {
+      "span_id": "fe2523abf69ade10",
+      "parent_span_id": "19750a70ddc07f29",
+      "name": "agent.requirement",
+      "start_time": "2026-09-28T17:43:58.366Z",
+      "end_time": "2026-09-28T17:45:03.171Z",
+      "duration_ms": 64804.146,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "requirement"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:45:03.171Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-004\",\n  \"summary\": \"提供單頁看板前端介面，支援切換使用者與專案、建立任務及推進任務狀態，並可透過 URL 參數預先選取。\",\n  \"acceptance_criteria\": [\n    \"透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。\",\n    \"任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。\",\n    \"API 錯誤時於錯誤區顯示訊息。\"\n  ]\n}",
+            "length": 261,
+            "truncated": false,
+            "artifact": "spans/fe2523abf69ade10-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2a8865e4ac291d9e",
+      "parent_span_id": "fe2523abf69ade10",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:43:58.366Z",
+      "end_time": "2026-09-28T17:45:02.896Z",
+      "duration_ms": 64529.876,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 183,
+        "gen_ai.usage.output_tokens": 133
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:43:58.369Z",
+          "attributes": {
+            "text": "[system]\nYou are a QA analyst. Read the requirement and answer with JSON only: {\"summary\": str, \"acceptance_criteria\": [str, ...]}\n\n[user]\nRequirement REQ-004:\n\n# REQ-004 看板前端\n\n`GET /` 提供單頁看板，可切換使用者與專案、建立任務、推進任務狀態。\n支援 `?user=<username>&project=<pid>` 預先選取。\n\n## 驗收準則\n- 透過表單建立任務成功後，列表須**立即**顯示新任務，不需重新整理頁面。\n- 任務標題須以純文字顯示：標題若含 HTML 標記（例如 `<b>x</b>`），畫面上應顯示字面文字，不得被解析成元素。\n- API 錯誤時於錯誤區顯示訊息。\n",
+            "length": 387,
+            "truncated": false,
+            "artifact": "prompts/2a8865e4ac291d9e-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:45:02.896Z",
+          "attributes": {
+            "text": "{\n  \"summary\": \"提供單頁看板前端介面，支援切換使用者與專案、建立任務及推進任務狀態，並可透過 URL 參數預先選取。\",\n  \"acceptance_criteria\": [\n    \"透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。\",\n    \"任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。\",\n    \"API 錯誤時於錯誤區顯示訊息。\"\n  ]\n}",
+            "length": 230,
+            "truncated": false,
+            "artifact": "prompts/2a8865e4ac291d9e-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "46873164f23ba22e",
+      "parent_span_id": "2a8865e4ac291d9e",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:43:58.369Z",
+      "end_time": "2026-09-28T17:45:02.893Z",
+      "duration_ms": 64523.876,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "b2a3a1cdc02ea0e6",
+      "parent_span_id": "19750a70ddc07f29",
+      "name": "agent.test_design",
+      "start_time": "2026-09-28T17:45:03.171Z",
+      "end_time": "2026-09-28T17:45:35.395Z",
+      "duration_ms": 32224.936,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "test_design"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:45:35.395Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-004\",\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Create task successfully via form and verify instant display without page reload\",\n      \"surface\": \"ui\",\n      \"steps\": [\n        \"Open /?user=alice&project=1\",\n        \"Wait for body attribute data-ready to be true\",\n        \"Type 'New UI Task' into element with testid 'new-title'\",\n        \"Click element with testid 'create-btn'\"\n      ],\n      \"expected\": \"透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Task title containing HTML tags is displayed as plain literal text without element parsing\",\n      \"surface\": \"ui\",\n      \"steps\": [\n        \"Open /?user=alice&project=1\",\n        \"Wait for body attribute data-ready to be true\",\n        \"Type '<b>Bold Title</b>' into element with testid 'new-title'\",\n        \"Click element with testid 'create-btn'\"\n      ],\n      \"expected\": \"任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Display error message in the error area when an API error occurs\",\n      \"surface\": \"ui\",\n      \"steps\": [\n        \"Open /?user=alice&project=99999\",\n        \"Wait for body attribute data-ready to be true\"\n      ],\n      \"expected\": \"API 錯誤時於錯誤區顯示訊息。\"\n    }\n  ]\n}",
+            "length": 1285,
+            "truncated": false,
+            "artifact": "spans/b2a3a1cdc02ea0e6-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "cbe46d0663b3a86e",
+      "parent_span_id": "b2a3a1cdc02ea0e6",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:45:03.171Z",
+      "end_time": "2026-09-28T17:45:35.125Z",
+      "duration_ms": 31953.211,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1176,
+        "gen_ai.usage.output_tokens": 411
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:45:03.175Z",
+          "attributes": {
+            "text": "[system]\nYou are a senior QA engineer designing black-box tests for one requirement of a web application.\n\nDesign 2 to 8 test cases that together verify every acceptance criterion, with emphasis on\nboundaries, forbidden transitions, and permission rules. Test only behaviour the requirement states.\nEach case is either \"api\" (HTTP calls only) or \"ui\" (drives the web page in a browser); prefer \"api\"\nunless the criterion is about what the page shows.\n\nRules:\n- Every expected result must follow from a sentence in the requirement; quote that criterion in \"expected\".\n- When steps act on the same entity in sequence, track its current state after each step and derive each\n  step's expected result from the requirement for that state. Prefer a fresh entity per check.\n- When a rule covers a small enumerable set (e.g. \"any transition from a state\", every status, every role,\n  both sides of a boundary), check each member explicitly instead of sampling one.\n\nAnswer with JSON only:\n{\"cases\": [{\"id\": \"TC-1\", \"title\": str, \"surface\": \"api\"|\"ui\", \"steps\": [str], \"expected\": str}]}\n\n[user]\nRequirement:\n{\n  \"requirement_id\": \"REQ-004\",\n  \"summary\": \"提供單頁看板前端介面，支援切換使用者與專案、建立任務及推進任務狀態，並可透過 URL 參數預先選取。\",\n  \"acceptance_criteria\": [\n    \"透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。\",\n    \"任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。\",\n    \"API 錯誤時於錯誤區顯示訊息。\"\n  ]\n}\n\nAPI reference:\n# TaskBoard API reference\n\nReference given to the test-design and automation agents, the way a QA engineer would get API docs.\nIt describes the interface only; expected behaviour comes from the requirement documents.\n\n## Identity\n\nEvery `/api/*` request identifies the caller with the header `X-User: <username>`.\nSeeded users: `alice`, `bob`, `carol`, `dave`. Missing or unknown user → `401`.\n\n## Resources\n\n**Project**: `{id, name, owner_id}`. The creator becomes owner and member.\n**Task**: `{id, project_id, title, description, status, priority, assignee_id, created_by, created_at, updated_at}`.\n`status` ∈ `todo | in",
+            "length": 3748,
+            "truncated": true,
+            "artifact": "prompts/cbe46d0663b3a86e-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:45:35.125Z",
+          "attributes": {
+            "text": "{\n  \"cases\": [\n    {\n      \"id\": \"TC-1\",\n      \"title\": \"Create task successfully via form and verify instant display without page reload\",\n      \"surface\": \"ui\",\n      \"steps\": [\n        \"Open /?user=alice&project=1\",\n        \"Wait for body attribute data-ready to be true\",\n        \"Type 'New UI Task' into element with testid 'new-title'\",\n        \"Click element with testid 'create-btn'\"\n      ],\n      \"expected\": \"透過表單建立任務成功後，列表須立即顯示新任務，不需重新整理頁面。\"\n    },\n    {\n      \"id\": \"TC-2\",\n      \"title\": \"Task title containing HTML tags is displayed as plain literal text without element parsing\",\n      \"surface\": \"ui\",\n      \"steps\": [\n        \"Open /?user=alice&project=1\",\n        \"Wait for body attribute data-ready to be true\",\n        \"Type '<b>Bold Title</b>' into element with testid 'new-title'\",\n        \"Click element with testid 'create-btn'\"\n      ],\n      \"expected\": \"任務標題須以純文字顯示：標題若含 HTML 標記（例如 <b>x</b>），畫面上應顯示字面文字，不得被解析成元素。\"\n    },\n    {\n      \"id\": \"TC-3\",\n      \"title\": \"Display error message in the error area when an API error occurs\",\n      \"surface\": \"ui\",\n      \"steps\": [\n        \"Open /?user=alice&project=99999\",\n        \"Wait for body attribute data-ready to be true\"\n      ],\n      \"expected\": \"API 錯誤時於錯誤區顯示訊息。\"\n    }\n  ]\n}",
+            "length": 1254,
+            "truncated": false,
+            "artifact": "prompts/cbe46d0663b3a86e-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b5c7c7e850025f55",
+      "parent_span_id": "cbe46d0663b3a86e",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:45:03.175Z",
+      "end_time": "2026-09-28T17:45:35.121Z",
+      "duration_ms": 31945.655,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "e2f0aa9c6ab638c6",
+      "parent_span_id": "19750a70ddc07f29",
+      "name": "agent.automation",
+      "start_time": "2026-09-28T17:45:35.395Z",
+      "end_time": "2026-09-28T17:45:59.432Z",
+      "duration_ms": 24036.379,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "automation",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:45:59.432Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-004\",\n  \"files\": [\n    {\n      \"path\": \"generated/test_req004_ui.py\",\n      \"content\": \"from playwright.sync_api import expect\\n\\ndef test_tc1_create_task_successfully_via_form(base_url, new_project):\\n    pid = new_project(owner=\\\"alice\\\")\\n    page.goto(f\\\"{base_url}/?user=alice&project={pid}\\\")\\n    expect(page.locator(\\\"body\\\")).to_have_attribute(\\\"data-ready\\\", \\\"true\\\")\\n    \\n    page.get_by_test_id(\\\"new-title\\\").fill(\\\"New UI Task\\\")\\n    page.get_by_test_id(\\\"create-btn\\\").click()\\n    \\n    task_item = page.get_by_test_id(\\\"task-item\\\").filter(has_text=\\\"New UI Task\\\")\\n    expect(task_item).to_be_visible()\\n\\ndef test_tc2_task_title_html_tags_as_literal(base_url, new_project):\\n    pid = new_project(owner=\\\"alice\\\")\\n    page.goto(f\\\"{base_url}/?user=alice&project={pid}\\\")\\n    expect(page.locator(\\\"body\\\")).to_have_attribute(\\\"data-ready\\\", \\\"true\\\")\\n    \\n    html_title = \\\"<b>Bold Title</b>\\\"\\n    page.get_by_test_id(\\\"new-title\\\").fill(html_title)\\n    page.get_by_test_id(\\\"create-btn\\\").click()\\n    \\n    task_item = page.get_by_test_id(\\\"task-item\\\").filter(has_text=html_title)\\n    expect(task_item).to_be_visible()\\n    \\n    # Verify that the <b> tag was not parsed as HTML\\n    bold_element = page.locator(\\\"b\\\", has_text=\\\"Bold Title\\\")\\n    assert bold_element.count() == 0 or not bold_element.is_visible(), \\\"HTML tags should not be parsed\\\"\\n\\ndef test_tc3_display_error_message_on_api_error(base_url):\\n    page.goto(f\\\"{base_url}/?user=alice&project=99999\\\")\\n    expect(page.locator(\\\"body\\\")).to_have_attribute(\\\"data-ready\\\", \\\"true\\\")\\n    \\n    error_area = page.get_by_test_id(\\\"error\\\")\\n    expect(error_area).to_be_visible()\\n    expect(error_area).not_to_be_empty()\\n\",\n      \"surface\": \"ui\"\n    }\n  ]\n}",
+            "length": 1786,
+            "truncated": false,
+            "artifact": "spans/e2f0aa9c6ab638c6-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "dc5fa25b9b17d4d1",
+      "parent_span_id": "e2f0aa9c6ab638c6",
+      "name": "llm.chat",
+      "start_time": "2026-09-28T17:45:35.395Z",
+      "end_time": "2026-09-28T17:45:59.387Z",
+      "duration_ms": 23991.527,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "chat",
+        "gen_ai.request.model": "gemini-3.5-flash-lite",
+        "gen_ai.request.temperature": 0.0,
+        "gen_ai.response.model": "gemini-3.5-flash-lite",
+        "gen_ai.usage.input_tokens": 1751,
+        "gen_ai.usage.output_tokens": 628
+      },
+      "events": [
+        {
+          "name": "prompt",
+          "timestamp": "2026-09-28T17:45:35.403Z",
+          "attributes": {
+            "text": "[system]\nYou are a test automation engineer. Turn the test plan into runnable pytest files.\n\nRules:\n- Output JSON only: {\"files\": [{\"path\": \"generated/test_<name>.py\", \"surface\": \"api\"|\"ui\", \"content\": \"<python source>\"}]}\n- Produce one file for the \"api\" cases and, only if the plan has \"ui\" cases, one file for the \"ui\" cases.\n  Paths must match generated/test_[a-z0-9_]+.py and include the requirement id, e.g. generated/test_req005_api.py.\n- These pytest fixtures already exist in generated/conftest.py. Use them; do NOT write a conftest,\n  start servers, import application code, or hard-code URLs/ports:\n    base_url            -> str, root URL of the running application\n    as_user(username)   -> httpx.Client with base_url and the X-User header set (users: alice, bob, carol, dave)\n    user_ids            -> dict username -> numeric user id\n    new_project(owner=\"alice\", members=())  -> int id of a brand-new project; members are added as project members\n    page                -> Playwright sync Page (ui files only)\n- as_user and new_project are factories: call them. Correct usage:\n      def test_example(as_user, new_project, user_ids):\n          alice = as_user(\"alice\")\n          pid = new_project(owner=\"alice\", members=(\"bob\",))\n          r = alice.post(f\"/api/projects/{pid}/tasks\", json={\"title\": \"t\"})\n          assert r.status_code == 201, r.text\n- UI tests: page.goto(f\"{base_url}/?user=alice&project={pid}\"), then\n  expect(page.locator(\"body\")).to_have_attribute(\"data-ready\", \"true\") before interacting.\n  Locate elements with page.get_by_test_id(...). Import expect from playwright.sync_api.\n- Every test creates its own data and is independent of the others.\n- Assert the exact status codes and fields the requirement specifies; include the response text in assertion\n  messages, e.g. assert r.status_code == 409, r.text\n- Allowed imports: pytest, httpx, uuid, re, playwright.sync_api.\n\n[user]\nTest plan for REQ-004:\n{\n  \"requirement_id\": \"REQ-004\",\n  \"cases\": [\n    {\n  ",
+            "length": 5618,
+            "truncated": true,
+            "artifact": "prompts/dc5fa25b9b17d4d1-prompt.txt"
+          }
+        },
+        {
+          "name": "completion",
+          "timestamp": "2026-09-28T17:45:59.387Z",
+          "attributes": {
+            "text": "{\"files\": [{\"path\": \"generated/test_req004_ui.py\", \"surface\": \"ui\", \"content\": \"from playwright.sync_api import expect\\n\\ndef test_tc1_create_task_successfully_via_form(base_url, new_project):\\n    pid = new_project(owner=\\\"alice\\\")\\n    page.goto(f\\\"{base_url}/?user=alice&project={pid}\\\")\\n    expect(page.locator(\\\"body\\\")).to_have_attribute(\\\"data-ready\\\", \\\"true\\\")\\n    \\n    page.get_by_test_id(\\\"new-title\\\").fill(\\\"New UI Task\\\")\\n    page.get_by_test_id(\\\"create-btn\\\").click()\\n    \\n    task_item = page.get_by_test_id(\\\"task-item\\\").filter(has_text=\\\"New UI Task\\\")\\n    expect(task_item).to_be_visible()\\n\\ndef test_tc2_task_title_html_tags_as_literal(base_url, new_project):\\n    pid = new_project(owner=\\\"alice\\\")\\n    page.goto(f\\\"{base_url}/?user=alice&project={pid}\\\")\\n    expect(page.locator(\\\"body\\\")).to_have_attribute(\\\"data-ready\\\", \\\"true\\\")\\n    \\n    html_title = \\\"<b>Bold Title</b>\\\"\\n    page.get_by_test_id(\\\"new-title\\\").fill(html_title)\\n    page.get_by_test_id(\\\"create-btn\\\").click()\\n    \\n    task_item = page.get_by_test_id(\\\"task-item\\\").filter(has_text=html_title)\\n    expect(task_item).to_be_visible()\\n    \\n    # Verify that the <b> tag was not parsed as HTML\\n    bold_element = page.locator(\\\"b\\\", has_text=\\\"Bold Title\\\")\\n    assert bold_element.count() == 0 or not bold_element.is_visible(), \\\"HTML tags should not be parsed\\\"\\n\\ndef test_tc3_display_error_message_on_api_error(base_url):\\n    page.goto(f\\\"{base_url}/?user=alice&project=99999\\\")\\n    expect(page.locator(\\\"body\\\")).to_have_attribute(\\\"data-ready\\\", \\\"true\\\")\\n    \\n    error_area = page.get_by_test_id(\\\"error\\\")\\n    expect(error_area).to_be_visible()\\n    expect(error_area).not_to_be_empty()\\n\"}]}",
+            "length": 1719,
+            "truncated": false,
+            "artifact": "prompts/dc5fa25b9b17d4d1-completion.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "0b214bcb963a090f",
+      "parent_span_id": "dc5fa25b9b17d4d1",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:45:35.403Z",
+      "end_time": "2026-09-28T17:45:59.383Z",
+      "duration_ms": 23979.952,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "9118ccc732461e49",
+      "parent_span_id": "e2f0aa9c6ab638c6",
+      "name": "tool.file_write",
+      "start_time": "2026-09-28T17:45:59.387Z",
+      "end_time": "2026-09-28T17:45:59.429Z",
+      "duration_ms": 41.856,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "file_write",
+        "qa.tool.name": "file_write",
+        "qa.agent.name": "automation",
+        "qa.test.round": 1,
+        "qa.tool.command": "file_write generated/test_req004_ui.py"
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:45:59.389Z",
+          "attributes": {
+            "agent": "automation",
+            "tool": "file_write",
+            "target": "generated/test_req004_ui.py",
+            "decision": "allow",
+            "matched": "agents.automation.tools.file_write.path_prefix"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:45:59.429Z",
+          "attributes": {
+            "text": "wrote 1545 chars to generated/test_req004_ui.py",
+            "length": 47,
+            "truncated": false,
+            "artifact": "spans/9118ccc732461e49-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ba6ceed281bb9ccf",
+      "parent_span_id": "19750a70ddc07f29",
+      "name": "agent.qa",
+      "start_time": "2026-09-28T17:45:59.435Z",
+      "end_time": "2026-09-28T17:46:03.889Z",
+      "duration_ms": 4454.644,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "qa",
+        "qa.test.round": 1
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:46:03.889Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-004\",\n  \"executions\": [\n    {\n      \"tool\": \"http_request\",\n      \"ok\": true,\n      \"attempts\": 1,\n      \"exit_code\": null,\n      \"summary\": \"{\\\"status\\\":\\\"ok\\\"}\",\n      \"error\": null,\n      \"data\": {\n        \"method\": \"GET\",\n        \"route\": \"/health\",\n        \"status_code\": 200\n      }\n    },\n    {\n      \"tool\": \"playwright\",\n      \"ok\": false,\n      \"attempts\": 1,\n      \"exit_code\": 1,\n      \"summary\": \"3 failed in 2.95s\",\n      \"error\": null,\n      \"data\": {\n        \"tests\": 3,\n        \"failures\": 3,\n        \"errors\": 0,\n        \"skipped\": 0,\n        \"assertion_failures\": 0,\n        \"exception_failures\": 3,\n        \"files\": [\n          \"generated/test_req004_ui.py\"\n        ],\n        \"junit\": \"reports/junit-test_req004_ui-2d77f1.xml\",\n        \"results\": [\n          {\n            \"node_id\": \"generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form\",\n            \"outcome\": \"ERROR\",\n            \"message\": \"NameError: name 'page' is not defined\"\n          },\n          {\n            \"node_id\": \"generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal\",\n            \"outcome\": \"ERROR\",\n            \"message\": \"NameError: name 'page' is not defined\"\n          },\n          {\n            \"node_id\": \"generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error\",\n            \"outcome\": \"ERROR\",\n            \"message\": \"NameError: name 'page' is not defined\"\n          }\n        ],\n        \"isolation\": \"L1\",\n        \"evidence\": []\n      }\n    }\n  ]\n}",
+            "length": 1529,
+            "truncated": false,
+            "artifact": "spans/ba6ceed281bb9ccf-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2f0725d55acca7f0",
+      "parent_span_id": "ba6ceed281bb9ccf",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:45:59.435Z",
+      "end_time": "2026-09-28T17:45:59.443Z",
+      "duration_ms": 8.37,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:45:59.435Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "http_request",
+            "target": "/health",
+            "decision": "allow",
+            "matched": "agents.qa.tools.http_request.url_allowlist"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:45:59.443Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/2f0725d55acca7f0-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2c402ba9aecd0e35",
+      "parent_span_id": "ba6ceed281bb9ccf",
+      "name": "tool.playwright",
+      "start_time": "2026-09-28T17:45:59.443Z",
+      "end_time": "2026-09-28T17:46:03.885Z",
+      "duration_ms": 4442.293,
+      "status": {
+        "code": "ERROR",
+        "message": "3 failed in 2.95s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "playwright",
+        "qa.tool.name": "playwright",
+        "qa.agent.name": "qa",
+        "qa.test.round": 1,
+        "qa.tool.command": "pytest generated/test_req004_ui.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req004_ui-2d77f1.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 3,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.permission.check",
+          "timestamp": "2026-09-28T17:45:59.445Z",
+          "attributes": {
+            "agent": "qa",
+            "tool": "playwright",
+            "target": "generated/test_req004_ui.py",
+            "decision": "allow",
+            "matched": "agents.qa.tools.playwright"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:03.880Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:03.880Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:03.880Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:46:03.885Z",
+          "attributes": {
+            "text": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_________________ test_tc1_create_task_successfully_via_form __________________\n\nbase_url = 'http://127.0.0.1:62700'\nnew_project = <function new_project.<locals>.create at 0x00000169AC61FB00>\n\n    def test_tc1_create_task_successfully_via_form(base_url, new_project):\n        pid = new_project(owner=\"alice\")\n>       page.goto(f\"{base_url}/?user=alice&project={pid}\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:5: NameError\n__________________ test_tc2_task_title_html_tags_as_literal ___________________\n\nbase_url = 'http://127.0.0.1:62700'\nnew_project = <function new_project.<locals>.create at 0x00000169AC61FCE0>\n\n    def test_tc2_task_title_html_tags_as_literal(base_url, new_project):\n        pid = new_project(owner=\"alice\")\n>       page.goto(f\"{base_url}/?user=alice&project={pid}\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:16: NameError\n_________________ test_tc3_display_error_message_on_api_error _________________\n\nbase_url = 'http://127.0.0.1:62700'\n\n    def test_tc3_display_error_message_on_api_error(base_url):\n>       page.goto(f\"{base_url}/?user=alice&project=99999\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:31: NameError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-174355-26C5\\reports\\junit-test_req004_ui-2d77f1.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form\nFAILED generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal\nFAILED generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error\n3 failed in 2.95s\n",
+            "length": 1858,
+            "truncated": false,
+            "artifact": "spans/2c402ba9aecd0e35-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "70e479b9acb1d8c5",
+      "parent_span_id": "2c402ba9aecd0e35",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:45:59.445Z",
+      "end_time": "2026-09-28T17:46:03.880Z",
+      "duration_ms": 4435.19,
+      "status": {
+        "code": "ERROR",
+        "message": "3 failed in 2.95s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "461631a96de425ae",
+      "parent_span_id": "19750a70ddc07f29",
+      "name": "agent.report",
+      "start_time": "2026-09-28T17:46:03.889Z",
+      "end_time": "2026-09-28T17:46:03.892Z",
+      "duration_ms": 2.958,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.agent.name": "report"
+      },
+      "events": [
+        {
+          "name": "output",
+          "timestamp": "2026-09-28T17:46:03.892Z",
+          "attributes": {
+            "text": "{\n  \"requirement_id\": \"REQ-004\",\n  \"summary\": \"REQ-004: 2 tool execution(s)\\n- http_request: ok (attempts=1, exit=None) - {\\\"status\\\":\\\"ok\\\"}\\n- playwright: FAILED (attempts=1, exit=1) - 3 failed in 2.95s\"\n}",
+            "length": 207,
+            "truncated": false,
+            "artifact": "spans/461631a96de425ae-output.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "2d3ca52b5a3216a7",
+      "parent_span_id": "19750a70ddc07f29",
+      "name": "evaluation.differential",
+      "start_time": "2026-09-28T17:46:03.893Z",
+      "end_time": "2026-09-28T17:46:18.498Z",
+      "duration_ms": 14604.784,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.sut_bugs": [],
+        "qa.eval.files": [
+          "generated/test_req004_ui.py"
+        ],
+        "qa.eval.status": "COMPLETE",
+        "qa.eval.verdict": "TEST_BROKEN",
+        "qa.eval.detected": 0,
+        "qa.eval.missed": 0,
+        "qa.eval.broken": 3,
+        "qa.eval.passed": 0,
+        "qa.eval.tests": 3
+      },
+      "events": [
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:46:18.498Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+            "qa.test.bug_outcome": "ERROR",
+            "qa.test.clean_outcome": "ERROR",
+            "qa.test.decision": "BROKEN",
+            "qa.test.rule": "R10"
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:46:18.498Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+            "qa.test.bug_outcome": "ERROR",
+            "qa.test.clean_outcome": "ERROR",
+            "qa.test.decision": "BROKEN",
+            "qa.test.rule": "R10"
+          }
+        },
+        {
+          "name": "qa.test",
+          "timestamp": "2026-09-28T17:46:18.498Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+            "qa.test.bug_outcome": "ERROR",
+            "qa.test.clean_outcome": "ERROR",
+            "qa.test.decision": "BROKEN",
+            "qa.test.rule": "R10"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "eb806d209d50ab2a",
+      "parent_span_id": "2d3ca52b5a3216a7",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T17:46:03.893Z",
+      "end_time": "2026-09-28T17:46:11.189Z",
+      "duration_ms": 7296.085,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "bug",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "da61384decab3a7b",
+      "parent_span_id": "eb806d209d50ab2a",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:46:06.589Z",
+      "end_time": "2026-09-28T17:46:06.598Z",
+      "duration_ms": 9.003,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:46:06.597Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/da61384decab3a7b-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "6de03df4ffe6217e",
+      "parent_span_id": "eb806d209d50ab2a",
+      "name": "tool.playwright",
+      "start_time": "2026-09-28T17:46:06.598Z",
+      "end_time": "2026-09-28T17:46:10.988Z",
+      "duration_ms": 4389.338,
+      "status": {
+        "code": "ERROR",
+        "message": "3 failed in 2.91s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "playwright",
+        "qa.tool.name": "playwright",
+        "qa.tool.command": "pytest generated/test_req004_ui.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req004_ui-400fba.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 3,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:10.985Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:10.985Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:10.985Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:46:10.988Z",
+          "attributes": {
+            "text": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_________________ test_tc1_create_task_successfully_via_form __________________\n\nbase_url = 'http://127.0.0.1:62710'\nnew_project = <function new_project.<locals>.create at 0x000002018D1BFB00>\n\n    def test_tc1_create_task_successfully_via_form(base_url, new_project):\n        pid = new_project(owner=\"alice\")\n>       page.goto(f\"{base_url}/?user=alice&project={pid}\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:5: NameError\n__________________ test_tc2_task_title_html_tags_as_literal ___________________\n\nbase_url = 'http://127.0.0.1:62710'\nnew_project = <function new_project.<locals>.create at 0x000002018D1BFCE0>\n\n    def test_tc2_task_title_html_tags_as_literal(base_url, new_project):\n        pid = new_project(owner=\"alice\")\n>       page.goto(f\"{base_url}/?user=alice&project={pid}\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:16: NameError\n_________________ test_tc3_display_error_message_on_api_error _________________\n\nbase_url = 'http://127.0.0.1:62710'\n\n    def test_tc3_display_error_message_on_api_error(base_url):\n>       page.goto(f\"{base_url}/?user=alice&project=99999\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:31: NameError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-174355-26C5\\reports\\junit-test_req004_ui-400fba.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form\nFAILED generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal\nFAILED generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error\n3 failed in 2.91s\n",
+            "length": 1858,
+            "truncated": false,
+            "artifact": "spans/6de03df4ffe6217e-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "545f0390a265fcee",
+      "parent_span_id": "6de03df4ffe6217e",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:46:06.598Z",
+      "end_time": "2026-09-28T17:46:10.985Z",
+      "duration_ms": 4386.338,
+      "status": {
+        "code": "ERROR",
+        "message": "3 failed in 2.91s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    },
+    {
+      "span_id": "4a6fbf85735576e3",
+      "parent_span_id": "2d3ca52b5a3216a7",
+      "name": "evaluation.build",
+      "start_time": "2026-09-28T17:46:11.192Z",
+      "end_time": "2026-09-28T17:46:18.493Z",
+      "duration_ms": 7300.7,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "qa.eval.build": "clean",
+        "qa.run.sut_bugs": []
+      },
+      "events": []
+    },
+    {
+      "span_id": "d405394383ce6c93",
+      "parent_span_id": "4a6fbf85735576e3",
+      "name": "tool.http_request",
+      "start_time": "2026-09-28T17:46:13.878Z",
+      "end_time": "2026-09-28T17:46:13.887Z",
+      "duration_ms": 8.956,
+      "status": {
+        "code": "OK",
+        "message": null
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "http_request",
+        "qa.tool.name": "http_request",
+        "qa.tool.command": "GET /health",
+        "qa.http.method": "GET",
+        "qa.http.route": "/health",
+        "qa.http.status_code": 200
+      },
+      "events": [
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:46:13.886Z",
+          "attributes": {
+            "text": "{\"status\":\"ok\"}",
+            "length": 15,
+            "truncated": false,
+            "artifact": "spans/d405394383ce6c93-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "ea1bd6fd72efd952",
+      "parent_span_id": "4a6fbf85735576e3",
+      "name": "tool.playwright",
+      "start_time": "2026-09-28T17:46:13.887Z",
+      "end_time": "2026-09-28T17:46:18.299Z",
+      "duration_ms": 4412.037,
+      "status": {
+        "code": "ERROR",
+        "message": "3 failed in 2.91s"
+      },
+      "attributes": {
+        "gen_ai.operation.name": "execute_tool",
+        "gen_ai.tool.name": "playwright",
+        "qa.tool.name": "playwright",
+        "qa.tool.command": "pytest generated/test_req004_ui.py",
+        "qa.tool.exit_code": 1,
+        "qa.artifact.path": [
+          "reports/junit-test_req004_ui-a822b8.xml"
+        ],
+        "qa.isolation.level": "L1",
+        "qa.test.count": 3,
+        "qa.test.collection_errors": 0
+      },
+      "events": [
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:18.295Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:18.295Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "qa.test.result",
+          "timestamp": "2026-09-28T17:46:18.295Z",
+          "attributes": {
+            "qa.test.id": "generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error",
+            "qa.test.outcome": "ERROR",
+            "qa.test.message": "NameError: name 'page' is not defined"
+          }
+        },
+        {
+          "name": "stdout.tail",
+          "timestamp": "2026-09-28T17:46:18.298Z",
+          "attributes": {
+            "text": "FFF                                                                      [100%]\n================================== FAILURES ===================================\n_________________ test_tc1_create_task_successfully_via_form __________________\n\nbase_url = 'http://127.0.0.1:62718'\nnew_project = <function new_project.<locals>.create at 0x000001B8E2F8FB00>\n\n    def test_tc1_create_task_successfully_via_form(base_url, new_project):\n        pid = new_project(owner=\"alice\")\n>       page.goto(f\"{base_url}/?user=alice&project={pid}\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:5: NameError\n__________________ test_tc2_task_title_html_tags_as_literal ___________________\n\nbase_url = 'http://127.0.0.1:62718'\nnew_project = <function new_project.<locals>.create at 0x000001B8E2F8FCE0>\n\n    def test_tc2_task_title_html_tags_as_literal(base_url, new_project):\n        pid = new_project(owner=\"alice\")\n>       page.goto(f\"{base_url}/?user=alice&project={pid}\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:16: NameError\n_________________ test_tc3_display_error_message_on_api_error _________________\n\nbase_url = 'http://127.0.0.1:62718'\n\n    def test_tc3_display_error_message_on_api_error(base_url):\n>       page.goto(f\"{base_url}/?user=alice&project=99999\")\nE       NameError: name 'page' is not defined\n\ngenerated\\test_req004_ui.py:31: NameError\n- generated xml file: D:\\AI\\project\\qa-factory\\artifacts\\RUN-20260928-174355-26C5\\reports\\junit-test_req004_ui-a822b8.xml -\n=========================== short test summary info ===========================\nFAILED generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form\nFAILED generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal\nFAILED generated/test_req004_ui.py::test_tc3_display_error_message_on_api_error\n3 failed in 2.91s\n",
+            "length": 1858,
+            "truncated": false,
+            "artifact": "spans/ea1bd6fd72efd952-stdout.txt"
+          }
+        }
+      ]
+    },
+    {
+      "span_id": "b43da76ac71441ce",
+      "parent_span_id": "ea1bd6fd72efd952",
+      "name": "attempt",
+      "start_time": "2026-09-28T17:46:13.887Z",
+      "end_time": "2026-09-28T17:46:18.295Z",
+      "duration_ms": 4408.038,
+      "status": {
+        "code": "ERROR",
+        "message": "3 failed in 2.91s"
+      },
+      "attributes": {
+        "qa.retry.attempt": 1
+      },
+      "events": []
+    }
+  ]
+}

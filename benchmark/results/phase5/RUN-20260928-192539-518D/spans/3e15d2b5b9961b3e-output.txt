@@ -1,0 +1,52 @@
+{
+  "requirement_id": "REQ-008",
+  "cases": [
+    {
+      "id": "TC-1",
+      "title": "Project owner successfully deletes a task",
+      "surface": "api",
+      "steps": [
+        "Send POST /api/projects with X-User: alice to create a project where alice is owner",
+        "Send POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "Send DELETE /api/tasks/{tid} with X-User: alice"
+      ],
+      "expected": "Only the project owner or the task creator can successfully delete a task, resulting in a 204 No Content response."
+    },
+    {
+      "id": "TC-2",
+      "title": "Task creator successfully deletes a task",
+      "surface": "api",
+      "steps": [
+        "Send POST /api/projects with X-User: alice to create a project",
+        "Send POST /api/projects/{pid}/members with X-User: alice to add bob as a member",
+        "Send POST /api/projects/{pid}/tasks with X-User: bob to create a task where bob is creator",
+        "Send DELETE /api/tasks/{tid} with X-User: bob"
+      ],
+      "expected": "Only the project owner or the task creator can successfully delete a task, resulting in a 204 No Content response."
+    },
+    {
+      "id": "TC-3",
+      "title": "Other project member attempting to delete a task receives 403 and task remains",
+      "surface": "api",
+      "steps": [
+        "Send POST /api/projects with X-User: alice to create a project",
+        "Send POST /api/projects/{pid}/members with X-User: alice to add bob as a member",
+        "Send POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "Send DELETE /api/tasks/{tid} with X-User: bob",
+        "Send GET /api/tasks/{tid} with X-User: alice"
+      ],
+      "expected": "Other project members attempting to delete the task receive a 403 Forbidden response, and the task remains in the system."
+    },
+    {
+      "id": "TC-4",
+      "title": "Non-member attempting to delete a task receives 403",
+      "surface": "api",
+      "steps": [
+        "Send POST /api/projects with X-User: alice to create a project",
+        "Send POST /api/projects/{pid}/tasks with X-User: alice to create a task",
+        "Send DELETE /api/tasks/{tid} with X-User: carol"
+      ],
+      "expected": "Non-members attempting to delete the task receive a 403 Forbidden response."
+    }
+  ]
+}

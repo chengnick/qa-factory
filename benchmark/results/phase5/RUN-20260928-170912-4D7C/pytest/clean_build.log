@@ -1,0 +1,53 @@
+===== playwright generated/test_req004_ui.py (exit 1, attempts 1)
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+____________________ test_req004_tc1_url_params_preselect _____________________
+
+base_url = 'http://127.0.0.1:53339'
+new_project = <function new_project.<locals>.create at 0x000001AE9B87FCE0>
+
+    def test_req004_tc1_url_params_preselect(base_url, new_project):
+        pid = new_project(owner="alice")
+>       page.goto(f"{base_url}/?user=alice&project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:5: NameError
+________________ test_req004_tc2_task_creation_instant_display ________________
+
+base_url = 'http://127.0.0.1:53339'
+new_project = <function new_project.<locals>.create at 0x000001AE9B87FEC0>
+
+    def test_req004_tc2_task_creation_instant_display(base_url, new_project):
+        pid = new_project(owner="alice")
+>       page.goto(f"{base_url}/?user=alice&project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:14: NameError
+___________________ test_req004_tc3_task_title_html_escaped ___________________
+
+base_url = 'http://127.0.0.1:53339'
+new_project = <function new_project.<locals>.create at 0x000001AE9BAF2160>
+
+    def test_req004_tc3_task_title_html_escaped(base_url, new_project):
+        pid = new_project(owner="alice")
+>       page.goto(f"{base_url}/?user=alice&project={pid}")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:27: NameError
+_________________ test_req004_tc4_api_error_message_displayed _________________
+
+base_url = 'http://127.0.0.1:53339'
+
+    def test_req004_tc4_api_error_message_displayed(base_url):
+>       page.goto(f"{base_url}/?user=alice&project=999999")
+E       NameError: name 'page' is not defined
+
+generated\test_req004_ui.py:41: NameError
+- generated xml file: D:\AI\project\qa-factory\artifacts\RUN-20260928-170912-4D7C\reports\junit-test_req004_ui-9f6432.xml -
+=========================== short test summary info ===========================
+FAILED generated/test_req004_ui.py::test_req004_tc1_url_params_preselect - Na...
+FAILED generated/test_req004_ui.py::test_req004_tc2_task_creation_instant_display
+FAILED generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped
+FAILED generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed
+4 failed in 2.99s
+
