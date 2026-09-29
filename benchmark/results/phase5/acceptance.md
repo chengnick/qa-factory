@@ -7,7 +7,7 @@ Spec v3.2 §13 Phase 5. Runs 2026-09-28, started 15:55–19:29 UTC. Machine-gene
 ## Conditions (frozen before the test set was unsealed)
 
 `benchmark/frozen.yaml` (sha256 `e919ca70…`), written at `219dfbe`, committed `60ad3be`. Every run checked every field before starting:
-`gemini-3.5-flash-lite` (the only model the provider reported), temperature 0, prompt `v3` (sha256 pinned), lockfile / policy / conftest hashes, isolation L1, one revision round. Runs executed at commit `60ad3be`, clean worktree.
+`gemini-3.5-flash-lite` (the only model the provider reported), temperature 0, prompt `v3` (sha256 pinned), lockfile / policy / conftest hashes, isolation L1 (= L1a, the in-process audit hook; see spec §8.2), one revision round. Runs executed at commit `60ad3be`, clean worktree.
 
 18 combinations × 5 rounds = 90 runs: dev set (B02–B04 and their 3 clean requirements) and test set (7 held-out bugs B01, B05–B10 and 5 clean requirements).
 

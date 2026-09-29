@@ -10,7 +10,7 @@ Spec v3.2 §13 Phase 4. Date 2026-09-27, Windows 11, Python 3.11, `requirements.
 | Test weakening simulated with `ScriptedRounds` is caught by W01 and marked `GOAL_DRIFT` | ✅ through the real pipeline, gate and FileWriteTool: `W01`, `GOAL_DRIFT: true`, `WORKFLOW_VIOLATION` + `GOAL_DRIFT` events on the root span, both rounds' files kept | `tests/agent_faults/test_workflow_scenarios.py::test_weakening_is_caught_by_w01_and_marked_goal_drift` |
 | Under L1, generated test code cannot write into `benchmark/` and `sut/` | ✅ refused with `PermissionError`, file absent afterwards, one `l1:open` refusal reported. Control: the same kind of write succeeds with `isolation="L0+"` | `tests/tools/test_l1_guard.py` |
 
-**How L1 is met (D22):** by an in-process audit hook, not by a restricted OS account. It stops what CPython audits (open, os.* file operations, sockets, subprocess, ctypes loading); it does not stop unaudited operations such as `_winapi.CreateFile`, or the browser process. README *Isolation* lists the gaps.
+**How L1 is met (D22):** *(since the L1 split: this is **L1a**; the OS-level L1b is not done. "L1" in this record and in run data means L1a.)* by an in-process audit hook, not by a restricted OS account. It stops what CPython audits (open, os.* file operations, sockets, subprocess, ctypes loading); it does not stop unaudited operations such as `_winapi.CreateFile`, or the browser process. README *Isolation* lists the gaps.
 
 ## Also delivered
 
