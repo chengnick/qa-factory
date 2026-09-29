@@ -34,11 +34,11 @@ Per held-out bug (cross-validated, blocked runs excluded): B01 3/4, **B05 2/4**,
 
 24 of 90 runs were blocked by Gemini 503 "model is experiencing high demand" (rule R3, layer PROVIDER): all 18 runs of round 1 and the 6 dev runs of round 2, consecutively (runs started 15:55–17:01 UTC). They were recorded as they happened and not re-run or moved to another model (spec v3 §13 Phase 2R rule). Consequences: they are excluded from the other metrics' denominators, round 1 contributes nothing, and the dev set has 3 usable rounds instead of 5.
 
-## Attribution accuracy (spec v3 §11.2): **pending manual labels**
+## Attribution accuracy (spec v3 §11.2): **not measured**
 
-40 of the 84 classified failures were sampled (stratified by the classifier's layer: SUT 18, TEST 10, PROVIDER 11, AGENT 1; seed 20260928) into a blind sheet, [../../labels/phase5/sheet.csv](../../labels/phase5/sheet.csv). The figure is computed only from a person's labels (`python -m evaluation.labels score --out benchmark/labels/phase5`); it is not filled in by the system that produced the classifications.
+40 of the 84 classified failures were sampled (stratified by the classifier's layer: SUT 18, TEST 10, PROVIDER 11, AGENT 1; seed 20260928) into a blind sheet, [../../labels/phase5/sheet.csv](../../labels/phase5/sheet.csv). The figure is computed only from a person's labels (`python -m evaluation.labels score --out benchmark/labels/phase5`); it is not filled in by the system that produced the classifications. The owner decided to close Phase 5 without labelling, so there is no attribution-accuracy figure; the sheet stays ready for later.
 
 ## Not done
 
 - **Prompt-injection layer 2 (§11.4): deferred** by the owner's decision. Authoring the attack documents was not done by the assistant; if resumed, the owner writes the injection documents and the harness only measures (generate-only, no execution).
-- Attribution accuracy: waiting for manual labels (above).
+- Attribution accuracy (§11.2): not measured; no manual labels were made (above).

@@ -20,7 +20,7 @@
 | 3 | 失敗歸因、Agent 故障注入、安全事件 | ✅ 見 `benchmark/results/phase3/acceptance.md`；W01 / W03 延到 Phase 4 |
 | 3.5 | Policy 檔（權限設定外部化、hash 追蹤）、CI（ubuntu + windows） | ✅ 見 `benchmark/results/phase3_5/ci_acceptance.md` |
 | 4 | Playwright 證據、Workflow Evaluator、L1 隔離 | ✅ 見 `benchmark/results/phase4/acceptance.md`；L1 為行程內 audit hook（D22），container 模式未做 |
-| 5 | 正式評估（解封測試集）、最終報告 | 🔄 評估完成，見 `benchmark/results/phase5/acceptance.md`；歸因準確率等待人工標註；prompt injection 第二層延後（D26） |
+| 5 | 正式評估（解封測試集）、最終報告 | ✅ 見 `benchmark/results/phase5/acceptance.md`；**未做**：歸因準確率（擁有者決定不做人工標註，盲標表保留）、prompt injection 第二層（D26） |
 | 6 | OTLP / OpenObserve / Dashboard（可選） | ⏳ |
 
 ---
