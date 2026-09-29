@@ -2,9 +2,19 @@
 
 [![CI](https://github.com/chengnick/qa-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/chengnick/qa-factory/actions/workflows/ci.yml)
 
-A QA agent pipeline with end-to-end tracing and rule-based failure attribution, evaluated against a small app with seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3.2).
+A QA agent pipeline with end-to-end tracing, rule-based failure attribution and workflow-level checks, evaluated against a small app with 10 seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3.2).
 
-## Current status: Phase 4 (evidence, Workflow Evaluator, L1 guard)
+## Results (Phase 5, [details](benchmark/results/phase5/acceptance.md))
+
+- Bugs were split into a dev set (3, used for prompt tuning) and a held-out test set (7, run once after freezing prompt, model and conditions in [benchmark/frozen.yaml](benchmark/frozen.yaml)).
+- **Held-out true detection rate: 89%** (25/28 runs, per-round range 71–100%, 95% CI 73–96%), verified by running every generated test against both the buggy and the clean build. Dev set: 9/9.
+- **False-positive rate on the clean build: 20% before cross-validation** (4/20, 95% CI 8–42%), **0/20 after it**. A user of the pipeline alone would see "defect found" on a correct system in about 1 of 5 clean runs; three of the four came from the UI requirement, whose generated UI tests are the weakest part (both B05 misses were broken UI tests).
+- Failure-layer attribution against manual labels: **pending** (40 sampled failures await a person's labels; the figure is not produced by the classifier itself).
+- 24 of 90 runs were blocked by a Gemini 503 outage and are reported separately, not re-run with another model.
+- Deterministic fault-injection suite covering tool misuse, provider outages, retry loops, permission violations and test weakening across revision rounds.
+- Isolation level: L1 as an in-process audit hook, not an OS sandbox (see *Isolation*). Prompt-injection resistance of the model (spec layer 2) was **not measured**.
+
+## Phase 4 (evidence, Workflow Evaluator, L1 guard)
 
 - **Revision rounds** ([pipeline.py](pipeline.py)): the pipeline can run automation + QA again while tests fail, up to `max_rounds`, for an automation agent that declares `revises = True`. **The real AutomationAgent does not revise, so live runs have exactly one round** (prompt stays v3; an LLM-driven revision step would need a new prompt version and a dev-set re-run). Each round's tests are saved read-only to `generated/roundN/` and listed with sha256 and per-test results in `rounds.json`. Spans carry `qa.test.round`.
 - **Playwright evidence** ([generated/conftest.py](generated/conftest.py)): a failed UI test leaves `playwright/{call}/{test}/trace.zip`, `screenshot.png` and `console.log`; tool spans list what they produced in `qa.artifact.path`. The owner conftest's hash is in `meta.json` (`conftest_sha256`).

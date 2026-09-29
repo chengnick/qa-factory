@@ -20,7 +20,7 @@
 | 3 | 失敗歸因、Agent 故障注入、安全事件 | ✅ 見 `benchmark/results/phase3/acceptance.md`；W01 / W03 延到 Phase 4 |
 | 3.5 | Policy 檔（權限設定外部化、hash 追蹤）、CI（ubuntu + windows） | ✅ 見 `benchmark/results/phase3_5/ci_acceptance.md` |
 | 4 | Playwright 證據、Workflow Evaluator、L1 隔離 | ✅ 見 `benchmark/results/phase4/acceptance.md`；L1 為行程內 audit hook（D22），container 模式未做 |
-| 5 | 正式評估（解封測試集）、最終報告 | ⏳ |
+| 5 | 正式評估（解封測試集）、最終報告 | 🔄 評估完成，見 `benchmark/results/phase5/acceptance.md`；歸因準確率等待人工標註；prompt injection 第二層延後（D26） |
 | 6 | OTLP / OpenObserve / Dashboard（可選） | ⏳ |
 
 ---
@@ -80,6 +80,7 @@
 | D23 | Workflow Evaluator 的結果不改變 verdict，另外列在 `workflow_eval.json` 與 `report.json` | verdict 描述產品與測試的狀態；「測試被改弱」是流程問題，兩者混在一起會讓 verdict 失去意義 |
 | D24 | 分類器只判斷最後一輪的測試執行；前面輪次交給 Workflow Evaluator | verdict 描述 run 最後留下的測試；改測試的過程由 W01–W03 判斷 |
 | D25 | Playwright 證據每個失敗測試一個資料夾（`playwright/{call}/{test}/`），不是 §4.2 原本的單一檔案 | 同一次執行可能有多支 UI 測試失敗，交叉驗證也會再執行一次 |
+| D26 | Prompt injection 第二層（§11.4）延後，不在 Phase 5 執行；若恢復，注入文件由專案擁有者撰寫，系統只做「只產生、不執行」的偵測與統計 | 擁有者決定；攻擊用的注入內容不由助理產生 |
 
 ---
 
