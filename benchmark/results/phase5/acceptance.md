@@ -30,9 +30,9 @@ Per held-out bug (cross-validated, blocked runs excluded): B01 3/4, **B05 2/4**,
 - **One agent failure (B01, round 4):** the test-design step returned a 10-case plan, above the limit of 8; its output was rejected as invalid (AGENT / INVALID_OUTPUT, rule R5), so no test ran.
 - **Dev vs test:** the dev set scored 9/9 but on only 9 usable runs; the test set's 89% (n=28) is the main figure. The dev-set tuning in Phase 2 does not show as a large dev/test gap, but the dev sample is too small to measure one.
 
-## Provider outage (ENV_BLOCKED)
+## Provider outage (ENV_BLOCKED: 23 × 503, 1 × 504)
 
-24 of 90 runs were blocked by Gemini 503 "model is experiencing high demand" (rule R3, layer PROVIDER): all 18 runs of round 1 and the 6 dev runs of round 2, consecutively (runs started 15:55–17:01 UTC). They were recorded as they happened and not re-run or moved to another model (spec v3 §13 Phase 2R rule). Consequences: they are excluded from the other metrics' denominators, round 1 contributes nothing, and the dev set has 3 usable rounds instead of 5.
+24 of 90 runs were blocked by the provider (layer PROVIDER): 23 by Gemini HTTP 503 "model is experiencing high demand" (rule R3) and 1 by HTTP 504 "Deadline expired" (`RUN-20260928-165559-6431`, rule R4, symptom TIMEOUT). They are all 18 runs of round 1 and the 6 dev runs of round 2, consecutively (runs started 15:55–17:01 UTC). They were recorded as they happened and not re-run or moved to another model (spec v3 §13 Phase 2R rule). Consequences: they are excluded from the other metrics' denominators, round 1 contributes nothing, and the dev set has 3 usable rounds instead of 5.
 
 ## Attribution accuracy (spec v3 §11.2): **not measured**
 

@@ -10,7 +10,7 @@ A QA agent pipeline with end-to-end tracing, rule-based failure attribution and 
 - **Held-out true detection rate: 89%** (25/28 runs, per-round range 71–100%, 95% CI 73–96%), verified by running every generated test against both the buggy and the clean build. Dev set: 9/9.
 - **False-positive rate on the clean build: 20% before cross-validation** (4/20, 95% CI 8–42%), **0/20 after it**. A user of the pipeline alone would see "defect found" on a correct system in about 1 of 5 clean runs; three of the four came from the UI requirement, whose generated UI tests are the weakest part (both B05 misses were broken UI tests).
 - Failure-layer attribution against manual labels: **not measured.** A blind sheet of 40 sampled failures is ready ([benchmark/labels/phase5](benchmark/labels/phase5/README.md)); the figure must come from a person's labels, not from the classifier itself, and no labels were made.
-- 24 of 90 runs were blocked by a Gemini 503 outage and are reported separately, not re-run with another model.
+- 24 of 90 runs were blocked by a Gemini outage (23 × HTTP 503 "high demand", 1 × HTTP 504 timeout) and are reported separately, not re-run with another model.
 - Deterministic fault-injection suite covering tool misuse, provider outages, retry loops, permission violations and test weakening across revision rounds.
 - Isolation level: L1 as an in-process audit hook, not an OS sandbox (see *Isolation*). Prompt-injection resistance of the model (spec layer 2) was **not measured**.
 
