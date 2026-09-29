@@ -1,9 +1,11 @@
 {
   "info": {
     "results_dir": "benchmark/results/phase5",
+    "runs": 90,
     "population": 84,
     "sampled": 40,
     "seed": 20260928,
+    "order_seed": 20260929,
     "population_by_layer": {
       "PROVIDER": 24,
       "SUT": 37,
@@ -12,16 +14,116 @@
     },
     "sample_by_layer": {
       "TEST": 10,
-      "SUT": 18,
       "PROVIDER": 11,
+      "SUT": 18,
       "AGENT": 1
+    },
+    "sample_by_kind": {
+      "diff": 28,
+      "llm": 11,
+      "agent": 1
     }
   },
   "key": {
+    "RUN-20260928-170912-4D7C#3": {
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10"
+    },
+    "RUN-20260928-162510-6EF7#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-165559-6431#0": {
+      "layer": "PROVIDER",
+      "symptom": "TIMEOUT",
+      "matched_rule": "R4"
+    },
+    "RUN-20260928-163539-3FF2#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-191150-63FB#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-170912-4D7C#0": {
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10"
+    },
+    "RUN-20260928-184751-2FE3#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-160908-C60F#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-184456-8DF1#2": {
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12"
+    },
     "RUN-20260928-185129-7150#0": {
       "layer": "TEST",
       "symptom": "ASSERTION",
       "matched_rule": "R12"
+    },
+    "RUN-20260928-182648-B528#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-171056-7231#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-174355-26C5#1": {
+      "layer": "TEST",
+      "symptom": "CRASH",
+      "matched_rule": "R10"
+    },
+    "RUN-20260928-161937-0167#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-162123-E13C#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-161605-5994#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-163927-E9F3#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-161422-9E5B#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-181752-C9AE#1": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-180556-9DB8#0": {
+      "layer": "SUT",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R11"
     },
     "RUN-20260928-190713-1408#1": {
       "layer": "SUT",
@@ -33,90 +135,85 @@
       "symptom": "ASSERTION",
       "matched_rule": "R11"
     },
-    "RUN-20260928-160421-20F0#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-181752-C9AE#1": {
+    "RUN-20260928-184702-7657#0": {
       "layer": "SUT",
       "symptom": "ASSERTION",
       "matched_rule": "R11"
     },
-    "RUN-20260928-191150-63FB#0": {
+    "RUN-20260928-191850-A65E#1": {
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12"
+    },
+    "RUN-20260928-181752-C9AE#2": {
+      "layer": "TEST",
+      "symptom": "ASSERTION",
+      "matched_rule": "R12"
+    },
+    "RUN-20260928-191850-A65E#0": {
       "layer": "SUT",
       "symptom": "ASSERTION",
       "matched_rule": "R11"
-    },
-    "RUN-20260928-162123-E13C#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
     },
     "RUN-20260928-174355-26C5#0": {
       "layer": "TEST",
       "symptom": "CRASH",
       "matched_rule": "R10"
     },
-    "RUN-20260928-184615-6E56#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
+    "RUN-20260928-184430-E57F#0": {
+      "layer": "AGENT",
+      "symptom": "INVALID_OUTPUT",
+      "matched_rule": "R5"
     },
     "RUN-20260928-185449-9A01#0": {
       "layer": "SUT",
       "symptom": "ASSERTION",
       "matched_rule": "R11"
     },
-    "RUN-20260928-184430-E57F#0": {
-      "layer": "AGENT",
-      "symptom": "INVALID_OUTPUT",
-      "matched_rule": "R5"
-    },
-    "RUN-20260928-184702-7657#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-183010-313C#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-171056-7231#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-161422-9E5B#0": {
+    "RUN-20260928-160109-7064#0": {
       "layer": "PROVIDER",
       "symptom": "HTTP_5XX",
       "matched_rule": "R3"
     },
-    "RUN-20260928-174355-26C5#1": {
-      "layer": "TEST",
-      "symptom": "CRASH",
-      "matched_rule": "R10"
+    "RUN-20260928-185529-D62B#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
     },
     "RUN-20260928-183440-2857#1": {
       "layer": "TEST",
       "symptom": "ASSERTION",
       "matched_rule": "R12"
     },
-    "RUN-20260928-160908-C60F#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-184751-2FE3#0": {
+    "RUN-20260928-183010-313C#0": {
       "layer": "SUT",
       "symptom": "ASSERTION",
       "matched_rule": "R11"
     },
-    "RUN-20260928-184456-8DF1#2": {
-      "layer": "TEST",
+    "RUN-20260928-184615-6E56#0": {
+      "layer": "SUT",
       "symptom": "ASSERTION",
-      "matched_rule": "R12"
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-184114-087E#0": {
+      "layer": "SUT",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-160421-20F0#0": {
+      "layer": "PROVIDER",
+      "symptom": "HTTP_5XX",
+      "matched_rule": "R3"
+    },
+    "RUN-20260928-170329-47C4#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
+    },
+    "RUN-20260928-172359-37F0#0": {
+      "layer": "SUT",
+      "symptom": "ASSERTION",
+      "matched_rule": "R11"
     },
     "RUN-20260928-184921-AB17#1": {
       "layer": "TEST",
@@ -127,96 +224,6 @@
       "layer": "SUT",
       "symptom": "ASSERTION",
       "matched_rule": "R11"
-    },
-    "RUN-20260928-185529-D62B#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-184114-087E#0": {
-      "layer": "SUT",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-191850-A65E#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-181752-C9AE#2": {
-      "layer": "TEST",
-      "symptom": "ASSERTION",
-      "matched_rule": "R12"
-    },
-    "RUN-20260928-161605-5994#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-163539-3FF2#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-172359-37F0#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-170912-4D7C#3": {
-      "layer": "TEST",
-      "symptom": "CRASH",
-      "matched_rule": "R10"
-    },
-    "RUN-20260928-180556-9DB8#0": {
-      "layer": "SUT",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-165559-6431#0": {
-      "layer": "PROVIDER",
-      "symptom": "TIMEOUT",
-      "matched_rule": "R4"
-    },
-    "RUN-20260928-160109-7064#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-170329-47C4#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-191850-A65E#1": {
-      "layer": "TEST",
-      "symptom": "ASSERTION",
-      "matched_rule": "R12"
-    },
-    "RUN-20260928-161937-0167#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-162510-6EF7#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-182648-B528#0": {
-      "layer": "SUT",
-      "symptom": "ASSERTION",
-      "matched_rule": "R11"
-    },
-    "RUN-20260928-163927-E9F3#0": {
-      "layer": "PROVIDER",
-      "symptom": "HTTP_5XX",
-      "matched_rule": "R3"
-    },
-    "RUN-20260928-170912-4D7C#0": {
-      "layer": "TEST",
-      "symptom": "CRASH",
-      "matched_rule": "R10"
     }
   }
 }

@@ -1,12 +1,66 @@
-﻿id,run_id,set,requirement_id,sut_bugs,kind,test_id,bug_build,clean_build,observation,generated_tests,human_layer,notes
-RUN-20260928-185129-7150#0,RUN-20260928-185129-7150,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error,FAIL,FAIL,"fails on a clean SUT: AssertionError: Locator expected not to be empty
+﻿id,run_id,set,requirement_id,sut_bugs,kind,test_id,observation,generated_tests,human_layer,targets_injected_bug,notes
+RUN-20260928-170912-4D7C#3,RUN-20260928-170912-4D7C,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed,NameError: name 'page' is not defined,RUN-20260928-170912-4D7C/generated/test_req004_ui.py,,,
+RUN-20260928-162510-6EF7#0,RUN-20260928-162510-6EF7,test,REQ-008,(clean),llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-165559-6431#0,RUN-20260928-165559-6431,dev,REQ-007,(clean),llm,,LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete.,,,,
+RUN-20260928-163539-3FF2#0,RUN-20260928-163539-3FF2,dev,REQ-005,B02,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-191150-63FB#0,RUN-20260928-191150-63FB,test,REQ-008,B07,diff,generated/test_req008_api.py::test_other_member_attempts_to_delete_task,"AssertionError: 
+assert 204 == 403
+ +  where 204 = <Response [204 No Content]>.status_code",RUN-20260928-191150-63FB/generated/test_req008_api.py,,,
+RUN-20260928-170912-4D7C#0,RUN-20260928-170912-4D7C,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc1_url_params_preselect,NameError: name 'page' is not defined,RUN-20260928-170912-4D7C/generated/test_req004_ui.py,,,
+RUN-20260928-184751-2FE3#0,RUN-20260928-184751-2FE3,test,REQ-006,B08,diff,generated/test_req006_api.py::test_assign_task_to_non_project_member,"AssertionError: {""id"":1,""project_id"":1,""title"":""Test Task"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":2,""created_by"":1,""created_at"":""2026-09-28T18:48:19.341+00:00"",""updated_at"":""2026-09-28T18:48:19.344+00:00""}
+assert 200 == 422
+ +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-184751-2FE3/generated/test_req006_api.py,,,
+RUN-20260928-160908-C60F#0,RUN-20260928-160908-C60F,test,REQ-004,B05,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-184456-8DF1#2,RUN-20260928-184456-8DF1,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area,"AssertionError: Locator expected not to be empty
 Actual value: empty 
 Call log:
   - Expect ""to_be_empty"" with timeout 5000ms
   - waiting for get_by_test_id(""error"")
     14 × locator resolved to <div id=""error"" data-testid=""error""></div>
-       - unexpected value ""empty"" | test",RUN-20260928-185129-7150/generated/test_req004_ui.py,,
-RUN-20260928-190713-1408#1,RUN-20260928-190713-1408,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_tc2_task_title_html_escaped,FAIL,PASS,"bug build: AssertionError: Locator expected to have text '<b>x</b>'
+       - unexpected value ""empty""",RUN-20260928-184456-8DF1/generated/test_req004_ui.py,,,
+RUN-20260928-185129-7150#0,RUN-20260928-185129-7150,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc4_display_error_message_upon_api_error,"AssertionError: Locator expected not to be empty
+Actual value: empty 
+Call log:
+  - Expect ""to_be_empty"" with timeout 5000ms
+  - waiting for get_by_test_id(""error"")
+    14 × locator resolved to <div id=""error"" data-testid=""error""></div>
+       - unexpected value ""empty""",RUN-20260928-185129-7150/generated/test_req004_ui.py,,,
+RUN-20260928-182648-B528#0,RUN-20260928-182648-B528,test,REQ-008,B07,diff,generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task,"AssertionError: 
+assert 204 == 403
+ +  where 204 = <Response [204 No Content]>.status_code",RUN-20260928-182648-B528/generated/test_req008_api.py,,,
+RUN-20260928-171056-7231#0,RUN-20260928-171056-7231,test,REQ-002,B06,diff,generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default,"AssertionError: {""detail"":[{""loc"":[""body"",""priority""],""msg"":""priority must be between 1 and 5""}]}
+assert 422 in (200, 201)
+ +  where 422 = <Response [422 Unprocessable Entity]>.status_code",RUN-20260928-171056-7231/generated/test_req002_api.py,,,
+RUN-20260928-174355-26C5#1,RUN-20260928-174355-26C5,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal,NameError: name 'page' is not defined,RUN-20260928-174355-26C5/generated/test_req004_ui.py,,,
+RUN-20260928-161937-0167#0,RUN-20260928-161937-0167,test,REQ-004,B10,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-162123-E13C#0,RUN-20260928-162123-E13C,test,REQ-003,(clean),llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-161605-5994#0,RUN-20260928-161605-5994,test,REQ-006,B08,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-163927-E9F3#0,RUN-20260928-163927-E9F3,dev,REQ-002,B04,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-161422-9E5B#0,RUN-20260928-161422-9E5B,test,REQ-008,B07,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-181752-C9AE#1,RUN-20260928-181752-C9AE,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped,"AssertionError: Locator expected to have text '<b>x</b>'
+Actual value: None
+Error: element(s) not found 
+Call log:
+  - Expect ""to_have_text"" with timeout 5000ms
+  - waiting for get_by_test_id(""task-title"").first
+
+Aria snapshot:
+- heading ""TaskBoard"" [level=1]
+- banner:
+  - text: User
+  - combobox ""User"":
+    - option ""alice"" [selected]
+    - option ""bob""
+    - option ""carol""
+    - option ""dave""
+  - text: Project
+  - combobox ""Project"":
+    - option ""gen-44e02592""
+    - option ""gen-f9dd6192""",RUN-20260928-181752-C9AE/generated/test_req004_ui.py,,,
+RUN-20260928-180556-9DB8#0,RUN-20260928-180556-9DB8,dev,REQ-002,B04,diff,generated/test_req002_api.py::test_tc2_title_invalid,"AssertionError: Internal Server Error
+assert 500 == 422
+ +  where 500 = <Response [500 Internal Server Error]>.status_code",RUN-20260928-180556-9DB8/generated/test_req002_api.py,,,
+RUN-20260928-190713-1408#1,RUN-20260928-190713-1408,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_tc2_task_title_html_escaped,"AssertionError: Locator expected to have text '<b>x</b>'
 Actual value: None
 Error: element(s) not found 
 Call log:
@@ -17,87 +71,29 @@ Aria snapshot:
 - heading ""TaskBoard"" [level=1]
 - banner:
   - text: User
-  - combob",RUN-20260928-190713-1408/generated/test_req004_ui.py,,
-RUN-20260928-191437-3540#0,RUN-20260928-191437-3540,test,REQ-006,B08,diff,generated/test_req006_api.py::test_assign_task_to_non_project_member_returns_422,FAIL,PASS,"bug build: AssertionError: {""id"":1,""project_id"":1,""title"":""Task 1"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":2,""created_by"":1,""created_at"":""2026-09-28T19:16:01.950+00:00"",""updated_at"":""2026-09-28T19:16:01.954+00:00""}
+  - combobox ""User"":
+    - option ""alice"" [selected]
+    - option ""bob""
+    - option ""carol""
+    - option ""dave""
+  - text: Project
+  - combobox ""Project"":
+    - option ""gen-a303aadc""
+    - option ""gen-fb1af012"" [selected]",RUN-20260928-190713-1408/generated/test_req004_ui.py,,,
+RUN-20260928-191437-3540#0,RUN-20260928-191437-3540,test,REQ-006,B08,diff,generated/test_req006_api.py::test_assign_task_to_non_project_member_returns_422,"AssertionError: {""id"":1,""project_id"":1,""title"":""Task 1"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":2,""created_by"":1,""created_at"":""2026-09-28T19:16:01.950+00:00"",""updated_at"":""2026-09-28T19:16:01.954+00:00""}
 assert 200 == 422
- +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-191437-3540/generated/test_req006_api.py,,
-RUN-20260928-160421-20F0#0,RUN-20260928-160421-20F0,dev,REQ-007,(clean),llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-181752-C9AE#1,RUN-20260928-181752-C9AE,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc3_task_title_html_escaped,FAIL,PASS,"bug build: AssertionError: Locator expected to have text '<b>x</b>'
-Actual value: None
-Error: element(s) not found 
-Call log:
-  - Expect ""to_have_text"" with timeout 5000ms
-  - waiting for get_by_test_id(""task-title"").first
-
-Aria snapshot:
-- heading ""TaskBoard"" [level=1]
-- banner:
-  - text: User
-  -",RUN-20260928-181752-C9AE/generated/test_req004_ui.py,,
-RUN-20260928-191150-63FB#0,RUN-20260928-191150-63FB,test,REQ-008,B07,diff,generated/test_req008_api.py::test_other_member_attempts_to_delete_task,FAIL,PASS,"bug build: AssertionError: 
+ +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-191437-3540/generated/test_req006_api.py,,,
+RUN-20260928-184702-7657#0,RUN-20260928-184702-7657,test,REQ-008,B07,diff,generated/test_req008_api.py::test_other_member_cannot_delete_task,"AssertionError: 
 assert 204 == 403
- +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_other_member_attempts_to_delete_task (FAIL)",RUN-20260928-191150-63FB/generated/test_req008_api.py,,
-RUN-20260928-162123-E13C#0,RUN-20260928-162123-E13C,test,REQ-003,(clean),llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-174355-26C5#0,RUN-20260928-174355-26C5,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form,ERROR,ERROR,bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form (ERROR),RUN-20260928-174355-26C5/generated/test_req004_ui.py,,
-RUN-20260928-184615-6E56#0,RUN-20260928-184615-6E56,test,REQ-002,B06,diff,generated/test_req002_api.py::test_tc3_priority_boundary_values,FAIL,PASS,"bug build: AssertionError: {""detail"":[{""loc"":[""body"",""priority""],""msg"":""priority must be between 1 and 5""}]}
-assert 422 in (200, 201)
- +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_priority_boundary_values (FAIL)",RUN-20260928-184615-6E56/generated/test_req002_api.py,,
-RUN-20260928-185449-9A01#0,RUN-20260928-185449-9A01,dev,REQ-005,B02,diff,generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409,FAIL,PASS,"bug build: AssertionError: {""id"":3,""project_id"":2,""title"":""Task 2"",""description"":"""",""status"":""in_progress"",""priority"":3,""assignee_id"":null,""created_by"":1,""created_at"":""2026-09-28T18:55:09.761+00:00"",""updated_at"":""2026-09-28T18:55:09.766+00:00""}
-assert 200 == 409
- +  where 200 = <Response [200 OK]>.s",RUN-20260928-185449-9A01/generated/test_req005_api.py,,
-RUN-20260928-184430-E57F#0,RUN-20260928-184430-E57F,test,REQ-003,B01,agent,,,,AgentOutputError: test plan has 10 cases; at most 8 allowed,,,
-RUN-20260928-184702-7657#0,RUN-20260928-184702-7657,test,REQ-008,B07,diff,generated/test_req008_api.py::test_other_member_cannot_delete_task,FAIL,PASS,"bug build: AssertionError: 
-assert 204 == 403
- +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_other_member_cannot_delete_task (FAIL)",RUN-20260928-184702-7657/generated/test_req008_api.py,,
-RUN-20260928-183010-313C#0,RUN-20260928-183010-313C,test,REQ-009,B09,diff,generated/test_req009_api.py::test_req009_tc1_case_insensitive_search,FAIL,PASS,"bug build: AssertionError: Expected 1 task, got []
-assert 0 == 1
- +  where 0 = len([]) | test generated/test_req009_api.py::test_req009_tc1_case_insensitive_search (FAIL)",RUN-20260928-183010-313C/generated/test_req009_api.py,,
-RUN-20260928-171056-7231#0,RUN-20260928-171056-7231,test,REQ-002,B06,diff,generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default,FAIL,PASS,"bug build: AssertionError: {""detail"":[{""loc"":[""body"",""priority""],""msg"":""priority must be between 1 and 5""}]}
-assert 422 in (200, 201)
- +  where 422 = <Response [422 Unprocessable Entity]>.status_code | test generated/test_req002_api.py::test_tc3_create_task_priority_boundaries_and_default (FAIL) | c",RUN-20260928-171056-7231/generated/test_req002_api.py,,
-RUN-20260928-161422-9E5B#0,RUN-20260928-161422-9E5B,test,REQ-008,B07,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-174355-26C5#1,RUN-20260928-174355-26C5,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal,ERROR,ERROR,bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_tc2_task_title_html_tags_as_literal (ERROR),RUN-20260928-174355-26C5/generated/test_req004_ui.py,,
-RUN-20260928-183440-2857#1,RUN-20260928-183440-2857,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area,FAIL,FAIL,"fails on a clean SUT: AssertionError: Locator expected not to have text ''
-Actual value:  
-Call log:
-  - Expect ""to_have_text"" with timeout 5000ms
-  - waiting for get_by_test_id(""error"")
-    14 × locator resolved to <div id=""error"" data-testid=""error""></div>
-       - unexpected value """" | test gener",RUN-20260928-183440-2857/generated/test_req004_ui.py,,
-RUN-20260928-160908-C60F#0,RUN-20260928-160908-C60F,test,REQ-004,B05,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-184751-2FE3#0,RUN-20260928-184751-2FE3,test,REQ-006,B08,diff,generated/test_req006_api.py::test_assign_task_to_non_project_member,FAIL,PASS,"bug build: AssertionError: {""id"":1,""project_id"":1,""title"":""Test Task"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":2,""created_by"":1,""created_at"":""2026-09-28T18:48:19.341+00:00"",""updated_at"":""2026-09-28T18:48:19.344+00:00""}
-assert 200 == 422
- +  where 200 = <Response [200 OK]>.status_c",RUN-20260928-184751-2FE3/generated/test_req006_api.py,,
-RUN-20260928-184456-8DF1#2,RUN-20260928-184456-8DF1,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area,FAIL,FAIL,"bug build: AssertionError: Locator expected not to be empty
+ +  where 204 = <Response [204 No Content]>.status_code",RUN-20260928-184702-7657/generated/test_req008_api.py,,,
+RUN-20260928-191850-A65E#1,RUN-20260928-191850-A65E,test,REQ-004,B10,diff,generated/test_req004_ui.py::test_tc3_api_error_shows_message,"AssertionError: Locator expected not to be empty
 Actual value: empty 
 Call log:
   - Expect ""to_be_empty"" with timeout 5000ms
   - waiting for get_by_test_id(""error"")
     14 × locator resolved to <div id=""error"" data-testid=""error""></div>
-       - unexpected value ""empty"" | clean build: Ass",RUN-20260928-184456-8DF1/generated/test_req004_ui.py,,
-RUN-20260928-184921-AB17#1,RUN-20260928-184921-AB17,test,REQ-004,B10,diff,generated/test_req004_ui.py::test_tc3_api_errors_display_message,FAIL,FAIL,"bug build: AssertionError: Locator expected not to be empty
-Actual value: empty 
-Call log:
-  - Expect ""to_be_empty"" with timeout 5000ms
-  - waiting for get_by_test_id(""error"")
-    14 × locator resolved to <div id=""error"" data-testid=""error""></div>
-       - unexpected value ""empty"" | clean build: Ass",RUN-20260928-184921-AB17/generated/test_req004_ui.py,,
-RUN-20260928-190326-2D86#0,RUN-20260928-190326-2D86,test,REQ-003,B01,diff,generated/test_req003_api.py::test_tc3_sequential_paging,FAIL,PASS,"bug build: AssertionError: assert 1 == 2
- +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}]) | test generated/test_req003_api.py::test_tc3_sequential_paging (FAIL)",RUN-20260928-190326-2D86/generated/test_req003_api.py,,
-RUN-20260928-185529-D62B#0,RUN-20260928-185529-D62B,dev,REQ-007,B03,diff,generated/test_req007_api.py::test_tc2_non_member_receives_403_reading_task_detail,FAIL,PASS,"bug build: AssertionError: {""id"":2,""project_id"":2,""title"":""Secret Task"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":null,""created_by"":1,""created_at"":""2026-09-28T18:55:55.982+00:00"",""updated_at"":""2026-09-28T18:55:55.982+00:00""}
-assert 200 == 403
- +  where 200 = <Response [200 OK]>.sta",RUN-20260928-185529-D62B/generated/test_req007_api.py,,
-RUN-20260928-184114-087E#0,RUN-20260928-184114-087E,dev,REQ-002,B04,diff,generated/test_req002_api.py::test_tc2_task_title_invalid,FAIL,PASS,"bug build: AssertionError: Internal Server Error
-assert 500 == 422
- +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_task_title_invalid (FAIL)",RUN-20260928-184114-087E/generated/test_req002_api.py,,
-RUN-20260928-191850-A65E#0,RUN-20260928-191850-A65E,test,REQ-004,B10,diff,generated/test_req004_ui.py::test_tc2_task_title_html_escaped,FAIL,PASS,"bug build: AssertionError: Locator expected to have text '<b>x</b>'
-Actual value: x 
-Call log:
-  - Expect ""to_have_text"" with timeout 5000ms
-  - waiting for get_by_test_id(""task-title"").first
-    13 × locator resolved to <span class=""title"" data-testid=""task-title"">…</span>
-       - unexpected value",RUN-20260928-191850-A65E/generated/test_req004_ui.py,,
-RUN-20260928-181752-C9AE#2,RUN-20260928-181752-C9AE,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc4_api_errors_displayed,FAIL,FAIL,"bug build: AssertionError: Locator expected to have attribute 'true'
+       - unexpected value ""empty""",RUN-20260928-191850-A65E/generated/test_req004_ui.py,,,
+RUN-20260928-181752-C9AE#2,RUN-20260928-181752-C9AE,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc4_api_errors_displayed,"AssertionError: Locator expected to have attribute 'true'
 Actual value: None 
 Call log:
   - Expect ""to_have_attribute"" with timeout 5000ms
@@ -106,31 +102,64 @@ Call log:
        - unexpected value ""null""
 
 Aria snapshot:
-- heading ""TaskBoard"" [le",RUN-20260928-181752-C9AE/generated/test_req004_ui.py,,
-RUN-20260928-161605-5994#0,RUN-20260928-161605-5994,test,REQ-006,B08,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-163539-3FF2#0,RUN-20260928-163539-3FF2,dev,REQ-005,B02,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-172359-37F0#0,RUN-20260928-172359-37F0,test,REQ-006,B08,diff,generated/test_req006_api.py::test_assign_task_to_non_member,FAIL,PASS,"bug build: AssertionError: {""id"":1,""project_id"":1,""title"":""Task 1"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":2,""created_by"":1,""created_at"":""2026-09-28T17:30:42.335+00:00"",""updated_at"":""2026-09-28T17:30:42.340+00:00""}
-assert 200 == 422
- +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-172359-37F0/generated/test_req006_api.py,,
-RUN-20260928-170912-4D7C#3,RUN-20260928-170912-4D7C,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed,ERROR,ERROR,bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc4_api_error_message_displayed (ERROR),RUN-20260928-170912-4D7C/generated/test_req004_ui.py,,
-RUN-20260928-180556-9DB8#0,RUN-20260928-180556-9DB8,dev,REQ-002,B04,diff,generated/test_req002_api.py::test_tc2_title_invalid,FAIL,PASS,"bug build: AssertionError: Internal Server Error
+- heading ""TaskBoard"" [level=1]
+- banner:
+  - text: User
+  - combobox ""User""
+  - text: Project
+  - combobox ""Project""
+  - textbox ""New project""
+  - button ""Add project""
+- textbox ""New task title""
+- button ""Create""
+- text: ""401 {\""detail",RUN-20260928-181752-C9AE/generated/test_req004_ui.py,,,
+RUN-20260928-191850-A65E#0,RUN-20260928-191850-A65E,test,REQ-004,B10,diff,generated/test_req004_ui.py::test_tc2_task_title_html_escaped,"AssertionError: Locator expected to have text '<b>x</b>'
+Actual value: x 
+Call log:
+  - Expect ""to_have_text"" with timeout 5000ms
+  - waiting for get_by_test_id(""task-title"").first
+    13 × locator resolved to <span class=""title"" data-testid=""task-title"">…</span>
+       - unexpected value ""x""
+
+Aria snapshot:
+- text: x",RUN-20260928-191850-A65E/generated/test_req004_ui.py,,,
+RUN-20260928-174355-26C5#0,RUN-20260928-174355-26C5,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc1_create_task_successfully_via_form,NameError: name 'page' is not defined,RUN-20260928-174355-26C5/generated/test_req004_ui.py,,,
+RUN-20260928-184430-E57F#0,RUN-20260928-184430-E57F,test,REQ-003,B01,agent,,AgentOutputError: test plan has 10 cases; at most 8 allowed,,,,
+RUN-20260928-185449-9A01#0,RUN-20260928-185449-9A01,dev,REQ-005,B02,diff,generated/test_req005_api.py::test_req005_tc2_transition_from_done_returns_409,"AssertionError: {""id"":3,""project_id"":2,""title"":""Task 2"",""description"":"""",""status"":""in_progress"",""priority"":3,""assignee_id"":null,""created_by"":1,""created_at"":""2026-09-28T18:55:09.761+00:00"",""updated_at"":""2026-09-28T18:55:09.766+00:00""}
+assert 200 == 409
+ +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-185449-9A01/generated/test_req005_api.py,,,
+RUN-20260928-160109-7064#0,RUN-20260928-160109-7064,dev,REQ-002,B04,llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-185529-D62B#0,RUN-20260928-185529-D62B,dev,REQ-007,B03,diff,generated/test_req007_api.py::test_tc2_non_member_receives_403_reading_task_detail,"AssertionError: {""id"":2,""project_id"":2,""title"":""Secret Task"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":null,""created_by"":1,""created_at"":""2026-09-28T18:55:55.982+00:00"",""updated_at"":""2026-09-28T18:55:55.982+00:00""}
+assert 200 == 403
+ +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-185529-D62B/generated/test_req007_api.py,,,
+RUN-20260928-183440-2857#1,RUN-20260928-183440-2857,test,REQ-004,(clean),diff,generated/test_req004_ui.py::test_tc3_api_error_displays_message_in_error_area,"AssertionError: Locator expected not to have text ''
+Actual value:  
+Call log:
+  - Expect ""to_have_text"" with timeout 5000ms
+  - waiting for get_by_test_id(""error"")
+    14 × locator resolved to <div id=""error"" data-testid=""error""></div>
+       - unexpected value """"",RUN-20260928-183440-2857/generated/test_req004_ui.py,,,
+RUN-20260928-183010-313C#0,RUN-20260928-183010-313C,test,REQ-009,B09,diff,generated/test_req009_api.py::test_req009_tc1_case_insensitive_search,"AssertionError: Expected 1 task, got []
+assert 0 == 1
+ +  where 0 = len([])",RUN-20260928-183010-313C/generated/test_req009_api.py,,,
+RUN-20260928-184615-6E56#0,RUN-20260928-184615-6E56,test,REQ-002,B06,diff,generated/test_req002_api.py::test_tc3_priority_boundary_values,"AssertionError: {""detail"":[{""loc"":[""body"",""priority""],""msg"":""priority must be between 1 and 5""}]}
+assert 422 in (200, 201)
+ +  where 422 = <Response [422 Unprocessable Entity]>.status_code",RUN-20260928-184615-6E56/generated/test_req002_api.py,,,
+RUN-20260928-184114-087E#0,RUN-20260928-184114-087E,dev,REQ-002,B04,diff,generated/test_req002_api.py::test_tc2_task_title_invalid,"AssertionError: Internal Server Error
 assert 500 == 422
- +  where 500 = <Response [500 Internal Server Error]>.status_code | test generated/test_req002_api.py::test_tc2_title_invalid (FAIL)",RUN-20260928-180556-9DB8/generated/test_req002_api.py,,
-RUN-20260928-165559-6431#0,RUN-20260928-165559-6431,dev,REQ-007,(clean),llm,,,,LLMTimeoutError: Gemini API error 504: Deadline expired before operation could complete.,,,
-RUN-20260928-160109-7064#0,RUN-20260928-160109-7064,dev,REQ-002,B04,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-170329-47C4#0,RUN-20260928-170329-47C4,test,REQ-003,B01,diff,generated/test_req003_api.py::test_req003_tc2_total_count_unaffected_by_pagination,FAIL,PASS,"bug build: AssertionError: assert 1 == 2
- +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T17:08:51.448+00:00', 'created_by': 1, 'description': '', ...}]) | test generated/test_req003_api.py::test_req003_tc2_total_count_unaffected_by_pagination (FAIL)",RUN-20260928-170329-47C4/generated/test_req003_api.py,,
-RUN-20260928-191850-A65E#1,RUN-20260928-191850-A65E,test,REQ-004,B10,diff,generated/test_req004_ui.py::test_tc3_api_error_shows_message,FAIL,FAIL,"bug build: AssertionError: Locator expected not to be empty
+ +  where 500 = <Response [500 Internal Server Error]>.status_code",RUN-20260928-184114-087E/generated/test_req002_api.py,,,
+RUN-20260928-160421-20F0#0,RUN-20260928-160421-20F0,dev,REQ-007,(clean),llm,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,,
+RUN-20260928-170329-47C4#0,RUN-20260928-170329-47C4,test,REQ-003,B01,diff,generated/test_req003_api.py::test_req003_tc2_total_count_unaffected_by_pagination,"AssertionError: assert 1 == 2
+ +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T17:08:51.448+00:00', 'created_by': 1, 'description': '', ...}])",RUN-20260928-170329-47C4/generated/test_req003_api.py,,,
+RUN-20260928-172359-37F0#0,RUN-20260928-172359-37F0,test,REQ-006,B08,diff,generated/test_req006_api.py::test_assign_task_to_non_member,"AssertionError: {""id"":1,""project_id"":1,""title"":""Task 1"",""description"":"""",""status"":""todo"",""priority"":3,""assignee_id"":2,""created_by"":1,""created_at"":""2026-09-28T17:30:42.335+00:00"",""updated_at"":""2026-09-28T17:30:42.340+00:00""}
+assert 200 == 422
+ +  where 200 = <Response [200 OK]>.status_code",RUN-20260928-172359-37F0/generated/test_req006_api.py,,,
+RUN-20260928-184921-AB17#1,RUN-20260928-184921-AB17,test,REQ-004,B10,diff,generated/test_req004_ui.py::test_tc3_api_errors_display_message,"AssertionError: Locator expected not to be empty
 Actual value: empty 
 Call log:
   - Expect ""to_be_empty"" with timeout 5000ms
   - waiting for get_by_test_id(""error"")
     14 × locator resolved to <div id=""error"" data-testid=""error""></div>
-       - unexpected value ""empty"" | clean build: Ass",RUN-20260928-191850-A65E/generated/test_req004_ui.py,,
-RUN-20260928-161937-0167#0,RUN-20260928-161937-0167,test,REQ-004,B10,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-162510-6EF7#0,RUN-20260928-162510-6EF7,test,REQ-008,(clean),llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-182648-B528#0,RUN-20260928-182648-B528,test,REQ-008,B07,diff,generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task,FAIL,PASS,"bug build: AssertionError: 
-assert 204 == 403
- +  where 204 = <Response [204 No Content]>.status_code | test generated/test_req008_api.py::test_member_not_owner_nor_creator_deletes_task (FAIL)",RUN-20260928-182648-B528/generated/test_req008_api.py,,
-RUN-20260928-163927-E9F3#0,RUN-20260928-163927-E9F3,dev,REQ-002,B04,llm,,,,LLMUnavailableError: Gemini API error 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.,,,
-RUN-20260928-170912-4D7C#0,RUN-20260928-170912-4D7C,test,REQ-004,B05,diff,generated/test_req004_ui.py::test_req004_tc1_url_params_preselect,ERROR,ERROR,bug build: NameError: name 'page' is not defined | test generated/test_req004_ui.py::test_req004_tc1_url_params_preselect (ERROR),RUN-20260928-170912-4D7C/generated/test_req004_ui.py,,
+       - unexpected value ""empty""",RUN-20260928-184921-AB17/generated/test_req004_ui.py,,,
+RUN-20260928-190326-2D86#0,RUN-20260928-190326-2D86,test,REQ-003,B01,diff,generated/test_req003_api.py::test_tc3_sequential_paging,"AssertionError: assert 1 == 2
+ +  where 1 = len([{'assignee_id': None, 'created_at': '2026-09-28T19:06:52.418+00:00', 'created_by': 1, 'description': '', ...}])",RUN-20260928-190326-2D86/generated/test_req003_api.py,,,
