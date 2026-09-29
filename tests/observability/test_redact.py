@@ -44,6 +44,29 @@ def test_redact_leaves_ordinary_text_alone(text):
     assert redact(text) == text
 
 
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        (r'File "C:\Users\Some_User\AppData\Local\Programs\Python\Python311\Lib\threading.py"',
+         r'File "C:\Users\[USER]\AppData\Local\Programs\Python\Python311\Lib\threading.py"'),
+        (r"C:\\Users\\Some_User\\AppData", r"C:\\Users\\[USER]\\AppData"),  # escaped, as inside JSON
+        ("c:/users/some.user/project", "c:/users/[USER]/project"),
+        (r"D:\Documents and Settings\bob\x", r"D:\Documents and Settings\[USER]\x"),
+        ("/home/runner/work/qa-factory", "/home/[USER]/work/qa-factory"),
+        ("/Users/alice/Library/x", "/Users/[USER]/Library/x"),
+    ],
+)
+def test_redact_masks_home_directory_account_names(text, expected):
+    assert redact(text) == expected
+
+
+@pytest.mark.parametrize(
+    "text", ["GET /api/users/3 -> 200", r"C:\Program Files\Python", "https://example.test/Usersguide", r"D:\a\qa-factory\tests"]
+)
+def test_home_masking_leaves_other_paths_alone(text):
+    assert redact(text) == text
+
+
 def test_redact_value_recurses():
     value = {"a": [f"k={ANTHROPIC_KEY}", ("password=hunter2",)], "n": 3}
     out = redact_value(value)

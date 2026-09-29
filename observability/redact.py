@@ -6,6 +6,7 @@ import re
 from typing import Any
 
 MASK = "[REDACTED]"
+USER_MASK = "[USER]"  # replaces the account name in a home-directory path
 
 # Order matters: specific token shapes first, then generic key=value / key: value pairs.
 _PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
@@ -24,6 +25,9 @@ _PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         ),
         rf"\1\2{MASK}",
     ),
+    # Home directories: the account name in a local path is personal data (Phase 2R logs held C:\Users\<name>\...).
+    (re.compile(r"(?i)\b([A-Z]:(?:\\{1,2}|/)(?:Users|Documents and Settings)(?:\\{1,2}|/))[^\\/:*?\"<>|\r\n]+"), rf"\1{USER_MASK}"),
+    (re.compile(r"(?<![\w.])(/home/|/Users/)[^/\s\"']+"), rf"\1{USER_MASK}"),
 )
 
 
