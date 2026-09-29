@@ -149,3 +149,43 @@ def test_open_target_is_accepted_only_with_a_reason(results, tmp_dir):
 
     _fill(out, fill)
     assert score(out)["targets_injected_bug_bugged_diff"].get("unclear", 0) >= 1
+
+
+def test_tests_are_copied_and_the_sheet_points_at_the_copies(results, tmp_dir):
+    out = tmp_dir / "labels"
+    sample(results, out, n=8)
+    rows = list(csv.DictReader((out / "sheet.csv").open(encoding="utf-8-sig", newline="")))
+    diff_rows = [r for r in rows if r["kind"] == "diff"]
+    assert diff_rows and all(r["generated_tests"].startswith("tests/RUN-") for r in diff_rows)
+    for r in diff_rows:
+        copy = out / r["generated_tests"]
+        assert copy.is_file() and copy.parent.name == r["run_id"]
+    assert "results" not in (out / "sheet.csv").read_text(encoding="utf-8-sig")
+    text = (out / "INSTRUCTIONS.md").read_text(encoding="utf-8")
+    assert "benchmark/results/phase5/" in text and "不要打開" in text and "SUT` | `no`" in text and "精確度" in text
+
+
+def test_score_warns_about_edited_fields_and_missing_ids_but_still_scores(results, tmp_dir):
+    out = tmp_dir / "labels"
+    sample(results, out, n=8)
+    key = json.loads((out / "key.json").read_text(encoding="utf-8"))["key"]
+    with (out / "sheet.csv").open(encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    for r in rows:
+        r["human_layer"] = key[r["id"]]["layer"]
+        r["targets_injected_bug"] = "yes" if r["kind"] == "diff" and r["sut_bugs"] != "(clean)" else "n.a."
+    rows[0]["observation"] = "edited by hand"
+    dropped = rows.pop()["id"]
+    rows = list(reversed(rows))  # order does not matter: rows are matched by id
+    with (out / "sheet.csv").open("w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+
+    result = score(out)
+    assert any("observation" in w for w in result["warnings"]) and any(dropped in w and "missing" in w for w in result["warnings"])
+    assert result["all_rows"]["n"] == 7 and result["all_rows"]["agree"] == 7
+    assert set(result["by_classifier_layer_all"]) <= {"SUT", "TEST", "PROVIDER"}
+    assert all(v["ci95"] for v in result["by_classifier_layer_all"].values())
+    md = (out / "score.md").read_text(encoding="utf-8")
+    assert "Agreement by the classifier's layer" in md and "precision" in md and "## Warnings" in md
