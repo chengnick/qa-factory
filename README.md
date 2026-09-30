@@ -147,6 +147,14 @@ pytest tests                       # flag mechanism + manifest consistency
 - **Results vary even at temperature 0.** In Phase 2R, REQ-005 + B02 was missed in rounds 1–2 and caught in rounds 3–5 with the same model, prompt and temperature 0. A single run says little about detection ability, which is why every combination runs at least 5 rounds and is reported with mean, range and a 95% CI.
 - **Clean runs cannot show a cross-validated false positive.** Both builds are clean, so a failing test is R12/R13, never R11. The main false-positive figure is therefore the **surface** rate: in real use there is no clean build to compare with, and the user sees the surface verdict.
 
+## Future improvements (not implemented)
+
+Written down from the Phase 5 data; nothing here exists yet, and the project is feature-frozen.
+
+- **Split FLAKY into two verdicts**: "provider retry succeeded" (an LLM call failed and a retry completed) and "test instability" (a test or tool gave different results on a retry). All 5 FLAKY runs of Phase 5 were the first kind; today the verdict cannot tell them apart.
+- **Static check of generated Playwright code before it runs**: fixture use (a test that uses `page` must take it as a parameter) and API names (only assertion and locator methods that exist in the Python API). On the Phase 5 data this would have stopped 10 of the 20 broken REQ-004 tests before execution (`NameError` 7, `AttributeError` 3).
+- **Next benchmark version: spell out REQ-004's error situations**: say which situations count as an API error the page must display (unknown preselected project, invalid input the form blocks, failed initialisation) and what the page must do in each. The other 10 broken REQ-004 tests and all 3 REQ-004 surface false positives come from this gap. The current benchmark stays as it is.
+
 ## Isolation (current level: L1a, in-process audit hook; L1b not done)
 
 > **Policy decides what an agent should be allowed to do. Isolation determines what it actually can do.**
