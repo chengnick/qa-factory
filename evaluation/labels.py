@@ -170,6 +170,7 @@ def instructions(info: dict[str, Any]) -> str:
   - 測試檢查的正是這個 bug 造成的錯誤行為，失敗的斷言也對應到它 → `yes`
   - 測試失敗的原因與這個 bug 無關（例如測試本身寫錯、測的是別的規則、剛好被其他行為連帶影響） → `no`
   - 看不出來 → 不要硬選：留空，並在 `notes` 說明原因（計分時算作「無法判斷」，另外列出）
+  - 這一欄可以整欄不標（計分時列為「未標註」）；主要數字只看 `human_layer`
 
 `human_layer` 與 `targets_injected_bug` 是**兩個獨立的判斷**：前者問「這次失敗的責任在哪一層」，後者問「失敗是不是因為測到了開的那個 bug」。
 四種組合都可能出現（只適用於有開 bug 的 diff 列）：
@@ -215,7 +216,8 @@ def instructions(info: dict[str, Any]) -> str:
 - `llm` 與 `agent` 類型的列另外報告（它們的歸因主要看例外類型，幾乎沒有判斷空間），不併入主要數字。
 - `human_layer = UNKNOWN` 的列計為不一致，並另外列出筆數。
 - `targets_injected_bug`：在有開 bug 的 diff 列中，分別統計 `yes` / `no` / 留空（無法判斷）的筆數，並對照分類器判為 `SUT` 的列。
-  留空只在 `notes` 有寫原因時才接受；`n.a.` 的列必須填 `n.a.`。
+  這一欄是選填的：留空且 `notes` 有寫原因算「無法判斷」，留空且沒有說明算「未標註」，都不影響 `human_layer` 的計分；
+  `n.a.` 的列必須填 `n.a.`。
 - 另外依**分類器判定的 layer** 分別報告一致率（例如分類器說 SUT 的列中，有幾成你也判 SUT），各附 Wilson 95% 信賴區間；
   diff 列與全部列各一份。
 - 以 `id` 對應資料，所以你可以排序或篩選列；計分前會比對非標註欄位是否與原檔相同，不同時發出警告（不中止），
@@ -285,8 +287,8 @@ def score(out: Path) -> dict[str, Any]:
         if layer not in LAYERS:
             problems.append(f"{i}: human_layer {r['human_layer']!r}")
         not_applicable = r["kind"] != MAIN_KIND or r["sut_bugs"] == "(clean)"
-        if not target and not_applicable is False and r["notes"].strip():
-            continue  # left open on purpose, with the reason in notes
+        if not target and not not_applicable:
+            continue  # optional judgement: left open (reported as "unclear" with a note, "not labelled" without)
         if target not in TARGETS or (not_applicable and target != "n.a."):
             problems.append(f"{i}: targets_injected_bug {r['targets_injected_bug']!r}" + (" (must be n.a.)" if not_applicable else ""))
     if problems:
@@ -303,8 +305,11 @@ def score(out: Path) -> dict[str, Any]:
     diff_ids = [i for i in rows if rows[i]["kind"] == MAIN_KIND]
     other_ids = [i for i in rows if rows[i]["kind"] != MAIN_KIND]
     bugged_diff = [i for i in diff_ids if rows[i]["sut_bugs"] != "(clean)"]
-    targets = Counter(rows[i]["targets_injected_bug"].strip().lower() or "unclear" for i in bugged_diff)
-    sut_targets = Counter(rows[i]["targets_injected_bug"].strip().lower() or "unclear" for i in bugged_diff if key[i]["layer"] == "SUT")
+    def target_of(i: str) -> str:
+        return rows[i]["targets_injected_bug"].strip().lower() or ("unclear" if rows[i]["notes"].strip() else "not labelled")
+
+    targets = Counter(target_of(i) for i in bugged_diff)
+    sut_targets = Counter(target_of(i) for i in bugged_diff if key[i]["layer"] == "SUT")
     disagreements = [{"id": i, "kind": rows[i]["kind"], "human": rows[i]["human_layer"].strip().upper(), "classifier": key[i]["layer"],
                       "rule": key[i]["matched_rule"], "notes": rows[i]["notes"]}
                      for i in rows if rows[i]["human_layer"].strip().upper() != key[i]["layer"]]  # fmt: skip

@@ -137,7 +137,7 @@ def test_score_refuses_missing_or_inconsistent_labels(results, tmp_dir, capsys):
         score(out)
 
 
-def test_open_target_is_accepted_only_with_a_reason(results, tmp_dir):
+def test_open_target_is_unclear_with_a_reason_and_not_labelled_without(results, tmp_dir):
     out = tmp_dir / "labels"
     sample(results, out, n=8)
 
@@ -149,6 +149,13 @@ def test_open_target_is_accepted_only_with_a_reason(results, tmp_dir):
 
     _fill(out, fill)
     assert score(out)["targets_injected_bug_bugged_diff"].get("unclear", 0) >= 1
+
+    def clear_notes(r):
+        r["notes"] = ""
+
+    _fill(out, clear_notes)  # the column is optional: open without a reason is "not labelled", still scored
+    result = score(out)
+    assert result["targets_injected_bug_bugged_diff"].get("not labelled", 0) >= 1 and result["main_diff"]["n"] > 0
 
 
 def test_tests_are_copied_and_the_sheet_points_at_the_copies(results, tmp_dir):
