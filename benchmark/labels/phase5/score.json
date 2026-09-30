@@ -1,0 +1,143 @@
+{
+  "main_diff": {
+    "n": 28,
+    "agree": 24,
+    "accuracy": 0.8571428571428571,
+    "ci95": [
+      0.6850982695512267,
+      0.9430108706929821
+    ],
+    "unknown_labels": 0
+  },
+  "llm_agent": {
+    "n": 12,
+    "agree": 12,
+    "accuracy": 1.0,
+    "ci95": [
+      0.7574992425007574,
+      1.0
+    ],
+    "unknown_labels": 0
+  },
+  "all_rows": {
+    "n": 40,
+    "agree": 36,
+    "accuracy": 0.9,
+    "ci95": [
+      0.7694792561952611,
+      0.9604211124044252
+    ],
+    "unknown_labels": 0
+  },
+  "by_classifier_layer_diff": {
+    "SUT": {
+      "n": 18,
+      "agree": 18,
+      "accuracy": 1.0,
+      "ci95": [
+        0.8241154494176252,
+        1.0
+      ],
+      "unknown_labels": 0
+    },
+    "TEST": {
+      "n": 10,
+      "agree": 6,
+      "accuracy": 0.6,
+      "ci95": [
+        0.3126695474501864,
+        0.8318224187964902
+      ],
+      "unknown_labels": 0
+    }
+  },
+  "by_classifier_layer_all": {
+    "AGENT": {
+      "n": 1,
+      "agree": 1,
+      "accuracy": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "unknown_labels": 0
+    },
+    "PROVIDER": {
+      "n": 11,
+      "agree": 11,
+      "accuracy": 1.0,
+      "ci95": [
+        0.7411599827511859,
+        1.0
+      ],
+      "unknown_labels": 0
+    },
+    "SUT": {
+      "n": 18,
+      "agree": 18,
+      "accuracy": 1.0,
+      "ci95": [
+        0.8241154494176252,
+        1.0
+      ],
+      "unknown_labels": 0
+    },
+    "TEST": {
+      "n": 10,
+      "agree": 6,
+      "accuracy": 0.6,
+      "ci95": [
+        0.3126695474501864,
+        0.8318224187964902
+      ],
+      "unknown_labels": 0
+    }
+  },
+  "confusion_diff_human_to_classifier": {
+    "TEST -> TEST": 6,
+    "SUT -> SUT": 18,
+    "SUT -> TEST": 4
+  },
+  "targets_injected_bug_bugged_diff": {
+    "not labelled": 24
+  },
+  "targets_injected_bug_where_classifier_said_SUT": {
+    "not labelled": 18
+  },
+  "disagreements": [
+    {
+      "id": "RUN-20260928-185129-7150#0",
+      "kind": "diff",
+      "human": "SUT",
+      "classifier": "TEST",
+      "rule": "R12",
+      "notes": ""
+    },
+    {
+      "id": "RUN-20260928-191850-A65E#1",
+      "kind": "diff",
+      "human": "SUT",
+      "classifier": "TEST",
+      "rule": "R12",
+      "notes": ""
+    },
+    {
+      "id": "RUN-20260928-181752-C9AE#2",
+      "kind": "diff",
+      "human": "SUT",
+      "classifier": "TEST",
+      "rule": "R12",
+      "notes": ""
+    },
+    {
+      "id": "RUN-20260928-183440-2857#1",
+      "kind": "diff",
+      "human": "SUT",
+      "classifier": "TEST",
+      "rule": "R12",
+      "notes": ""
+    }
+  ],
+  "warnings": [],
+  "limitation": "sample drawn from failures the classifier had already attributed: measures precision, not misses; one labeller, the author"
+}

@@ -4,12 +4,12 @@
 
 A QA agent pipeline with end-to-end tracing, rule-based failure attribution and workflow-level checks, evaluated against a small app with 10 seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3.2).
 
-## Results (Phase 5: evaluation complete, attribution labelling not done; [details](benchmark/results/phase5/acceptance.md))
+## Results (Phase 5; [details](benchmark/results/phase5/acceptance.md))
 
 - Bugs were split into a dev set (3, used for prompt tuning) and a held-out test set (7, run once after freezing prompt, model and conditions in [benchmark/frozen.yaml](benchmark/frozen.yaml)).
 - **Held-out true detection rate: 89%** (25/28 runs, per-round range 71–100%, 95% CI 73–96%), verified by running every generated test against both the buggy and the clean build. Dev set: 9/9.
 - **False-positive rate on the clean build: 20% before cross-validation** (4/20, 95% CI 8–42%), **0/20 after it**. A user of the pipeline alone would see "defect found" on a correct system in about 1 of 5 clean runs; three of the four came from the UI requirement, whose generated UI tests are the weakest part (both B05 misses were broken UI tests).
-- Failure-layer attribution against manual labels: **not measured yet.** A blind sheet of 40 sampled failures is ready ([benchmark/labels/phase5](benchmark/labels/phase5/INSTRUCTIONS.md)); the figure will come only from the owner's labels, not from the classifier itself.
+- Failure-layer attribution matched the owner's manual labels in **24 of 28** sampled test failures (86%, 95% CI 69–94%); 12/12 for LLM / agent failures, reported apart. All four disagreements are one case, a UI requirement that does not say what the page must do (classifier: test broken; owner: system at fault). One labeller, the author; the sample measures precision, not misses ([score](benchmark/labels/phase5/score.md)).
 - 24 of 90 runs were blocked by a Gemini outage (23 × HTTP 503 "high demand", 1 × HTTP 504 timeout) and are reported separately, not re-run with another model.
 - Deterministic fault-injection suite covering tool misuse, provider outages, retry loops, permission violations and test weakening across revision rounds.
 - Isolation level: **L1a** (in-process audit hook, not an OS sandbox); L1b (OS level) not done (see *Isolation*). Prompt-injection resistance of the model (spec layer 2) was **not measured**.
@@ -135,7 +135,7 @@ pytest tests                       # flag mechanism + manifest consistency
 - **UI bugs are visible in the page source.** B05 and B10 are injected server-side by swapping JS snippets. The served page looks like naturally buggy code with no flag names, but a reader can still spot the bug by reading it.
 - **Weak identity.** Users are identified only by the `X-User` header. There is no real authentication.
 - **B01 needs multiple pages.** It only triggers when pagination has moved past the first page (`offset > 0`), so the single-page UI list is unaffected.
-- **Manual attribution labels have one labeller, the author.** The Phase 5 attribution-accuracy figure (once labelled) comes from a single person who also built the system, with no second labeller and no agreement measure. It also covers only failures the classifier had already attributed, so it measures precision, not misses.
+- **Manual attribution labels have one labeller, the author.** The Phase 5 attribution-accuracy figure comes from a single person who also built the system, with no second labeller and no agreement measure. It also covers only failures the classifier had already attributed, so it measures precision, not misses.
 - **Isolation is in-process (L1a).** The guard is an audit hook, not an OS sandbox; L1b (OS level) is not done. See *Isolation* below.
 - **Policy write area is relative to the run's parent directory.** The `artifacts/` in the policy's `path_prefix` (`config/agent_policy.yaml`) is taken to be the parent directory of the run workspace. For real runs this is `<repo>/artifacts`; for tests with a temporary workspace it is the temporary parent. A workspace placed somewhere else therefore gets its write area there too.
 - **What cross-validation cannot tell** (spec v3 §6.4). It confirms that a failure depends on the bug switch, not that the failing test describes *that* bug. For example, with B04 enabled, an unrelated wrong test could fail on the 500 by chance. Phase 5's manual labels quantify this.
