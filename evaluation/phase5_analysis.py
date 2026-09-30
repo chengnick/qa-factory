@@ -1,0 +1,288 @@
+"""Read-only analyses of the Phase 5 run artifacts (no pipeline, no LLM, nothing re-run).
+
+    python -m evaluation.phase5_analysis --results-dir benchmark/results/phase5 --baseline benchmark/results/phase2r
+
+Reads the run directories under --results-dir (meta.json, trace.json, differential.json, classification.json and
+the generated tests) and writes three reports to <results-dir>/analysis/:
+
+    req004_breakdown.md   why REQ-004 (the UI requirement) tests were judged broken
+    flaky_causes.md       which span made each FLAKY run flaky
+    timing_breakdown.md   where the time of a run went
+
+--baseline (optional, also only read) adds an earlier results directory to the timing comparison.
+Run directories are never written to.
+"""
+
+from __future__ import annotations
+
+import argparse
+import ast
+import json
+import re
+import statistics
+from collections import Counter
+from collections.abc import Sequence
+from pathlib import Path
+from typing import Any
+
+UI_REQUIREMENT = "REQ-004"
+COMMAND = "python -m evaluation.phase5_analysis --results-dir {results} --baseline {baseline}"
+
+
+def _load(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+
+def runs(results_dir: Path) -> list[tuple[int, Path, dict[str, Any]]]:
+    """(position in summary.json starting at 1, run directory, meta) in execution order."""
+    summary = _load(results_dir / "summary.json")
+    order = [r["run_id"] for r in summary["runs"]] if summary else sorted(p.name for p in results_dir.glob("RUN-*"))
+    return [(i, results_dir / rid, _load(results_dir / rid / "meta.json")) for i, rid in enumerate(order, 1)]
+
+
+# --------------------------------------------------------------------------- REQ-004 breakdown
+
+
+def _function_source(code: str, name: str) -> str:
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return ""
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == name:
+            return ast.get_source_segment(code, node) or ""
+    return ""
+
+
+def error_trigger(body: str) -> str:
+    """How an error-area test tries to provoke an API error (read from its source)."""
+    if re.search(r"project=9{4,}", body):
+        return "unknown project id in the URL"
+    if re.search(r"""\.fill\((["'])\1\)""", body):
+        return "empty title submitted"
+    if re.search(r"user=(?!alice|bob|carol|dave)", body):
+        return "unknown user in the URL"
+    return "other"
+
+
+def broken_tests(results_dir: Path, requirement: str = UI_REQUIREMENT) -> list[dict[str, Any]]:
+    """Every generated test of `requirement` that cross-validation judged BROKEN, with its cause."""
+    out = []
+    for n, run_dir, meta in runs(results_dir):
+        diff = _load(run_dir / "differential.json")
+        if meta["requirement_id"] != requirement or not diff:
+            continue
+        for d in diff["decisions"]:
+            if d["decision"] != "BROKEN":
+                continue
+            path, _, name = d["node_id"].partition("::")
+            name = name.split("::")[-1]
+            evidence = d.get("evidence") or ""
+            if d["rule"] == "R10":
+                exc = re.search(r"\b(\w+Error)\b", evidence)
+                cause, trigger = f"test code error: {exc.group(1) if exc else 'exception'}", ""
+            elif "error" in name.lower():
+                cause = "error-area display"
+                trigger = error_trigger(_function_source((run_dir / path).read_text(encoding="utf-8"), name))
+            else:
+                cause, trigger = "other", ""
+            message = " ".join(re.sub(r"^(bug build|fails on a clean SUT): ", "", evidence).split())
+            out.append({"n": n, "run_id": run_dir.name, "bugs": ",".join(meta["sut_bugs"]) or "clean", "surface": meta["surface_verdict"],
+                        "verdict": meta["verdict"], "test": name, "rule": d["rule"], "bug_build": d["bug_outcome"],
+                        "clean_build": d["clean_outcome"], "cause": cause, "trigger": trigger, "message": message[:140]})  # fmt: skip
+    return out
+
+
+def req004_report(results_dir: Path, command: str) -> str:
+    rows = broken_tests(results_dir)
+    causes = Counter(r["cause"] for r in rows)
+    triggers = Counter(r["trigger"] for r in rows if r["cause"] == "error-area display")
+    total = sum(len(_load(d / "differential.json")["decisions"]) for _, d, m in runs(results_dir)
+                if m["requirement_id"] == UI_REQUIREMENT and _load(d / "differential.json"))  # fmt: skip
+    by_run: dict[int, list[dict[str, Any]]] = {}
+    for r in rows:
+        by_run.setdefault(r["n"], []).append(r)
+    surface_fp = [n for n, rs in by_run.items() if rs[0]["bugs"] == "clean" and rs[0]["surface"] == "DEFECT_FOUND"]
+    fp_from_error_area = [n for n in surface_fp if any(r["cause"] == "error-area display" for r in by_run[n])]
+    lines = [
+        "# REQ-004 (UI requirement): why generated tests were judged broken", "",
+        f"Generated by `{command}` (read-only; nothing was re-run).", "",
+        f"REQ-004 runs that completed cross-validation produced {total} tests; **{len(rows)} were judged broken** "
+        "(R10 = raised a non-assertion error, R12 = failed on the buggy and on the clean build).", "",
+        "| Cause | Tests |", "|---|---|", *[f"| {c} | {k} |" for c, k in causes.most_common()], "",
+        "**Error-area display**: the test checks the acceptance criterion \"API 錯誤時於錯誤區顯示訊息\", but its way of provoking "
+        "an error does not make the page show one, so it fails on both builds. How these tests tried to provoke the error:", "",
+        "| Trigger used by the test | Tests |", "|---|---|", *[f"| {t} | {k} |" for t, k in triggers.most_common()], "",
+        f"Surface false positives on clean REQ-004 runs: runs {', '.join(f'#{n}' for n in surface_fp)}; "
+        f"with an error-area test among the broken ones: {len(fp_from_error_area)} of {len(surface_fp)} "
+        "(a non-assertion error, R10, cannot produce a surface \"defect found\").", "",
+        "## Every broken test", "",
+        "| # | Run | Bugs | Surface → verdict | Test | Rule | Bug / clean build | Cause | Trigger | Message |",
+        "|---|---|---|---|---|---|---|---|---|---|",
+        *[f"| {r['n']} | `{r['run_id']}` | {r['bugs']} | {r['surface']} → {r['verdict']} | `{r['test']}` | {r['rule']} | "
+          f"{r['bug_build']} / {r['clean_build']} | {r['cause']} | {r['trigger'] or '-'} | {r['message'].replace('|', '/')} |" for r in rows],
+    ]  # fmt: skip
+    return "\n".join(lines) + "\n"
+
+
+# --------------------------------------------------------------------------- FLAKY causes
+
+
+def flaky_runs(results_dir: Path) -> list[dict[str, Any]]:
+    out = []
+    for n, run_dir, meta in runs(results_dir):
+        if meta["verdict"] != "FLAKY":
+            continue
+        spans = _load(run_dir / "trace.json")["spans"]
+        by_id = {s["span_id"]: s for s in spans}
+        retried = []
+        for s in spans:
+            if s["name"] != "attempt" or (s.get("status") or {}).get("code") != "ERROR":
+                continue
+            parent = by_id[s["parent_span_id"]]
+            siblings = [c for c in spans if c.get("parent_span_id") == parent["span_id"] and c["name"] == "attempt"]
+            succeeded = [c["attributes"]["qa.retry.attempt"] for c in siblings if (c.get("status") or {}).get("code") != "ERROR"]
+            agent = next((a["name"] for a in _ancestors(parent, by_id) if a["name"].startswith("agent.")), "")
+            exc = next((e["attributes"] for e in s.get("events", []) if e["name"] == "exception"), {})
+            retried.append({"span_id": s["span_id"], "attempt": s["attributes"]["qa.retry.attempt"], "parent": parent["name"], "agent": agent,
+                            "error": f"{exc.get('exception.type', '')}: {(exc.get('exception.message') or '')[:60]}",
+                            "succeeded_on_attempt": min(succeeded) if succeeded else None})  # fmt: skip
+        out.append({"n": n, "run_id": run_dir.name, "requirement": meta["requirement_id"], "bugs": ",".join(meta["sut_bugs"]) or "clean",
+                    "underlying": meta.get("underlying_verdict"), "retried": retried})  # fmt: skip
+    return out
+
+
+def _ancestors(span: dict[str, Any], by_id: dict[str, dict[str, Any]]):
+    parent = by_id.get(span.get("parent_span_id"))
+    while parent is not None:
+        yield parent
+        parent = by_id.get(parent.get("parent_span_id"))
+
+
+def flaky_report(results_dir: Path, command: str) -> str:
+    rows = flaky_runs(results_dir)
+    parents = Counter(r["parent"] for run in rows for r in run["retried"])
+    lines = [
+        "# FLAKY runs: what was retried", "",
+        f"Generated by `{command}` (read-only; nothing was re-run).", "",
+        "A run is FLAKY when an `attempt` span failed and a later attempt under the same parent span succeeded.", "",
+        f"{len(rows)} FLAKY runs. Failed-then-retried attempts by parent span: {dict(parents) or 'none'}. "
+        + ("**Every one is an LLM call (`llm.chat`) that the provider failed and a retry completed; no test or tool was retried.**"
+           if set(parents) <= {"llm.chat"} else "Not all retried spans are LLM calls; see the table."), "",
+        "| # | Run | Requirement | Bugs | Underlying verdict | Failed attempt span | Under | Agent | Error | Succeeded on attempt |",
+        "|---|---|---|---|---|---|---|---|---|---|",
+    ]  # fmt: skip
+    for run in rows:
+        for r in run["retried"]:
+            lines.append(f"| {run['n']} | `{run['run_id']}` | {run['requirement']} | {run['bugs']} | {run['underlying']} | `{r['span_id']}` "
+                         f"(attempt {r['attempt']}) | {r['parent']} | {r['agent']} | {r['error']} | {r['succeeded_on_attempt']} |")  # fmt: skip
+    return "\n".join(lines) + "\n"
+
+
+# --------------------------------------------------------------------------- timing
+
+
+def run_timing(run_dir: Path, meta: dict[str, Any]) -> dict[str, float]:
+    spans = _load(run_dir / "trace.json")["spans"]
+    by_id = {s["span_id"]: s for s in spans}
+    sec = lambda s: s["duration_ms"] / 1000  # noqa: E731
+    root = next(s for s in spans if s["name"] == "qa.run")
+    t = dict.fromkeys(("llm", "llm_ok", "llm_failed", "llm_wait", "llm_extra_attempts", "pytest", "playwright", "http",
+                       "cross_validation", "cross_validation_runners"), 0.0)  # fmt: skip
+    for s in spans:
+        in_eval = any(a["name"] == "evaluation.differential" for a in _ancestors(s, by_id))
+        if s["name"] == "llm.chat":
+            t["llm"] += sec(s)
+            attempts = [c for c in spans if c.get("parent_span_id") == s["span_id"] and c["name"] == "attempt"]
+            if attempts:
+                t["llm_extra_attempts"] += len(attempts) - 1
+                t["llm_wait"] += sec(s) - sum(sec(a) for a in attempts)
+                for a in attempts:
+                    t["llm_failed" if (a.get("status") or {}).get("code") == "ERROR" else "llm_ok"] += sec(a)
+            else:
+                t["llm_ok"] += sec(s)
+        elif s["name"] in ("tool.pytest", "tool.playwright"):
+            t["cross_validation_runners" if in_eval else s["name"].split(".")[1]] += sec(s)
+        elif s["name"] == "tool.http_request" and not in_eval:
+            t["http"] += sec(s)
+        elif s["name"] == "evaluation.differential":
+            t["cross_validation"] += sec(s)
+    t["total"] = float(meta.get("duration_s") or 0)
+    t["outside_qa_run"] = t["total"] - sec(root)
+    t["cross_validation_other"] = t["cross_validation"] - t["cross_validation_runners"]
+    t["non_llm"] = t["total"] - t["llm"]
+    t["ui"] = float(any(p.name.endswith("_ui.py") for p in (run_dir / "generated").glob("test_*.py")))
+    return t
+
+
+ROWS = (
+    ("total", "**Total** (meta.json `duration_s`)"), ("llm_ok", "LLM: successful calls"), ("llm_failed", "LLM: failed calls (503 / 504)"),
+    ("llm_wait", "LLM: waiting between retries"), ("pytest", "Pipeline pytest"), ("playwright", "Pipeline Playwright"),
+    ("cross_validation_runners", "Cross-validation: running the tests on both builds"),
+    ("cross_validation_other", "Cross-validation: starting the two SUTs, health checks"),
+    ("outside_qa_run", "Outside the pipeline span (starting the pipeline's SUT)"),
+    ("non_llm", "**Everything except LLM calls** (total − LLM)"), ("llm_extra_attempts", "LLM retries per run (count)"),
+)  # fmt: skip
+
+
+def timing_report(results_dir: Path, baseline: Path | None, command: str) -> str:
+    groups: dict[str, list[dict[str, float]]] = {}
+    dates: dict[str, str] = {}
+    if baseline is not None:
+        base = [(d, m) for _, d, m in runs(baseline)]
+        groups[f"{baseline.name} ({len(base)} runs)"] = [run_timing(d, m) for d, m in base]
+        dates[baseline.name] = _span_dates(base)
+    done = [(d, m) for _, d, m in runs(results_dir) if m["verdict"] != "ENV_BLOCKED"]
+    blocked = [(d, m) for _, d, m in runs(results_dir) if m["verdict"] == "ENV_BLOCKED"]
+    groups[f"{results_dir.name} completed ({len(done)})"] = [run_timing(d, m) for d, m in done]
+    groups[f"{results_dir.name} ENV_BLOCKED ({len(blocked)})"] = [run_timing(d, m) for d, m in blocked]
+    dates[results_dir.name] = _span_dates(done + blocked)
+    mean = lambda g, k: statistics.mean(x[k] for x in g) if g else 0.0  # noqa: E731
+    completed = groups[f"{results_dir.name} completed ({len(done)})"]
+    no_retry = [x for x in completed if x["llm_extra_attempts"] == 0]
+    ui, api = [x for x in completed if x["ui"]], [x for x in completed if not x["ui"]]
+    everything = completed + groups[f"{results_dir.name} ENV_BLOCKED ({len(blocked)})"]
+    lines = [
+        "# Where the time of a run went", "",
+        f"Generated by `{command}` (read-only; nothing was re-run). Mean seconds per run, from each run's `trace.json` and `meta.json`.", "",
+        "Measured on: " + "; ".join(f"`{k}` runs started {v}" for k, v in dates.items())
+        + ". LLM latency is the provider's at that time and will differ on another day.", "",
+        "| Mean seconds per run | " + " | ".join(groups) + " |", "|---|" + "---|" * len(groups),
+        *[f"| {label} | " + " | ".join(f"{mean(g, key):.1f}" for g in groups.values()) + " |" for key, label in ROWS], "",
+        f"- Mean over all {len(everything)} `{results_dir.name}` runs: {mean(everything, 'total'):.1f} s "
+        f"(median of completed runs: {statistics.median(x['total'] for x in completed):.1f} s).",
+        f"- Completed runs without any LLM retry: {len(no_retry)} runs, mean {mean(no_retry, 'total'):.1f} s, of which LLM {mean(no_retry, 'llm'):.1f} s.",
+        f"- Completed runs with UI tests: {len(ui)} runs, mean {mean(ui, 'total'):.1f} s (Playwright {mean(ui, 'playwright'):.1f} s, "
+        f"cross-validation {mean(ui, 'cross_validation'):.1f} s); without: {len(api)} runs, mean {mean(api, 'total'):.1f} s.",
+        "- \"Everything except LLM calls\" is the pipeline's own time: starting SUTs, running the generated tests and cross-validating them.",
+    ]  # fmt: skip
+    return "\n".join(lines) + "\n"
+
+
+def _span_dates(items: list[tuple[Path, dict[str, Any]]]) -> str:
+    starts = sorted(m.get("started_at") or "" for _, m in items)
+    return f"{starts[0][:16]} to {starts[-1][:16]} UTC" if starts and starts[0] else "unknown"
+
+
+# --------------------------------------------------------------------------- CLI
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--results-dir", type=Path, required=True)
+    parser.add_argument("--baseline", type=Path, help="an earlier results directory for the timing comparison (read only)")
+    args = parser.parse_args(argv)
+    command = COMMAND.format(results=args.results_dir.as_posix(), baseline=args.baseline.as_posix() if args.baseline else "")
+    if args.baseline is None:
+        command = command.replace(" --baseline ", "")
+    out = args.results_dir / "analysis"
+    out.mkdir(exist_ok=True)
+    (out / "req004_breakdown.md").write_text(req004_report(args.results_dir, command), encoding="utf-8")
+    (out / "flaky_causes.md").write_text(flaky_report(args.results_dir, command), encoding="utf-8")
+    (out / "timing_breakdown.md").write_text(timing_report(args.results_dir, args.baseline, command), encoding="utf-8")
+    print(f"wrote {out.as_posix()}/req004_breakdown.md, flaky_causes.md, timing_breakdown.md")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
