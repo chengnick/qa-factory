@@ -54,6 +54,10 @@ def test_ci_job_shape():
     assert steps["Install dependencies (lockfile)"]["run"] == "python -m pip install -r requirements.lock"
     # test-only dependencies come from their own lock, so requirements.lock (a frozen field) never changes for them
     assert steps["Install test-only dependencies (lockfile)"]["run"] == "python -m pip install -r requirements-test.lock"
+    # full git history in every job: frozen check verifies that the commits named in frozen_amendments.yaml exist
+    for job in (test, ci["jobs"]["canary"]):
+        checkout = next(s for s in job["steps"] if "actions/checkout" in s.get("uses", ""))
+        assert checkout.get("with", {}).get("fetch-depth") == 0
     names = [s.get("name", "") for s in test["steps"]]
     assert names.index("Install dependencies (lockfile)") < names.index("Install test-only dependencies (lockfile)") < names.index("Tests (no live LLM)")
     assert '-m "not live"' in steps["Tests (no live LLM)"]["run"] and "--junitxml" in steps["Tests (no live LLM)"]["run"]

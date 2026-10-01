@@ -67,3 +67,13 @@ amendments:
     affects_frozen_fields: []
     changes: {}
     evaluation_impact: none; requirements.lock is unchanged (hypothesis lives in requirements-test.lock), so lockfile_sha256 still matches
+
+  - id: A7
+    date: 2026-10-01
+    commits: []
+    files: [.github/workflows/ci.yml, tests/ci/test_workflows.py]
+    change: "CI checks out the full git history (fetch-depth: 0) in the test and canary jobs"
+    reason: "CI #20 failed: with the default shallow checkout the commits named in this file are absent, so the amendment check rejected them; the check stays strict and the history is fetched instead"
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none; CI configuration only
