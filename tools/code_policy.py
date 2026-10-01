@@ -71,9 +71,16 @@ def check_source(source: str, *, sut_url: str | None = None, policy: Policy | No
             violations.append(Violation("FORBIDDEN_ATTRIBUTE", f".{node.attr}", line))
         elif isinstance(node, ast.Constant) and isinstance(node.value, str):
             for url in _URL.findall(node.value):
-                if not any(url.startswith(prefix) for prefix in url_allowlist if "{" not in prefix):
+                if not any(_within(url, prefix) for prefix in url_allowlist if "{" not in prefix):
                     violations.append(Violation("HARDCODED_URL", url, line))
     return violations
+
+
+def _within(url: str, prefix: str) -> bool:
+    """The URL is the allowlisted one or lies under it: the prefix must end where a path, query or fragment begins.
+    A plain startswith let "http://127.0.0.1:8765@evil.test", ":87650" and ":8765.evil.test" pass as the SUT."""
+    base = prefix.rstrip("/")
+    return url == base or (url.startswith(base) and url[len(base)] in "/?#")
 
 
 def check_files(workspace: Path, paths: Iterable[str], *, sut_url: str | None = None, policy: Policy | None = None) -> list[tuple[str, Violation]]:
