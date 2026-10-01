@@ -14,6 +14,18 @@ A QA agent pipeline with end-to-end tracing, rule-based failure attribution and 
 - Deterministic fault-injection suite covering tool misuse, provider outages, retry loops, permission violations and test weakening across revision rounds.
 - Isolation level: **L1a** (in-process audit hook, not an OS sandbox); L1b (OS level) not done (see *Isolation*). Prompt-injection resistance of the model (spec layer 2) was **not measured**.
 
+## Property-based tests (after the evaluation)
+
+The one exception to the feature freeze: tests only ([tests/property/](tests/property/), Hypothesis from [requirements-test.lock](requirements-test.lock), installed on top of `requirements.lock` so the frozen lockfile hash is unchanged). They check, over generated inputs: a refused tool call never executes; every spelling of a protected, evidence or other-run path is refused and judged the same; URLs that only look like the SUT are refused; the verdict always follows the priority order, ignores observation order and is never PASS when no test ran; removing assertions from a failing test that then passes always triggers W01. Five deliberately injected bugs (monkeypatch, no code edited) are each caught; the cross-validation decision table is enumerated in full.
+
+They found one real bug: the generated-code check accepted `http://127.0.0.1:<port>@evil.test`, an extra port digit and `127.0.0.1:<port>.evil.test` as the SUT (prefix match without a boundary). It was fixed with the owner's approval; no recorded run had a hard-coded URL, so no result changes. Post-evaluation changes are listed in [benchmark/frozen_amendments.yaml](benchmark/frozen_amendments.yaml); `python -m evaluation.frozen check --model gemini-3.5-flash-lite` reports them next to the (still matching) frozen conditions.
+
+```bash
+pip install -r requirements.lock -r requirements-test.lock
+python -m pytest tests/property                              # ci profile: fixed examples, 100 each
+HYPOTHESIS_PROFILE=full python -m pytest tests/property      # 5000 random examples each
+```
+
 ## Phase 4 (evidence, Workflow Evaluator, L1 guard)
 
 - **Revision rounds** ([pipeline.py](pipeline.py)): the pipeline can run automation + QA again while tests fail, up to `max_rounds`, for an automation agent that declares `revises = True`. **The real AutomationAgent does not revise, so live runs have exactly one round** (prompt stays v3; an LLM-driven revision step would need a new prompt version and a dev-set re-run). Each round's tests are saved read-only to `generated/roundN/` and listed with sha256 and per-test results in `rounds.json`. Spans carry `qa.test.round`.
