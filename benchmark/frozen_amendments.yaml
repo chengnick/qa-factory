@@ -1,0 +1,49 @@
+# Changes made after the Phase 5 evaluation (spec v3 §3.3). Append-only: add new entries, never edit or delete
+# old ones. benchmark/frozen.yaml itself is never changed.
+#
+# `python -m evaluation.frozen check --model gemini-3.5-flash-lite` lists these entries. An entry that changes a
+# frozen field must name it in affects_frozen_fields and give {from, to} under changes; check then reports the
+# difference as recorded (exit 3), while evaluation.run still refuses test-set runs on any difference.
+# commits: the commits that made the change ([] when the change arrives in the same commit as its entry).
+
+schema: 1
+amendments:
+  - id: A1
+    date: 2026-09-29
+    commits: [cc99a1d]
+    files: [observability/redact.py, tests/observability/test_redact.py]
+    change: redact() masks the account name in home-directory paths (C:\Users\<name>, /home/<name>, /Users/<name>)
+    reason: the full-history secret scan found a Windows username in Phase 2R logs; the owner asked to mask it in future runs
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none on the 90 Phase 5 runs (already recorded); later runs would show [USER] in span content, traces, build logs and classification evidence; verdict logic unchanged
+
+  - id: A2
+    date: 2026-09-30
+    commits: [9ee9273, c6585e8, a7305c4]
+    files: [evaluation/labels.py, tests/evaluation/test_labels.py]
+    change: blind labelling sheet regenerated (raw messages only, targets_injected_bug, shuffled rows, test copies) and scoring extended (per classifier layer, id matching, optional targets_injected_bug)
+    reason: owner's requirements for the manual attribution labels (spec v3 §11.2)
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none on pipeline runs or verdicts; only how the 40 sampled failures are presented and scored
+
+  - id: A3
+    date: 2026-09-30
+    commits: [7bfb3c4]
+    files: [evaluation/phase5_analysis.py, tests/evaluation/test_phase5_analysis.py]
+    change: read-only analysis script for the Phase 5 artifacts (REQ-004 breakdown, FLAKY causes, timing)
+    reason: owner asked to keep the analyses reproducible in the repository
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none; reads run directories, writes only benchmark/results/phase5/analysis/
+
+  - id: A4
+    date: 2026-10-01
+    commits: []
+    files: [evaluation/frozen.py, benchmark/frozen_amendments.yaml, tests/evaluation/test_frozen_amendments.py]
+    change: frozen check lists the recorded amendments and reports a frozen-field difference that an amendment records exactly as "recorded" (exit 3) instead of a plain mismatch
+    reason: post-evaluation changes (property-based tests) must be traceable without editing frozen.yaml or loosening the check
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none; the compared fields are unchanged and evaluation.run still refuses test-set runs on any difference

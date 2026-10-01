@@ -6,6 +6,11 @@
 Writing it is the moment the test set is unsealed. Afterwards every test-set run must match it field by field;
 the runner refuses otherwise (a changed prompt would make test-set results "contaminated", so they are not
 produced at all). The file is written once and never overwritten.
+
+Changes made after the evaluation are recorded in benchmark/frozen_amendments.yaml (append-only). `check` lists them.
+A frozen field that differs is reported as a mismatch unless an amendment records that exact change (from the frozen
+value to the current one); then `check` says so and exits with a distinct code. The runner (evaluation.run
+check_frozen) ignores amendments: any difference still refuses a test-set run.
 """
 
 from __future__ import annotations
@@ -13,6 +18,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import inspect
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +34,9 @@ from permissions.policy import Policy, default_policy
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FROZEN = REPO_ROOT / "benchmark" / "frozen.yaml"
+AMENDMENTS = REPO_ROOT / "benchmark" / "frozen_amendments.yaml"
+AMENDMENT_KEYS = ("id", "date", "commits", "files", "change", "reason", "affects_frozen_fields", "changes", "evaluation_impact")
+EXIT_MATCH, EXIT_MISMATCH, EXIT_INVALID, EXIT_AMENDED = 0, 1, 2, 3
 TEMPERATURE = 0.0  # the Gemini adapter's fixed temperature
 ROUNDS = 5
 # Fields a test-set run must match exactly.
@@ -102,6 +111,61 @@ def write(model: str, path: Path = FROZEN, policy: Policy | None = None) -> dict
     return doc
 
 
+class AmendmentError(ValueError):
+    """benchmark/frozen_amendments.yaml is malformed."""
+
+
+def _commit_exists(sha: str) -> bool:
+    try:
+        return subprocess.run(["git", "cat-file", "-e", f"{sha}^{{commit}}"], cwd=REPO_ROOT, capture_output=True).returncode == 0
+    except OSError:
+        return False
+
+
+def load_amendments(path: Path = AMENDMENTS) -> list[dict[str, Any]]:
+    """The recorded post-evaluation changes, validated. A missing file means no amendments."""
+    if not path.is_file():
+        return []
+    doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if not isinstance(doc, dict) or doc.get("schema") != 1 or not isinstance(doc.get("amendments"), list):
+        raise AmendmentError(f"{path}: expected `schema: 1` and an `amendments` list")
+    errors, seen = [], set()
+    for i, a in enumerate(doc["amendments"]):
+        where = f"amendments[{i}]"
+        if not isinstance(a, dict) or set(a) != set(AMENDMENT_KEYS):
+            errors.append(f"{where}: keys must be exactly {', '.join(AMENDMENT_KEYS)}")
+            continue
+        if a["id"] in seen:
+            errors.append(f"{where}: duplicate id {a['id']!r}")
+        seen.add(a["id"])
+        fields = a["affects_frozen_fields"] or []
+        if not isinstance(fields, list) or any(f not in CHECKED for f in fields):
+            errors.append(f"{where}: affects_frozen_fields must list frozen fields ({', '.join(CHECKED)})")
+        changes = a["changes"] or {}
+        if set(changes) != set(fields) or any(not isinstance(v, dict) or set(v) != {"from", "to"} for v in changes.values()):
+            errors.append(f"{where}: changes must give {{from, to}} for exactly the affected fields")
+        for sha in a["commits"] or []:
+            if not _commit_exists(str(sha)):
+                errors.append(f"{where}: commit {sha} is not in the git history")
+        for key in ("change", "reason", "evaluation_impact"):
+            if not str(a[key] or "").strip():
+                errors.append(f"{where}: {key} must not be empty")
+    if errors:
+        raise AmendmentError(f"{path}: " + "; ".join(errors))
+    return doc["amendments"]
+
+
+def explain(frozen: dict[str, Any], current: dict[str, Any], amendments: list[dict[str, Any]]) -> tuple[list[str], list[str]]:
+    """(differing fields an amendment records exactly, differing fields nothing explains)."""
+    explained, unexplained = [], []
+    for field in CHECKED:
+        if frozen.get(field) == current.get(field):
+            continue
+        recorded = any((a["changes"] or {}).get(field) == {"from": frozen.get(field), "to": current.get(field)} for a in amendments)
+        (explained if recorded else unexplained).append(field)
+    return explained, unexplained
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("action", choices=["write", "check"])
@@ -123,11 +187,30 @@ def main(argv: list[str] | None = None) -> int:
     if frozen is None:
         print(f"{FROZEN} does not exist: the test set is sealed", file=sys.stderr)
         return 1
-    problems = mismatches(frozen, current_conditions(args.model))
-    for p in problems:
-        print(f"MISMATCH {p}")
-    print("matches the freeze" if not problems else f"{len(problems)} mismatch(es)")
-    return 0 if not problems else 1
+    try:
+        amendments = load_amendments(AMENDMENTS)
+    except AmendmentError as exc:
+        print(f"invalid amendments: {exc}", file=sys.stderr)
+        return EXIT_INVALID
+    current = current_conditions(args.model)
+    explained, unexplained = explain(frozen, current, amendments)
+    for a in amendments:
+        affected = ", ".join(a["affects_frozen_fields"] or []) or "no frozen field"
+        print(f"AMENDMENT {a['id']} ({a['date']}): {a['change']} [{affected}]")
+    for field in explained:
+        print(f"AMENDED {field}: frozen {frozen.get(field)!r}, now {current.get(field)!r} (recorded)")
+    for field in unexplained:
+        print(f"MISMATCH {field}: frozen {frozen.get(field)!r}, now {current.get(field)!r}")
+    if unexplained:
+        print(f"{len(unexplained)} mismatch(es)")
+        return EXIT_MISMATCH
+    if explained:
+        print(f"differs from the freeze only by recorded amendments ({', '.join(explained)}); test-set runs stay refused")
+        return EXIT_AMENDED
+    changing = sum(1 for a in amendments if a["affects_frozen_fields"])
+    print(f"matches the freeze; {len(amendments)} recorded amendment(s) after the freeze"
+          + (" (none changes a frozen field)" if not changing else f" ({changing} change frozen fields)"))
+    return EXIT_MATCH
 
 
 if __name__ == "__main__":
