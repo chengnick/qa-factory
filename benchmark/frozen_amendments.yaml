@@ -57,3 +57,13 @@ amendments:
     affects_frozen_fields: []
     changes: {}
     evaluation_impact: "none on recorded results: no generated test in benchmark/results (Phase 2R, Phase 4 smoke, Phase 5) contains a hard-coded URL, so no run reached this code path; the gate and the browser route already had the boundary, and the L1a guard limits connections to the SUT at run time"
+
+  - id: A6
+    date: 2026-10-01
+    commits: []
+    files: [tests/property/, tests/evaluation/test_differential_table.py, requirements-test.lock, pyproject.toml, .github/workflows/ci.yml, tests/ci/test_workflows.py, .gitignore]
+    change: property-based tests (Hypothesis 6.168.3) for the permission gate, write paths, URLs, verdict aggregation and W01, mutation checks of those properties, and the full cross-validation decision table; hypothesis installed from a separate requirements-test.lock
+    reason: the owner's one exception to the feature freeze; tests only (the one production fix they led to is A5)
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none; requirements.lock is unchanged (hypothesis lives in requirements-test.lock), so lockfile_sha256 still matches

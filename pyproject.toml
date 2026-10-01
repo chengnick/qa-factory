@@ -19,6 +19,7 @@ gemini = [
 dev = [
     "pytest>=8.0",
     "playwright>=1.44",
+    "hypothesis>=6.168",
 ]
 
 [tool.setuptools]

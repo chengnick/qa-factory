@@ -9,3 +9,4 @@ generated/*
 !generated/conftest.py
 .env
 *.db
+.hypothesis/

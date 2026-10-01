@@ -1,0 +1,5 @@
+# Test-only dependencies (property-based tests), installed on top of requirements.lock.
+# Kept apart so requirements.lock, whose sha256 is a frozen field (benchmark/frozen.yaml), stays unchanged.
+# Install: pip install -r requirements.lock -r requirements-test.lock
+hypothesis==6.168.3
+sortedcontainers==2.4.0

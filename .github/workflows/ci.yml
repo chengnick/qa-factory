@@ -32,6 +32,10 @@ jobs:
       - name: Install dependencies (lockfile)
         run: python -m pip install -r requirements.lock
 
+      # Property-based tests only; kept out of requirements.lock, whose hash is a frozen field (benchmark/frozen.yaml).
+      - name: Install test-only dependencies (lockfile)
+        run: python -m pip install -r requirements-test.lock
+
       - name: Install Chromium
         shell: bash
         run: |

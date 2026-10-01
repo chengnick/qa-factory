@@ -52,6 +52,10 @@ def test_ci_job_shape():
     setup = next(s for s in test["steps"] if "setup-python" in s.get("uses", ""))
     assert setup["with"] == {"python-version-file": ".python-version"}  # no second copy of the version
     assert steps["Install dependencies (lockfile)"]["run"] == "python -m pip install -r requirements.lock"
+    # test-only dependencies come from their own lock, so requirements.lock (a frozen field) never changes for them
+    assert steps["Install test-only dependencies (lockfile)"]["run"] == "python -m pip install -r requirements-test.lock"
+    names = [s.get("name", "") for s in test["steps"]]
+    assert names.index("Install dependencies (lockfile)") < names.index("Install test-only dependencies (lockfile)") < names.index("Tests (no live LLM)")
     assert '-m "not live"' in steps["Tests (no live LLM)"]["run"] and "--junitxml" in steps["Tests (no live LLM)"]["run"]
     assert steps["Phase 0 acceptance matrix"]["run"] == "python -m benchmark.matrix"
     assert steps["Upload evidence on failure"]["if"] == "failure()"
