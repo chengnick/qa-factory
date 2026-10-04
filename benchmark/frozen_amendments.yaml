@@ -90,3 +90,30 @@ amendments:
         from: e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6
         to: fcf9153078efebf7e427d76511fe419194280071ef3db677541414f5c7d4db90
     evaluation_impact: "none on what was installed: both hashes are the same lockfile content (CRLF vs LF). Recorded runs keep e727f4d1... in meta.json (all computed on this machine's CRLF checkout). frozen check now reports this field as a recorded amendment (exit 3); evaluation.run refuses test-set runs on the difference"
+
+  - id: A9
+    date: 2026-10-04
+    commits: []
+    files: [benchmark/frozen_amendments.yaml]
+    change: "verification record for A5 and A8 (no code change): how each claim was checked and what it showed"
+    reason: "the owner asked for A8's values and A5's 'no run affected' to be checked independently, read-only, and the method recorded here (append-only, so A5 and A8 stay as written)"
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: >-
+      none; verification only.
+      A5 on Phase 5: every generated test file (130 test_*.py across the 90 runs, all rounds; 6192 string constants)
+      and every LLM completion (200 files) was scanned; 0 strings contain '://', 0 contain '@', 0 contain a host-like
+      value (IP, localhost, domain), and the pre-A5 check (git show 8bc2180^:tools/code_policy.py) and the current
+      check give identical results (no HARDCODED_URL) on every file, so no Phase 5 test could reach the bug. Run time:
+      65 runs have isolated pytest spans (195 spans, level L1 = L1a); none carries qa.isolation.denials, i.e. L1a refused
+      nothing, and security_events.json has 0 events other than 7 W05 workflow findings (missing Playwright evidence).
+      A8 on this machine's CRLF checkout (core.autocrlf=true; requirements.lock 1041 bytes, 44 CRLF, 0 bare LF):
+      (1) sha256 of the raw bytes (pre-A8 algorithm) = e727f4d1... = benchmark/frozen.yaml lockfile_sha256 = A8 'from',
+      and all 90 Phase 5 meta.json record e727f4d1...; (2) sha256 after CRLF->LF (current lockfile_sha256()) =
+      fcf91530... = A8 'to', which is also the raw sha256 of the committed blob (git show HEAD:requirements.lock, LF);
+      requirements.lock last changed in d4f7591 (2026-09-25), before the freeze. (3) exit codes of
+      `python -m evaluation.frozen check`: 0 all match, 1 mismatch, 2 amendments file invalid, 3 every difference is
+      recorded exactly by an amendment. Exit 3 is not "pass": evaluation.run.check_frozen ignores amendments and still
+      refuses test-set runs (verified: RunnerRefused on lockfile_sha256). CI does not run `frozen check` as a step;
+      the pytest step runs tests/evaluation/test_frozen_amendments.py, which requires exactly exit 3 with only
+      lockfile_sha256 AMENDED and no MISMATCH, so in CI exit 3 is the expected state and any other code fails the job.
