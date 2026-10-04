@@ -27,7 +27,12 @@ def git_commit(repo: Path = REPO_ROOT) -> dict[str, object]:
 
 
 def lockfile_sha256(path: Path = LOCKFILE) -> str | None:
-    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+    """sha256 of the lockfile with line endings normalised to LF, like the policy and conftest hashes, so a CRLF
+    checkout (Windows, core.autocrlf) and an LF one hash the same content identically. Before amendment A8 the raw
+    bytes were hashed: runs up to then recorded the CRLF value of this machine's checkout."""
+    if not path.is_file():
+        return None
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 OWNER_CONFTEST = REPO_ROOT / "generated" / "conftest.py"

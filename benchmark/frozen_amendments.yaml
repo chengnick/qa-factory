@@ -77,3 +77,16 @@ amendments:
     affects_frozen_fields: []
     changes: {}
     evaluation_impact: none; CI configuration only
+
+  - id: A8
+    date: 2026-10-04
+    commits: []
+    files: [evaluation/provenance.py, tests/evaluation/test_provenance.py, tests/evaluation/test_frozen_amendments.py]
+    change: lockfile_sha256 is computed with line endings normalised to LF, like policy_hash and conftest_sha256
+    reason: "CI #21 failed: the raw-byte hash depended on the checkout's line endings (this machine: CRLF via core.autocrlf, e727f4d1...; CI on ubuntu and windows: LF, fcf91530...); requirements.lock itself is unchanged since d4f7591"
+    affects_frozen_fields: [lockfile_sha256]
+    changes:
+      lockfile_sha256:
+        from: e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6
+        to: fcf9153078efebf7e427d76511fe419194280071ef3db677541414f5c7d4db90
+    evaluation_impact: "none on what was installed: both hashes are the same lockfile content (CRLF vs LF). Recorded runs keep e727f4d1... in meta.json (all computed on this machine's CRLF checkout). frozen check now reports this field as a recorded amendment (exit 3); evaluation.run refuses test-set runs on the difference"

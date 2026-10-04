@@ -55,3 +55,11 @@ def test_lockfile_hash(tmp_dir):
     assert lockfile_sha256(lock) is None
     lock.write_text("a==1\n", encoding="utf-8")
     assert len(lockfile_sha256(lock)) == 64
+
+
+def test_lockfile_hash_ignores_line_endings(tmp_dir):
+    """A CRLF checkout (Windows, core.autocrlf=true) and an LF checkout of the same lockfile hash the same (amendment A8)."""
+    lf, crlf = tmp_dir / "lf.lock", tmp_dir / "crlf.lock"
+    lf.write_bytes(b"a==1\nb==2\n")
+    crlf.write_bytes(b"a==1\r\nb==2\r\n")
+    assert lockfile_sha256(lf) == lockfile_sha256(crlf)

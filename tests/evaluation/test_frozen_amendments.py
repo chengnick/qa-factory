@@ -23,18 +23,24 @@ def _write(path: Path, entries: list[dict]) -> Path:
     return path
 
 
-def test_the_repository_amendments_are_valid_and_change_no_frozen_field():
+LOCKFILE_CHANGE = {"from": "e727f4d1a5cfe7854fa25fe3b625d58cf7cfa6ab70c40f891ddaa2d674326cd6",
+                   "to": "fcf9153078efebf7e427d76511fe419194280071ef3db677541414f5c7d4db90"}  # fmt: skip
+
+
+def test_the_repository_amendments_are_valid_and_only_a8_changes_a_frozen_field():
     amendments = frozen.load_amendments()
-    assert [a["id"] for a in amendments][:4] == ["A1", "A2", "A3", "A4"]
-    assert all(not a["affects_frozen_fields"] for a in amendments)
+    assert [a["id"] for a in amendments][:8] == ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
+    changing = {a["id"]: a["changes"] for a in amendments if a["affects_frozen_fields"]}
+    assert changing == {"A8": {"lockfile_sha256": LOCKFILE_CHANGE}}  # the line-ending fix of the lockfile hash, nothing else
 
 
-def test_check_on_the_repository_matches_and_lists_the_amendments(capsys, monkeypatch):
+def test_check_on_the_repository_differs_only_by_the_recorded_lockfile_amendment(capsys, monkeypatch):
+    """Same result on a CRLF (this machine) and an LF (CI) checkout, since A8 normalises line endings."""
     monkeypatch.setattr(frozen, "FROZEN", frozen.REPO_ROOT / "benchmark" / "frozen.yaml")
-    assert frozen.main(["check", "--model", MODEL]) == frozen.EXIT_MATCH
+    assert frozen.main(["check", "--model", MODEL]) == frozen.EXIT_AMENDED
     out = capsys.readouterr().out
-    assert "matches the freeze;" in out and "recorded amendment(s) after the freeze (none changes a frozen field)" in out
-    assert "AMENDMENT A1 " in out and "MISMATCH" not in out
+    assert "AMENDED lockfile_sha256" in out and LOCKFILE_CHANGE["to"] in out and "MISMATCH" not in out
+    assert "AMENDMENT A1 " in out and "test-set runs stay refused" in out
 
 
 @pytest.mark.parametrize(
