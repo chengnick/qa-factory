@@ -2,198 +2,133 @@
 
 [![CI](https://github.com/chengnick/qa-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/chengnick/qa-factory/actions/workflows/ci.yml)
 
-A QA agent pipeline with end-to-end tracing, rule-based failure attribution and workflow-level checks, evaluated against a small app with 10 seeded bugs. Spec: [docs/spec.md](docs/spec.md) (v3.2).
+An LLM pipeline that reads a requirement, writes tests for it and runs them against a small web app with seeded bugs. The project is less about generating tests than about one question: **when the pipeline says "defect found", can you trust it, and when it fails, can you tell why?**
 
-## Results (Phase 5; [details](benchmark/results/phase5/acceptance.md))
+Every run leaves a trace and its evidence. Verdicts come from rules, not from model output. Results were measured on a held-out set of bugs after the prompt, model and conditions were frozen.
 
-- Bugs were split into a dev set (3, used for prompt tuning) and a held-out test set (7, run once after freezing prompt, model and conditions in [benchmark/frozen.yaml](benchmark/frozen.yaml)).
-- **Held-out true detection rate: 89%** (25/28 runs, per-round range 71–100%, 95% CI 73–96%), verified by running every generated test against both the buggy and the clean build. Dev set: 9/9.
-- **False-positive rate on the clean build: 20% before cross-validation** (4/20, 95% CI 8–42%), **0/20 after it**. A user of the pipeline alone would see "defect found" on a correct system in about 1 of 5 clean runs; three of the four came from the UI requirement, whose generated UI tests are the weakest part (both B05 misses were broken UI tests).
-- Failure-layer attribution matched the owner's manual labels in **24 of 28** sampled test failures (86%, 95% CI 69–94%); 12/12 for LLM / agent failures, reported apart. All four disagreements are one case, a UI requirement that does not say what the page must do (classifier: test broken; owner: system at fault). One labeller, the author; the sample measures precision, not misses ([score](benchmark/labels/phase5/score.md)).
-- 24 of 90 runs were blocked by a Gemini outage (23 × HTTP 503 "high demand", 1 × HTTP 504 timeout) and are reported separately, not re-run with another model.
-- Deterministic fault-injection suite covering tool misuse, provider outages, retry loops, permission violations and test weakening across revision rounds.
-- Isolation level: **L1a** (in-process audit hook, not an OS sandbox); L1b (OS level) not done (see *Isolation*). Prompt-injection resistance of the model (spec layer 2) was **not measured**.
+---
 
-## Property-based tests (after the evaluation)
+## Results
 
-The one exception to the feature freeze: tests only ([tests/property/](tests/property/), Hypothesis from [requirements-test.lock](requirements-test.lock), installed on top of `requirements.lock` so the frozen lockfile hash is unchanged). They check, over generated inputs: a refused tool call never executes; every spelling of a protected, evidence or other-run path is refused and judged the same; URLs that only look like the SUT are refused; the verdict always follows the priority order, ignores observation order and is never PASS when no test ran; removing assertions from a failing test that then passes always triggers W01. Five deliberately injected bugs (monkeypatch, no code edited) are each caught; the cross-validation decision table is enumerated in full.
+Phase 5 evaluation, `gemini-3.5-flash-lite`, temperature 0, prompt v3. 10 seeded bugs: 3 in a dev set (used for prompt tuning), 7 held out and run only after the freeze ([frozen.yaml](benchmark/frozen.yaml)). Each combination ran 5 rounds. Full record: [acceptance.md](benchmark/results/phase5/acceptance.md).
 
-They found one real bug: the generated-code check accepted `http://127.0.0.1:<port>@evil.test`, an extra port digit and `127.0.0.1:<port>.evil.test` as the SUT (prefix match without a boundary). It was fixed with the owner's approval; no recorded run had a hard-coded URL, so no result changes. Post-evaluation changes are listed in [benchmark/frozen_amendments.yaml](benchmark/frozen_amendments.yaml); `python -m evaluation.frozen check --model gemini-3.5-flash-lite` reports them next to the (still matching) frozen conditions.
+| | Result |
+|---|---|
+| Held-out detection, verified by cross-validation | **25/28** (89%, 95% CI 73–96%) |
+| &nbsp;&nbsp;API requirements | 19/20 |
+| &nbsp;&nbsp;UI requirement (REQ-004) | 6/8 |
+| False "defect found" on the clean build, as a user would see it | **4/20** (20%, 95% CI 8–42%) |
+| &nbsp;&nbsp;of which from the UI requirement | 3 of 4 |
+| Same false positives after cross-validation | 0/20 |
+| Failure attribution vs. manual labels | **24/28** (86%, 95% CI 69–94%) |
+| Dev set detection | 9/9 |
+| Runs blocked by provider outages (HTTP 503/504), reported, not re-run | 24/90 |
 
-```bash
-pip install -r requirements.lock -r requirements-test.lock
-python -m pytest tests/property                              # ci profile: fixed examples, 100 each
-HYPOTHESIS_PROFILE=full python -m pytest tests/property      # 5000 random examples each
+**What the numbers say.** The pipeline is reliable on API requirements. Its weak point is UI test generation: on the one UI requirement, half of the broken tests were plain code errors (`NameError`, `AttributeError` from JavaScript-style Playwright calls) and half came from a gap in the requirement itself, which also caused all three UI false positives ([breakdown](benchmark/results/phase5/analysis/req004_breakdown.md)). Cross-validation is what keeps a user from acting on those false alarms.
+
+**Attribution.** When the classifier said "the system is at fault", the manual labels agreed in 18 of 18 cases. All 4 disagreements are one case: the UI requirement does not say what the page must do in certain situations, so "test is wrong" and "system is wrong" are both defensible ([score](benchmark/labels/phase5/score.md)). One labeller, the author; labels were committed before scoring (`9617645`).
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+    R[Requirement] --> A1[LLM: requirement summary]
+    A1 --> A2[LLM: test plan]
+    A2 --> A3[LLM: test code]
+    A3 --> C1{Static check<br/>+ permission gate}
+    C1 --> T1[Run tests on bug build]
+    T1 --> S[Surface verdict]
+    S --> X[Cross-validation:<br/>fresh bug build vs. fresh clean build]
+    X --> C2[Rule-based classifier<br/>+ workflow evaluator]
+    C2 --> V[Verdict + evidence]
 ```
 
-## Phase 4 (evidence, Workflow Evaluator, L1 guard)
+**The LLM proposes; code decides.** Each step in the pipeline is one of four kinds:
 
-- **Revision rounds** ([pipeline.py](pipeline.py)): the pipeline can run automation + QA again while tests fail, up to `max_rounds`, for an automation agent that declares `revises = True`. **The real AutomationAgent does not revise, so live runs have exactly one round** (prompt stays v3; an LLM-driven revision step would need a new prompt version and a dev-set re-run). Each round's tests are saved read-only to `generated/roundN/` and listed with sha256 and per-test results in `rounds.json`. Spans carry `qa.test.round`.
-- **Playwright evidence** ([generated/conftest.py](generated/conftest.py)): a failed UI test leaves `playwright/{call}/{test}/trace.zip`, `screenshot.png` and `console.log`; tool spans list what they produced in `qa.artifact.path`. The owner conftest's hash is in `meta.json` (`conftest_sha256`).
-- **Workflow Evaluator** ([evaluation/workflow.py](evaluation/workflow.py), spec v3 §9): deterministic rules over the whole run. W01 weakened test, W02 removed failing test, W03 expected value rewritten to the observed one, W04 executed security event, W05 missing or changed evidence in acceptance mode. Output `workflow_eval.json`, `WORKFLOW_VIOLATION` / `GOAL_DRIFT` security events. **It does not change the verdict**; it is reported next to it. Because live runs have one round, W01–W03 are shown on scripted histories ([testing/scripted_rounds.py](testing/scripted_rounds.py)), not on real model behaviour.
-- **L1 guard** ([tools/l1_guard.py](tools/l1_guard.py)): see *Isolation* below. In-process, not an OS sandbox.
-- **Final report**: every run ends with `report.json` (spec v3 §12). `python -m evaluation.report <run dirs> --out DIR` rebuilds reports for existing runs elsewhere.
-- **Offline check on the 30 Phase 2R runs**: no W01–W04 violation; W05 lists only the files later phases added (`security_events.json`, `classification.json`, `rounds.json`), as expected for the older layout.
+| Kind | Steps |
+|---|---|
+| **LLM** (produces content only) | Requirement summary, test plan, test code. Three calls per run. The model never chooses a tool. |
+| **Code** (deterministic) | Handoff schema checks, test-plan size limit, static check of generated code, permission gate, tool argument checks, retry policy, SUT start and health check, cross-validation, failure classification, verdict, workflow rules, evidence storage and hashing, freeze check |
+| **Tool** (executes) | `pytest`, Playwright, `http_request`, `file_write` |
+| **Human** (in development, not at run time) | Writing requirements, seeded bugs and reference tests; freezing the evaluation; approving post-evaluation changes; manual attribution labels |
 
-### Phase 3.5 (policy file, CI)
+The verdict is never taken from model output. A scripted model that "obeys" an instruction to mark every test as passed does not change it ([agent_security tests](tests/agent_security/)).
 
-- **Policy file** ([config/agent_policy.yaml](config/agent_policy.yaml), [permissions/policy.py](permissions/policy.py)): the permission table, protected and evidence paths, and the generated-code rules. Validated strictly at startup: an invalid policy stops the program before any run exists. Every permission check, allowed or denied, is a `qa.permission.check` span event and is counted in `meta.json`.
-- **CI** ([.github/workflows/ci.yml](.github/workflows/ci.yml)): runs the tests (`-m "not live"`) and the Phase 0 matrix on ubuntu-latest and windows-latest with the pinned Python version (`.python-version`) and `requirements.lock`, plus a non-blocking Python 3.14 canary. No real LLM, no secrets. CI verifies one Python version on two operating systems, nothing more.
+---
 
-### Phase 3 (failure attribution, permission gate, fault injection)
+## Design decisions
 
-### Architecture fact: tool routing is fixed
+- **Cross-validation instead of trusting a failure.** Generated tests run once on a fresh buggy build and once on a fresh clean build. Only "fails on the bug, passes without it" counts as a detected bug. It confirms the failure depends on the bug, not that the test describes that bug; the manual labels check the second part.
+- **Held-out bugs and a freeze.** The prompt was tuned on 3 bugs only. Prompt, model, temperature, lockfile, policy and test fixtures were hashed into `frozen.yaml` before the other 7 bugs were run; nothing in them changed afterwards. Later changes are listed in [frozen_amendments.yaml](benchmark/frozen_amendments.yaml), which can only grow.
+- **Rule-based attribution.** Each failure gets a layer (system under test, test, harness, agent, provider, environment) from an ordered rule table, with the matching rule and evidence recorded. No confidence scores; an unmatched failure is `UNKNOWN`, not guessed.
+- **Fixed tool routing.** Agents call tools in code; the model only writes content. Fault-injection tests therefore exercise the safeguards (gate, registry, trace, classifier) with scripted agents, not the model's behaviour.
+- **Policy is not isolation.** The [policy file](config/agent_policy.yaml) says what an agent may do; isolation decides what it actually can do. Current isolation is in-process (see *Limitations*).
+- **Evidence is never deleted.** Every run keeps its trace, prompts, generated tests, logs and verdicts under `artifacts/{run_id}/`; evaluation runs are committed to `benchmark/results/`.
 
-Agents decide which tool to call and with which arguments; **the LLM only produces content** (a requirement summary, a test plan, test source code). It never chooses a tool. So "the LLM called an unknown tool", "passed wrong arguments" or "kept repeating a failing call" cannot happen through the model in this pipeline.
+---
 
-The fault-injection scenarios reproduce those situations with `ScriptedAgent` ([testing/fake_agent.py](testing/fake_agent.py)), an agent whose tool calls come from a script. **Those scenarios test the safeguards** (gate, registry, trace, classifier), **not the model's behaviour**. The same holds for prompt injection layer 1: FakeLLM plays a model that obeys the injection, and the tests show the safeguards hold. How often a real model would obey is a separate, statistical question (spec v3 §11.4, Phase 5).
+## Testing the safeguards
 
-### Phase 3 (spec v3 §5, §7, §10)
+**Property-based tests** ([tests/property/](tests/property/), Hypothesis) check over generated inputs that a refused tool call never executes; that every spelling of a protected path is refused and judged the same; that URLs which only look like the app are refused; and that the verdict follows its priority order and is never PASS when no test ran.
 
-- **Classifier** ([classification/](classification/)): the rule table R1–R18 plus R11U, ordered specific before general. Every classification records `matched_rule` and `evidence`; a failure no rule matches is `UNKNOWN`, and the run is `INCONCLUSIVE`. The verdict order is ENV_BLOCKED > AGENT_FAILED > DEFECT_FOUND > TEST_BROKEN > INCONCLUSIVE > MISSED > FLAKY > PASS. Each run writes `classification.json`.
-- **Permission gate and security events** ([permissions/gate.py](permissions/gate.py), [security/events.py](security/events.py)): spec v3 §8.1 per agent; `security_events.json` per run.
-- **Static check of generated tests** ([tools/code_policy.py](tools/code_policy.py)): a check, not a sandbox.
-- **Fault injection**: `pytest tests/agent_faults/ tests/agent_security/` runs 104 tests in about 6 s (13–16 s wall clock), identical across 20 consecutive runs. Details in [benchmark/results/phase3/acceptance.md](benchmark/results/phase3/acceptance.md).
-- **Phase 2R re-classified offline**: `python -m evaluation.classify_runs`. All 30 verdicts are reproduced.
+- They found a **latent bug** in the generated-code check: `http://127.0.0.1:<port>@evil.test` and similar URLs were accepted as the app (prefix match without a boundary). No generated test in any recorded run contained a hard-coded URL, so no result changed. Fixed with approval and recorded as an amendment.
+- Five deliberately injected bugs (via monkeypatch) were each caught.
 
-### Phase 2R (re-acceptance of Phase 2 with cross-validation)
+**CI** runs on Ubuntu and Windows. It caught a second bug: the freeze check hashed the lockfile without normalising line endings. The frozen value had been computed on a local Windows checkout with CRLF line endings (`core.autocrlf`), so CI's LF checkouts, on Ubuntu and on Windows alike, disagreed with it (CI #21). The hash now normalises line endings; recorded as an amendment.
 
-Install the exact locked versions (spec v3 D13):
+**Fault injection** ([tests/agent_faults/](tests/agent_faults/), [tests/agent_security/](tests/agent_security/)): 104 deterministic tests for provider outages, retry loops, tool misuse, permission violations and test weakening across revision rounds; identical across 20 consecutive runs.
+
+---
+
+## Quick start
 
 ```bash
 pip install -r requirements.lock
 pip install --no-deps -e .
+
+python app.py --requirement REQ-005 --llm fake   # scripted run, no API key needed
+pytest -m "not live"                             # full test suite, offline
+python -m benchmark.matrix                       # check every seeded bug against its reference test
 ```
 
-### Phase 2R (spec v3 §6, §11)
-
-- **Cross-validation** ([evaluation/differential.py](evaluation/differential.py)): the final generated tests run once on a **fresh bug SUT** and once on a **fresh clean SUT**. Both builds use the same file order, tools, retry policy and whitelisted environment, and every fresh SUT starts from the same seed (users 1–4, no projects). Results are compared per pytest node id (§6.2):
-
-  | Bug build | Clean build | Decision |
-  |---|---|---|
-  | FAIL | PASS | bug caught (R11) |
-  | FAIL | FAIL | broken test (R12) |
-  | PASS | FAIL | broken test (R13) |
-  | ERROR | anything | broken test (R10) |
-  | PASS | PASS | not caught |
-
-  Each build starts with a SUT health check. If either check fails, cross-validation is `ENV_BLOCKED`: no test is judged and none counts toward test health. The pipeline's own QA run only gives the **surface verdict**. Output: `differential.json`, `pytest/bug_build.log`, `pytest/clean_build.log`, and an `evaluation.differential` span in the same trace.
-- **Multi-round runner**: `python -m evaluation.run --dataset dev --rounds 5 --llm gemini --model gemini-3.5-flash-lite --results-dir benchmark/results/phase2r` ([evaluation/run.py](evaluation/run.py)).
-  - Combinations are interleaved round by round, and every run is copied to the results directory after a secret scan.
-  - Live runs refuse a dirty git worktree, and `--dataset test` is refused while `benchmark/frozen.yaml` does not exist.
-  - Metrics are in [evaluation/metrics.py](evaluation/metrics.py): mean, range, n, and per-bug detection.
-
-### Phase 2.5 (minimal fixes, spec v3 §13)
-
-- **Evidence**: every run writes `artifacts/{run_id}/` (`run_id` = `RUN-YYYYMMDD-HHMMSS-XXXX`) and nothing deletes it automatically. `meta.json` records the trace_id, model, temperature, prompt version, dataset, git commit and lockfile hash. The root span carries `qa.run.id`, `qa.run.prompt_version` and `qa.run.dataset`.
-- **Dev / test split**: B02, B03 and B04 are the dev set; the other seven bugs are sealed until Phase 5 ([benchmark/datasets.py](benchmark/datasets.py)). `app.py` refuses sealed bugs unless `--allow-test-set` is passed.
-- **Prompt pinning**: prompts are pinned to [agents/version.py](agents/version.py) (currently `v3`). A test fails if a prompt changes without a version bump.
-- **PROVIDER layer** (spec v3 R2–R4): LLM 429, 5xx, timeouts and connection failures are marked `qa.failure.layer=PROVIDER` and end the run as `ENV_BLOCKED`. The verdict for an aborted run follows the exception type (`agents/report.py::EXCEPTION_VERDICTS`), not a blanket `AGENT_FAILED`.
-- **Isolation L0+**: see *Isolation* below.
-
-### Phase 2
-
-- **Gemini adapter**: `llm/adapters/gemini.py` uses the `google-genai` SDK in JSON mode with `temperature=0`. SDK retries are off; 429s and timeouts are retried through `with_retry()`, so every attempt is a span.
-- **Real tools**: `tools/` has `file_write` (the tool writes only inside the run's `generated/`), `pytest` / `playwright` (run tests in a subprocess against the SUT), and `http_request`. Arguments are checked against a parameter schema before a tool runs.
-- **Per-run workspace**: each live run gets `artifacts/{run_id}/`, and generated tests are written and executed there (see *Isolation* below).
-- **Agent context**: agents get the API reference in [docs/sut-api.md](docs/sut-api.md) and the owner-written fixtures in [generated/conftest.py](generated/conftest.py), which is read-only for agents.
-- **SUT startup**: `sut/launcher.py` starts the SUT with any set of bug flags. The pipeline and the reference tests share it.
-
-**Acceptance** ([phase2_acceptance.md](benchmark/results/phase2_acceptance.md)): 5 of 6 bugged runs genuinely detected (B02, B03, B04, each checked by hand), 1 of 6 clean runs a false positive. Model: `gemini-3.5-flash-lite` (the larger Flash models returned 503 at run time).
-
-Set up the key once. Create `.env` in the repo root with `GEMINI_API_KEY=...`. It is git-ignored and never printed or traced.
+A live run needs `GEMINI_API_KEY` in a git-ignored `.env`:
 
 ```bash
-python app.py --requirement REQ-005 --llm gemini --sut-bugs B02    # starts a SUT with B02 enabled
-QA_LIVE=1 pytest tests/llm/test_gemini_live.py                     # optional live smoke test
+python app.py --requirement REQ-005 --llm gemini --sut-bugs B02
 ```
 
-### Phase 1
+---
 
-- **LLM**: `llm/client.py` defines the `LLMClient` Protocol. Only the scripted `FakeLLM` exists; no real LLM is connected yet.
-- **Agents**: `agents/` has five minimal agents (requirement, test_design, automation, qa, report) with typed dataclass handoffs (`agents/contracts.py`). The LLM and tools are injected, and agents never import OpenTelemetry.
-- **Tracing**: `observability/` builds on the OTel SDK. Spans are mounted around agents, the LLM and tools in `pipeline.py`. Every retry goes through `with_retry()`, which emits one `attempt` child span per try. Timestamps come from an injected clock. Secrets are redacted in spans, events, artifacts and trace files.
-- **Output**: every run (fake or live) gets its own `artifacts/{run_id}/` directory (spec v3 §4.2). It is git-ignored and never deleted automatically. It contains:
-  - `meta.json`: run_id ↔ trace_id, requirement, model, prompt version, dataset, SUT bugs, git commit, lockfile hash, verdict
-  - `trace.json`: the trace (spec v2 §3.4 format, carried over by v3)
-  - `prompts/`: full-size LLM inputs and outputs; `spans/`: other full-size content (agent outputs, stdout)
-  - `generated/`: the tests the Automation agent wrote, plus a copy of the owner conftest
-  - `reports/`: junit XML from each test run
+## Limitations
 
-```bash
-python app.py --requirement REQ-005 --llm fake            # scenario: flaky (default) | pass | defect
-pytest tests/observability                               # offline, no API key
-```
+The most important ones; the full list is in [docs/limitations.md](docs/limitations.md).
 
-### Phase 0 (SUT and benchmark)
+- **Small benchmark.** One app, 9 requirements, 10 seeded bugs, 5 rounds per combination. Confidence intervals are wide.
+- **One model.** All results use `gemini-3.5-flash-lite`, the model the prompt was tuned on. They cannot be reproduced once that model is retired. No other model was compared.
+- **REQ-004 has a requirement gap.** It does not say which situations the page must show as errors. The benchmark is frozen, so the requirement was left as it is.
+- **Isolation is in-process (L1a).** Generated tests run under a Python audit hook that limits file writes, network and processes. It is not an OS sandbox and has known gaps; OS-level isolation (L1b) is not done.
+- **Prompt-injection resistance of the model was not measured.** Tests show the safeguards hold when a scripted model obeys an injection; how often a real model would obey is untested.
+- **"FLAKY" in Phase 5 means provider retries.** All five FLAKY runs were LLM calls that failed and succeeded on retry; no test-level instability was observed. The verdict does not yet tell the two apart.
+- **Latency depends on the provider.** Runs took 31 s on 2026-09-25 and 122 s on 2026-09-28; the pipeline's own share was about 23–27 s both times ([timing](benchmark/results/phase5/analysis/timing_breakdown.md)).
+- **Manual labels have one labeller, the author,** and cover only failures the classifier had already attributed (precision, not misses).
 
-- **SUT**: `sut/` is a TaskBoard app (FastAPI + in-memory SQLite + one HTML page) with users, projects, members and tasks that move through a status state machine.
-- **Seeded bugs**: 10 bugs in 8 categories, listed in [benchmark/bugs.yaml](benchmark/bugs.yaml). They are switched on with `SUT_BUGS`, and every injection point is an `is_enabled("Bxx")` call in `sut/app.py`.
-- **Requirements**: [benchmark/requirements/](benchmark/requirements/) has REQ-001 to REQ-009.
-- **Reference tests**: [benchmark/reference_tests/](benchmark/reference_tests/) has one hand-written, black-box test per bug. API bugs are tested with httpx and UI bugs with Playwright.
+---
 
-```bash
-SUT_BUGS=B01,B04 uvicorn sut.app:app
-python -m benchmark.matrix         # acceptance matrix -> benchmark/results/phase0_matrix.md
-pytest tests                       # flag mechanism + manifest consistency
-```
+## Repository map
 
-## Known limitations
-
-- **Fake runs are simulated.** `--llm fake` runs are fully scripted and use a simulated clock. `--llm gemini` runs use real tools and a real clock.
-- **Free tier.** Gemini's free tier uses submitted content to improve Google products (only the public requirements and generated tests are sent). Its small quota can make runs slow, and runs fail when retries are exhausted.
-- **Rule-based attribution only.** The verdict comes from the rule table in [classification/rules.py](classification/rules.py) (spec v3 §5.4). A failure that no rule matches is `UNKNOWN`, and the run is `INCONCLUSIVE` rather than guessed. Examples are a non-provider LLM error such as a 400, or a bad API key in the middle of a run.
-- **Playwright browser.** `requirements.lock` pins Playwright 1.61; run `playwright install chromium` if no matching browser is installed.
-- **UI bugs are visible in the page source.** B05 and B10 are injected server-side by swapping JS snippets. The served page looks like naturally buggy code with no flag names, but a reader can still spot the bug by reading it.
-- **Weak identity.** Users are identified only by the `X-User` header. There is no real authentication.
-- **B01 needs multiple pages.** It only triggers when pagination has moved past the first page (`offset > 0`), so the single-page UI list is unaffected.
-- **REQ-004 has a requirement gap; the benchmark is frozen and REQ-004 is not changed.** Its criterion "API 錯誤時於錯誤區顯示訊息" does not say which situations are errors the page must show. Generated tests provoked "errors" that produce no API error (an unknown project id in the URL: the page makes no request; an empty title: the form's `required` field blocks the submit), and they failed on the buggy and on the clean build. In Phase 5 this accounts for 10 of the 20 broken REQ-004 tests (of 41; the other 10 are test code errors: `NameError` 7, `AttributeError` 3) and for all 3 REQ-004 surface false positives ([req004_breakdown.md](benchmark/results/phase5/analysis/req004_breakdown.md)). The four attribution disagreements with the manual labels are the same case.
-- **FLAKY in Phase 5 means provider retries, not unstable tests.** All 5 FLAKY runs are LLM calls that failed (HTTP 503 / 504) and succeeded on a retry: 13 retried attempts, every one under `llm.chat`; no test or tool was retried, so no test-level instability was observed ([flaky_causes.md](benchmark/results/phase5/analysis/flaky_causes.md)). The verdict does not distinguish the two.
-- **Latency depends on the provider.** Mean time per run: 30.8 s in Phase 2R (measured 2026-09-25) and 121.5 s for completed Phase 5 runs (measured 2026-09-28; 131 s over all 90 runs including blocked ones). The difference is LLM time: successful calls 7.6 s vs 64.7 s per run for the same three calls, plus 25.2 s in failed calls and 4.6 s waiting between retries in Phase 5. The pipeline's own time (starting SUTs, running the generated tests, cross-validation) is about 23–27 s per run in both (23.2 s and 27.1 s); runs with UI tests take about 17 s longer ([timing_breakdown.md](benchmark/results/phase5/analysis/timing_breakdown.md)).
-- **Possible testability defect in the SUT, not among the injected bugs.** When page initialisation fails (for example an unknown user in the URL), the page never sets `data-ready`, the attribute tests are told to wait for. One Phase 5 test failed waiting for it. It is not in `benchmark/bugs.yaml` and was left as it is.
-- **Manual attribution labels have one labeller, the author.** The Phase 5 attribution-accuracy figure comes from a single person who also built the system, with no second labeller and no agreement measure. It also covers only failures the classifier had already attributed, so it measures precision, not misses.
-- **Isolation is in-process (L1a).** The guard is an audit hook, not an OS sandbox; L1b (OS level) is not done. See *Isolation* below.
-- **Policy write area is relative to the run's parent directory.** The `artifacts/` in the policy's `path_prefix` (`config/agent_policy.yaml`) is taken to be the parent directory of the run workspace. For real runs this is `<repo>/artifacts`; for tests with a temporary workspace it is the temporary parent. A workspace placed somewhere else therefore gets its write area there too.
-- **What cross-validation cannot tell** (spec v3 §6.4). It confirms that a failure depends on the bug switch, not that the failing test describes *that* bug. For example, with B04 enabled, an unrelated wrong test could fail on the 500 by chance. Phase 5's manual labels quantify this.
-- **R12 means "the failure is unrelated to the injected bug", not necessarily "the test is wrong".** Both builds failed, so the bug did not cause the failure. The test may be wrong, the requirement or API spec may be ambiguous, or the SUT may have an unlisted behaviour difference. Example: in `RUN-20260925-162242-4188` a test queried a task with a non-numeric id and expected `404`; the SUT answers `422`. REQ-007 only says "missing resource → 404", so this is spec ambiguity rather than a clearly wrong test (spec v3 §6.4).
-- **Results vary even at temperature 0.** In Phase 2R, REQ-005 + B02 was missed in rounds 1–2 and caught in rounds 3–5 with the same model, prompt and temperature 0. A single run says little about detection ability, which is why every combination runs at least 5 rounds and is reported with mean, range and a 95% CI.
-- **Clean runs cannot show a cross-validated false positive.** Both builds are clean, so a failing test is R12/R13, never R11. The main false-positive figure is therefore the **surface** rate: in real use there is no clean build to compare with, and the user sees the surface verdict.
-
-## Future improvements (not implemented)
-
-Written down from the Phase 5 data; nothing here exists yet, and the project is feature-frozen.
-
-- **Split FLAKY into two verdicts**: "provider retry succeeded" (an LLM call failed and a retry completed) and "test instability" (a test or tool gave different results on a retry). All 5 FLAKY runs of Phase 5 were the first kind; today the verdict cannot tell them apart.
-- **Static check of generated Playwright code before it runs**: fixture use (a test that uses `page` must take it as a parameter) and API names (only assertion and locator methods that exist in the Python API). On the Phase 5 data this would have stopped 10 of the 20 broken REQ-004 tests before execution (`NameError` 7, `AttributeError` 3).
-- **Next benchmark version: spell out REQ-004's error situations**: say which situations count as an API error the page must display (unknown preselected project, invalid input the form blocks, failed initialisation) and what the page must do in each. The other 10 broken REQ-004 tests and all 3 REQ-004 surface false positives come from this gap. The current benchmark stays as it is.
-
-## Isolation (current level: L1a, in-process audit hook; L1b not done)
-
-> **Policy decides what an agent should be allowed to do. Isolation determines what it actually can do.**
->
-> - Policy: tool-level allowlist in [config/agent_policy.yaml](config/agent_policy.yaml), validated at startup, hash recorded in every trace (`qa.policy.hash`) and in `meta.json` (`policy_hash`)
-> - Isolation: **L1a**, enforced in-process by an audit hook in the test subprocess. It applies the L1 rules of spec v3 §8.2 (read-only repo and evidence, network only to the SUT) to what CPython audits. **L1b**, the OS-level version (restricted account or token), is not done; neither is a container (L2).
->
-> The value `L1` in older records means L1a: `benchmark/frozen.yaml` (`isolation: L1`), each run's `meta.json` / `report.json` (`isolation_level`), the span attribute `qa.isolation.level` and `PytestTool(isolation="L1")`. Those records are not changed.
-
-| Control | Status |
+| Path | Contents |
 |---|---|
-| Agents can reach tools only through the registry, with a parameter schema check | ✅ in-process (L0) |
-| `file_write` refuses paths outside the run's `generated/`, the owner conftest, the round snapshots `generated/roundN/`, and non-`.py` files | ✅ in-process check on the tool (L0) |
-| Generated tests run in a subprocess whose working directory is the run workspace `artifacts/{run_id}/` | ✅ (L0+) |
-| The subprocess gets whitelisted environment variables only; `GEMINI_API_KEY`, other tokens and `PYTHONPATH` are dropped (tested in `tests/tools/test_pytest_isolation.py`) | ✅ (L0+) |
-| The workspace has its own `pytest.ini`, so the repo root is not on `sys.path` | ✅ (L0+) |
-| Permission gate per agent (spec v3 §8.1): tools per agent; `file_write` paths judged after `resolve()` + `normcase()` (own `generated/` → protected → evidence → other); `http_request` only to SUT paths. Refusals never execute and are recorded in `security_events.json` | ✅ Phase 3 (L0, in-process) |
-| Static check of generated test code (AST): allowed imports only; no `open` / `exec` / `eval` / `compile` / `__import__` / `getattr` / `__builtins__`; no `__dict__` / `__class__` / `__subclasses__`; no hard-coded non-SUT URLs. A violating file is not run (`AGENT_FAILED`, rule R18). **This is a check, not a sandbox**: determined code can get around it | ✅ Phase 3 (L0+) |
-| Generated code can write only its own junit report, the Playwright evidence folder and a private temp dir; `sut/`, `benchmark/`, the run's own evidence and every other path are read-only; the repo `.env` cannot be read (tested in `tests/tools/test_l1_guard.py`) | ✅ Phase 4 (L1a, **in-process audit hook**) |
-| Network from generated code: name lookups and connections only to the SUT | ✅ Phase 4 (L1a, in-process audit hook) |
-| Network from the browser: every request that is not for the SUT is aborted by the page fixture (the browser runs outside Python) | ✅ Phase 4 (fixture route; the test code could remove it) |
-| Processes: only the Playwright driver may be started; `os.system`, exec, spawn, fork refused. Native code: no new libraries, no raw memory reads | ✅ Phase 4 (L1a, in-process audit hook) |
-| What the L1a guard cannot stop: operations CPython does not audit (e.g. `_winapi.CreateFile` on Windows), functions of libraries loaded before the hook (pytest, colorama, httpx, trio are preloaded; colorama holds `kernel32`), and anything done by the browser process itself. Refusals are logged to a file the test could rewrite; the refusal itself is the protection | ⚠️ known gaps |
-| L1b: restricted OS account or token for the test subprocess | ❌ not done (needs administrator changes) |
-| L2: container with read-only mounts and an isolated network | ❌ (container mode proposed, not built) |
+| `sut/` | TaskBoard app (FastAPI, SQLite, one HTML page) with switchable seeded bugs |
+| `benchmark/` | Requirements, bug list, reference tests, frozen conditions, all evaluation results |
+| `agents/`, `llm/`, `pipeline.py` | The five agents, LLM client and adapter, pipeline |
+| `tools/` | `pytest`, Playwright, HTTP and file tools; static check; isolation guard |
+| `classification/`, `evaluation/` | Rule table and verdicts; cross-validation, runner, metrics, workflow rules |
+| `permissions/`, `security/`, `config/` | Permission gate, policy file, security events |
+| `observability/` | OpenTelemetry tracing with a JSON exporter |
+| `docs/` | [Specification](docs/spec.md), [development log](docs/development-log.md), [limitations](docs/limitations.md) |
 
-Refusals raise `PermissionError` in the test, are recorded as `PERMISSION_DENIED` security events (`action: l1:<event>`, `executed: false`) and counted on the tool span (`qa.isolation.denials`). `report.json` states the level (`isolation_level`) and what it means (`isolation_note`). `PytestTool(isolation="L0+")` switches the guard off; the test suite uses that as a control to show the same write succeeding without it.
+The project was built in phases with a written spec, and each phase was accepted against recorded evidence. The [development log](docs/development-log.md) has the per-phase detail.
 
-The pipeline is one-way (tests run after the LLM has finished writing them), so test output never flows back into an LLM prompt.
-That limits what a test could leak to the model, but it is not a security boundary.
+The project is feature-frozen.
