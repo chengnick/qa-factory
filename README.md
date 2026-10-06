@@ -24,7 +24,7 @@ Phase 5 evaluation, `gemini-3.5-flash-lite`, temperature 0, prompt v3. 10 seeded
 | Dev set detection | 9/9 |
 | Runs blocked by provider outages (HTTP 503/504), reported, not re-run | 24/90 |
 
-**What the numbers say.** The pipeline is reliable on API requirements. Its weak point is UI test generation: on the one UI requirement, half of the broken tests were plain code errors (`NameError`, `AttributeError` from JavaScript-style Playwright calls) and half came from a gap in the requirement itself, which also caused all three UI false positives ([breakdown](benchmark/results/phase5/analysis/req004_breakdown.md)). Cross-validation is what keeps a user from acting on those false alarms.
+**What the numbers say.** The pipeline is reliable on API requirements. Its weak point is UI test generation: on the one UI requirement, half of the broken tests were plain code errors (`NameError` from using `page` without its fixture, `AttributeError` from JavaScript-style Playwright calls such as `toBeVisible`) and half came from a gap in the requirement itself, which also caused all three UI false positives ([breakdown](benchmark/results/phase5/analysis/req004_breakdown.md)). Cross-validation is what keeps a user from acting on those false alarms.
 
 **Attribution.** When the classifier said "the system is at fault", the manual labels agreed in 18 of 18 cases. All 4 disagreements are one case: the UI requirement does not say what the page must do in certain situations, so "test is wrong" and "system is wrong" are both defensible ([score](benchmark/labels/phase5/score.md)). One labeller, the author; labels were committed before scoring (`9617645`).
 
@@ -61,7 +61,7 @@ The verdict is never taken from model output. A scripted model that "obeys" an i
 ## Design decisions
 
 - **Cross-validation instead of trusting a failure.** Generated tests run once on a fresh buggy build and once on a fresh clean build. Only "fails on the bug, passes without it" counts as a detected bug. It confirms the failure depends on the bug, not that the test describes that bug; the manual labels check the second part.
-- **Held-out bugs and a freeze.** The prompt was tuned on 3 bugs only. Prompt, model, temperature, lockfile, policy and test fixtures were hashed into `frozen.yaml` before the other 7 bugs were run; nothing in them changed afterwards. Later changes are listed in [frozen_amendments.yaml](benchmark/frozen_amendments.yaml), which can only grow.
+- **Held-out bugs and a freeze.** The prompt was tuned on 3 bugs only. Prompt, model, temperature, lockfile, policy and test fixtures were hashed into `frozen.yaml` before the other 7 bugs were run; their contents did not change afterwards. The one frozen value that now differs is the lockfile hash, because its computation was changed to ignore line endings (amendment A8). Later changes are listed in [frozen_amendments.yaml](benchmark/frozen_amendments.yaml), which can only grow.
 - **Rule-based attribution.** Each failure gets a layer (system under test, test, harness, agent, provider, environment) from an ordered rule table, with the matching rule and evidence recorded. No confidence scores; an unmatched failure is `UNKNOWN`, not guessed.
 - **Fixed tool routing.** Agents call tools in code; the model only writes content. Fault-injection tests therefore exercise the safeguards (gate, registry, trace, classifier) with scripted agents, not the model's behaviour.
 - **Policy is not isolation.** The [policy file](config/agent_policy.yaml) says what an agent may do; isolation decides what it actually can do. Current isolation is in-process (see *Limitations*).
@@ -80,7 +80,7 @@ The verdict is never taken from model output. A scripted model that "obeys" an i
 
 **Secrets** ([tests/property/test_prop_secrets.py](tests/property/test_prop_secrets.py), [test_secrets_e2e.py](tests/property/test_secrets_e2e.py)): synthetic secrets (FakeLLM only) are injected through environment variables, tool inputs and outputs, exception messages, HTTP headers and requirement text, and every file a run saves is scanned, including junit XML, pytest logs, Playwright console.log and the unzipped trace.zip. They found two leaks, both fixed with approval: a refused file write put the secret it had detected into `meta.json`, and agent output was redacted only after JSON escaping, which hid `"api_key": "…"` from the masking rules.
 
-**Fault injection** ([tests/agent_faults/](tests/agent_faults/), [tests/agent_security/](tests/agent_security/)): 104 deterministic tests for provider outages, retry loops, tool misuse, permission violations and test weakening across revision rounds; identical across 20 consecutive runs.
+**Fault injection** ([tests/agent_faults/](tests/agent_faults/), [tests/agent_security/](tests/agent_security/)): 111 deterministic tests for provider outages, retry loops, tool misuse, permission violations and test weakening across revision rounds; identical results across 20 consecutive runs (re-checked 2026-10-06; 104 tests when first measured in Phase 3).
 
 ---
 
