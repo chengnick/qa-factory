@@ -78,6 +78,8 @@ The verdict is never taken from model output. A scripted model that "obeys" an i
 
 **CI** runs on Ubuntu and Windows. It caught a second bug: the freeze check hashed the lockfile without normalising line endings. The frozen value had been computed on a local Windows checkout with CRLF line endings (`core.autocrlf`), so CI's LF checkouts, on Ubuntu and on Windows alike, disagreed with it (CI #21). The hash now normalises line endings; recorded as an amendment.
 
+**Secrets** ([tests/property/test_prop_secrets.py](tests/property/test_prop_secrets.py), [test_secrets_e2e.py](tests/property/test_secrets_e2e.py)): synthetic secrets (FakeLLM only) are injected through environment variables, tool inputs and outputs, exception messages, HTTP headers and requirement text, and every file a run saves is scanned, including junit XML, pytest logs, Playwright console.log and the unzipped trace.zip. They found two leaks, both fixed with approval: a refused file write put the secret it had detected into `meta.json`, and agent output was redacted only after JSON escaping, which hid `"api_key": "…"` from the masking rules.
+
 **Fault injection** ([tests/agent_faults/](tests/agent_faults/), [tests/agent_security/](tests/agent_security/)): 104 deterministic tests for provider outages, retry loops, tool misuse, permission violations and test weakening across revision rounds; identical across 20 consecutive runs.
 
 ---
@@ -112,6 +114,7 @@ The most important ones; the full list is in [docs/limitations.md](docs/limitati
 - **Prompt-injection resistance of the model was not measured.** Tests show the safeguards hold when a scripted model obeys an injection; how often a real model would obey is untested.
 - **"FLAKY" in Phase 5 means provider retries.** All five FLAKY runs were LLM calls that failed and succeeded on retry; no test-level instability was observed. The verdict does not yet tell the two apart.
 - **Latency depends on the provider.** Runs took 31 s on 2026-09-25 and 122 s on 2026-09-28; the pipeline's own share was about 23–27 s both times ([timing](benchmark/results/phase5/analysis/timing_breakdown.md)).
+- **Secret masking covers known shapes only.** The exact values of configured secrets and the formats in `redact.py` are covered; secrets of arbitrary format and text inside images (screenshots, trace frames) are not. Verbatim evidence (generated tests, junit XML, Playwright traces) is never masked: it is guaranteed free only of the narrower shapes the secret scan detects, so a short Bearer value or an `auth_token=` value written into a test stays there.
 - **Manual labels have one labeller, the author,** and cover only failures the classifier had already attributed (precision, not misses).
 
 ---
