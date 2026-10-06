@@ -34,7 +34,7 @@ from llm.client import (
     Message,
 )
 from observability.clock import Clock
-from observability.redact import redact
+from observability.redact import redact, redact_value
 from tools.registry import (
     NO_RETRY,
     RetryPolicy,
@@ -223,7 +223,8 @@ def record_content(inst: Instrumentation, span: Span, kind: str, text: str, *, t
 def _to_text(value: Any) -> str:
     if dataclasses.is_dataclass(value) and not isinstance(value, type):
         value = dataclasses.asdict(value)
-    return json.dumps(value, ensure_ascii=False, indent=2, default=str)
+    # Redact before serialising: JSON escaping turns `api_key": "x` into `api_key\": \"x`, which redact() no longer sees.
+    return json.dumps(redact_value(value), ensure_ascii=False, indent=2, default=str)
 
 
 # --------------------------------------------------------------------------- retry

@@ -39,6 +39,7 @@ from evaluation.run import (
 )
 from permissions.policy import DEFAULT_POLICY_PATH, Policy, PolicyError, load_policy
 from llm.client import LLMConfigError
+from observability.redact import redact
 from pipeline import run_pipeline
 from testing import scripts
 from testing.fake_clock import FakeClock
@@ -90,7 +91,7 @@ def _run_fake(args: argparse.Namespace, sut_bugs: list[str], policy: Policy) -> 
                 policy=policy,
             )
     except Exception as exc:  # unclassified failure: keep the evidence, then crash loudly
-        meta.update(error=f"{type(exc).__name__}: {exc}", finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
+        meta.update(error=redact(f"{type(exc).__name__}: {exc}"), finished_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         write_meta(workspace, meta)
         raise
     meta.update(

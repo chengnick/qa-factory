@@ -28,6 +28,7 @@ from evaluation import workflow as wf
 from llm.client import LLMClient
 from observability.instrument import AgentTools, Instrumentation, RunHandle, TracedLLM, TracedToolRegistry, traced_agent, traced_run
 from observability.json_exporter import span_to_dict
+from observability.redact import redact
 from permissions.gate import PermissionGate
 from permissions.policy import Policy, default_policy
 from security.events import SecurityRecorder
@@ -131,7 +132,7 @@ def run_pipeline(
             report = report_agent.run(qa)
         except Exception as exc:  # classified from the trace below; an unmatched exception becomes UNKNOWN
             run.fail(exc)
-            error = f"{type(exc).__name__}: {exc}"
+            error = redact(f"{type(exc).__name__}: {exc}")  # goes to meta.json; e.g. the gate's refusal names the secret it found
         else:
             if differential is not None:
                 diff = differential(automation)

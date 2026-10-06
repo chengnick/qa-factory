@@ -117,3 +117,24 @@ amendments:
       refuses test-set runs (verified: RunnerRefused on lockfile_sha256). CI does not run `frozen check` as a step;
       the pytest step runs tests/evaluation/test_frozen_amendments.py, which requires exactly exit 3 with only
       lockfile_sha256 AMENDED and no MISMATCH, so in CI exit 3 is the expected state and any other code fails the job.
+
+  - id: A10
+    date: 2026-10-06
+    commits: []
+    files: [pipeline.py, app.py, evaluation/run.py]
+    change: the run error (pipeline result.error, and the exception messages app.py and evaluation.run write to meta.json) is passed through redact() before it is stored
+    reason: "found by the secret property tests: when the permission gate refuses a file_write because the content holds a secret, its PermissionDeniedError message names that secret, and it reached meta.json's error field unmasked; fixed with the owner's approval"
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: "none on recorded results: none of the 126 meta.json under benchmark/results has a detected secret in its error field, and Phase 5 had no SECRET_ACCESS event; verdict logic unchanged"
+
+  - id: A11
+    date: 2026-10-06
+    commits: []
+    files: [observability/instrument.py]
+    change: agent output is redacted as a structure (redact_value) before it is serialised to JSON for spans/ and the trace, instead of only after
+    reason: "found by the secret property tests: JSON escaping turns `api_key\": \"x` into `api_key\\\": \\\"x`, which the key=value masking rule no longer matched, so the value stayed in spans/*-output.txt and trace.json; fixed with the owner's approval"
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: "none on recorded results: no text file under benchmark/results (2949 scanned) holds an unmasked JSON-escaped key/value pair; verdict logic unchanged"
+

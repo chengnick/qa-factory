@@ -36,7 +36,7 @@ from llm.client import LLMClient
 from observability.clock import Clock, SystemClock
 from observability.instrument import Instrumentation, RunContentSink
 from observability.json_exporter import JsonFileSpanExporter
-from observability.redact import find_secret
+from observability.redact import find_secret, redact
 from observability.setup import new_instrumentation
 from permissions.policy import DEFAULT_POLICY_PATH, Policy, PolicyError, default_policy, load_policy
 from pipeline import run_pipeline
@@ -226,11 +226,11 @@ def execute_run(
                 sut_url=url,
             )
     except SUTStartupError as exc:
-        meta.update(verdict="ENV_BLOCKED", surface_verdict="ENV_BLOCKED", error=f"SUTStartupError: {exc}", finished_at=_now())
+        meta.update(verdict="ENV_BLOCKED", surface_verdict="ENV_BLOCKED", error=redact(f"SUTStartupError: {exc}"), finished_at=_now())
         write_meta(workspace, meta)
         return workspace, meta
     except Exception as exc:  # unclassified: keep the evidence, then crash loudly
-        meta.update(error=f"{type(exc).__name__}: {exc}", finished_at=_now(), duration_s=round(time.monotonic() - started, 1))
+        meta.update(error=redact(f"{type(exc).__name__}: {exc}"), finished_at=_now(), duration_s=round(time.monotonic() - started, 1))
         write_meta(workspace, meta)
         raise
     diff = result.differential
