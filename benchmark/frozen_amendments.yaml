@@ -138,3 +138,12 @@ amendments:
     changes: {}
     evaluation_impact: "none on recorded results: no text file under benchmark/results (2949 scanned) holds an unmasked JSON-escaped key/value pair; verdict logic unchanged"
 
+  - id: A12
+    date: 2026-10-06
+    commits: []
+    files: [tests/property/test_prop_secrets.py, tests/property/test_secrets_e2e.py, tests/property/prop_support.py, tests/property/test_prop_mutants.py]
+    change: "secret property tests: P1 the value of a configured secret (environment) is in no saved file; P2 a secret in a format redact.py masks is masked in every saved file, except verbatim evidence (generated tests, junit XML, Playwright evidence), which is guaranteed free only of what the gate's secret scan detects (SECRET_SHAPES; owner decision 2026-10-06). Injection through environment variables, tool inputs and outputs, exception messages, HTTP headers and requirement text (FakeLLM only, synthetic secrets); every file under the run directory is scanned, unzipped trace.zip included; mutants M6 / M7 undo A10 / A11"
+    reason: "the owner's second exception to the feature freeze; tests only (the production fixes they led to are A10 and A11)"
+    affects_frozen_fields: []
+    changes: {}
+    evaluation_impact: none
