@@ -135,3 +135,5 @@ The most important ones; the full list is in [docs/limitations.md](docs/limitati
 The project was built in phases with a written spec, and each phase was accepted against recorded evidence. The [development log](docs/development-log.md) has the per-phase detail.
 
 The project is feature-frozen.
+
+How the project was developed with a coding agent, with the working rules and the cases behind them: [docs/how-this-was-built.md](docs/how-this-was-built.md).
